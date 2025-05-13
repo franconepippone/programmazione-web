@@ -6,19 +6,18 @@
  */
 
 
-class Fruit {
+class Controller {
 
   // Properties
-  public $name;
-  public $color;
+  public $ciccio;
 
   // Methods
-  function set_name($name) {
-    $this->name = $name;
+  function set_ciccio($ciccio) {
+    $this->ciccio = $ciccio;
   }
   
-  function get_name() {
-    return $this->name;
+  function get_ciccio() {
+    return $this->ciccio;
   }
 }
 ?>
