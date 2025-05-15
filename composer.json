@@ -1,0 +1,6 @@
+{
+    "require": {
+        "doctrine/orm": "^3",
+        "symfony/cache": "^7.2"
+    }
+}

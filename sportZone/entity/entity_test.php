@@ -1,4 +1,4 @@
-  <?php
+<?php
 
 /**
  * File di prova .php, eliminatelo appena iniziate a scrivere codice vero
