@@ -5,6 +5,12 @@ Una volta pullato tutto dovreste avere nella repository i seguenti file
 - composer.lock
 - composer.phar
 
+Prima di tutto dovete avere installato git. Per verificare che lo avete installato, provate ad aprire il terminale e digitare:
+> git --version
+
+Se non da errore allora git è installato, altrimenti dovrete installarlo da qui: https://git-scm.com/downloads/win. <br>
+Una volta installato riavviate VSCode o il terminale prima di procedere.
+
 Doctrine non è installato ancora, per farlo dovete eseguire il seguente comando da terminale (assicuratevi di aprire il terminale
 nella cartella dove avete clonato la repository!!)
 
