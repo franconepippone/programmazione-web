@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * relazione 1..N con la classe EntityB (pensatele rispettivamente come una classe "User" e una classe "Post"; lo user ha tanti post,
  * ma ogni post è di un solo user), e viene mostrato nelle due classi come questi tipi di relazioni vanno gestite sia a livello di php
  * che a livello di ORM (commenti con #)
+ * 
+ * -americo
  */
 
 
@@ -16,8 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Questo è un template per le classi entity; per creare altre classi entity, partite da questa. Aggiungete
  * metodi e attributi necessari (i #[..] sono per le specifiche per il mappaggio per il database)
- * 
- * - americo
  */
 class EntityA
 {   
