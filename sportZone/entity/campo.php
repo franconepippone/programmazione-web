@@ -1,0 +1,88 @@
+<?php
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+#[ORM\Entity]
+#[ORM\Table(name: "campo")]
+class Campo
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue("AUTO")]
+    #[ORM\Column(type: "integer")]
+    private int $id;
+
+    #[ORM\Column(type: "string")]
+    private string $sport;
+
+    #[ORM\Column(type: "integer")]
+    private int $numero;
+
+    #[ORM\Column(type: "string")]
+    private string $tipologia_terreno;
+
+    #[ORM\Column(type: "string")]
+    private string $coperto_scoperto;
+
+    #[ORM\Column(type: "float")]
+    private float $costo_h;
+
+    #[ORM\OneToMany(mappedBy: "campo", targetEntity: Corso::class)]
+    private Collection $corsi;
+
+    #[ORM\OneToMany(mappedBy: "campo", targetEntity: Prenotazione::class, cascade: ["remove"])]
+    private Collection $prenotazioni;
+
+    public function __construct() {
+        $this->corsi = new ArrayCollection();
+        $this->prenotazioni = new ArrayCollection();
+    }
+
+    // getters/setters...
+
+    public function getCorsi(): Collection {
+        return $this->corsi;
+    }
+
+    public function addCorso(Corso $corso): self {
+        if (!$this->corsi->contains($corso)) {
+            $this->corsi->add($corso);
+            $corso->setCampo($this);
+        }
+        return $this;
+    }
+
+    public function removeCorso(Corso $corso): self {
+        if ($this->corsi->removeElement($corso)) {
+            // evita di lasciare riferimenti pendenti
+            if ($corso->getCampo() === $this) {
+                $corso->setCampo(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getPrenotazioni(): Collection {
+        return $this->prenotazioni;
+    }
+
+    public function addPrenotazione(Prenotazione $prenotazione): self {
+        if (!$this->prenotazioni->contains($prenotazione)) {
+            $this->prenotazioni->add($prenotazione);
+            $prenotazione->setCampo($this);
+        }
+        return $this;
+    }
+
+    public function removePrenotazione(Prenotazione $prenotazione): self {
+        if ($this->prenotazioni->removeElement($prenotazione)) {
+            if ($prenotazione->getCampo() === $this) {
+                $prenotazione->setCampo(null);
+            }
+        }
+        return $this;
+    }
+}
+
+
+// eliminando un campo non si elimina un corso associato, ma eliminando un campo si elinima una prenotazione associata
