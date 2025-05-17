@@ -22,7 +22,7 @@ class EntityB
     /* Questa classe ha una relazione di tipo N..1 con la classe EntityA, definita nell'altro file.
     * Questo qui sotto è il modo in cui si dichiara questo tipo di relazione.
     */
-    #[ORM\ManyToOne(targetEntity: EntityA::class, inversedBy:"listaDiEntitaB")]
+    #[ORM\ManyToOne(targetEntity: EntityA::class, inversedBy:"entitiesB")]
     private ?EntityA $entityA = null; // in questo attributo è memorizzato il riferimento a entityA
 
     public function setEntityA(?EntityA $entityA): self

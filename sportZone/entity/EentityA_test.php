@@ -45,11 +45,11 @@ class EntityA
      * Questo qui sotto è il modo in cui si dicharano questo tipo di relazioni.
      */
     #[ORM\OneToMany(targetEntity: EntityB::class, mappedBy:"entityA", cascade: ["persist", "remove"])]
-    private Collection $listaDiEntitaB; // in questo "array" sono memorizzate tutti i riferimenti agli oggetti di classe Entity2
+    private Collection $entities; // in questo "array" sono memorizzate tutti i riferimenti agli oggetti di classe Entity2
 
     //Questo è il costruttore della classe. Crea un instanza di ArrayCollection e la assegna all'attributo.
     public function __construct() {
-      $this->listaDiEntitaB = new ArrayCollection();
+      $this->entities = new ArrayCollection();
     }
 
 
@@ -81,8 +81,8 @@ class EntityA
      */
     public function addEntityB(EntityB $entityB): self {
       // se l'entità non è gia presente...
-      if (!$this->listaDiEntitaB->contains($entityB)) {
-        $this->listaDiEntitaB->add($entityB); // aggiungi l'entità
+      if (!$this->entities->contains($entityB)) {
+        $this->entities->add($entityB); // aggiungi l'entità
         $entityB->setEntityA($this); // NB: aggiorna l'attributo dell'entitàB con un riferimento a questa classe ($this)
         // Quest'ultima riga è IMPORTANTE perché permette all'oggetto di classe entityB di conoscere a quale entityA è associata. 
     }
@@ -91,10 +91,18 @@ class EntityA
 
     // Simile al precedente, solo per la rimozione.
     public function removeEntityB(EntityB $entityB): self {
-      if ($this->listaDiEntitaB->contains($entityB)) {
-        $this->listaDiEntitaB->removeElement($entityB);
+      if ($this->entities->contains($entityB)) {
+        $this->entities->removeElement($entityB);
         $entityB->setEntityA(null); // IMPORTANTE: rimuove l'associazione su entityB con questa entityA
       }
       return $this;
+    }
+
+    /**
+     * ATTENZIONE!! usare la collection ritornata solo per operazioni di lettura, per modificarla, usa i metodi
+     * "addEntityB" e "removeEntityB
+    */ 
+    public function getEntitiesB(): Collection {
+      return $this->entities;
     }
 }
