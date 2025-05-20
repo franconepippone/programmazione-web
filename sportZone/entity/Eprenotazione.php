@@ -68,7 +68,7 @@ class Prenotazione
         return $this->campo;
     }
 
-    public function setCampo(Campo $campo): void {
+    public function setCampo(?Campo $campo): void {
         $this->campo = $campo;
     }
 
@@ -76,7 +76,7 @@ class Prenotazione
         return $this->cliente;
     }
 
-    public function setCliente(Cliente $cliente): void {
+    public function setCliente(?Cliente $cliente): void {
         $this->cliente = $cliente;
     }
 

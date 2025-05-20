@@ -113,7 +113,7 @@ class CartaDiCredito
         return $this->pagamentoOnline;
     }
 
-    public function setPagamentoOnline(PagamentoOnline $pagamentoOnline): self
+    public function setPagamentoOnline(?PagamentoOnline $pagamentoOnline): self
     {
         $this->pagamentoOnline = $pagamentoOnline;
         return $this;

@@ -35,5 +35,7 @@ abstract class Utente
     #[ORM\Column(type: "string", nullable: false)]
     protected string $password;
 
+    public function __construct() {}
+
     // Getters e Setters possono essere aggiunti qui
 }

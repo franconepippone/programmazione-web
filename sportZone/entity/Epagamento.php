@@ -31,6 +31,8 @@ abstract class Pagamento
     #[ORM\ManyToOne(targetEntity: Dipendente::class, inversedBy: "pagamenti")]
     protected ?Dipendente $dipendente = null;
 
+    public function __construct() {}
+
     public function getId(): int {
         return $this->id;
     }

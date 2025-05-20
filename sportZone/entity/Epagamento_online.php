@@ -3,6 +3,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+require_once("Epagamento.php");
+
 #[ORM\Entity]
 class PagamentoOnline extends Pagamento
 {
@@ -10,6 +12,7 @@ class PagamentoOnline extends Pagamento
     private Collection $carteDiCredito;
 
     public function __construct() {
+        parent::__construct();
         $this->carteDiCredito = new ArrayCollection();
     }
 

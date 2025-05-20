@@ -30,7 +30,7 @@ class Campo
     #[ORM\OneToMany(mappedBy: "campo", targetEntity: Corso::class)]
     private Collection $corsi;
 
-    #[ORM\OneToMany(mappedBy: "campo", targetEntity: Prenotazione::class, cascade: ["remove"])]
+    #[ORM\OneToMany(mappedBy: "campo", targetEntity: Prenotazione::class, cascade: ["persist", "remove"])]
     private Collection $prenotazioni;
 
     public function __construct() {

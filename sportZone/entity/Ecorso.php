@@ -142,7 +142,7 @@ class Corso
         return $this->campo;
     }
 
-    public function setCampo(Campo $campo): void {
+    public function setCampo(?Campo $campo): void {
         $this->campo = $campo;
     }
 
