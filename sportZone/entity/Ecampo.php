@@ -21,8 +21,8 @@ class ECampo
     #[ORM\Column(type: "string")]
     private string $tipologia_terreno;
 
-    #[ORM\Column(type: "string")]
-    private string $coperto_scoperto;
+    #[ORM\Column(type: "bool")]
+    private bool $al_coperto;
 
     #[ORM\Column(type: "float")]
     private float $costo_h;
@@ -39,6 +39,51 @@ class ECampo
     }
 
     // getters/setters...
+
+    public function setSport(string $sport): self {
+        $this->sport = $sport;
+        return $this;
+    }
+    
+    public function getSport(): string {
+        return $this->sport;
+    }
+
+    public function setNumero(int $numero): self {
+        $this->numero = $numero;
+        return $this;
+    }
+
+    public function getNumero(): int {
+        return $this->numero;
+    }
+
+    public function setCoperto(bool $al_coperto): self {
+        $this->al_coperto = $al_coperto;
+        return $this;
+    }
+
+    public function getCoperto(): bool {
+        return $this->al_coperto;
+    }
+
+    public function setTipologiaTerreno(string $tipologiaTerreno): self {
+        $this->tipologia_terreno = $tipologiaTerreno;
+        return $this;
+    }
+
+    public function getTipologiaTerreno(): string {
+        return $this->tipologia_terreno;
+    }
+
+    public function setCosto(float $costo): self {
+        $this->costo = $costo;
+        return $this;
+    }
+
+    public function getCosto(): float {
+        return $this->costo_h;
+    }
 
     public function getCorsi(): Collection {
         return $this->corsi;
