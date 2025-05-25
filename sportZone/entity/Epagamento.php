@@ -4,9 +4,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\InheritanceType("SINGLE_TABLE")]
 #[ORM\DiscriminatorColumn(name: "tipo_pagamento", type: "string")]
-#[ORM\DiscriminatorMap(["online" => PagamentoOnline::class, "struttura" => PagamentoInStruttura::class])]
+#[ORM\DiscriminatorMap(["online" => EPagamentoOnline::class, "struttura" => EPagamentoInStruttura::class])]
 #[ORM\Table(name: "pagamento")]
-abstract class Pagamento
+abstract class EPagamento
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,14 +22,14 @@ abstract class Pagamento
     #[ORM\Column(type: "time")]
     protected \DateTimeInterface $ora;
 
-    #[ORM\OneToOne(mappedBy: "pagamento", targetEntity: Prenotazione::class)]
-    protected ?Prenotazione $prenotazione = null;
+    #[ORM\OneToOne(mappedBy: "pagamento", targetEntity: EPrenotazione::class)]
+    protected ?EPrenotazione $prenotazione = null;
 
-    #[ORM\OneToOne(mappedBy: "pagamento", targetEntity: Iscrizione::class)]
-    protected ?Iscrizione $iscrizione = null;
+    #[ORM\OneToOne(mappedBy: "pagamento", targetEntity: EIscrizione::class)]
+    protected ?EIscrizione $iscrizione = null;
 
-    #[ORM\ManyToOne(targetEntity: Dipendente::class, inversedBy: "pagamenti")]
-    protected ?Dipendente $dipendente = null;
+    #[ORM\ManyToOne(targetEntity: EDipendente::class, inversedBy: "pagamenti")]
+    protected ?EDipendente $dipendente = null;
 
     public function __construct() {}
 
@@ -61,27 +61,27 @@ abstract class Pagamento
         $this->ora = $ora;
     }
 
-    public function getPrenotazione(): ?Prenotazione {
+    public function getPrenotazione(): ?EPrenotazione {
         return $this->prenotazione;
     }
 
-    public function setPrenotazione(?Prenotazione $prenotazione): void {
+    public function setPrenotazione(?EPrenotazione $prenotazione): void {
         $this->prenotazione = $prenotazione;
     }
 
-    public function getIscrizione(): ?Iscrizione {
+    public function getIscrizione(): ?EIscrizione {
         return $this->iscrizione;
     }
 
-    public function setIscrizione(?Iscrizione $iscrizione): void {
+    public function setIscrizione(?EIscrizione $iscrizione): void {
         $this->iscrizione = $iscrizione;
     }
 
-    public function getDipendente(): ?Dipendente {
+    public function getDipendente(): ?EDipendente {
         return $this->dipendente;
     }
 
-    public function setDipendente(?Dipendente $dipendente): void {
+    public function setDipendente(?EDipendente $dipendente): void {
         $this->dipendente = $dipendente;
     }
 }

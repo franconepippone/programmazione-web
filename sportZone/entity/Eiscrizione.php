@@ -4,7 +4,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-class Iscrizione
+class EIscrizione
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,12 +16,12 @@ class Iscrizione
 
     // ======= RELAZIONI =======
 
-    #[ORM\ManyToOne(targetEntity: Cliente::class, inversedBy: "corsi")]
-    private ?Cliente $cliente = null;
+    #[ORM\ManyToOne(targetEntity: ECliente::class, inversedBy: "corsi")]
+    private ?ECliente $cliente = null;
 
-    #[ORM\OneToOne(targetEntity: Corso::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToOne(targetEntity: ECorso::class, cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Corso $corso = null;
+    private ?ECorso $corso = null;
 
     // ========= GETTERS & SETTERS ==========
 
@@ -37,19 +37,19 @@ class Iscrizione
         $this->data_iscrizione = $data;
     }
 
-    public function getCliente(): ?Cliente {
+    public function getCliente(): ?ECliente {
         return $this->cliente;
     }
 
-    public function setCliente(?Cliente $cliente): void {
+    public function setCliente(?ECliente $cliente): void {
         $this->cliente = $cliente;
     }
 
-    public function getCorso(): ?Corso {
+    public function getCorso(): ?ECorso {
         return $this->corso;
     }
 
-    public function setCorso(?Corso $corso): void {
+    public function setCorso(?ECorso $corso): void {
         $this->corso = $corso;
     }
 }

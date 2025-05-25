@@ -4,7 +4,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-class Corso
+class ECorso
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,17 +34,17 @@ class Corso
 
     // ======= RELAZIONI =======
 
-    #[ORM\ManyToOne(targetEntity: Istruttore::class, inversedBy: "corsi")]
-    private ?Istruttore $istruttore = null;
+    #[ORM\ManyToOne(targetEntity: EIstruttore::class, inversedBy: "corsi")]
+    private ?EIstruttore $istruttore = null;
 
-    #[ORM\ManyToMany(targetEntity: Dipendente::class, mappedBy: "corsi")]
+    #[ORM\ManyToMany(targetEntity: EDipendente::class, mappedBy: "corsi")]
     private Collection $dipendenti;
 
-    #[ORM\ManyToOne(targetEntity: Campo::class)]
+    #[ORM\ManyToOne(targetEntity: ECampo::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Campo $campo = null;
+    private ?ECampo $campo = null;
 
-    #[ORM\OneToMany(mappedBy: "corso", targetEntity: Iscrizione::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "corso", targetEntity: EIscrizione::class, cascade: ["persist", "remove"])]
     private Collection $iscrizioni;
 
     public function __construct() {
@@ -114,11 +114,11 @@ class Corso
         $this->max_iscritti = $max;
     }
 
-    public function getIstruttore(): ?Istruttore {
+    public function getIstruttore(): ?EIstruttore {
         return $this->istruttore;
     }
 
-    public function setIstruttore(?Istruttore $istruttore): void {
+    public function setIstruttore(?EIstruttore $istruttore): void {
         $this->istruttore = $istruttore;
     }
 
@@ -126,23 +126,23 @@ class Corso
         return $this->dipendenti;
     }
 
-    public function addDipendente(Dipendente $dipendente): self {
+    public function addDipendente(EDipendente $dipendente): self {
         if (!$this->dipendenti->contains($dipendente)) {
             $this->dipendenti->add($dipendente);
         }
         return $this;
     }
 
-    public function removeDipendente(Dipendente $dipendente): self {
+    public function removeDipendente(EDipendente $dipendente): self {
         $this->dipendenti->removeElement($dipendente);
         return $this;
     }
 
-    public function getCampo(): Campo {
+    public function getCampo(): ECampo {
         return $this->campo;
     }
 
-    public function setCampo(?Campo $campo): void {
+    public function setCampo(?ECampo $campo): void {
         $this->campo = $campo;
     }
 
@@ -150,7 +150,7 @@ class Corso
         return $this->iscrizioni;
     }
 
-    public function addIscrizione(Iscrizione $iscrizione): self {
+    public function addIscrizione(EIscrizione $iscrizione): self {
         if (!$this->iscrizioni->contains($iscrizione)) {
             $this->iscrizioni->add($iscrizione);
             $iscrizione->setCorso($this); // sincronizza il lato inverso
@@ -158,7 +158,7 @@ class Corso
         return $this;
     }
 
-    public function removeIscrizione(Iscrizione $iscrizione): self {
+    public function removeIscrizione(EIscrizione $iscrizione): self {
         if ($this->iscrizioni->removeElement($iscrizione)) {
             if ($iscrizione->getCorso() === $this) {
                 $iscrizione->setCorso(null);

@@ -3,7 +3,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "carta_di_credito")]
-class CartaDiCredito
+class ECartaDiCredito
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,9 +26,9 @@ class CartaDiCredito
     private string $titolareCarta;
 
     // Relazione molti a uno con PagamentoOnline
-    #[ORM\ManyToOne(targetEntity: PagamentoOnline::class, inversedBy: "carteDiCredito")]
+    #[ORM\ManyToOne(targetEntity: EPagamentoOnline::class, inversedBy: "carteDiCredito")]
     #[ORM\JoinColumn(nullable: false)]
-    private PagamentoOnline $pagamentoOnline;
+    private EPagamentoOnline $pagamentoOnline;
 
     // Constructor
     public function __construct(
@@ -37,7 +37,7 @@ class CartaDiCredito
         string $circuito,
         string $banca,
         string $titolareCarta,
-        PagamentoOnline $pagamentoOnline
+        EPagamentoOnline $pagamentoOnline
     ) {
         $this->numeroCarta = $numeroCarta;
         $this->dataScadenza = $dataScadenza;
@@ -108,12 +108,12 @@ class CartaDiCredito
         return $this;
     }
 
-    public function getPagamentoOnline(): PagamentoOnline
+    public function getPagamentoOnline(): EPagamentoOnline
     {
         return $this->pagamentoOnline;
     }
 
-    public function setPagamentoOnline(?PagamentoOnline $pagamentoOnline): self
+    public function setPagamentoOnline(?EPagamentoOnline $pagamentoOnline): self
     {
         $this->pagamentoOnline = $pagamentoOnline;
         return $this;

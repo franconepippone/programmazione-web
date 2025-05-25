@@ -5,7 +5,7 @@ use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "campo")]
-class Campo
+class ECampo
 {
     #[ORM\Id]
     #[ORM\GeneratedValue("AUTO")]
@@ -27,10 +27,10 @@ class Campo
     #[ORM\Column(type: "float")]
     private float $costo_h;
 
-    #[ORM\OneToMany(mappedBy: "campo", targetEntity: Corso::class)]
+    #[ORM\OneToMany(mappedBy: "campo", targetEntity: ECorso::class)]
     private Collection $corsi;
 
-    #[ORM\OneToMany(mappedBy: "campo", targetEntity: Prenotazione::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "campo", targetEntity: EPrenotazione::class, cascade: ["persist", "remove"])]
     private Collection $prenotazioni;
 
     public function __construct() {
@@ -44,7 +44,7 @@ class Campo
         return $this->corsi;
     }
 
-    public function addCorso(Corso $corso): self {
+    public function addCorso(ECorso $corso): self {
         if (!$this->corsi->contains($corso)) {
             $this->corsi->add($corso);
             $corso->setCampo($this);
@@ -52,7 +52,7 @@ class Campo
         return $this;
     }
 
-    public function removeCorso(Corso $corso): self {
+    public function removeCorso(ECorso $corso): self {
         if ($this->corsi->removeElement($corso)) {
             // evita di lasciare riferimenti pendenti
             if ($corso->getCampo() === $this) {
@@ -66,7 +66,7 @@ class Campo
         return $this->prenotazioni;
     }
 
-    public function addPrenotazione(Prenotazione $prenotazione): self {
+    public function addPrenotazione(EPrenotazione $prenotazione): self {
         if (!$this->prenotazioni->contains($prenotazione)) {
             $this->prenotazioni->add($prenotazione);
             $prenotazione->setCampo($this);
@@ -74,7 +74,7 @@ class Campo
         return $this;
     }
 
-    public function removePrenotazione(Prenotazione $prenotazione): self {
+    public function removePrenotazione(EPrenotazione $prenotazione): self {
         if ($this->prenotazioni->removeElement($prenotazione)) {
             if ($prenotazione->getCampo() === $this) {
                 $prenotazione->setCampo(null);

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 require_once("Eutente.php");
 
 #[ORM\Entity]
-class Dipendente extends Utente
+class EDipendente extends EUtente
 {
     #[ORM\Column(type: "float")]
     private float $stipendio;
@@ -36,7 +36,7 @@ class Dipendente extends Utente
         return $this->pagamenti;
     }
 
-    public function addPagamento(Pagamento $pagamento): self {
+    public function addPagamento(EPagamento $pagamento): self {
         if (!$this->pagamenti->contains($pagamento)) {
             $this->pagamenti[] = $pagamento;
             $pagamento->setDipendente($this);
@@ -44,7 +44,7 @@ class Dipendente extends Utente
         return $this;
     }
 
-    public function removePagamento(Pagamento $pagamento): self {
+    public function removePagamento(EPagamento $pagamento): self {
         if ($this->pagamenti->removeElement($pagamento)) {
             $pagamento->setDipendente(null);
         }
@@ -55,7 +55,7 @@ class Dipendente extends Utente
         return $this->corsi;
     }
 
-    public function addCorso(Corso $corso): self {
+    public function addCorso(ECorso $corso): self {
         if (!$this->corsi->contains($corso)) {
             $this->corsi[] = $corso;
             $corso->addDipendente($this); // mantiene sincronizzazione
@@ -63,7 +63,7 @@ class Dipendente extends Utente
         return $this;
     }
 
-    public function removeCorso(Corso $corso): self {
+    public function removeCorso(ECorso $corso): self {
         if ($this->corsi->removeElement($corso)) {
             $corso->removeDipendente($this);
         }

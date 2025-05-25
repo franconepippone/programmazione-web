@@ -6,9 +6,9 @@ use Doctrine\Common\Collections\Collection;
 require_once("Epagamento.php");
 
 #[ORM\Entity]
-class PagamentoOnline extends Pagamento
+class EPagamentoOnline extends EPagamento
 {
-    #[ORM\OneToMany(targetEntity: CartaDiCredito::class, mappedBy: "pagamentoOnline", cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(targetEntity: ECartaDiCredito::class, mappedBy: "pagamentoOnline", cascade: ["persist", "remove"])]
     private Collection $carteDiCredito;
 
     public function __construct() {
@@ -17,13 +17,13 @@ class PagamentoOnline extends Pagamento
     }
 
     /**
-     * @return Collection|CartaDiCredito[]
+     * @return Collection|ECartaDiCredito[]
      */
     public function getCarteDiCredito(): Collection {
         return $this->carteDiCredito;
     }
 
-    public function addCartaDiCredito(CartaDiCredito $carta): self {
+    public function addCartaDiCredito(ECartaDiCredito $carta): self {
         if (!$this->carteDiCredito->contains($carta)) {
             $this->carteDiCredito->add($carta);
             $carta->setPagamentoOnline($this);
@@ -31,7 +31,7 @@ class PagamentoOnline extends Pagamento
         return $this;
     }
 
-    public function removeCartaDiCredito(CartaDiCredito $carta): self {
+    public function removeCartaDiCredito(ECartaDiCredito $carta): self {
         if ($this->carteDiCredito->contains($carta)) {
             $this->carteDiCredito->removeElement($carta);
             // Rimuovi il collegamento inverso

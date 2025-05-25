@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 require_once("Eutente.php");
 
 #[ORM\Entity]
-class Istruttore extends Utente
+class EIstruttore extends EUtente
 {
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $cv = null;
@@ -31,7 +31,7 @@ class Istruttore extends Utente
         return $this->corsi;
     }
 
-    public function addCorso(Corso $corso): self {
+    public function addCorso(ECorso $corso): self {
         if (!$this->corsi->contains($corso)) {
             $this->corsi[] = $corso;
             $corso->setIstruttore($this);
@@ -39,7 +39,7 @@ class Istruttore extends Utente
         return $this;
     }
 
-    public function removeCorso(Corso $corso): self {
+    public function removeCorso(ECorso $corso): self {
         if ($this->corsi->removeElement($corso)) {
             $corso->setIstruttore(null);
         }

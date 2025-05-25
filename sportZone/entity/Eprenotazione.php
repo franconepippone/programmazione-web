@@ -3,7 +3,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "prenotazioni")]
-class Prenotazione
+class EPrenotazione
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,24 +16,24 @@ class Prenotazione
     #[ORM\Column(type: "date")]
     private \DateTimeInterface $data_prenotazione;
 
-    #[ORM\ManyToOne(targetEntity: Campo::class, inversedBy: "prenotazioni")]
+    #[ORM\ManyToOne(targetEntity: ECampo::class, inversedBy: "prenotazioni")]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    private Campo $campo;
+    private ECampo $campo;
 
-    #[ORM\ManyToOne(targetEntity: Cliente::class, inversedBy: "prenotazioni")]
+    #[ORM\ManyToOne(targetEntity: ECliente::class, inversedBy: "prenotazioni")]
     #[ORM\JoinColumn(nullable: false)]
-    private Cliente $cliente;
+    private ECliente $cliente;
 
-    #[ORM\OneToOne(targetEntity: Pagamento::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToOne(targetEntity: EPagamento::class, cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
-    private Pagamento $pagamento;
+    private EPagamento $pagamento;
 
     public function __construct(
         \DateTimeInterface $orario,
         \DateTimeInterface $data,
-        Campo $campo,
-        Cliente $cliente,
-        Pagamento $pagamento
+        ECampo $campo,
+        ECliente $cliente,
+        EPagamento $pagamento
     ) {
         $this->orario_prenotazione = $orario;
         $this->data_prenotazione = $data;
@@ -64,27 +64,27 @@ class Prenotazione
         $this->data_prenotazione = $data;
     }
 
-    public function getCampo(): Campo {
+    public function getCampo(): ECampo {
         return $this->campo;
     }
 
-    public function setCampo(?Campo $campo): void {
+    public function setCampo(?ECampo $campo): void {
         $this->campo = $campo;
     }
 
-    public function getCliente(): Cliente {
+    public function getCliente(): ECliente {
         return $this->cliente;
     }
 
-    public function setCliente(?Cliente $cliente): void {
+    public function setCliente(?ECliente $cliente): void {
         $this->cliente = $cliente;
     }
 
-    public function getPagamento(): Pagamento {
+    public function getPagamento(): EPagamento {
         return $this->pagamento;
     }
 
-    public function setPagamento(Pagamento $pagamento): void {
+    public function setPagamento(EPagamento $pagamento): void {
         $this->pagamento = $pagamento;
     }
 }

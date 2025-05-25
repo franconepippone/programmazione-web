@@ -4,10 +4,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\InheritanceType("SINGLE_TABLE")]
 #[ORM\DiscriminatorColumn(name: "tipo", type: "string")]
-#[ORM\DiscriminatorMap(["cliente" => Cliente::class, "dipendente" => Dipendente::class, "istruttore" => Istruttore::class])]
+#[ORM\DiscriminatorMap(["cliente" => ECliente::class, "dipendente" => EDipendente::class, "istruttore" => EIstruttore::class])]
 #[ORM\Table(name: "utenti")]
 
-abstract class Utente
+abstract class EUtente
 {
     #[ORM\Id]
     #[ORM\GeneratedValue("AUTO")]
