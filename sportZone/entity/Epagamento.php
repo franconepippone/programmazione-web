@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\InheritanceType("SINGLE_TABLE")]
 #[ORM\DiscriminatorColumn(name: "tipo_pagamento", type: "string")]
 #[ORM\DiscriminatorMap(["online" => EPagamentoOnline::class, "struttura" => EPagamentoInStruttura::class])]
-#[ORM\Table(name: "pagamento")]
+#[ORM\Table(name: "pagamenti")]
 abstract class EPagamento
 {
     #[ORM\Id]

@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../../../../bootstrap.php');
+require_once(__DIR__ . '/../../bootstrap.php');
 
 class FEntityManager{
     private static $instance;
@@ -194,7 +194,7 @@ class FEntityManager{
      * save one object in the db (persistance of Entity)
      * @return boolean
      */
-    public static function saveObject($obj)
+    public static function saveObject(object $obj)
     {
         try{
             self::$entityManager->getConnection()->beginTransaction();
@@ -204,7 +204,7 @@ class FEntityManager{
             return true;
         }catch(Exception $e){
             self::$entityManager->getConnection();
-            echo "ERROR: " . $e->getMessage();
+            echo "ERROR: " . $e->getMessage() . "\n";
             return false;
         }
     }

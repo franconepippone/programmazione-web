@@ -1,5 +1,6 @@
 <?php
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\SessoEnum;
 
 #[ORM\Entity]
 #[ORM\InheritanceType("SINGLE_TABLE")]
@@ -24,7 +25,7 @@ abstract class EUtente
     protected \DateTimeInterface $data_nascita;
 
     #[ORM\Column(type: "string", nullable: false)]
-    protected string $sesso;
+    protected SessoEnum $sesso;
 
     #[ORM\Column(type: "string", nullable: false, unique: true)]
     protected string $email;
@@ -38,4 +39,60 @@ abstract class EUtente
     public function __construct() {}
 
     // Getters e Setters possono essere aggiunti qui
+
+    public function getId(): int {
+        return $this->id;
+    }
+
+    public function setNome(string $nome): self {
+        $this->nome = $nome;
+        return $this;
+    }
+
+    public function getNome(): string {
+        return $this->nome;
+    }
+
+    public function setCognome(string $cognome): self {
+        $this->cognome = $cognome;
+        return $this;
+    }
+
+    public function getCognome(): string {
+        return $this->cognome;
+    }
+
+    public function setDataNascita(\DateTimeInterface $data_nascita): self {
+        $this->data_nascita = $data_nascita;
+        return $this;
+    }
+
+    public function getDataNascita(): \DateTimeInterface {
+        return $this->data_nascita;
+    }
+
+    public function setEmail(string $email): self {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function getEmail(): string {
+        return $this->email;
+    }
+
+    public function setPassword(string $password): self {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function getPassword(): string {
+        return $this->password;
+    }
+
+    public function setNomeUtente(string $nome_utente): self {
+        $this->nome_utente = $nome_utente;
+        return $this;
+    }
+
+
 }

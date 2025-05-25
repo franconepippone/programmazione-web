@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 require_once("Eutente.php");
 
 #[ORM\Entity]
+#[ORM\Table(name: "dipendenti")]
+
 class EDipendente extends EUtente
 {
     #[ORM\Column(type: "float")]

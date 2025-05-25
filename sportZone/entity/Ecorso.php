@@ -4,6 +4,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
+#[ORM\Table(name: "corsi")]
+
 class ECorso
 {
     #[ORM\Id]

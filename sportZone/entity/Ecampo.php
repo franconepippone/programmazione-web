@@ -4,7 +4,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
-#[ORM\Table(name: "campo")]
+#[ORM\Table(name: "campi")]
 class ECampo
 {
     #[ORM\Id]
@@ -27,7 +27,7 @@ class ECampo
     #[ORM\Column(type: "float")]
     private float $costo_h;
 
-    #[ORM\OneToMany(mappedBy: "campo", targetEntity: ECorso::class)]
+    #[ORM\OneToMany(mappedBy: "campo", targetEntity: ECorso::class, cascade: ["persist", "remove"])]
     private Collection $corsi;
 
     #[ORM\OneToMany(mappedBy: "campo", targetEntity: EPrenotazione::class, cascade: ["persist", "remove"])]
@@ -39,6 +39,10 @@ class ECampo
     }
 
     // getters/setters...
+
+    public function getId(): int { 
+        return $this->id; 
+    }
 
     public function setSport(string $sport): self {
         $this->sport = $sport;
@@ -76,8 +80,8 @@ class ECampo
         return $this->tipologia_terreno;
     }
 
-    public function setCosto(float $costo): self {
-        $this->costo = $costo;
+    public function setCosto(float $costo_h): self {
+        $this->costo_h = $costo_h;
         return $this;
     }
 

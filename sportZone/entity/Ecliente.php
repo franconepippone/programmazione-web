@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 require_once("Eutente.php");
 
 #[ORM\Entity]
+#[ORM\Table(name: "clienti")]
 class ECliente extends EUtente
 {
     #[ORM\OneToMany(mappedBy: "cliente", targetEntity: EIscrizione::class, cascade: ["persist", "remove"])]

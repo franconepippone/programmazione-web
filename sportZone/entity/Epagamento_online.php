@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\Collection;
 require_once("Epagamento.php");
 
 #[ORM\Entity]
+#[ORM\Table(name: "pagamenti_online")]
+
 class EPagamentoOnline extends EPagamento
 {
     #[ORM\OneToMany(targetEntity: ECartaDiCredito::class, mappedBy: "pagamentoOnline", cascade: ["persist", "remove"])]
