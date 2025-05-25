@@ -3,6 +3,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use App\Enum\SessoEnum;
+
+
 require_once("Eutente.php");
 
 #[ORM\Entity]
@@ -15,8 +18,16 @@ class ECliente extends EUtente
     #[ORM\OneToMany(mappedBy: "cliente", targetEntity: EPrenotazione::class, cascade: ["persist", "remove"])]
     private Collection $prenotazioni;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(        
+        string $nome = '',
+        string $cognome = '',
+        ?\DateTimeInterface $data_nascita = null,
+        ?SessoEnum $sesso = null,
+        string $email = '',
+        string $nome_utente = '',
+        string $password = ''
+    ) {
+        parent::__construct($nome, $cognome, $data_nascita, $sesso, $email, $nome_utente, $password);
         $this->iscrizioni = new ArrayCollection();
         $this->prenotazioni = new ArrayCollection();
     }
@@ -59,4 +70,5 @@ class ECliente extends EUtente
         }
         return $this;
     }
+    
 }

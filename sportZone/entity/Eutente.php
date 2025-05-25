@@ -24,7 +24,7 @@ abstract class EUtente
     #[ORM\Column(type: "date", nullable: false)]
     protected \DateTimeInterface $data_nascita;
 
-    #[ORM\Column(type: "string", nullable: false)]
+    #[ORM\Column(enumType: SessoEnum::class, nullable: false)]
     protected SessoEnum $sesso;
 
     #[ORM\Column(type: "string", nullable: false, unique: true)]
@@ -36,7 +36,25 @@ abstract class EUtente
     #[ORM\Column(type: "string", nullable: false)]
     protected string $password;
 
-    public function __construct() {}
+    // construct (per semplificare l'instanziazione)
+    public function __construct(
+        string $nome = '',
+        string $cognome = '',
+        ?\DateTimeInterface $data_nascita = null,
+        ?SessoEnum $sesso = null,
+        string $email = '',
+        string $nome_utente = '',
+        string $password = ''
+    ) {
+        $this->nome = $nome;
+        $this->cognome = $cognome;
+        $this->data_nascita = $data_nascita ?? new \DateTimeImmutable('1900-01-01');
+        $this->sesso = $sesso ?? SessoEnum::MALE; // or FEMALE, pick a sensible default
+        $this->email = $email;
+        $this->nome_utente = $nome_utente;
+        $this->password = $password;
+    }
+
 
     // Getters e Setters possono essere aggiunti qui
 
