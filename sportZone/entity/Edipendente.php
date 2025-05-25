@@ -11,10 +11,10 @@ class EDipendente extends EUtente
     #[ORM\Column(type: "float")]
     private float $stipendio;
 
-    #[ORM\OneToMany(mappedBy: "dipendente", targetEntity: Pagamento::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "dipendente", targetEntity: EPagamento::class, cascade: ["persist", "remove"])]
     private Collection $pagamenti;
 
-    #[ORM\ManyToMany(targetEntity: Corso::class, inversedBy: "dipendenti")]
+    #[ORM\ManyToMany(targetEntity: ECorso::class, inversedBy: "dipendenti")]
     #[ORM\JoinTable(name: "dipendenti_corsi")]
     private Collection $corsi;
 

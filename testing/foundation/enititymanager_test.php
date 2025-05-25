@@ -5,4 +5,7 @@ require_once __DIR__ . "../../sportZone/entity/Ecampo.php";
 
 $fem = FEntityManager::getInstance();
 
-$fem->retriveObj(Ecampo)
+$campo = new ECampo();
+$campo->setNumero(2)
+
+$fem->retriveObj(ECampo::class, )

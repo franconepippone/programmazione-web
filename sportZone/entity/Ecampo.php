@@ -21,7 +21,7 @@ class ECampo
     #[ORM\Column(type: "string")]
     private string $tipologia_terreno;
 
-    #[ORM\Column(type: "bool")]
+    #[ORM\Column(type: "boolean")]
     private bool $al_coperto;
 
     #[ORM\Column(type: "float")]

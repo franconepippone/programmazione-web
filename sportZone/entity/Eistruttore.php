@@ -11,7 +11,7 @@ class EIstruttore extends EUtente
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $cv = null;
 
-    #[ORM\OneToMany(mappedBy: "istruttore", targetEntity: Corso::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "istruttore", targetEntity: ECorso::class, cascade: ["persist", "remove"])]
     private Collection $corsi;
 
     public function __construct() {
