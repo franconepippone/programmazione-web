@@ -12,19 +12,21 @@ use App\Enum\SessoEnum;
 $fem = FEntityManager::getInstance();
 
 $cliente = new ECliente(
-    'Mario',                   // $nome
-    'Rossi',                   // $cognome
-    new DateTime('1990-05-01'), // $data_nascita
-    SessoEnum::MALE,           // $sesso
-    'mario.rossi@example.com', // $email
-    'mrossi',                  // $nome_utente
-    'securepassword123'        // $password
+    'Argildo',                   // $nome
+    'Escuculo',                   // $cognome
+    new DateTime('2002-05-5'), // $data_nascita
+    SessoEnum::TRANS,           // $sesso
+    'pino.esposito200@example.com', // $email
+    'porcaccioddio2',                  // $nome_utente
+    '12345'        // $password
 );
 
 echo "salvando...\n";
 $fem->saveObject($cliente);
 echo "Oggetto salvato\n";
 
-$cliente_retr = $fem->retriveObj(ECliente::class, 1);
+$cliente_retr = $fem->retriveObj(ECliente::class, 2);
 echo "oggetto recuperato, id: ". $cliente_retr->getId();
 echo $cliente_retr->getNome();
+echo $cliente_retr->getCognome();
+echo $cliente_retr->getEmail();

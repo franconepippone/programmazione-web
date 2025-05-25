@@ -6,4 +6,5 @@ enum SessoEnum: string
 {
     case MALE = 'male';
     case FEMALE = 'female';
+    case TRANS = 'trans';
 }
