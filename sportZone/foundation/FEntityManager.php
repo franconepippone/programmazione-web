@@ -1,5 +1,8 @@
 <?php
 require_once(__DIR__ . '/../../bootstrap.php');
+require_once(__DIR__ . '/../entity/EClient.php');
+require_once(__DIR__ . '/../entity/EEmployee.php');
+require_once(__DIR__ . '/../entity/EInstructor.php');
 
 class FEntityManager{
     private static $instance;
@@ -36,6 +39,59 @@ class FEntityManager{
     }
 
     /**
+     * save one object in the db (persistance of Entity)
+     * @return boolean
+     */
+    public static function saveObject(object $obj)
+    {
+        try{
+            self::$entityManager->getConnection()->beginTransaction();
+            self::$entityManager->persist($obj);
+            self::$entityManager->flush();
+            self::$entityManager->getConnection()->commit();
+            return true;
+        }catch(Exception $e){
+            self::$entityManager->getConnection();
+            echo "ERROR: " . $e->getMessage() . "\n";
+            return false;
+        }
+    }
+
+    /**
+     * delete an object from the db
+     * @return boolean
+     */
+    public static function deleteObj($obj){
+        try{
+            self::$entityManager->getConnection()->beginTransaction();
+            self::$entityManager->remove($obj);
+            self::$entityManager->flush();
+            self::$entityManager->getConnection()->commit();
+            return true;
+        }catch(Exception $e){
+            self::$entityManager->getConnection();
+            echo "ERROR: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
+     * return an array of all elemnts of a table
+     * @return array
+     */
+    public static function selectAll($table){
+        try{
+            $dql = "SELECT e FROM " . $table . " e";
+            $query = self::$entityManager->createQuery($dql);
+            $result = $query->getResult();
+            return $result;
+        }catch(Exception $e){
+            echo "ERROR " . $e->getMessage();
+            return [];
+        }
+    }
+
+    /**
      * return an object finding it not on the id but on an attribute
      */
     public static function retriveObjNotOnId($class, $field, $id){
@@ -48,10 +104,32 @@ class FEntityManager{
         }
     }
 
+
+
     /**
-     * return a list of objects
-     * @return array
+     * Checks if at least one entity exists where the given field matches the specified value.
+     *
+     * @return bool True if at least one matching entity exists, false otherwise
      */
+    public function verifyAttributeExists(string $entityClass, string $field, mixed $value): bool
+    {
+        $qb = self::$entityManager->createQueryBuilder();
+
+        $qb->select('1')
+           ->from($entityClass, 'e')
+           ->where("e.$field = :value")
+           ->setParameter('value', $value)
+           ->setMaxResults(1); // We only need to check existence, no need to fetch all
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result !== null;
+    }
+
+        /**
+         * return a list of objects
+         * @return array
+         */
     public static function objectList($table, $field, $id)
     {
         try{
@@ -190,56 +268,5 @@ class FEntityManager{
             }
     }
 
-    /**
-     * save one object in the db (persistance of Entity)
-     * @return boolean
-     */
-    public static function saveObject(object $obj)
-    {
-        try{
-            self::$entityManager->getConnection()->beginTransaction();
-            self::$entityManager->persist($obj);
-            self::$entityManager->flush();
-            self::$entityManager->getConnection()->commit();
-            return true;
-        }catch(Exception $e){
-            self::$entityManager->getConnection();
-            echo "ERROR: " . $e->getMessage() . "\n";
-            return false;
-        }
-    }
 
-    /**
-     * delete an object from the db
-     * @return boolean
-     */
-    public static function deleteObj($obj){
-        try{
-            self::$entityManager->getConnection()->beginTransaction();
-            self::$entityManager->remove($obj);
-            self::$entityManager->flush();
-            self::$entityManager->getConnection()->commit();
-            return true;
-        }catch(Exception $e){
-            self::$entityManager->getConnection();
-            echo "ERROR: " . $e->getMessage();
-            return false;
-        }
-    }
-
-    /**
-     * return an array of all elemnts of a table
-     * @return array
-     */
-    public static function selectAll($table){
-        try{
-            $dql = "SELECT e FROM " . $table . " e";
-            $query = self::$entityManager->createQuery($dql);
-            $result = $query->getResult();
-            return $result;
-        }catch(Exception $e){
-            echo "ERROR " . $e->getMessage();
-            return [];
-        }
-    }
 }

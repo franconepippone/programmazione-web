@@ -6,18 +6,18 @@ class CFrontController{
     
     public function run($requestUri){
         // Parse the request URI
+        ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
-        $requestUri = trim($requestUri, '/');
+        //$requestUri = trim($requestUri, '/');
         $uriParts = explode('/', $requestUri);
-
         array_shift($uriParts);
         var_dump($uriParts);
         echo "<br><br>";
-
+       
         // Extract controller and method names
         $controllerName = !empty($uriParts[0]) ? ucfirst($uriParts[0]) : 'User';
-        // var_dump($controllerName);
+        var_dump($controllerName);
         $methodName = (!empty($uriParts[1]) ? $uriParts[1] : 'login');
         echo "Requested controller: " . $controllerName . "<br>";
         echo "Requested method: " . $methodName . "<br>";
@@ -52,6 +52,12 @@ class CFrontController{
 
         $params = array_slice($uriParts, 2); // Get optional parameters
         echo "Calling " . "$controllerClass" . "." . "$methodName" . " with parameters: " . print_r($params, true) . "<br>";
+        
+        
+        
+        ob_clean(); // UNCOMMENT THIS TO SHOW DEBUG ECHOS TO BROWSER
+
+
         call_user_func_array([$controllerClass, $methodName], $params);
     }
 }

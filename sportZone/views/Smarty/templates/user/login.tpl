@@ -46,18 +46,34 @@
       border: none;
       border-radius: 4px;
       font-size: 1rem;
+      cursor: pointer;
     }
 
     .login-container button:hover {
       background-color: #0056b3;
     }
+
+    .register-link {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .register-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-
   <div class="login-container">
-    <h2>Login</h2>
-    <form action="login_.php" method="POST">
+    <h2>{$login_title|default:"Login"}</h2>
+    <form action="/user/checkLogin" method="POST">
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
 
@@ -66,7 +82,10 @@
 
       <button type="submit">Log In</button>
     </form>
-  </div>
 
+    <div class="register-link">
+      Don't have an account? <a href="/user/register">Register here</a>
+    </div>
+  </div>
 </body>
 </html>

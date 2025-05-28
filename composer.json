@@ -3,5 +3,13 @@
         "doctrine/orm": "^3",
         "symfony/cache": "^7.2",
         "smarty/smarty": "^5.5"
-    }
+    },
+
+    "classmap": [
+        "sportZone/foundation/",
+        "sportZone/utility/",
+        "sportZone/views/",
+        "sportZone/controllers/",
+        "sportZone/entity/"
+    ]
 }

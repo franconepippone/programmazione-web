@@ -1,8 +1,17 @@
 <?php
 
-require_once(__DIR__ . "/../foundation/FEntityManager.php");
+use App\Enum\UserSex;
+
+require_once __DIR__ . "/../../vendor/autoload.php";
+require_once(__DIR__ . "/../views/VUser.php");
+require_once(__DIR__ . "/../utility/USmarty.php");
+/*require_once(__DIR__ . "/../foundation/FEntityManager.php");
+require_once(__DIR__ . "/../foundation/FPersistentManager.php");
 require_once(__DIR__ . "/../utility/UCookie.php");
+require_once(__DIR__ . "/../utility/UHTTPMethods.php");
 require_once(__DIR__ . "/../utility/USession.php");
+require_once(__DIR__ . "/../utility/USmarty.php");
+require_once(__DIR__ . "/../views/VUser.php");*/
 
 class CUser{
 
@@ -46,6 +55,20 @@ class CUser{
         }
     }
 
+    public static function register(){
+        if(UCookie::isSet('PHPSESSID')){
+            if(session_status() == PHP_SESSION_NONE){
+                USession::getInstance();
+            }
+        }
+        if(USession::isSetSessionElement('user')){
+            header('Location: /Agora/User/home');
+        }
+
+        $view = new VUser();
+        $view->showRegistrationForm();
+    }
+
     public static function login(){
         if(UCookie::isSet('PHPSESSID')){
             if(session_status() == PHP_SESSION_NONE){
@@ -55,36 +78,42 @@ class CUser{
         if(USession::isSetSessionElement('user')){
             header('Location: /Agora/User/home');
         }
-        header("Location: http://localhost/programmazioneweb/sportZone/views/login.php");
-        #$view = new VUser();
-        #$view->showLoginForm();
+
+        $view = new VUser();
+        $view->showLoginForm();
     }
 
     /**
      * verify if the choosen username and email already exist, create the User Obj and set a default profile image 
      * @return void
      */
-    public static function registration()
+    public static function attemptRegister()
     {
         $view = new VUser();
-        if(FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')) == false 
-        && FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username')) == false)
+
+        // checks if email and username are already present in the database
+        if(!FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')) ||
+        !FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'))) 
         {
-                $user = new EUtente(
-                    UHTTPMethods::post('name'), 
-                    UHTTPMethods::post('surname'),
-                    UHTTPMethods::post('age'), 
-                    UHTTPMethods::post('email'),
-                    UHTTPMethods::post('password'),
-                    UHTTPMethods::post('username')
-                );
-                $check = FPersistentManager::getInstance()->uploadObj($user);
-                if($check){
-                    $view->showLoginForm();
-                }
-        }else{
-                $view->registrationError();
-            }
+            echo "User already present";
+            return;
+        }
+
+        $new_user = new EClient(
+            UHTTPMethods::post('username'), 
+            '',
+            UHTTPMethods::post('birthdate'),
+            UserSex::MALE, 
+            UHTTPMethods::post('email'),
+            UHTTPMethods::post('username'),
+            UHTTPMethods::post('password')
+        );
+        // register was succesfull
+        $check = FPersistentManager::getInstance()->uploadObj($new_user);
+        if($check){
+            echo "success";
+            //$view->showLoginForm();
+        }
     }
 
     /**
@@ -93,6 +122,12 @@ class CUser{
      */
     public static function checkLogin(){
         $view = new VUser();
+        var_dump($_SERVER['REQUEST_METHOD']);  // Should be "POST"
+        var_dump($_POST);
+        echo "username: ". UHTTPMethods::post('username') . "<br>";
+        echo "password: " . UHTTPMethods::post('password') . "<br>";
+
+        /*
         $username = FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'));                                            
         if($username){
             $user = FPersistentManager::getInstance()->retriveUserOnUsername(UHTTPMethods::post('username'));
@@ -110,7 +145,9 @@ class CUser{
             }
         }else{
             $view->loginError();
-        }
+        }*/
+
+        $view->showHomePage();
     }
 
     /**

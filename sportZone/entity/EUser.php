@@ -24,8 +24,8 @@ abstract class EUser
     #[ORM\Column(type: "date", nullable: false)]
     protected \DateTimeInterface $birthDate;
 
-    #[ORM\Column(enumType: UserSex::class, nullable: false)]
-    protected UserSex $sex;
+    #[ORM\Column(type: "string", nullable: false)]
+    protected string $sex;
 
     #[ORM\Column(type: "string", nullable: false, unique: true)]
     protected string $email;
@@ -40,21 +40,20 @@ abstract class EUser
     public function __construct(
         string $name = '',
         string $surname = '',
-        ?\DateTimeInterface $birthDate = null,
-        ?UserSex $sex = null,
+        \DateTimeInterface $birthDate = new \DateTimeImmutable('1900-01-01'),
+        UserSex $sex = UserSex::MALE,
         string $email = '',
         string $username = '',
         string $password = ''
     ) {
         $this->name = $name;
         $this->surname = $surname;
-        $this->birthDate = $birthDate ?? new \DateTimeImmutable('1900-01-01');
-        $this->sex = $sex ?? UserSex::MALE; 
+        $this->birthDate = $birthDate;
+        $this->setSex($sex);
         $this->email = $email;
         $this->username = $username;
         $this->password = $password;
     }
-
 
     // Getters e Setters possono essere aggiunti qui
 
@@ -78,6 +77,15 @@ abstract class EUser
 
     public function getSurname(): string {
         return $this->surname;
+    }
+
+    public function setSex(UserSex $sex): self {
+        $this->sex = $sex->value;
+        return $this;
+    }
+
+    public function getSex(): UserSex {
+        return UserSex::from($this->sex);
     }
 
     public function setDataNascita(\DateTimeInterface $birthDate): self {

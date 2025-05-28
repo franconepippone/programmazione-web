@@ -6,8 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Enum\UserSex;
 
 
-
 require_once("EUser.php");
+require_once("EEnrollment.php");
+require_once("EReservation.php");
+require_once("EPaymentMethod.php");
+require_once("ECourse.php");
 
 #[ORM\Entity]
 #[ORM\Table(name: "clients")]
