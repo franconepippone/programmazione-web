@@ -92,11 +92,11 @@ class FEntityManager{
     }
 
     /**
-     * return an object finding it not on the id but on an attribute
+     * return an object finding it not on the a but on an attribute
      */
-    public static function retriveObjNotOnId($class, $field, $id){
+    public static function retriveObjFromField($class, $field, $value){
         try{
-            $obj = self::$entityManager->getRepository($class)->findOneBy([$field => $id]);
+            $obj = self::$entityManager->getRepository($class)->findOneBy([$field => $value]);
             return $obj;
         }catch(Exception $e){
             echo "ERROR: ". $e->getMessage();

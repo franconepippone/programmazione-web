@@ -41,4 +41,28 @@ class FPersistentManager{
         return $result;
     }
 
+    /**
+     * upload any Object in the database
+     */
+    public static function uploadObj($obj){
+
+        $result = FEntityManager::getInstance()->saveObject($obj);
+
+        return $result;
+    }
+
+    /**
+     * return a User findig it not on the id but on it's username
+     */
+    public static function retriveUserOnUsername($username)
+    {
+        $result = FUser::getUserByUsername($username);
+        return $result;
+    }
+
+    public static function retriveUserOnId(int $id) {
+        $result = FUser::getUserById($id);
+        return $result;
+    }
+
 }

@@ -2,6 +2,26 @@
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
+/*
+The front controller is the main entry point of the server. All requests made to the server pass though the run()
+method of this class. 
+The run method parses the uri and splits it into tokens separated by "/". The behaviour implemented here
+is to treat the first token as a controller class name, the second token as a method name to execute on that controller,
+and all following tokens as arguments to that method.
+
+For example: localhost/user/login will execute the method CUser.login()
+For example: localhost/image/get/1 will execute the method CImage.get(1)
+In general, localhost/<clsname>/<mtdname>/<arg1>/<arg2>/... will execute CClsname.mtdname(arg1, arg2, ...)
+
+This creates a 1:1 mapping between urls provided to the server and the various methods located 
+in the controller classes. Each request to the server maps to exactly one method call.
+A single use case might consist in multiple subsequent requests to the server.
+
+Login usecase example:
+    1) host/user/login => shows login form. When sumbit is clicked, post form data to 2)
+    2) host/user/checkLogin => receives login data from the form and decides if the user login was succesfull. In which case, 3)
+    3) host/user/home => routes the user to the homepage
+*/
 class CFrontController{
     
     public function run($requestUri){

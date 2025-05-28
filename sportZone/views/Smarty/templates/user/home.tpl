@@ -1,21 +1,30 @@
-{extends file='layouts/base.tpl'}
-
-{block name='title'}Home Page{/block}
-
-{block name='content'}
-  <h1>Welcome to Our Website</h1>
-  <p>This is the homepage. Enjoy your stay!</p>
-
-  <div class="features">
-    <h2>Features</h2>
-    <ul>
-      <li>Fast and secure</li>
-      <li>Easy to use</li>
-      <li>Responsive design</li>
-    </ul>
-  </div>
-
-  <div class="cta">
-    <a href="{$base_url}/signup" class="btn">Get Started</a>
-  </div>
-{/block}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef;
+            padding: 2rem;
+            text-align: center;
+        }
+        .box {
+            background: white;
+            padding: 2rem;
+            max-width: 500px;
+            margin: 3rem auto;
+            box-shadow: 0 0 12px rgba(0,0,0,0.15);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Welcome Home</h1>
+        <p>Hello, <strong>{$username|escape}</strong>!</p>
+        <p>Glad to see you again.</p>
+    </div>
+</body>
+</html>

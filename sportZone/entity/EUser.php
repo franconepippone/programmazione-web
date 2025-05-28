@@ -52,7 +52,7 @@ abstract class EUser
         $this->setSex($sex);
         $this->email = $email;
         $this->username = $username;
-        $this->password = $password;
+        $this->setPassword($password);
     }
 
     // Getters e Setters possono essere aggiunti qui
@@ -107,11 +107,12 @@ abstract class EUser
     }
 
     public function setPassword(string $password): self {
-        $this->password = $password;
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $this->password = $hashedPassword;
         return $this;
     }
 
-    public function getPassword(): string {
+    public function getPasswordHashed(): string {
         return $this->password;
     }
 
@@ -122,6 +123,10 @@ abstract class EUser
 
     public function getUsername(): string {
         return $this->username;
+    }
+
+    public function getFullName(): string {
+        return $this->getName() .' '. $this->getSurname();
     }
 
 

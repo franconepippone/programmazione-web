@@ -17,8 +17,8 @@ class VUser{
         $this->smarty->display("user/register.tpl");
     }
 
-    public function showHomePage() {
-        $this->smarty->assign('base_url', 'http://yourdomain.com');
+    public function showHomePage(string $username) {
+        $this->smarty->assign('username', $username);
         $this->smarty->display('user/home.tpl');
     }
 

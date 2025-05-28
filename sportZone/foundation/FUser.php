@@ -18,4 +18,13 @@ class FUser{
         return $result;
     }
 
+    public static function getUserByUsername($username){
+        $result = FEntityManager::getInstance()->retriveObjFromField(EUser::class, 'username', $username);
+        return $result;
+    }
+
+    public static function getUserById(int $id){
+        $result = FEntityManager::getInstance()->retriveObj(EUser::class, $id);
+        return $result;
+    }
 }

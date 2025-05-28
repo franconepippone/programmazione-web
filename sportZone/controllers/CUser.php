@@ -21,25 +21,15 @@ class CUser{
         }
         if(USession::isSetSessionElement('user')){
             $logged = true;
-            self::isBanned();
         }
         if(!$logged){
-            header('Location: /Agora/User/login');
+            header('Location: /User/login');
             exit;
         }
         return true;
     }
 
     public static function register(){
-        if(UCookie::isSet('PHPSESSID')){
-            if(session_status() == PHP_SESSION_NONE){
-                USession::getInstance();
-            }
-        }
-        if(USession::isSetSessionElement('user')){
-            header('Location: /Agora/User/home');
-        }
-
         $view = new VUser();
         $view->showRegistrationForm();
     }
@@ -51,7 +41,7 @@ class CUser{
             }
         }
         if(USession::isSetSessionElement('user')){
-            header('Location: /Agora/User/home');
+            header('Location: /user/home');
         }
 
         $view = new VUser();
@@ -66,19 +56,21 @@ class CUser{
     {
 
         $view = new VUser();
+        var_dump(FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')));
+        var_dump(FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username')));
 
         // checks if email and username are already present in the database
-        if(!FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')) ||
-        !FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'))) 
+        if(FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')) ||
+        FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'))) 
         {
             echo "User already present";
             return;
         }
 
         $new_user = new EClient(
-            UHTTPMethods::post('username'), 
-            '',
-            UHTTPMethods::post('birthdate'),
+            UHTTPMethods::post('name'), 
+            UHTTPMethods::post('surname'),
+            null,
             UserSex::MALE, 
             UHTTPMethods::post('email'),
             UHTTPMethods::post('username'),
@@ -88,6 +80,7 @@ class CUser{
         $check = FPersistentManager::getInstance()->uploadObj($new_user);
         if($check){
             echo "success";
+            header("Location: /user/login");
             //$view->showLoginForm();
         }
     }
@@ -103,27 +96,22 @@ class CUser{
         echo "username: ". UHTTPMethods::post('username') . "<br>";
         echo "password: " . UHTTPMethods::post('password') . "<br>";
 
-        /*
-        $username = FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'));                                            
-        if($username){
+        
+        $username_exists = FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'));                                            
+        if($username_exists){
             $user = FPersistentManager::getInstance()->retriveUserOnUsername(UHTTPMethods::post('username'));
-            if(password_verify(UHTTPMethods::post('password'), $user->getPassword())){
-                if($user->isBanned()){
-                    $view->loginBan();
-
-                }elseif(USession::getSessionStatus() == PHP_SESSION_NONE){
+            if(password_verify(UHTTPMethods::post('password'), $user->getPasswordHashed())){
+                if(USession::getSessionStatus() == PHP_SESSION_NONE){
                     USession::getInstance();
                     USession::setSessionElement('user', $user->getId());
-                    header('Location: /Agora/User/home');
+                    header('Location: /user/home');
                 }
             }else{
                 $view->loginError();
             }
         }else{
             $view->loginError();
-        }*/
-
-        $view->showHomePage();
+        }
     }
 
     /**
@@ -137,27 +125,13 @@ class CUser{
         header('Location: /Agora/User/login');
     }
 
-    /**
-     * load all the Posts in homepage (Posts of the Users that the logged User are following). Also are loaded Information about vip User and
-     * about profile Images of all the involved User
-     */
     public static function home(){
         if(CUser::isLogged()){
             $view = new VUser();
 
             $userId = USession::getInstance()->getSessionElement('user');
-            $userAndPropic = FPersistentManager::getInstance()->loadUsersAndImage($userId);
-
-            //load all the posts of the users who you follow(post have user attribute) and the profile pic of the author of teh post
-            $postInHome = FPersistentManager::getInstance()->loadHomePage($userId);
-            
-            //load the VIP Users, their profile Images and the foillower number
-            $arrayVipUserPropicFollowNumb = FPersistentManager::getInstance()->loadVip();
-
-            //var_dump($userAndPropic[0][1]->getImageData());
-
-            //var_dump($userAndPropic[0][0]->getUsername());
-            $view->home($userAndPropic, $postInHome,$arrayVipUserPropicFollowNumb);
+            $user = FPersistentManager::getInstance()->retriveUserOnId($userId);-
+            $view->showHomePage($user->getFullName());
         }  
     }
 

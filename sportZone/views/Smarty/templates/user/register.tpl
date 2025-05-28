@@ -79,11 +79,11 @@
     <h2>Register</h2>
     <form action="/user/attemptRegister" method="POST">
 
-      <label for="username">First name:</label>
-      <input type="text" id="username" name="username" required>
+      <label for="name">First name:</label>
+      <input type="text" id="name" name="name" required>
 
-      <label for="username">Last name:</label>
-      <input type="text" id="username" name="username" required>
+      <label for="surname">Last name:</label>
+      <input type="text" id="surname" name="surname" required>
 
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>

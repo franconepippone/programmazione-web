@@ -27,7 +27,15 @@ class EClient extends EUser
         string $username = '',
         string $password = ''
     ) {
-        parent::__construct($name, $surname, $birthDate, $sex, $email, $username, $password);
+        parent::__construct(
+            $name, 
+            $surname, 
+            $birthDate ?? new \DateTime("10-10-1990"), 
+            $sex, 
+            $email, 
+            $username, 
+            $password
+        );
         $this->enrollments = new ArrayCollection();
         $this->reservations = new ArrayCollection();
     }
