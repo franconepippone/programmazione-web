@@ -3,15 +3,6 @@
 use App\Enum\UserSex;
 
 require_once __DIR__ . "/../../vendor/autoload.php";
-require_once(__DIR__ . "/../views/VUser.php");
-require_once(__DIR__ . "/../utility/USmarty.php");
-/*require_once(__DIR__ . "/../foundation/FEntityManager.php");
-require_once(__DIR__ . "/../foundation/FPersistentManager.php");
-require_once(__DIR__ . "/../utility/UCookie.php");
-require_once(__DIR__ . "/../utility/UHTTPMethods.php");
-require_once(__DIR__ . "/../utility/USession.php");
-require_once(__DIR__ . "/../utility/USmarty.php");
-require_once(__DIR__ . "/../views/VUser.php");*/
 
 class CUser{
 
@@ -37,22 +28,6 @@ class CUser{
             exit;
         }
         return true;
-    }
-
-    /**
-     * check if the user is banned
-     * @return void
-     */
-    public static function isBanned()
-    {
-        $userId = USession::getSessionElement('user');
-        $user = FEntityManager::getInstance()->retriveObj(EUtente::class, $userId);
-        if($user->isBanned()){
-            $view = new VUser();
-            USession::unsetSession();
-            USession::destroySession();
-            $view->loginBan();
-        }
     }
 
     public static function register(){
@@ -89,6 +64,7 @@ class CUser{
      */
     public static function attemptRegister()
     {
+
         $view = new VUser();
 
         // checks if email and username are already present in the database

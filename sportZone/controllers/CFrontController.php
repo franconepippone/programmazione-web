@@ -1,11 +1,13 @@
 <?php
 
-require_once(__DIR__ . "/../utility/UCookie.php");
+require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CFrontController{
     
     public function run($requestUri){
         // Parse the request URI
+        
+
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";

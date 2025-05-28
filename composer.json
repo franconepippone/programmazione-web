@@ -5,11 +5,14 @@
         "smarty/smarty": "^5.5"
     },
 
-    "classmap": [
-        "sportZone/foundation/",
-        "sportZone/utility/",
-        "sportZone/views/",
-        "sportZone/controllers/",
-        "sportZone/entity/"
-    ]
+    "autoload": {
+        "classmap": [
+            "sportZone/foundation/",
+            "sportZone/utility/",
+            "sportZone/views/",
+            "sportZone/controllers/",
+            "sportZone/entity/"
+        ]
+    }
+    
 }
