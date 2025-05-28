@@ -1,14 +1,14 @@
 <?php
 use Doctrine\ORM\Mapping as ORM;
-use App\Enum\SessoEnum;
+use App\Enum\UserSex;
 
 #[ORM\Entity]
 #[ORM\InheritanceType("SINGLE_TABLE")]
-#[ORM\DiscriminatorColumn(name: "tipo", type: "string")]
-#[ORM\DiscriminatorMap(["cliente" => ECliente::class, "dipendente" => EDipendente::class, "istruttore" => EIstruttore::class])]
-#[ORM\Table(name: "utenti")]
+#[ORM\DiscriminatorColumn(name: "type", type: "string")]
+#[ORM\DiscriminatorMap(value: ["client" => EClient::class, "employee" => EEmployee::class, "instructor" => EInstructor::class])]
+#[ORM\Table(name: "users")]
 
-abstract class EUtente
+abstract class EUser
 {
     #[ORM\Id]
     #[ORM\GeneratedValue("AUTO")]
@@ -16,42 +16,42 @@ abstract class EUtente
     protected int $id;
 
     #[ORM\Column(type: "string", nullable: false)]
-    protected string $nome;
+    protected string $name;
 
     #[ORM\Column(type: "string", nullable: false)]
-    protected string $cognome;
+    protected string $surname;
 
     #[ORM\Column(type: "date", nullable: false)]
-    protected \DateTimeInterface $data_nascita;
+    protected \DateTimeInterface $birthDate;
 
-    #[ORM\Column(enumType: SessoEnum::class, nullable: false)]
-    protected SessoEnum $sesso;
+    #[ORM\Column(enumType: UserSex::class, nullable: false)]
+    protected UserSex $sex;
 
     #[ORM\Column(type: "string", nullable: false, unique: true)]
     protected string $email;
 
     #[ORM\Column(type: "string", nullable: false, unique: true)]
-    protected string $nome_utente;
+    protected string $username;
 
     #[ORM\Column(type: "string", nullable: false)]
     protected string $password;
 
     // construct (per semplificare l'instanziazione)
     public function __construct(
-        string $nome = '',
-        string $cognome = '',
-        ?\DateTimeInterface $data_nascita = null,
-        ?SessoEnum $sesso = null,
+        string $name = '',
+        string $surname = '',
+        ?\DateTimeInterface $birthDate = null,
+        ?UserSex $sex = null,
         string $email = '',
-        string $nome_utente = '',
+        string $username = '',
         string $password = ''
     ) {
-        $this->nome = $nome;
-        $this->cognome = $cognome;
-        $this->data_nascita = $data_nascita ?? new \DateTimeImmutable('1900-01-01');
-        $this->sesso = $sesso ?? SessoEnum::MALE; // or FEMALE, pick a sensible default
+        $this->name = $name;
+        $this->surname = $surname;
+        $this->birthDate = $birthDate ?? new \DateTimeImmutable('1900-01-01');
+        $this->sex = $sex ?? UserSex::MALE; 
         $this->email = $email;
-        $this->nome_utente = $nome_utente;
+        $this->username = $username;
         $this->password = $password;
     }
 
@@ -62,31 +62,31 @@ abstract class EUtente
         return $this->id;
     }
 
-    public function setNome(string $nome): self {
-        $this->nome = $nome;
+    public function setName(string $name): self {
+        $this->name = $name;
         return $this;
     }
 
-    public function getNome(): string {
-        return $this->nome;
+    public function getName(): string {
+        return $this->name;
     }
 
-    public function setCognome(string $cognome): self {
-        $this->cognome = $cognome;
+    public function setSurname(string $surname): self {
+        $this->surname = $surname;
         return $this;
     }
 
-    public function getCognome(): string {
-        return $this->cognome;
+    public function getSurname(): string {
+        return $this->surname;
     }
 
-    public function setDataNascita(\DateTimeInterface $data_nascita): self {
-        $this->data_nascita = $data_nascita;
+    public function setDataNascita(\DateTimeInterface $birthDate): self {
+        $this->birthDate = $birthDate;
         return $this;
     }
 
     public function getDataNascita(): \DateTimeInterface {
-        return $this->data_nascita;
+        return $this->birthDate;
     }
 
     public function setEmail(string $email): self {
@@ -107,9 +107,13 @@ abstract class EUtente
         return $this->password;
     }
 
-    public function setNomeUtente(string $nome_utente): self {
-        $this->nome_utente = $nome_utente;
+    public function setUsername(string $username): self {
+        $this->username = $username;
         return $this;
+    }
+
+    public function getUsername(): string {
+        return $this->username;
     }
 
 

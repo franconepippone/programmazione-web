@@ -1,6 +1,10 @@
 <?php
 
-class CUser{
+require_once(__DIR__ . "/../foundation/FEntityManager.php");
+require_once(__DIR__ . "/../utility/UCookie.php");
+require_once(__DIR__ . "/../utility/USession.php");
+
+class CUtente{
 
     /**
      * check if the user is logged (using session)
@@ -33,7 +37,7 @@ class CUser{
     public static function isBanned()
     {
         $userId = USession::getSessionElement('user');
-        $user = FPersistentManager::getInstance()->retriveObj(EUser::getEntity(), $userId);
+        $user = FEntityManager::getInstance()->retriveObj(EUtente::class, $userId);
         if($user->isBanned()){
             $view = new VUser();
             USession::unsetSession();
@@ -42,7 +46,7 @@ class CUser{
         }
     }
 
-    public static function login(){
+    public static function PUB_login(){
         if(UCookie::isSet('PHPSESSID')){
             if(session_status() == PHP_SESSION_NONE){
                 USession::getInstance();
@@ -51,8 +55,8 @@ class CUser{
         if(USession::isSetSessionElement('user')){
             header('Location: /Agora/User/home');
         }
-        $view = new VUser();
-        $view->showLoginForm();
+        #$view = new VUser();
+        #$view->showLoginForm();
     }
 
     /**
@@ -62,8 +66,17 @@ class CUser{
     public static function registration()
     {
         $view = new VUser();
-        if(FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')) == false && FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username')) == false){
-                $user = new EUser(UHTTPMethods::post('name'), UHTTPMethods::post('surname'),UHTTPMethods::post('age'), UHTTPMethods::post('email'),UHTTPMethods::post('password'),UHTTPMethods::post('username'));
+        if(FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')) == false 
+        && FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username')) == false)
+        {
+                $user = new EUtente(
+                    UHTTPMethods::post('name'), 
+                    UHTTPMethods::post('surname'),
+                    UHTTPMethods::post('age'), 
+                    UHTTPMethods::post('email'),
+                    UHTTPMethods::post('password'),
+                    UHTTPMethods::post('username')
+                );
                 $check = FPersistentManager::getInstance()->uploadObj($user);
                 if($check){
                     $view->showLoginForm();
