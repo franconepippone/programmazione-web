@@ -18,7 +18,7 @@ class CFrontController{
         // Extract controller and method names
         $controllerName = !empty($uriParts[0]) ? ucfirst($uriParts[0]) : 'User';
         // var_dump($controllerName);
-        $methodName = 'PUB_' . (!empty($uriParts[1]) ? $uriParts[1] : 'login');
+        $methodName = (!empty($uriParts[1]) ? $uriParts[1] : 'login');
         echo "Requested controller: " . $controllerName . "<br>";
         echo "Requested method: " . $methodName . "<br>";
 
@@ -28,24 +28,30 @@ class CFrontController{
         $controllerFile = __DIR__ . "/{$controllerClass}.php";
         // var_dump($controllerFile);
 
-        if (file_exists($controllerFile)) {
-            require_once $controllerFile;
-
-            // Check if the method exists in the controller
-            if (method_exists($controllerClass, $methodName)) {
-                // Call the method
-                $params = array_slice($uriParts, 2); // Get optional parameters
-                echo "Calling " . "$controllerClass"."."."$methodName" . " with parameters: " . print_r($params, true) . "<br>";
-                call_user_func_array([$controllerClass, $methodName], $params);
-            } else {
-                echo "<br> Method ". $methodName ." not found <br>";
-                // Method not found, handle appropriately (e.g., show 404 page)
-                //header('Location: /Agora/User/home');
-            }
-        } else {
+        if (!file_exists($controllerFile)) {
             echo "<br> Controller ". $controllerClass ." not found <br>";
             // Controller not found, handle appropriately (e.g., show 404 page)
-            //header('Location: /Agora/User/home');
+            //header('Location: /Agora/User/home')
+            exit;
         }
+        
+        require_once $controllerFile;
+        if (!class_exists($controllerClass)) {
+            echo "<br> Controller class ". $controllerClass ." not found <br>";
+            // Controller not found, handle appropriately (e.g., show 404 page)
+            //header('Location: /Agora/User/home')
+            exit;            
+        }
+
+        if (!method_exists($controllerClass, $methodName)) {
+            echo "<br> Method ". $methodName ." not found <br>";
+            // Method not found, handle appropriately (e.g., show 404 page)
+            //header('Location: /Agora/User/home')
+            exit;
+        }
+
+        $params = array_slice($uriParts, 2); // Get optional parameters
+        echo "Calling " . "$controllerClass" . "." . "$methodName" . " with parameters: " . print_r($params, true) . "<br>";
+        call_user_func_array([$controllerClass, $methodName], $params);
     }
 }

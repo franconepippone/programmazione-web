@@ -4,7 +4,7 @@ require_once(__DIR__ . "/../foundation/FEntityManager.php");
 require_once(__DIR__ . "/../utility/UCookie.php");
 require_once(__DIR__ . "/../utility/USession.php");
 
-class CUtente{
+class CUser{
 
     /**
      * check if the user is logged (using session)
@@ -46,7 +46,7 @@ class CUtente{
         }
     }
 
-    public static function PUB_login(){
+    public static function login(){
         if(UCookie::isSet('PHPSESSID')){
             if(session_status() == PHP_SESSION_NONE){
                 USession::getInstance();
@@ -55,6 +55,7 @@ class CUtente{
         if(USession::isSetSessionElement('user')){
             header('Location: /Agora/User/home');
         }
+        header("Location: http://localhost/programmazioneweb/sportZone/views/login.php");
         #$view = new VUser();
         #$view->showLoginForm();
     }
