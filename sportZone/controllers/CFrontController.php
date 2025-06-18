@@ -77,7 +77,7 @@ class CFrontController{
         
         
         
-        ob_clean(); // UNCOMMENT THIS TO SHOW DEBUG ECHOS TO BROWSER
+        ob_clean(); // COMMENT THIS TO SHOW DEBUG ECHOS TO BROWSER
 
 
         call_user_func_array([$controllerClass, $methodName], $params);

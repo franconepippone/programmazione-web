@@ -122,7 +122,7 @@ class CUser{
         USession::getInstance();
         USession::unsetSession();
         USession::destroySession();
-        header('Location: /Agora/User/login');
+        header('Location: /user/login');
     }
 
     public static function home(){
