@@ -1,2 +1,5 @@
 *.code-workspace
 /vendor
+
+# ms doc temp files
+~$*.*
