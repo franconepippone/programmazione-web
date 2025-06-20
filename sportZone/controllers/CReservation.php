@@ -9,8 +9,9 @@ class CReservation{
             return;
         }
     
-    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     $view = new VReservation();
+    $fieldId = UHTTPMethods::get('fieldId');
+    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     $view->showReservationForm($fields);
   
   }
