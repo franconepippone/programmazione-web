@@ -14,6 +14,13 @@ class VField{
     }
 
     public function showSearchResults() {
-        $this->smarty->display("field/lista_campi.tpl");
+        $this->smarty->display("field/search_results_list.tpl");
     }
+
+    // ------------------- ADMIN -----------------------------
+
+    public function showCreateFieldForm() {
+        $this->smarty->display("field/create_field.tpl");
+    }
+
 }

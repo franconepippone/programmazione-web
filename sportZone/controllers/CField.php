@@ -27,4 +27,12 @@ class CField{
     public static function details($field_id) {
         echo $field_id;
     }
+
+
+    // ------------------- ADMIN -----------------------------
+
+    public static function createFieldForm() {
+        $view = new VField();
+        $view->showCreateFieldForm();
+    }
 }
