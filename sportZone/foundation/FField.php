@@ -9,7 +9,7 @@ class FField {
      * @param int $id
      * @return EField|null
      */
-    public static function retrieveFieldById(int $id): ?EField {
+    public static function getFieldById(int $id): ?EField {
         return FEntityManager::getInstance()->retriveObj(EField::class, $id);
     }
 }
