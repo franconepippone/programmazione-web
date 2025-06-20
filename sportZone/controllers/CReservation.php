@@ -3,6 +3,10 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CReservation{
 
-  public static function ReservationForm{
+  public static function createForm(){
+    
+    $fields = FPersistentManager::getInstance()->retriveAll(EField::getEntity());
+    $view = new VReservation();
+    $view->showReservationForm($fields);
   
 }
