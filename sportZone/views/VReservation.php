@@ -9,7 +9,7 @@ class VReservation{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function showCreateForm() {
+    public function showReservationForm() {
         $this->smarty->display("reservation/create_form.tpl");
     }
 }
