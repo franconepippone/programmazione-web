@@ -1,1 +1,40 @@
 
+<form method="POST" action="/reservation/finalizeReservation">
+
+    <!-- Info campo -->
+    <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
+        <div>
+            <img src="<?php echo $field->getImageUrl(); ?>" alt="Campo" style="width: 300px; height: auto; border-radius: 10px;">
+        </div>
+        <div>
+            <p><strong>Sport:</strong> <?php echo htmlspecialchars($field->getSport()); ?></p>
+            <p><strong>Tipo terreno:</strong> <?php echo htmlspecialchars($field->getSurface()); ?></p>
+            <p><strong>Coperto:</strong> <?php echo $field->isIndoor() ? 'Sì' : 'No'; ?></p>
+            <p><strong>Costo orario:</strong> €<?php echo number_format($field->getHourlyCost(), 2); ?></p>
+            <p><strong>Data selezionata:</strong> <?php echo htmlspecialchars($date); ?></p>
+        </div>
+    </div>
+
+    <!-- Hidden input per field e data -->
+    <input type="hidden" name="field_id" value="<?php echo $field->getId(); ?>">
+    <input type="hidden" name="date" value="<?php echo htmlspecialchars($date); ?>">
+
+    <!-- Orario -->
+    <label for="time"><strong>Seleziona orario:</strong></label><br>
+    <select name="time" required>
+        <?php
+        for ($hour = 8; $hour <= 22; $hour++) {
+            echo "<option value='{$hour}:00'>{$hour}:00</option>";
+        }
+        ?>
+    </select><br><br>
+
+    <!-- Metodo di pagamento -->
+    <label for="payment_method"><strong>Metodo di pagamento:</strong></label><br>
+    <select name="payment_method" required>
+        <option value="online">Pagamento Online</option>
+        <option value="onsite">Pagamento in sede</option>
+    </select><br><br>
+
+    <button type="submit">Conferma Prenotazione</button>
+</form>
