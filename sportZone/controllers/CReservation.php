@@ -3,7 +3,7 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CReservation{
 
-  public static function createForm(){
+  public static function reservationForm(){
 
      if (!CUser::isLogged()) {
             return;
