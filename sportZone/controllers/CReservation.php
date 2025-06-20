@@ -10,9 +10,9 @@ class CReservation{
         }
     
     $view = new VReservation();
-    $fieldId = UHTTPMethods::get('fieldId');
-    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-    $view->showReservationForm($fields);
+    //$fieldId = UHTTPMethods::get('fieldId');
+    //$field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+    $view->showReservationForm();
   
   }
 }
