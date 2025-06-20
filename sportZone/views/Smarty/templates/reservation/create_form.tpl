@@ -63,13 +63,14 @@
 
     <div class="field-info">
       <div>
-        <img src="<?php echo $field->getImageUrl(); ?>" alt="Campo">
+        <!-- Se non hai un'immagine, puoi usare un placeholder -->
+        <img src="/images/placeholder_field.jpg" alt="Campo">
       </div>
       <div class="field-details">
         <p><strong>Sport:</strong> <?php echo htmlspecialchars($field->getSport()); ?></p>
-        <p><strong>Tipo terreno:</strong> <?php echo htmlspecialchars($field->getSurface()); ?></p>
-        <p><strong>Coperto:</strong> <?php echo $field->isIndoor() ? 'Sì' : 'No'; ?></p>
-        <p><strong>Costo orario:</strong> €<?php echo number_format($field->getHourlyCost(), 2); ?></p>
+        <p><strong>Tipo terreno:</strong> <?php echo htmlspecialchars($field->getTerrainType()); ?></p>
+        <p><strong>Coperto:</strong> <?php echo $field->getIsIndoor() ? 'Sì' : 'No'; ?></p>
+        <p><strong>Costo orario:</strong> €<?php echo number_format($field->getCost(), 2); ?></p>
         <p><strong>Data selezionata:</strong> <?php echo htmlspecialchars($date); ?></p>
       </div>
     </div>
