@@ -12,3 +12,4 @@ class VReservation{
     public function showCreateForm() {
         $this->smarty->display("reservation/create_form.tpl");
     }
+}
