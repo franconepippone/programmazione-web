@@ -1,20 +1,29 @@
 tra [..] ci sono i parametri passati con POST / GET
 tra <..> ci sono parti variabili dell'url
 
-field/search 					// mostra un form per ricerca dei campi2b
+---------------- FIELD
+field/search 					// mostra un form per ricerca dei campi
 field/show [parametri di filtraggio]		// mostra una lista di campi in base ai filtri 
 field/detail/<campo>				// mostra i dettagli di un singolo campo + bottone per prenotarlo
 
+
+---------------- RESERVATION
 reservation/create [parametri di prenotazione]	// mostra form finale di prenotazione con ultime opzioni selezionabili e riepilogo alla fine
 
+
+---------------- ONLINEPAYMENT
 onlinepayment/pay				// apre il form di pagamento online con la cifra richiesta (impostata dal server)
 
+
+---------------- COURSE
 course/show [parametri di filtraggio]		// mostra la lista dei orsi attivi in base ai filtri
 course/detail/<corso>				// mostra i dettagli di un corso
 course/enroll/<corso>				// mostra un form di iscrizione (si sceglie il metodo di pagam.) e chiede conferma
 course/manage/<corso>				// mostra un menu per la gestione del corso (riservato a istruttori/dipendenti)
 course/create					// mostra il menu per la creazione di un nuovo corso (riservato a dipendenti)
 
+
+---------------- USER
 user/home					// mostra l'area riservata dell'utente con tutti i menu e le opzioni
 user/home/mycourses
 user/home/dashboard
