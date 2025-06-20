@@ -9,4 +9,5 @@ class CReservation{
     $view = new VReservation();
     $view->showReservationForm($fields);
   
+  }
 }
