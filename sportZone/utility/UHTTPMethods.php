@@ -6,6 +6,13 @@
 class UHTTPMethods{
 
     /**
+     * can access to $_GET superglobal
+     */
+    public static function get($param){
+        return $_GET[$param];
+    }
+    
+    /**
      * can access to $_POST superglobal
      */
     public static function post($param){
