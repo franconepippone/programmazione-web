@@ -3,8 +3,7 @@
 require_once __DIR__ . "/FUser.php";
 require_once __DIR__ . "/FReservation.php";
 require_once __DIR__ . "/FField.php";
-require_once __DIR__ . "/FClient.php";
-require_once __DIR__ . "/FPaymentMethod.php";
+
 
 class FPersistentManager{
 
