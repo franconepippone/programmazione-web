@@ -1,6 +1,10 @@
 <?php
 
 require_once __DIR__ . "/FUser.php";
+require_once __DIR__ . "/FReservation.php";
+require_once __DIR__ . "/FField.php";
+require_once __DIR__ . "/FClient.php";
+require_once __DIR__ . "/FPaymentMethod.php";
 
 class FPersistentManager{
 
@@ -64,5 +68,49 @@ class FPersistentManager{
         $result = FUser::getUserById($id);
         return $result;
     }
+
+     //-------------------------------------FIELD---------------------------------------
+
+    /**
+     * Retrieve a Field by ID
+     */
+    public static function retriveFieldById($id){
+        return FField::getFieldById($id);
+    }
+
+     //-------------------------------------CLIENT--------------------------------------
+
+    /**
+     * Retrieve a Client by ID
+     */
+    public static function retriveClientById($id){
+        return FClient::getClientById($id);
+    }
+
+    //-----------------------------------PAYMENT METHOD-------------------------------
+
+    /**
+     * Retrieve a Payment Method by ID
+     */
+    public static function retrivePaymentMethodById($id){
+        return FPaymentMethod::getPaymentMethodById($id);
+    }
+
+    //-------------------------------------RESERVATION--------------------------------
+
+    /**
+     * Retrieve reservations by field and date
+     */
+    public static function getReservationsByFieldAndDate($field, $date){
+        return FReservation::getReservationsByFieldAndDate($field, $date);
+    }
+
+    /**
+     * Save a Reservation object
+     */
+    public static function saveReservation($reservation){
+        return FReservation::save($reservation);
+    }
+
 
 }
