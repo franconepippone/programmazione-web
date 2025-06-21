@@ -72,19 +72,17 @@ class CReservation{
 
     $id = isset($_GET['id']) && is_numeric($_GET['id']) ? intval($_GET['id']) : null;
 
-    $view = new VReservation();
-
     if ($id === null || $id <= 0) {
-        $view->assign('errorMessage', 'ID prenotazione non valido.');
-        $view->showCancelError();
+        $errorView = new VError();
+        $errorView->show('ID prenotazione non valido.');
         return;
     }
 
     $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, $id);
 
     if ($reservation === null) {
-        $view->assign('errorMessage', 'Prenotazione non trovata.');
-        $view->showCancelError();
+        $errorView = new VError();
+        $errorView->show('Prenotazione non trovata.');
         return;
     }
 
@@ -96,22 +94,20 @@ class CReservation{
 
     $client = $reservation->getClient();
     if ($client === null || $client->getUserId() !== $userId) {
-        $view->assign('errorMessage', 'Non sei autorizzato a cancellare questa prenotazione.');
-        $view->showCancelError();
+        $errorView = new VError();
+        $errorView->show('Non sei autorizzato a cancellare questa prenotazione.');
         return;
     }
 
-    // Se arriva POST con conferma, cancella e mostra conferma
+    $view = new VReservation();
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
         FPersistentManager::getInstance()->deleteObj($reservation);
-        $view->showCancelConfirmation();
+        $view->showConfirmation();
         return;
     }
 
-    // Mostra riepilogo con form (id passato nel form come hidden)
-    $view->assign('reservation', $reservation);
+    $view->reservation = $reservation;
     $view->showCancelReservation();
  }
 }
-
-   
