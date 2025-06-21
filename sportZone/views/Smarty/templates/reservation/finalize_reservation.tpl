@@ -25,7 +25,7 @@
     </ul>
 {/if}
 
-<form id="reservationForm" method="post" action="reservation/finalizeReservation">
+<form id="reservationForm" method="post" action="/reservation/finalizeReservation">
     <input type="hidden" name="data" value="{$data|default:''}">
     <input type="hidden" name="orario" value="{$orario|default:''}">
     <input type="hidden" name="id" value="{if $campo != null}{$campo->getId()}{else}[/getId()]{/if}">
@@ -44,9 +44,9 @@
     document.getElementById('reservationForm').addEventListener('submit', function (e) {
         const metodo = document.getElementById('paymentMethod').value;
         if (metodo === 'online') {
-            this.action = 'index.php?controller=onlinepayment&task=payForm';
+            this.action = '/onlinepayment/payForm';
         } else {
-            this.action = 'index.php?controller=reservation&task=finalizeReservation';
+            this.action = '/reservation/finalizeReservation';
         }
     });
 </script>
