@@ -72,42 +72,42 @@ class CReservation{
 
     $id = isset($_GET['id']) && is_numeric($_GET['id']) ? intval($_GET['id']) : null;
 
-    if ($id === null || $id <= 0) {
-        $errorView = new VError();
-        $errorView->show('ID prenotazione non valido.');
-        return;
-    }
+   // if ($id === null || $id <= 0) {
+     //   $errorView = new VError();
+       // $errorView->show('ID prenotazione non valido.');
+       // return;
+    //}
 
-    $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, $id);
+    //$reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, $id);
 
-    if ($reservation === null) {
-        $errorView = new VError();
-        $errorView->show('Prenotazione non trovata.');
-        return;
-    }
+    //if ($reservation === null) {
+      //  $errorView = new VError();
+        //$errorView->show('Prenotazione non trovata.');
+        //return;
+    //}
 
     $userId = USession::getSessionElement('userId') ?? null;
-    if ($userId === null) {
-        header('Location: index.php?controller=user&task=loginForm');
-        exit;
-    }
+    //if ($userId === null) {
+      //  header('Location: index.php?controller=user&task=loginForm');
+        //exit;
+    //}
 
-    $client = $reservation->getClient();
-    if ($client === null || $client->getUserId() !== $userId) {
-        $errorView = new VError();
-        $errorView->show('Non sei autorizzato a cancellare questa prenotazione.');
-        return;
-    }
+    //$client = $reservation->getClient();
+    //if ($client === null || $client->getUserId() !== $userId) {
+      //  $errorView = new VError();
+        //$errorView->show('Non sei autorizzato a cancellare questa prenotazione.');
+        //return;
+    //}
 
     $view = new VReservation();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
-        FPersistentManager::getInstance()->deleteObj($reservation);
-        $view->showConfirmation();
+      //  FPersistentManager::getInstance()->deleteObj($reservation);
+        $view->showCancelConfirmation();
         return;
     }
 
-    $view->reservation = $reservation;
+   // $view->reservation = $reservation;
     $view->showCancelReservation();
  }
 }
