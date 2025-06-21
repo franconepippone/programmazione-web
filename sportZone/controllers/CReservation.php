@@ -63,7 +63,7 @@ class CReservation{
         return;
     }
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $fieldId = UHTTPMethods::post("field_id");
         $date = UHTTPMethods::post("date");
