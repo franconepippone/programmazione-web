@@ -64,22 +64,24 @@
         <img src="/images/placeholder_field.jpg" alt="Campo">
       </div>
       <div class="field-details">
-        <p><strong>Sport:</strong> <?php echo htmlspecialchars($field->getSport()); ?></p>
-        <p><strong>Tipo terreno:</strong> <?php echo htmlspecialchars($field->getTerrainType()); ?></p>
-        <p><strong>Coperto:</strong> <?php echo $field->getIsIndoor() ? 'Sì' : 'No'; ?></p>
-        <p><strong>Costo orario:</strong> €<?php echo number_format($field->getCost(), 2); ?></p>
-        <p><strong>Data selezionata:</strong> <?php echo htmlspecialchars($date); ?></p>
+        <p><strong>Sport:</strong> Calcio</p>
+        <p><strong>Tipo terreno:</strong> Erba sintetica</p>
+        <p><strong>Coperto:</strong> Sì</p>
+        <p><strong>Costo orario:</strong> €25.00</p>
+        <p><strong>Data selezionata:</strong> 2025-06-21</p>
       </div>
     </div>
 
-    <input type="hidden" name="field_id" value="<?php echo $field->getId(); ?>">
-    <input type="hidden" name="date" value="<?php echo htmlspecialchars($date); ?>">
+    <input type="hidden" name="field_id" value="123">
+    <input type="hidden" name="date" value="2025-06-21">
 
     <label for="time">Seleziona orario:</label>
     <select name="time" id="time" required>
-      <?php foreach ($availableHours as $hour): ?>
-        <option value="<?php echo htmlspecialchars($hour); ?>"><?php echo htmlspecialchars($hour); ?></option>
-      <?php endforeach; ?>
+      <option value="10:00">10:00</option>
+      <option value="11:00">11:00</option>
+      <option value="12:00">12:00</option>
+      <option value="13:00">13:00</option>
+      <option value="14:00">14:00</option>
     </select>
 
     <button type="submit">Conferma Orario</button>
