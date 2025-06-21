@@ -1,7 +1,9 @@
+{* prenotazione_campo.tpl *}
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Prenotazione Campo</title>
   <style>
     body {
@@ -22,7 +24,7 @@
       margin-top: 10px;
       margin-bottom: 5px;
     }
-    select, input[type="text"], input[type="hidden"] {
+    select, input[type="hidden"] {
       width: 100%;
       padding: 8px;
       box-sizing: border-box;
@@ -48,6 +50,8 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      width: 100%;
+      font-size: 16px;
     }
     button:hover {
       background-color: #0056b3;
@@ -56,32 +60,31 @@
 </head>
 <body>
 
-  <h2>Prenotazione Campo</h2>
+  <h2 style="text-align:center;">Prenotazione Campo</h2>
 
   <form method="GET" action="/reservation/finalizeReservation">
+
     <div class="field-info">
       <div>
-        <img src="/images/placeholder_field.jpg" alt="Campo">
+        <img src="/images/placeholder_field.jpg" alt="Campo" />
       </div>
       <div class="field-details">
-        <p><strong>Sport:</strong> Calcio</p>
-        <p><strong>Tipo terreno:</strong> Erba sintetica</p>
-        <p><strong>Coperto:</strong> Sì</p>
-        <p><strong>Costo orario:</strong> €25.00</p>
-        <p><strong>Data selezionata:</strong> 2025-06-21</p>
+        <p><strong>Sport:</strong> {$field->getSport()}</p>
+        <p><strong>Tipo terreno:</strong> {$field->getTerrainType()}</p>
+        <p><strong>Coperto:</strong> {if $field->getIsIndoor()}Sì{else}No{/if}</p>
+        <p><strong>Costo orario:</strong> €{$field->getCost()|number_format:2}</p>
+        <p><strong>Data selezionata:</strong> {$date}</p>
       </div>
     </div>
 
-    <input type="hidden" name="field_id" value="123">
-    <input type="hidden" name="date" value="2025-06-21">
+    <input type="hidden" name="field_id" value="{$field->getId()}" />
+    <input type="hidden" name="date" value="{$date}" />
 
     <label for="time">Seleziona orario:</label>
     <select name="time" id="time" required>
-      <option value="10:00">10:00</option>
-      <option value="11:00">11:00</option>
-      <option value="12:00">12:00</option>
-      <option value="13:00">13:00</option>
-      <option value="14:00">14:00</option>
+      {foreach $availableHours as $hour}
+        <option value="{$hour}">{$hour}</option>
+      {/foreach}
     </select>
 
     <button type="submit">Conferma Orario</button>
