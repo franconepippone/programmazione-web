@@ -73,7 +73,8 @@
     </ul>
 
     <form method="post" action="reservation/cancelReservation&id={if $reservation neq null}{$reservation->getId()}{else}0{/if}">
-        <button type="submit" name="confirm">Conferma cancellazione</button>
+       <input type="hidden" name="id" value="{if $reservation neq null}{$reservation->getId()}{else}0{/if}">
+       <button type="submit" name="confirm">Conferma cancellazione</button>
     </form>
 
 {/if}
