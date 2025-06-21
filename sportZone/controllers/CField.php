@@ -22,28 +22,27 @@ class CField{
 
         $fieldsInfo = [];
         foreach ($fields as $fld) {
+            $imageObj = $fld->getImage();
+            if ($imageObj !== null) {
+                $base64 = $imageObj->getEncodedData();
+                $type = $imageObj->getType(); // e.g. "image/png"
+                $imageDataUri = "data:" . htmlspecialchars($type) . ";base64," . $base64;
+            } else {
+                $imageDataUri = ''; // or a placeholder image URI
+            }
+
             $info = [
-                'id'    => $fld->getId(),
-                'title' => $fld->getName(),
-                'sport' => $fld->getSport(),
-                'orario' => '09:00 - 22:00',
-                'superficie' => $fld->getTerrainType(),
-                'price' => $fld->getCost(),
-                'image' => 'https://th.bing.com/th/id/R.5e6c852d2443894ea716c5d7cce49c42?rik=rWtVM5FnJ%2fxwmw&pid=ImgRaw&r=0&sres=1&sresct=1',
-                'alt' => 'Campo Calcio 11'
+                'id'        => $fld->getId(),
+                'title'     => $fld->getName(),
+                'sport'     => $fld->getSport(),
+                'orario'    => '09:00 - 22:00',
+                'superficie'=> $fld->getTerrainType(),
+                'price'     => $fld->getCost(),
+                'image'     => $imageDataUri,
+                'alt'       => 'Campo Calcio 11'
             ];
+
             $fieldsInfo[] = $info;
-
-            $image = $fld->getImage();
-            // Get the base64 encoded image data
-            $base64 = $image->getEncodedData();
-
-            // Assume $image->getType() returns the MIME type, e.g. "image/png"
-            $type = $image->getType();
-
-            // Embed directly in an <img> tag
-            echo '<img src="data:' . htmlspecialchars($type) . ';base64,' . $base64 . '" alt="Field Image" />';
-
         }
 
 
