@@ -29,7 +29,7 @@ class CReservation{
   
   }
 
-ublic static function finalizeReservation() {
+public static function finalizeReservation() {
     // Step 1: Get GET parameters safely, evitando warning PHP su chiavi mancanti
     $fieldId = isset($_GET['field_id']) ? UHTTPMethods::get('field_id') : null;
     $date = isset($_GET['date']) ? UHTTPMethods::get('date') : null;
