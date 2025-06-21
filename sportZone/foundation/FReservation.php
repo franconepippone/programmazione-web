@@ -16,6 +16,25 @@ class FReservation {
         return FEntityManager::getInstance()->verifyAttributeExists(EReservation::class, $field, $value);
     }
 
+
+    /**
+    * Returns all the reservations of a sports field for a specific date.
+    *
+    * @param int $fieldId The ID of the sports field.
+    * @param string $date The date in YYYY-MM-DD format.
+    * @return array<EReservation> An array of reservations for the given field and date, or empty if none exist.
+    *
+    * Used to check existing reservations during the creation process
+    * (e.g., to display occupied time slots and prevent double bookings).
+    */
+    public static function getByFieldAndDate($fieldId, $date) {
+        $field = FField::getById($fieldId);
+        return FEntityManager::getRepository(EReservation::class)->findBy([
+            'field' => $field,
+            'date' => $date
+        ]);
+    }
+
     /**
      * Retrieve Reservation by ID
      *
