@@ -17,13 +17,18 @@
         <li><strong>Costo orario:</strong> {$campo->getCostoOrario()|default:'[getCostoOrario()]'} €</li>
     </ul>
 {else}
-    <p><em>Campo non disponibile (metodi: getSport(), getTipoTerreno(), ecc.)</em></p>
+    <ul>
+        <li><strong>Sport:</strong> [getSport()]</li>
+        <li><strong>Tipo terreno:</strong> [getTipoTerreno()]</li>
+        <li><strong>Indoor:</strong> [getIndoor()]</li>
+        <li><strong>Costo orario:</strong> [getCostoOrario()] €</li>
+    </ul>
 {/if}
 
 <form id="reservationForm" method="post" action="index.php?controller=reservation&task=finalizeReservation">
     <input type="hidden" name="data" value="{$data|default:''}">
     <input type="hidden" name="orario" value="{$orario|default:''}">
-    <input type="hidden" name="id" value="{$campo->getId()|default:''}">
+    <input type="hidden" name="id" value="{if $campo != null}{$campo->getId()}{else}[/getId()]{/if}">
 
     <label for="paymentMethod">Metodo di pagamento:</label>
     <select name="paymentMethod" id="paymentMethod" required>
@@ -40,6 +45,8 @@
         const metodo = document.getElementById('paymentMethod').value;
         if (metodo === 'online') {
             this.action = 'index.php?controller=onlinepayment&task=payForm';
+        } else {
+            this.action = 'index.php?controller=reservation&task=finalizeReservation';
         }
     });
 </script>
