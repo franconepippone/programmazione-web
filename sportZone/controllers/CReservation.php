@@ -70,7 +70,8 @@ public static function finalizeReservation() {
         // Retrieve current client
         $client = CUser::getUserLogged();
         if (!$client || !$field || !$date || !$time) {
-            VError::show("Missing data for onsite reservation.");
+            $error = New VError();
+            $error->show("Missing data for onsite reservation.");
             return;
         }
 
@@ -89,7 +90,8 @@ public static function finalizeReservation() {
         exit;
 
     } else {
-        VError::show("Invalid or missing payment method.");
+            $error = New VError();
+            $error->show("Invalid or missing payment method.");
     }
 }
 }
