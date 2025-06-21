@@ -5,7 +5,7 @@ require_once __DIR__ . "/FUser.php";
 class FPersistentManager{
 
     /**
-     * Singleton Class
+     * Singleton Class (NON HA SENSO???? che senso ha avere un singleton con metodi statici?? forse è solo simmetria con eentitymanager?) -americo 
      */
 
      private static $instance;
@@ -63,6 +63,10 @@ class FPersistentManager{
     public static function retriveUserOnId(int $id) {
         $result = FUser::getUserById($id);
         return $result;
+    }
+
+    public static function retrieveFieldOnId(int $id) {
+        
     }
 
 }

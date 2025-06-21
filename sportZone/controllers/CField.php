@@ -35,4 +35,34 @@ class CField{
         $view = new VField();
         $view->showCreateFieldForm();
     }
+
+    public static function finalizeFieldCreation() {
+        // riceve i dati dal field form e crea un entry nel database
+        echo '<pre>';
+        print_r($_FILES);
+        echo '<\pre>';
+        echo '<pre>';
+        print_r($_POST);
+        echo '<\pre>';
+
+        $field = (new EField())
+        ->setTerrainType(UHTTPMethods::post('terrainType'))
+        ->setCost(UHTTPMethods::post('hourlyCost'))
+        ->setIsIndoor(UHTTPMethods::post('isIndoor'))
+        ->setSport(UHTTPMethods::post('sport'));
+
+        // If an image was givemn, assigns it
+        $imageInfo = UHTTPMethods::files('fieldImage');
+
+        // if entry 'fieldImage' is present in $_FILES
+        if ($imageInfo != null) {
+            $img = UImage::createImageFromInputFile($imageInfo);
+            if ($img != null) {
+                $field->setImage($img);
+            }
+        }
+
+        $pm = FPersistentManager::getInstance()->uploadObj($field);
+        echo "uploaded";
+    }
 }

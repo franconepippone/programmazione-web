@@ -3,6 +3,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+require_once("EImage.php");
+
 #[ORM\Entity]
 #[ORM\Table(name: "fields")]
 class EField
@@ -29,6 +31,9 @@ class EField
 
     #[ORM\OneToMany(mappedBy: "field", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
     private Collection $reservations;
+
+    #[ORM\OneToOne(targetEntity: Eimage::class, inversedBy: "field", cascade: ["persist", "remove"])]
+    private ?EImage $image;
 
     public function __construct() {
         $this->courses = new ArrayCollection();
@@ -118,6 +123,15 @@ class EField
             }
         }
         return $this;
+    }
+
+    public function setImage(EImage $image): self {
+        $this->image = $image;
+        return $this;
+    }
+
+    public function getImage(): ?EImage {
+        return $this->image;
     }
 }
 

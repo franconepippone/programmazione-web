@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-06-20 18:20:02
+/* Smarty version 5.5.1, created on 2025-06-21 11:29:41
   from 'file:field/create_field.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68558a32726d42_26107677',
+  'unifunc' => 'content_68567b853bb3b5_88185145',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a852a093a8b55c21c1e6bc4dc938a75e09e98d87' => 
     array (
       0 => 'field/create_field.tpl',
-      1 => 1750436330,
+      1 => 1750498165,
       2 => 'file',
     ),
   ),
@@ -20,9 +20,9 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68558a32726d42_26107677 (\Smarty\Template $_smarty_tpl) {
+function content_68567b853bb3b5_88185145 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\Smarty\\templates\\field';
-?><form action="/create-field.php" method="post">
+?><form action="/field/finalizeFieldCreation" method="post" enctype="multipart/form-data">
   <label for="sport">Sport:</label><br>
   <input type="text" id="sport" name="sport" required><br><br>
 
@@ -37,6 +37,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\
 
   <label for="hourlyCost">Costo orario (€):</label><br>
   <input type="number" step="0.01" id="hourlyCost" name="hourlyCost" required><br><br>
+
+  <label for="fieldImage">Carica una foto del campo:</label><br>
+  <input type="file" id="fieldImage" name="fieldImage" accept="image/*"><br><br>
 
   <button type="submit">Crea campo</button>
 </form>

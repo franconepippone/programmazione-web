@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping as ORM;
 require_once("EPaymentMethod.php");
 
 #[ORM\Entity]
-#[ORM\Table(name: "pagamenti_online")]
+#[ORM\Table(name: "online_payments")]
 
 class EOnlinePayment extends EPaymentMethod
 {   
