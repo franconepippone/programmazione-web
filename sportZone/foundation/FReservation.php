@@ -57,6 +57,38 @@ class FReservation {
     }
 
     /**
+     * Get available reservation hours for a given field and date
+     *
+     * This method calculates the list of free hourly slots between
+     * the opening and closing hours (8 to 21) by excluding the hours
+     * already booked in existing reservations for the specified field and date.
+     *
+     * @param int $fieldId The ID of the sports field
+     * @param string $date The date for which to check availability (format: 'YYYY-MM-DD')
+     * @return int[] Array of available hours in 24-hour format (e.g., [8, 9, 10, ...])
+     */
+
+     public static function getAvailableHours(int $fieldId, string $date): array {
+        $openingHour = 8;
+        $closingHour = 21;
+        $allHours = range($openingHour, $closingHour - 1);
+
+        // Use EntityManager to get reservations for that field and date
+        $entityManager = FEntityManager::getInstance();
+
+        $reservations = $entityManager->getRepository(EReservation::class)->findBy([
+            'field' => $fieldId,
+            'date' => new \DateTime($date)
+        ]);
+
+        foreach ($reservations as $reservation) {
+            $reservedHour = (int)$reservation->getTime(); // assuming getTime() returns hour as int or string
+            if (($key = array_search($reservedHour, $allHours)) !== false) {
+                unset($allHours[$key]);
+            }
+        }
+
+    /**
      * Save or update a Reservation entity
      *
      * @param EReservation $reservation
