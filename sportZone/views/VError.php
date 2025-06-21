@@ -9,10 +9,8 @@ class VError{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function show($message) {
-        $smarty = USmarty::getSmarty();
-        $smarty->assign("errorMessage", $message);
-        $smarty->display("error.tpl");
-        exit;
+    public function show(string $message) {
+        $this->smarty->assign("message", $message);
+        $this->smarty->display("error/error.tpl");
     }
 }
