@@ -61,4 +61,4 @@ class CReservation{
         $view->showFinalizeForm($field, $date, $time);
     }
    }
-  } 
+   
