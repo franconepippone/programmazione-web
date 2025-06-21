@@ -20,8 +20,11 @@ class CReservation{
     //if (!$field) {
        // VError::show("Campo non trovato.");
         //return;
-
+   
+    // Get available hours for this field and date through FReservation
+    //$availableHours = FReservation::getAvailableHours($fieldId, $date);
     //$date = UHTTPMethods::get('date') ?? (new DateTime())->format('Y-m-d');
+    
     $view->showReservationForm();
   
   }
