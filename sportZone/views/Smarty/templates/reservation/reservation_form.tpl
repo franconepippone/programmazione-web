@@ -58,7 +58,7 @@
 
   <h2>Prenotazione Campo</h2>
 
-  <form method="POST" action="/reservation/finalizeReservation">
+  <form method="GET" action="/reservation/finalizeReservation">
 
     <div class="field-info">
       <div>
