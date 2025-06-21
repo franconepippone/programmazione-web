@@ -102,8 +102,9 @@ class CReservation{
 
             $view->showSuccess("Prenotazione completata con pagamento in sede.");
             return;
+        }
 
-        } elseif ($paymentMethod === "online") {
+        elseif ($paymentMethod === "online") {
             // Reindirizza a pagina pagamento online con parametri
             $query = http_build_query([
                 "field_id" => $fieldId,
@@ -112,10 +113,12 @@ class CReservation{
             ]);
             header("Location: /onlinepayment/payForm?$query");
             exit;
+        }
 
-        } else {
+        else {
             $errorView = new VError();
             $errorView->show("Metodo di pagamento non valido.");
         }
     }
+  }
 }
