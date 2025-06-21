@@ -29,64 +29,59 @@ class CReservation{
   
   }
 
-public static function finalizeReservation() {
-    if (!CUser::isLogged()) {
-        header("Location: /user/login");
-        exit;
-    }
+ublic static function finalizeReservation() {
+    // Step 1: Get GET parameters safely, evitando warning PHP su chiavi mancanti
+    $fieldId = isset($_GET['field_id']) ? UHTTPMethods::get('field_id') : null;
+    $date = isset($_GET['date']) ? UHTTPMethods::get('date') : null;
+    $time = isset($_GET['time']) ? UHTTPMethods::get('time') : null;
 
-    $fieldId = UHTTPMethods::get('field_id');
-    $date = UHTTPMethods::get('date');
-    $time = UHTTPMethods::get('time');
-
-    // Check if form is submitted via POST (payment method selected)
+    // Step 2: Check request method POST per metodo pagamento
+    $paymentMethod = null;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $paymentMethod = UHTTPMethods::post('payment_method');
-
-        if (!$paymentMethod) {
-            $view = new VError();
-            $view->show("Payment method not selected.");
-            return;
-        }
-
-        if ($paymentMethod === 'online') {
-            // Redirect to online payment page with field_id, date, time
-            header("Location: /onlinepayment/payForm?field_id={$fieldId}&date={$date}&time={$time}");
-            exit;
-        } elseif ($paymentMethod === 'onsite') {
-            // Create reservation and redirect to confirmation
-            $client = CUser::getUser();
-            $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-
-            // Check required entities
-            if ($client && $field && $date && $time) {
-                $reservation = new EReservation();
-                $reservation->setClient($client);
-                $reservation->setField($field);
-                $reservation->setDate($date);
-                $reservation->setTime($time);
-                $reservation->setPaymentMethod(new EOnsitePayment());
-
-                FPersistentManager::getInstance()->store($reservation);
-
-                header("Location: /reservation/confirmation");
-                exit;
-            } else {
-                $view = new VError();
-                $view->show("Missing data to complete the reservation.");
-                return;
-            }
-        } else {
-            $view = new VError();
-            $view->show("Invalid payment method.");
-            return;
-        }
+        $paymentMethod = isset($_POST['payment_method']) ? UHTTPMethods::post('payment_method') : null;
     }
 
-    // If GET request (first arrival), show the summary form
-    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+    // Step 3: Recupera il campo dal DB o passa null
+    $field = null;
+    if ($fieldId !== null) {
+        $pm = FPersistentManager::getInstance();
+        $field = $pm->load('EField', $fieldId);
+    }
 
-    $view = new VReservation();
-    $view->showFinalizeReservation($field, $date, $time);
+    // Step 4: Se POST e metodo di pagamento è onsite -> crea prenotazione e redirect a conferma
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $paymentMethod === 'onsite') {
+        // Supponiamo che id cliente venga da sessione, esempio:
+        $clientId = 1; // devi cambiare con il metodo corretto per recuperare cliente loggato
+        $pm = FPersistentManager::getInstance();
+
+        $reservation = new EReservation();
+        $reservation->setField($field);
+        $reservation->setDate($date);
+        $reservation->setTime($time);
+        $reservation->setClientId($clientId);
+
+        // Salva prenotazione nel DB
+        $pm->save($reservation);
+
+        // Redirect alla pagina di conferma
+        header('Location: /reservation/confirmation');
+        exit();
+    }
+
+    // Step 5: Se POST e metodo pagamento online -> redirect pagina pagamento online con GET params
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $paymentMethod === 'online') {
+        // Costruisci url con parametri
+        $url = '/onlinepayment/payForm?field_id=' . urlencode($fieldId) 
+               . '&date=' . urlencode($date) 
+               . '&time=' . urlencode($time);
+
+        header('Location: ' . $url);
+        exit();
+    }
+
+    // Step 6: Altrimenti mostra pagina di riepilogo con dati o placeholder
+
+    $vReservation = new VReservation();
+    $vReservation->showFinalizeReservation($field, $date, $time);
 }
 }
