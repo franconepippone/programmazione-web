@@ -8,23 +8,50 @@
 
   <h2>Riepilogo Prenotazione</h2>
 
-  <form method="POST" action="/reservation/finalizeReservation">
+  {if $redirect}
+    <script>
+      window.location.href = "{$redirect}";
+    </script>
+  {/if}
 
-    <p><strong>Sport:</strong> {if isset($field)}{$field->getSport()}{else}Campo non disponibile (usa getSport()){ /if}</p>
-    <p><strong>Tipo terreno:</strong> {if isset($field)}{$field->getTerrainType()}{else}Tipo sconosciuto (usa getTerrainType()){ /if}</p>
-    <p><strong>Coperto:</strong> 
+  <form method="POST" action="/reservation/finalizeReservation?field_id={$field_id}&date={$date}&time={$time}">
+
+    <p><strong>Sport:</strong>
+      {if isset($field)}
+        {$field->getSport()}
+      {else}
+        {$field->getSport()|default:'getSport()'}
+      {/if}
+    </p>
+
+    <p><strong>Tipo terreno:</strong>
+      {if isset($field)}
+        {$field->getTerrainType()}
+      {else}
+        getTerrainType()
+      {/if}
+    </p>
+
+    <p><strong>Coperto:</strong>
       {if isset($field)}
         {if $field->getIsIndoor()}Sì{else}No{/if}
       {else}
-        Informazione non disponibile (usa getIsIndoor())
+        getIsIndoor()
       {/if}
     </p>
-    <p><strong>Costo orario:</strong> €{if isset($field)}{$field->getCost()|number_format:2}{else}0.00 (usa getCost()){ /if}</p>
 
-    <p><strong>Data:</strong> {$date|default:"Data non disponibile"}</p>
-    <p><strong>Orario:</strong> {$time|default:"Orario non disponibile"}</p>
+    <p><strong>Costo orario:</strong>
+      {if isset($field)}
+        €{$field->getCost()|number_format:2}
+      {else}
+        getCost()
+      {/if}
+    </p>
 
-    <input type="hidden" name="field_id" value="{$field_id|default:1}" />
+    <p><strong>Data:</strong> {$date|default:"getParam('date')"}</p>
+    <p><strong>Orario:</strong> {$time|default:"getParam('time')"}</p>
+
+    <input type="hidden" name="field_id" value="{$field_id|default:'getParam(field_id)'}" />
     <input type="hidden" name="date" value="{$date|default:''}" />
     <input type="hidden" name="time" value="{$time|default:''}" />
 
@@ -35,7 +62,6 @@
     </select>
 
     <button type="submit">Conferma Prenotazione</button>
-
   </form>
 
 </body>
