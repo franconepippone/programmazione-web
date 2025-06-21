@@ -112,5 +112,13 @@ class FPersistentManager{
         return FReservation::save($reservation);
     }
 
+    /**
+     * Get available hours for a field on a specific date.
+     * Returns the list of free hours by checking existing reservations.
+     */
+    public function getAvailableHours(int $fieldId, string $date): array {
+        return FReservation::getAvailableHours($fieldId, $date);
+    }
+
 
 }
