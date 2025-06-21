@@ -34,7 +34,7 @@ class CReservation{
             return;
         }
 
-        $userId = USession::getElement('userId');
+        $userId = USession::getSessionElement('userId');
         $fieldId = UHTTPMethods::get('id');
         $date = UHTTPMethods::get('data');
         $time = UHTTPMethods::get('orario');
