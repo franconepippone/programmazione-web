@@ -1,28 +1,64 @@
-<h2>Reservation Summary</h2>
+<h2>Reservation Recap</h2>
 
-{if $field}
-    <p>Field Sport: {$field->getSport()}</p>
-    <p>Field Type: {$field->getType()}</p>
-{else}
-    <p><em>Field data not available (null object)</em></p>
-{/if}
+<div>
+    <p><strong>Field ID:</strong> 
+        {if $field}
+            {$field->getId()}
+        {else}
+            $field->getId()
+        {/if}
+    </p>
 
-<p>Date: {$date|default:'N/A'}</p>
-<p>Time: {$time|default:'N/A'}</p>
+    <p><strong>Sport:</strong> 
+        {if $field}
+            {$field->getSport()}
+        {else}
+            $field->getSport()
+        {/if}
+    </p>
 
-{if !$paymentMethod}
-    <form method="post" action="{$baseUrl}/reservation/finalizeReservation">
-        <input type="hidden" name="field_id" value="{$field ? $field->getId() : ''}">
-        <input type="hidden" name="date" value="{$date|default:''}">
-        <input type="hidden" name="time" value="{$time|default:''}">
+    <p><strong>Surface:</strong> 
+        {if $field}
+            {$field->getSurface()}
+        {else}
+            $field->getSurface()
+        {/if}
+    </p>
 
-        <label for="paymentMethod">Choose payment method:</label>
-        <select name="paymentMethod" id="paymentMethod">
-            <option value="">--Select--</option>
-            <option value="onsite">Onsite Payment</option>
-            <option value="online">Online Payment</option>
-        </select>
+    <p><strong>Indoor:</strong> 
+        {if $field}
+            {if $field->isIndoor()} Yes {else} No {/if}
+        {else}
+            $field->isIndoor()
+        {/if}
+    </p>
 
-        <button type="submit">Confirm</button>
-    </form>
-{/if}
+    <p><strong>Hourly Cost:</strong> 
+        {if $field}
+            {$field->getHourlyCost()} €
+        {else}
+            $field->getHourlyCost()
+        {/if}
+    </p>
+</div>
+
+<hr>
+
+<div>
+    <p><strong>Date:</strong> {$date|default:'(not set)'}</p>
+    <p><strong>Time:</strong> {$time|default:'(not set)'}</p>
+</div>
+
+<hr>
+
+<form method="post" action="">
+    <label for="paymentMethod"><strong>Select payment method:</strong></label><br>
+    <select name="paymentMethod" id="paymentMethod" required>
+        <option value="">-- Choose --</option>
+        <option value="online">Online</option>
+        <option value="onsite">Onsite</option>
+    </select>
+
+    <br><br>
+    <button type="submit">Confirm</button>
+</form>
