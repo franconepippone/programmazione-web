@@ -24,7 +24,7 @@ require_once("EField.php");
     #[ORM\Column(type: "blob")]
     private $imageData;
 
-    #[ORM\OneToOne(targetEntity: EField::class, inversedBy: "image", cascade: ["persist", "remove"])]
+    #[ORM\ManyToOne(targetEntity: EField::class, inversedBy: "image", cascade: ["persist", "remove"])]
     private EField $field;
     
     public function __construct($name, $size, $type, $imageData){
@@ -59,6 +59,11 @@ require_once("EField.php");
         return $this->imageData;
     }
 
+    public function getField(): EField
+    {
+        return $this->field;
+    }
+
     public function getEncodedData(){
         if(is_resource($this->imageData)){
             $data = stream_get_contents($this->imageData);
@@ -67,5 +72,10 @@ require_once("EField.php");
             return base64_encode($this->imageData);
         }
         
+    }
+
+    public function setField(?EField $field): self {
+        $this->field = $field;
+        return $this;
     }
 }

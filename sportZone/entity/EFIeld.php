@@ -21,6 +21,15 @@ class EField
     private string $sport;
 
     #[ORM\Column(type: "string")]
+    private string $description;
+
+    #[ORM\Column(type: "decimal", precision: 10, scale: 7)]
+    private $latitude;
+
+    #[ORM\Column(type: "decimal", precision: 10, scale: 7)]
+    private $longitude;
+
+    #[ORM\Column(type: "string")]
     private string $terrainType;
 
     #[ORM\Column(type: "boolean")]
@@ -35,8 +44,8 @@ class EField
     #[ORM\OneToMany(mappedBy: "field", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
     private Collection $reservations;
 
-    #[ORM\OneToOne(targetEntity: EImage::class, inversedBy: "field", cascade: ["persist", "remove"])]
-    private ?EImage $image;
+    #[ORM\OneToMany(targetEntity: EImage::class, mappedBy: "field", cascade: ["persist", "remove"])]
+    private Collection $images;
 
     public function __construct() {
         $this->courses = new ArrayCollection();
@@ -137,13 +146,58 @@ class EField
         return $this;
     }
 
-    public function setImage(EImage $image): self {
-        $this->image = $image;
+    public function addImage(EImage $image): self {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setField($this);
+        }
         return $this;
     }
 
-    public function getImage(): ?EImage {
-        return $this->image;
+    public function removeImage(EImage $image): self {
+        if ($this->reservations->removeElement($image)) {
+            if ($image->getField() === $this) {
+                $image->setField(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getImages(): Collection {
+        return $this->images;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(string $latitude): self
+    {
+        $this->latitude = $latitude;
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(string $longitude): self
+    {
+        $this->longitude = $longitude;
+        return $this;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 }
 

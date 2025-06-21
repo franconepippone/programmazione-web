@@ -12,45 +12,26 @@ class CField{
     }
 
     public static function showResults() {
-        //echo "giorno: ". UHTTPMethods::post('giorno') . "<br>";
-        //echo "sport: " . UHTTPMethods::post('sport') . "<br>";
-
-
-        // MAGIA MAGIA MIAGAI
         $pm = FPersistentManager::getInstance();
         $fields = $pm->retrieveAllMatchingFields();
-
-        $fieldsInfo = [];
-        foreach ($fields as $fld) {
-            $imageObj = $fld->getImage();
-            if ($imageObj !== null) {
-                $base64 = $imageObj->getEncodedData();
-                $type = $imageObj->getType(); // e.g. "image/png"
-                $imageDataUri = "data:" . htmlspecialchars($type) . ";base64," . $base64;
-            } else {
-                $imageDataUri = ''; // or a placeholder image URI
-            }
-
-            $info = [
-                'id'        => $fld->getId(),
-                'title'     => $fld->getName(),
-                'sport'     => $fld->getSport(),
-                'orario'    => '09:00 - 22:00',
-                'superficie'=> $fld->getTerrainType(),
-                'price'     => $fld->getCost(),
-                'image'     => $imageDataUri,
-                'alt'       => $fld->getName()
-            ];
-
-            $fieldsInfo[] = $info;
-        }
+        
+        // TODO Filtering
 
         $view = new VField();
-        $view->showSearchResults($fieldsInfo);
+        $view->showSearchResults($fields);
     }
 
     public static function details($field_id) {
-        echo $field_id;
+        $pm = FPersistentManager::getInstance();
+        $fld = $pm->retrieveFieldOnId($field_id);
+
+        if ($fld == null) {
+            echo "Invalid field id";
+            exit;
+        }
+
+        $view = new VField();
+        $view->showDetailsPage($fld);
     }
 
 
@@ -75,7 +56,10 @@ class CField{
         ->setTerrainType(UHTTPMethods::post('terrainType'))
         ->setCost(UHTTPMethods::post('hourlyCost'))
         ->setIsIndoor(UHTTPMethods::post('isIndoor'))
-        ->setSport(UHTTPMethods::post('sport'));
+        ->setSport(UHTTPMethods::post(param: 'sport'))
+        ->setDescription(UHTTPMethods::post('description'))
+        ->setLatitude(UHTTPMethods::post('latitude'))
+        ->setLongitude(UHTTPMethods::post('longitude'));
 
         // If an image was given, saves it for that field
         $imageInfo = UHTTPMethods::files('fieldImage');
