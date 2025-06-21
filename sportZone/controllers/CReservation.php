@@ -29,68 +29,36 @@ class CReservation{
   
   }
 
-   public static function finalizeReservation() {
-     // Step 1: Get GET parameters safely, evitando warning PHP su chiavi mancanti
-     $fieldId = isset($_GET['field_id']) ? UHTTPMethods::get('field_id') : null;
-     $date = isset($_GET['date']) ? UHTTPMethods::get('date') : null;
-     $time = isset($_GET['time']) ? UHTTPMethods::get('time') : null;
+  public static function finalizeReservation() {
+        if (!CUser::isLogged()) {
+            return;
+        }
 
-     // Step 2: Check request method POST per metodo pagamento
-     $paymentMethod = null;
-     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-         $paymentMethod = isset($_POST['payment_method']) ? UHTTPMethods::post('payment_method') : null;
-     }
+        $userId = USession::getElement('userId');
+        $fieldId = UHTTPMethods::get('id');
+        $date = UHTTPMethods::get('data');
+        $time = UHTTPMethods::get('orario');
 
-     // Step 3: Recupera il campo dal DB o passa null
-     $field = null;
-     if ($fieldId !== null) {
-         $pm = FPersistentManager::getInstance();
-         $field = $pm->load('EField', $fieldId);
-     }
+        $field = null;
+        if ($fieldId !== null) {
+            $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+        }
 
-     // Step 4: Se POST e metodo di pagamento è onsite -> crea prenotazione e redirect a conferma
-     if ($_SERVER['REQUEST_METHOD'] === 'POST' && $paymentMethod === 'onsite') {
-         // Supponiamo che id cliente venga da sessione, esempio:
-         $clientId = 1; // devi cambiare con il metodo corretto per recuperare cliente loggato
-         $pm = FPersistentManager::getInstance();
+        // Se il form è stato inviato con metodo onsite
+        if (UHTTPMethods::post('confirm') && UHTTPMethods::post('paymentMethod') === 'onsite') {
+            $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
+            $payment = new EOnsitePayment();
+            $reservation = new EReservation($date, $time, $field, $client, $payment);
+            FPersistentManager::getInstance()->storeReservation($reservation);
 
-         $reservation = new EReservation();
-         $reservation->setField($field);
-         $reservation->setDate($date);
-         $reservation->setTime($time);
-         $reservation->setClientId($clientId);
+            $view = new VReservation();
+            $view->showConfirmation();
+            return;
+        }
 
-         // Salva prenotazione nel DB
-         $pm->save($reservation);
-
-         // Redirect alla pagina di conferma
-         header('Location: /reservation/confirmation');
-         exit();
-     }
-
-      // Step 5: Se POST e metodo pagamento online -> redirect pagina pagamento online con GET params
-      if ($_SERVER['REQUEST_METHOD'] === 'POST' && $paymentMethod === 'online') {
-         // Costruisci url con parametri
-          $url = '/onlinepayment/payForm?field_id=' . urlencode($fieldId) 
-                 . '&date=' . urlencode($date) 
-                 . '&time=' . urlencode($time);
-
-          header('Location: ' . $url);
-          exit();
-       }
-
-       // Step 6: Altrimenti mostra pagina di riepilogo con dati o placeholder
- 
-       $vReservation = new VReservation();
-       $vReservation->showFinalizeReservation($field, $date, $time);
-     }
-
-   public static function ConfirmReservation(){
-     if (!CUser::isLogged()) {
-             return;
-         }
-    
-     $view = new VReservation();
-     $view->showConfirmReservation();
+        // Visualizzazione iniziale
+        $view = new VReservation();
+        $view->showFinalizeForm($field, $date, $time);
+    }
    }
   } 
