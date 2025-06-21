@@ -23,5 +23,9 @@ class VReservation{
     public function showConfirmation(){
         $this->smarty->display("reservation/confirmation.tpl");
     }
+
+    public function showCancelReservation() {
+        $this->smarty->display("reservation/cancel_reservation.tpl");
+    }
         
 }
