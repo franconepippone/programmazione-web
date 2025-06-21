@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-06-21 11:29:41
+/* Smarty version 5.5.1, created on 2025-06-21 14:25:28
   from 'file:field/create_field.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68567b853bb3b5_88185145',
+  'unifunc' => 'content_6856a4b83ccad9_77099550',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a852a093a8b55c21c1e6bc4dc938a75e09e98d87' => 
     array (
       0 => 'field/create_field.tpl',
-      1 => 1750498165,
+      1 => 1750508725,
       2 => 'file',
     ),
   ),
@@ -20,9 +20,12 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68567b853bb3b5_88185145 (\Smarty\Template $_smarty_tpl) {
+function content_6856a4b83ccad9_77099550 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\Smarty\\templates\\field';
 ?><form action="/field/finalizeFieldCreation" method="post" enctype="multipart/form-data">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name" required><br><br>
+
   <label for="sport">Sport:</label><br>
   <input type="text" id="sport" name="sport" required><br><br>
 

@@ -34,6 +34,7 @@ $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
 $connection = DriverManager::getConnection($connectionParams, $config);
 $entityManager = new EntityManager($connection, $config);
 
+
 // Use SchemaTool to create/update schema
 $schemaTool = new SchemaTool($entityManager);
 $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
@@ -43,6 +44,18 @@ if (empty($metadata)) {
     exit(1);
 }
 
+try {
+    // Drops all tables for all entities in the current database
+    $schemaTool->dropSchema($metadata);
+
+    // Creates tables for all entities fresh
+    $schemaTool->createSchema($metadata);
+
+    echo "Schema dropped and recreated successfully.\n";
+} catch (\Exception $e) {
+    echo "Error during schema reset: " . $e->getMessage() . "\n";
+}
+
 // Create or update schema
 try {
     $schemaTool->updateSchema($metadata);
@@ -50,3 +63,6 @@ try {
 } catch (\Exception $e) {
     echo "Error updating schema: " . $e->getMessage() . "\n";
 }
+
+$proxyFactory = $entityManager->getProxyFactory();
+$proxyFactory->generateProxyClasses($entityManager->getMetadataFactory()->getAllMetadata());

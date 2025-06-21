@@ -36,7 +36,7 @@ require_once("EField.php");
 
     public function getId()
     {
-        return $this->idImage;
+        return $this->id;
     }
 
     public function getName()
@@ -67,15 +67,5 @@ require_once("EField.php");
             return base64_encode($this->imageData);
         }
         
-    }
-
-    public function setPost(EPost $post): void
-    {
-        $this->post = $post;
-    }
-
-    public function getPost(): ?EPost
-    {
-        return $this->post;
     }
 }

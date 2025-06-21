@@ -64,50 +64,21 @@
   <h1>Seleziona un Campo Sportivo</h1>
 
   <div class="container">
-    <a class="card" href="/field/details/campo_calcio_11">
-      <img src="https://via.placeholder.com/400x180?text=Campo+Calcio" alt="Campo Calcio 11">
-      <div class="card-body">
-        <div class="card-title">Campo Calcio 11</div>
-        <div class="card-details">Sport: Calcio<br>Orario: 09:00 - 22:00<br>Superficie: Erba sintetica</div>
-        <div class="price">€60 / ora</div>
-      </div>
-    </a>
-
-    <a class="card" href="/field/details/campo_tennis_coperto">
-      <img src="https://via.placeholder.com/400x180?text=Campo+Tennis" alt="Campo Tennis Coperto">
-      <div class="card-body">
-        <div class="card-title">Campo Tennis Coperto</div>
-        <div class="card-details">Sport: Tennis<br>Orario: 08:00 - 21:00<br>Superficie: Resina</div>
-        <div class="price">€25 / ora</div>
-      </div>
-    </a>
-
-    <a class="card" href="campo3.html">
-      <img src="https://via.placeholder.com/400x180?text=Campo+Padel" alt="Campo Padel Deluxe">
-      <div class="card-body">
-        <div class="card-title">Campo Padel Deluxe</div>
-        <div class="card-details">Sport: Padel<br>Orario: 10:00 - 23:00<br>Illuminazione: LED</div>
-        <div class="price">€40 / ora</div>
-      </div>
-    </a>
-
-    <a class="card" href="campo4.html">
-      <img src="https://via.placeholder.com/400x180?text=Campo+Basket" alt="Campo Basket All'aperto">
-      <div class="card-body">
-        <div class="card-title">Campo Basket All'aperto</div>
-        <div class="card-details">Sport: Basket<br>Orario: 07:00 - 20:00<br>Superficie: Cemento</div>
-        <div class="price">€20 / ora</div>
-      </div>
-    </a>
-
-    <a class="card" href="campo5.html">
-      <img src="https://via.placeholder.com/400x180?text=Campo+Volley" alt="Campo Volley Beach">
-      <div class="card-body">
-        <div class="card-title">Campo Volley Beach</div>
-        <div class="card-details">Sport: Beach Volley<br>Orario: 10:00 - 19:00<br>Superficie: Sabbia</div>
-        <div class="price">€30 / ora</div>
-      </div>
-    </a>
+    {foreach $fields as $field}
+      <a class="card" href="/field/details/{$field.id}">
+        <img src="{$field.image}" alt="{$field.alt}">
+        <div class="card-body">
+          <div class="card-title">{$field.title}</div>
+          <div class="card-details">
+            Sport: {$field.sport}<br>
+            Orario: {$field.orario}<br>
+            {if isset($field.superficie)}Superficie: {$field.superficie}<br>{/if}
+            {if isset($field.illuminazione)}Illuminazione: {$field.illuminazione}<br>{/if}
+          </div>
+          <div class="price">{$field.price}</div>
+        </div>
+      </a>
+    {/foreach}
   </div>
 
 </body>

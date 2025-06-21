@@ -1,4 +1,7 @@
 <form action="/field/finalizeFieldCreation" method="post" enctype="multipart/form-data">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name" required><br><br>
+
   <label for="sport">Sport:</label><br>
   <input type="text" id="sport" name="sport" required><br><br>
 

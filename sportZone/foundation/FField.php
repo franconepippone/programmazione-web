@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . "/../entity/EFIeld.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
-class FFIeld{
+class FField{
 
     /**
      * Checks if there exists at least one User entity in the db with the specified field equal to the given value.
@@ -18,5 +18,9 @@ class FFIeld{
         return $result;
     }
 
+    public static function getFieldById($id){
+        $result = FEntityManager::getInstance()->retriveObj(EField::class, $id);
+        return $result;
+    }
    
 }

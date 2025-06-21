@@ -36,25 +36,6 @@ abstract class EUser
     #[ORM\Column(type: "string", nullable: false)]
     protected string $password;
 
-    // construct (per semplificare l'instanziazione)
-    public function __construct(
-        string $name = '',
-        string $surname = '',
-        \DateTimeInterface $birthDate = new \DateTimeImmutable('1900-01-01'),
-        UserSex $sex = UserSex::MALE,
-        string $email = '',
-        string $username = '',
-        string $password = ''
-    ) {
-        $this->name = $name;
-        $this->surname = $surname;
-        $this->birthDate = $birthDate;
-        $this->setSex($sex);
-        $this->email = $email;
-        $this->username = $username;
-        $this->setPassword($password);
-    }
-
     // Getters e Setters possono essere aggiunti qui
 
     public function getId(): int {

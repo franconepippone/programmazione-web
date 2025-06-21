@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . "/FUser.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
+require_once "FField.php";
 
 class FPersistentManager{
 
@@ -66,7 +67,13 @@ class FPersistentManager{
     }
 
     public static function retrieveFieldOnId(int $id) {
-        
+        $result = FField::getFieldById($id);
+        return $result;
+    }
+
+    public static function retrieveAllMatchingFields(array $filters = []) {
+        $result = FEntityManager::getInstance()->selectAll(EField::class);
+        return $result;
     }
 
 }

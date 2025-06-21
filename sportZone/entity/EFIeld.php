@@ -15,6 +15,9 @@ class EField
     private int $id;
 
     #[ORM\Column(type: "string")]
+    private string $name;
+
+    #[ORM\Column(type: "string")]
     private string $sport;
 
     #[ORM\Column(type: "string")]
@@ -32,7 +35,7 @@ class EField
     #[ORM\OneToMany(mappedBy: "field", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
     private Collection $reservations;
 
-    #[ORM\OneToOne(targetEntity: Eimage::class, inversedBy: "field", cascade: ["persist", "remove"])]
+    #[ORM\OneToOne(targetEntity: EImage::class, inversedBy: "field", cascade: ["persist", "remove"])]
     private ?EImage $image;
 
     public function __construct() {
@@ -53,6 +56,15 @@ class EField
     
     public function getSport(): string {
         return $this->sport;
+    }
+
+    public function setName(string $name): self {
+        $this->name = $name;
+        return $this;
+    }
+    
+    public function getName(): string {
+        return $this->name;
     }
 
     public function setIsIndoor(bool $isIndoor): self {
