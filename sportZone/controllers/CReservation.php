@@ -46,12 +46,14 @@ class CReservation{
         $time = UHTTPMethods::get("time");
 
         if (!$fieldId || !$date || !$time) {
-            VError::show("Dati mancanti per completare la prenotazione.");
+            $errorView = new VError();
+            $errorView->show("Dati mancanti per completare la prenotazione.");
         }
 
         $field = $pm->retrieveFieldById($fieldId);
         if (!$field) {
-            VError::show("Campo non trovato.");
+            $errorView = new VError();
+            $errorView->show("Campo non trovato.");
         }
 
         // Mostra riepilogo con scelta metodo di pagamento
@@ -67,17 +69,20 @@ class CReservation{
         $paymentMethod = UHTTPMethods::post("payment_method");
 
         if (!$fieldId || !$date || !$time || !$paymentMethod) {
-            VError::show("Dati incompleti per finalizzare la prenotazione.");
+            $errorView = new VError();
+            $errorView->show("Dati incompleti per finalizzare la prenotazione.");
         }
 
         $field = $pm->retrieveFieldById($fieldId);
         if (!$field) {
-            VError::show("Campo non trovato.");
+            $errorView = new VError();
+            $errorView->show("Campo non trovato.");
         }
 
         $client = USession::get("user");
         if (!$client) {
-            VError::show("Utente non autenticato.");
+            $errorView = new VError();
+            $errorView->show("Utente non autenticato.");
         }
 
         // Crea prenotazione
@@ -109,7 +114,8 @@ class CReservation{
             exit;
 
         } else {
-            VError::show("Metodo di pagamento non valido.");
+            $errorView = new VError();
+            $errorView->show("Metodo di pagamento non valido.");
         }
     }
 }
