@@ -53,8 +53,8 @@ class CReservation{
             $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
         }
         $payment = new EOnsitePayment();
-        $reservation = new EReservation($date, $time, $field, $client, $payment);
-        FPersistentManager::getInstance()->storeReservation($reservation);
+        //$reservation = new EReservation($date, $time, $field, $client, $payment);
+        //FPersistentManager::getInstance()->storeReservation($reservation);
 
         $view = new VReservation();
         $view->showConfirmation();
