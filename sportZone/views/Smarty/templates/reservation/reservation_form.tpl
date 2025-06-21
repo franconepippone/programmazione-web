@@ -8,7 +8,7 @@
 
   <h2>Prenotazione Campo</h2>
 
-  {if isset($field) && isset($date) && isset($availableHours)}
+
     <form method="get" action="/reservation/finalizeReservation">
 
       <p><strong>Sport:</strong> {$field->getSport()}</p>
@@ -30,9 +30,7 @@
       <button type="submit">Conferma Orario</button>
     </form>
 
-  {else}
-    <p>Errore: dati mancanti per la prenotazione.</p>
-  {/if}
+  
 
 </body>
 </html>
