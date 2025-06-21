@@ -29,43 +29,74 @@ class CReservation{
   
   }
 
- public static function finalizeReservation() {
-    if (!CUser::isLogged()) return;
+public static function finalizeReservation() {
+    // Check if user is logged in
+    if (!CUser::isLogged()) {
+        header('Location: /user/login');
+        exit;
+    }
 
+    // Retrieve POST parameters or fallback to null
     $fieldId = $_POST['field_id'] ?? null;
     $date = $_POST['date'] ?? null;
     $time = $_POST['time'] ?? null;
+    $paymentMethod = $_POST['payment'] ?? null;
 
-    // Primo step: visualizza pagina riepilogo e scelta pagamento
-    if (!isset($_POST['payment_method'])) {
+    // Retrieve the field object if ID is present
+    $field = null;
+    if ($fieldId) {
         $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-        $view = new VReservation();
-        $view->showFinalizeReservation($field, $date, $time); // mostra la view per scegliere il pagamento
+    }
+
+    // Instantiate views for reservation and error
+    $viewReservation = new VReservation();
+    $viewError = new VError();
+
+    // If payment method is not set, show the payment selection form
+    if ($paymentMethod === null) {
+        $viewReservation->showFinalizeReservation($field, $date, $time);
         return;
     }
 
-    $paymentMethod = $_POST['payment_method'];
-    $client = CUser::getUserLogged();
-    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+    // Get logged-in client object
+    $client = CUser::getLoggedUser();
 
+    // Validate all necessary data before proceeding
+    if (!$field || !$date || !$time || !$client) {
+        $viewError->show("Insufficient data to complete the reservation.");
+        return;
+    }
+
+    // Process based on payment method
     if ($paymentMethod === 'onsite') {
-        // Crea la reservation e reindirizza a conferma
-        $reservation = new EReservation($date, $time, $client, $field);
-        $payment = new EOnsitePayment($reservation);
-        $reservation->setPayment($payment);
+        // Create a new reservation entity and populate it
+        $reservation = new EReservation();
+        $reservation->setField($field);
+        $reservation->setClient($client);
+        $reservation->setDate($date);
+        $reservation->setTime($time);
 
-        FPersistentManager::getInstance()->storeReservation($reservation);
-        header("Location: /reservation/confirm");
+        // Save the reservation in the database
+        FPersistentManager::getInstance()->saveReservation($reservation);
+
+        // Redirect to onsite reservation confirmation page
+        header('Location: /reservation/confirmation');
         exit;
-    } elseif ($paymentMethod === 'online') {
-        // Reindirizza alla pagina di pagamento online, passando i dati
+    }
+
+    if ($paymentMethod === 'online') {
+        // Redirect to the online payment page with necessary query parameters
         $query = http_build_query([
             'field_id' => $fieldId,
             'date' => $date,
-            'time' => $time
+            'time' => $time,
+            'client_id' => $client->getId()
         ]);
-        header("Location: /payment/onlinePayment?$query");
+        header('Location: /onlinepayment/payForm' . $query);
         exit;
     }
+
+    // If payment method is invalid, show an error message
+    $viewError->show("Invalid payment method selected.");
 }
 }
