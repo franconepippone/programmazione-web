@@ -63,6 +63,55 @@ class CReservation{
 
     $view = new VReservation();
     $view->showFinalizeReservation();
+  }
+  public static function cancelReservation() {
+    if (!CUser::isLogged()) {
+        header('Location: index.php?controller=user&task=loginForm');
+        exit;
+    }
+
+    $id = isset($_GET['id']) && is_numeric($_GET['id']) ? intval($_GET['id']) : null;
+
+    $view = new VReservation();
+
+    if ($id === null || $id <= 0) {
+        $view->assign('errorMessage', 'ID prenotazione non valido.');
+        $view->showCancelError();
+        return;
+    }
+
+    $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, $id);
+
+    if ($reservation === null) {
+        $view->assign('errorMessage', 'Prenotazione non trovata.');
+        $view->showCancelError();
+        return;
+    }
+
+    $userId = USession::getSessionElement('userId') ?? null;
+    if ($userId === null) {
+        header('Location: index.php?controller=user&task=loginForm');
+        exit;
+    }
+
+    $client = $reservation->getClient();
+    if ($client === null || $client->getUserId() !== $userId) {
+        $view->assign('errorMessage', 'Non sei autorizzato a cancellare questa prenotazione.');
+        $view->showCancelError();
+        return;
+    }
+
+    // Se arriva POST con conferma, cancella e mostra conferma
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
+        FPersistentManager::getInstance()->deleteObj($reservation);
+        $view->showCancelConfirmation();
+        return;
+    }
+
+    // Mostra riepilogo con form (id passato nel form come hidden)
+    $view->assign('reservation', $reservation);
+    $view->showCancelReservation();
+ }
 }
-   }
+
    
