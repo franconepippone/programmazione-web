@@ -48,7 +48,7 @@ class CReservation{
         if (!$fieldId || !$date || !$time) {
             $errorView = new VError();
             $errorView->show("Dati mancanti per completare la prenotazione.");
-            return;  // importante: fermare l'esecuzione
+            return;  
         }
 
         $field = $pm->retrieveFieldById($fieldId);
@@ -58,13 +58,13 @@ class CReservation{
             return;
         }
 
-        // Mostra riepilogo con scelta metodo di pagamento
+        
         $view->showFinalizeReservation($field, $date, $time);
         return;
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Leggi parametri da POST (UHTTPMethods::post deve restituire null se chiave assente)
+        
         $fieldId = UHTTPMethods::post("field_id");
         $date = UHTTPMethods::post("date");
         $time = UHTTPMethods::post("time");
@@ -90,19 +90,19 @@ class CReservation{
             return;
         }
 
-        // Crea prenotazione
+       
         $reservation = new EReservation();
         $reservation->setClient($client);
         $reservation->setField($field);
         $reservation->setDate($date);
         $reservation->setTime($time);
 
-        // Gestione metodo di pagamento
+        
         if ($paymentMethod === "onsite") {
             $payment = new EOnsitePayment();
             $reservation->setPaymentMethod($payment);
 
-            // Salva prenotazione con pagamento in sede
+            
             $pm->storeReservation($reservation);
 
             $view->showSuccess("Prenotazione completata con pagamento in sede.");
@@ -110,7 +110,7 @@ class CReservation{
         }
 
         elseif ($paymentMethod === "online") {
-            // Reindirizza a pagina pagamento online con parametri
+            
             $query = http_build_query([
                 "field_id" => $fieldId,
                 "date" => $date,
