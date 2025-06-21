@@ -35,63 +35,58 @@ public static function finalizeReservation() {
         exit;
     }
 
-    // Get parameters ONLY via GET
-    $fieldId = $_GET['field_id'] ?? null;
-    $date = $_GET['date'] ?? null;
-    $time = $_GET['time'] ?? null;
+    $fieldId = UHTTPMethods::get('field_id');
+    $date = UHTTPMethods::get('date');
+    $time = UHTTPMethods::get('time');
 
-    // Try to retrieve the EField object (may be null during testing)
-    $field = null;
-    if ($fieldId !== null) {
-        $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-    }
+    // Check if form is submitted via POST (payment method selected)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $paymentMethod = UHTTPMethods::post('payment_method');
 
-    // If no POST (i.e., no payment method chosen yet), show recap page
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $view = new VReservation();
-        $view->showFinalizeReservation($field, $date, $time);
-        return;
-    }
-
-    // Handle POST form submission (confirm clicked)
-    $paymentMethod = $_POST['paymentMethod'] ?? null;
-
-    if ($paymentMethod === 'online') {
-        // Redirect to online payment form via GET
-        $query = http_build_query([
-            'field_id' => $fieldId,
-            'date' => $date,
-            'time' => $time
-        ]);
-        header("Location: /onlinepayment/payForm?$query");
-        exit;
-
-    } elseif ($paymentMethod === 'onsite') {
-        // Retrieve current client
-        $client = CUser::getUserLogged();
-        if (!$client || !$field || !$date || !$time) {
-            $error = New VError();
-            $error->show("Missing data for onsite reservation.");
+        if (!$paymentMethod) {
+            $view = new VError();
+            $view->show("Payment method not selected.");
             return;
         }
 
-        // Create and store the reservation
-        $reservation = new EReservation();
-        $reservation->setDate(new DateTime($date));
-        $reservation->setTime($time);
-        $reservation->setField($field);
-        $reservation->setClient($client);
-        $reservation->setPaymentMethod(new EOnsitePayment());
+        if ($paymentMethod === 'online') {
+            // Redirect to online payment page with field_id, date, time
+            header("Location: /onlinepayment/payForm?field_id={$fieldId}&date={$date}&time={$time}");
+            exit;
+        } elseif ($paymentMethod === 'onsite') {
+            // Create reservation and redirect to confirmation
+            $client = CUser::getUser();
+            $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
 
-        FPersistentManager::getInstance()->storeReservation($reservation);
+            // Check required entities
+            if ($client && $field && $date && $time) {
+                $reservation = new EReservation();
+                $reservation->setClient($client);
+                $reservation->setField($field);
+                $reservation->setDate($date);
+                $reservation->setTime($time);
+                $reservation->setPaymentMethod(new EOnsitePayment());
 
-        // Redirect to confirmation page
-        header("Location: /reservation/confirmation");
-        exit;
+                FPersistentManager::getInstance()->store($reservation);
 
-    } else {
-            $error = New VError();
-            $error->show("Invalid or missing payment method.");
+                header("Location: /reservation/confirmation");
+                exit;
+            } else {
+                $view = new VError();
+                $view->show("Missing data to complete the reservation.");
+                return;
+            }
+        } else {
+            $view = new VError();
+            $view->show("Invalid payment method.");
+            return;
+        }
     }
+
+    // If GET request (first arrival), show the summary form
+    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+
+    $view = new VReservation();
+    $view->showFinalizeReservation($field, $date, $time);
 }
 }
