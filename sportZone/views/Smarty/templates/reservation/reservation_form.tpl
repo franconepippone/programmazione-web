@@ -91,7 +91,7 @@
       <option value="onsite">Pagamento in sede</option>
     </select>
 
-    <button type="submit">Conferma Prenotazione</button>
+    <button type="submit">Conferma Dati</button>
   </form>
 
 </body>
