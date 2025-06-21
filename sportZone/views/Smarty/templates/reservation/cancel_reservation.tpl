@@ -4,7 +4,7 @@
 
 {if isset($errorMessage)}
     <p style="color:red;">{$errorMessage}</p>
-{else}
+{elseif $reservation}
     <h3>Riepilogo Prenotazione</h3>
 
     <p><strong>ID Prenotazione:</strong> {$reservation->getId()|default:'[getId()]'}</p>
@@ -41,4 +41,6 @@
     <form method="post" action="index.php?controller=reservation&task=cancelReservation&id={$reservation->getId()|default:''}">
         <button type="submit" name="confirm">Conferma cancellazione</button>
     </form>
+{else}
+    <p>Impossibile visualizzare la prenotazione.</p>
 {/if}
