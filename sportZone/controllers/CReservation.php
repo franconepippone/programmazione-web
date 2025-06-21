@@ -44,7 +44,7 @@ class CReservation{
 
     $field = null;
     if ($fieldId !== null) {
-        $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+       // $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     }
 
     if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
