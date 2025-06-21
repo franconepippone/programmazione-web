@@ -30,35 +30,39 @@ class CReservation{
   }
 
   public static function finalizeReservation() {
-        if (!CUser::isLogged()) {
-            return;
-        }
-
-        $userId = USession::getSessionElement('userId');
-        $fieldId = UHTTPMethods::get('id');
-        $date = UHTTPMethods::get('data');
-        $time = UHTTPMethods::get('orario');
-
-        $field = null;
-        if ($fieldId !== null) {
-            $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-        }
-
-        // Se il form è stato inviato con metodo onsite
-        if (UHTTPMethods::post('confirm') && UHTTPMethods::post('paymentMethod') === 'onsite') {
-            $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
-            $payment = new EOnsitePayment();
-            $reservation = new EReservation($date, $time, $field, $client, $payment);
-            FPersistentManager::getInstance()->storeReservation($reservation);
-
-            $view = new VReservation();
-            $view->showConfirmation();
-            return;
-        }
-
-        // Visualizzazione iniziale
-        $view = new VReservation();
-        $view->showFinalizeForm($field, $date, $time);
+       if (!CUser::isLogged()) {
+        return;
     }
+
+    // Prendi userId dalla sessione, se esiste
+    $userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
+
+    // Prendi parametri GET o POST con controllo esistenza
+    $fieldId = isset($_GET['id']) ? $_GET['id'] : (isset($_POST['id']) ? $_POST['id'] : null);
+    $date = isset($_GET['data']) ? $_GET['data'] : (isset($_POST['data']) ? $_POST['data'] : null);
+    $time = isset($_GET['orario']) ? $_GET['orario'] : (isset($_POST['orario']) ? $_POST['orario'] : null);
+
+    $field = null;
+    if ($fieldId !== null) {
+        $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+    }
+
+    if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
+        $client = null;
+        if ($userId !== null) {
+            $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
+        }
+        $payment = new EOnsitePayment();
+        $reservation = new EReservation($date, $time, $field, $client, $payment);
+        FPersistentManager::getInstance()->storeReservation($reservation);
+
+        $view = new VReservation();
+        $view->showConfirmation();
+        return;
+    }
+
+    $view = new VReservation();
+    $view->showFinalizeForm($field, $date, $time);
+}
    }
    
