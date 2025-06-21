@@ -30,7 +30,7 @@ class CReservation{
   }
 
   public static function finalizeReservation() {
-    // Check if the user is logged in
+    // Verifica login
     if (!CUser::isLogged()) {
         header("Location: /user/login");
         exit;
@@ -39,32 +39,28 @@ class CReservation{
     $view = new VReservation();
     $pm = FPersistentManager::getInstance();
 
-    // Phase 1: GET — show reservation summary and payment method selection
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
+        // Leggi parametri da query string
         $fieldId = UHTTPMethods::get("field_id");
         $date = UHTTPMethods::get("date");
         $time = UHTTPMethods::get("time");
 
         if (!$fieldId || !$date || !$time) {
             VError::show("Dati mancanti per completare la prenotazione.");
-            return;
         }
 
-        $field = $pm->retriveFieldById($fieldId);
+        $field = $pm->retrieveFieldById($fieldId);
         if (!$field) {
             VError::show("Campo non trovato.");
-            return;
         }
 
-        // Show summary page with payment method dropdown
+        // Mostra riepilogo con scelta metodo di pagamento
         $view->showFinalizeReservation($field, $date, $time);
         return;
     }
 
-    // Phase 2: POST — handle selected payment method
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+        // Leggi parametri da POST
         $fieldId = UHTTPMethods::post("field_id");
         $date = UHTTPMethods::post("date");
         $time = UHTTPMethods::post("time");
@@ -72,41 +68,38 @@ class CReservation{
 
         if (!$fieldId || !$date || !$time || !$paymentMethod) {
             VError::show("Dati incompleti per finalizzare la prenotazione.");
-            return;
         }
 
-        $field = $pm->retriveFieldById($fieldId);
+        $field = $pm->retrieveFieldById($fieldId);
         if (!$field) {
             VError::show("Campo non trovato.");
-            return;
         }
 
         $client = USession::get("user");
         if (!$client) {
             VError::show("Utente non autenticato.");
-            return;
         }
 
-        // Create the reservation object
+        // Crea prenotazione
         $reservation = new EReservation();
         $reservation->setClient($client);
         $reservation->setField($field);
         $reservation->setDate($date);
         $reservation->setTime($time);
 
+        // Gestione metodo di pagamento
         if ($paymentMethod === "onsite") {
-            // Create an onsite payment
             $payment = new EOnsitePayment();
             $reservation->setPaymentMethod($payment);
 
-            // Save to DB
+            // Salva prenotazione con pagamento in sede
             $pm->storeReservation($reservation);
 
             $view->showSuccess("Prenotazione completata con pagamento in sede.");
             return;
 
         } elseif ($paymentMethod === "online") {
-            // Redirect to the payment form with necessary info
+            // Reindirizza a pagina pagamento online con parametri
             $query = http_build_query([
                 "field_id" => $fieldId,
                 "date" => $date,
@@ -119,5 +112,4 @@ class CReservation{
             VError::show("Metodo di pagamento non valido.");
         }
     }
-}
 }
