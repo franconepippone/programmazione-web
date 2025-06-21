@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -63,7 +62,6 @@
 
     <div class="field-info">
       <div>
-        <!-- Se non hai un'immagine, puoi usare un placeholder -->
         <img src="/images/placeholder_field.jpg" alt="Campo">
       </div>
       <div class="field-details">
@@ -80,18 +78,12 @@
 
     <label for="time">Seleziona orario:</label>
     <select name="time" id="time" required>
-      <?php for ($hour = 8; $hour <= 22; $hour++): ?>
-        <option value="<?php echo $hour; ?>:00"><?php echo $hour; ?>:00</option>
-      <?php endfor; ?>
+      <?php foreach ($availableHours as $hour): ?>
+        <option value="<?php echo htmlspecialchars($hour); ?>"><?php echo htmlspecialchars($hour); ?></option>
+      <?php endforeach; ?>
     </select>
 
-    <label for="payment_method">Metodo di pagamento:</label>
-    <select name="payment_method" id="payment_method" required>
-      <option value="online">Pagamento Online</option>
-      <option value="onsite">Pagamento in sede</option>
-    </select>
-
-    <button type="submit">Conferma Dati</button>
+    <button type="submit">Conferma Orario</button>
   </form>
 
 </body>
