@@ -62,7 +62,7 @@ class CReservation{
     }
 
     $view = new VReservation();
-    $view->showFinalizeForm($field, $date, $time);
+    $view->showFinalizeReservation($field, $date, $time);
 }
    }
    
