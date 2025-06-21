@@ -55,7 +55,7 @@ class CReservation{
         }
 
         // Show summary page with payment method dropdown
-        $view->showFinalizeForm($field, $date, $time);
+        $view->showFinalizeReservation($field, $date, $time);
         return;
     }
 
