@@ -40,7 +40,7 @@ class CReservation{
     if (!isset($_POST['payment_method'])) {
         $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
         $view = new VReservation();
-        $view->showFinalizeForm($field, $date, $time); // mostra la view per scegliere il pagamento
+        $view->showFinalizeReservation($field, $date, $time); // mostra la view per scegliere il pagamento
         return;
     }
 
