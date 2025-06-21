@@ -4,26 +4,54 @@
 
 {if isset($errorMessage)}
     <p style="color:red;">{$errorMessage}</p>
-{elseif $reservation}
+{else}
+
     <h3>Riepilogo Prenotazione</h3>
 
-    <p><strong>ID Prenotazione:</strong> {$reservation->getId()|default:'[getId()]'}</p>
+    <p><strong>ID Prenotazione:</strong> 
+        {if $reservation neq null}
+            {$reservation->getId()|default:'[getId()]'}
+        {else}
+            [getId()]
+        {/if}
+    </p>
+
     <p><strong>Data:</strong> 
-        {if $reservation->getDate() neq null}
+        {if $reservation neq null && $reservation->getDate() neq null}
             {$reservation->getDate()|date_format:"%Y-%m-%d"}
         {else}
             [getDate()]
         {/if}
     </p>
-    <p><strong>Orario:</strong> {$reservation->getTime()|default:'[getTime()]'}</p>
 
-    {assign var=campo value=$reservation->getField()}
-    {if $campo}
-        <p><strong>Campo Sportivo:</strong></p>
-        <ul>
-            <li>Sport: {$campo->getSport()|default:'[getSport()]'}</li>
-            <li>Tipo terreno: {$campo->getTipoTerreno()|default:'[getTipoTerreno()]'}</li>
-            <li>Indoor: 
+    <p><strong>Orario:</strong> 
+        {if $reservation neq null}
+            {$reservation->getTime()|default:'[getTime()]'}
+        {else}
+            [getTime()]
+        {/if}
+    </p>
+
+    {assign var=campo value=$reservation neq null ? $reservation->getField() : null}
+
+    <p><strong>Campo Sportivo:</strong></p>
+    <ul>
+        <li>Sport: 
+            {if $campo neq null}
+                {$campo->getSport()|default:'[getSport()]'}
+            {else}
+                [getSport()]
+            {/if}
+        </li>
+        <li>Tipo terreno: 
+            {if $campo neq null}
+                {$campo->getTipoTerreno()|default:'[getTipoTerreno()]'}
+            {else}
+                [getTipoTerreno()]
+            {/if}
+        </li>
+        <li>Indoor: 
+            {if $campo neq null}
                 {if $campo->getIndoor() === null}
                     [getIndoor()]
                 {elseif $campo->getIndoor()}
@@ -31,16 +59,21 @@
                 {else}
                     Outdoor
                 {/if}
-            </li>
-            <li>Costo Orario: {$campo->getCostoOrario()|default:'[getCostoOrario()]'} €</li>
-        </ul>
-    {else}
-        <p><em>Informazioni campo non disponibili (metodi: getSport(), getTipoTerreno(), ecc.)</em></p>
-    {/if}
+            {else}
+                [getIndoor()]
+            {/if}
+        </li>
+        <li>Costo Orario: 
+            {if $campo neq null}
+                {$campo->getCostoOrario()|default:'[getCostoOrario()]'} €
+            {else}
+                [getCostoOrario()]
+            {/if}
+        </li>
+    </ul>
 
-    <form method="post" action="index.php?controller=reservation&task=cancelReservation&id={$reservation->getId()|default:''}">
+    <form method="post" action="index.php?controller=reservation&task=cancelReservation&id={if $reservation neq null}{$reservation->getId()}{else}0{/if}">
         <button type="submit" name="confirm">Conferma cancellazione</button>
     </form>
-{else}
-    <p>Impossibile visualizzare la prenotazione.</p>
+
 {/if}
