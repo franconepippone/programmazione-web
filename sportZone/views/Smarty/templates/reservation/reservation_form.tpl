@@ -8,7 +8,7 @@
 
   <h2>Prenotazione Campo (Modalità Test)</h2>
 
-  <form method="get" action="/reservation/finalizeReservation">
+  <form method="POST" action="/reservation/finalizeReservation">
 
     <p><strong>Sport:</strong> {if isset($field)}{$field->getSport()}{else}Calcio{/if}</p>
     <p><strong>Tipo terreno:</strong> {if isset($field)}{$field->getTerrainType()}{else}Erba sintetica{/if}</p>
