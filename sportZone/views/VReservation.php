@@ -13,10 +13,10 @@ class VReservation{
         $this->smarty->display("reservation/reservation_form.tpl");
     }
 
-    public function showFinalizeReservation($field, $date, $time){
-        $this->smarty->assign("field", $field);
-        $this->smarty->assign("date", $date);
-        $this->smarty->assign("time", $time);
+    public function showFinalizeReservation(){
+        //$this->smarty->assign("field", $field);
+        //$this->smarty->assign("date", $date);
+        //$this->smarty->assign("time", $time);
         $this->smarty->display("reservation/finalize_reservation.tpl");
     }
 }
