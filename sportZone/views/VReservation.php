@@ -12,4 +12,8 @@ class VReservation{
     public function showReservationForm() {
         $this->smarty->display("reservation/reservation_form.tpl");
     }
+
+    public function showFinalizeReservation(){
+         $this->smarty->display("reservation/finalize_reservation.tpl");
+    }
 }
