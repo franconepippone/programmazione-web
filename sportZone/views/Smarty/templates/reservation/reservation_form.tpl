@@ -59,7 +59,6 @@
   <h2>Prenotazione Campo</h2>
 
   <form method="GET" action="/reservation/finalizeReservation">
-
     <div class="field-info">
       <div>
         <img src="/images/placeholder_field.jpg" alt="Campo">
