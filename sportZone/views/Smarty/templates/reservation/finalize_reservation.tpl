@@ -25,7 +25,7 @@
     </ul>
 {/if}
 
-<form id="reservationForm" method="post" action="index.php?controller=reservation&task=finalizeReservation">
+<form id="reservationForm" method="post" action="reservation/finalizeReservation">
     <input type="hidden" name="data" value="{$data|default:''}">
     <input type="hidden" name="orario" value="{$orario|default:''}">
     <input type="hidden" name="id" value="{if $campo != null}{$campo->getId()}{else}[/getId()]{/if}">
