@@ -18,4 +18,4 @@
     </ul>
 {/if}
 
-<p><a href="index.php?controller=reservation&task=reservationForm">Torna al modulo di prenotazione</a></p>
+<p><a href="/reservation/reservationForm">Torna al modulo di prenotazione</a></p>
