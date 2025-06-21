@@ -86,7 +86,7 @@ class CReservation{
         //return;
     //}
 
-    $userId = USession::getSessionElement('userId') ?? null;
+   // $userId = USession::getSessionElement('userId') ?? null;
     //if ($userId === null) {
       //  header('Location: index.php?controller=user&task=loginForm');
         //exit;
