@@ -19,4 +19,9 @@ class VReservation{
         //$this->smarty->assign("time", $time);
         $this->smarty->display("reservation/finalize_reservation.tpl");
     }
+
+    public function showConfirmation(){
+        $this->smarty->display("reservation/confirmation.tpl");
+    }
+        
 }
