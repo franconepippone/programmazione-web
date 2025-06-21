@@ -69,21 +69,21 @@
         <img src="/images/placeholder_field.jpg" alt="Campo" />
       </div>
       <div class="field-details">
-        <p><strong>Sport:</strong> {$field->getSport()}</p>
-        <p><strong>Tipo terreno:</strong> {$field->getTerrainType()}</p>
+        <p><strong>Sport:</strong> {$field->getSport()|escape}</p>
+        <p><strong>Tipo terreno:</strong> {$field->getTerrainType()|escape}</p>
         <p><strong>Coperto:</strong> {if $field->getIsIndoor()}Sì{else}No{/if}</p>
         <p><strong>Costo orario:</strong> €{$field->getCost()|number_format:2}</p>
-        <p><strong>Data selezionata:</strong> {$date}</p>
+        <p><strong>Data selezionata:</strong> {$date|escape}</p>
       </div>
     </div>
 
-    <input type="hidden" name="field_id" value="{$field->getId()}" />
-    <input type="hidden" name="date" value="{$date}" />
+    <input type="hidden" name="field_id" value="{$field->getId()|escape}" />
+    <input type="hidden" name="date" value="{$date|escape}" />
 
     <label for="time">Seleziona orario:</label>
     <select name="time" id="time" required>
-      {foreach $availableHours as $hour}
-        <option value="{$hour}">{$hour}</option>
+      {foreach from=$availableHours item=hour}
+        <option value="{$hour|escape}">{$hour|escape}</option>
       {/foreach}
     </select>
 
