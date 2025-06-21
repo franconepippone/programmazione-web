@@ -87,6 +87,7 @@ class FReservation {
                 unset($allHours[$key]);
             }
         }
+     }
 
     /**
      * Save or update a Reservation entity
