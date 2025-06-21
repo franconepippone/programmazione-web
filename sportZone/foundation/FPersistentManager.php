@@ -77,6 +77,13 @@ class FPersistentManager{
         return FField::getFieldById($id);
     }
 
+    /**
+    *Retrive all fields
+    */
+    public function getAllFields() {
+        return FField::getAll();
+    }
+
      //-------------------------------------CLIENT--------------------------------------
 
     /**
