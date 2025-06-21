@@ -11,6 +11,6 @@ class VError{
 
     public function show(string $message) {
         $this->smarty->assign("message", $message);
-        $this->smarty->display("error.tpl");
+        $this->smarty->display("reservation/error.tpl");
     }
 }
