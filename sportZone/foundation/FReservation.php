@@ -156,7 +156,7 @@ class FReservation {
     }
     
     public static function getAllReservations() {
-        return FEntityManager::getInstance()->getAll(EReservation::class);
+        return FEntityManager::getInstance()->selectAll(EReservation::class);
     }
 
 
