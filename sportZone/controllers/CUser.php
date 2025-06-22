@@ -27,7 +27,7 @@ class CUser{
         // This way, when user finishes login, he is redirected back to the site he was visiting
         if(!$logged){
             $query = http_build_query([
-                'redirect' => parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
+                'redirect' => $_SERVER['REQUEST_URI']
             ]);
 
             header('Location: /user/login?' . $query);
