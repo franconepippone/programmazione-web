@@ -110,5 +110,29 @@ class CEmployee{
         $view = new VEmployee();
         $view->showReservations($reservations, $filters, null);
     }
+
+  public static function viewReservation() {
+    
+    // CUser::isEmployee();
+
+    $id = $_POST['id'] ?? null;
+
+    if ($id === null) {
+        $errorView = new VError();
+        $errorView->show("ID prenotazione mancante.");
+        return;
+    }
+
+    $reservation = FPersistentManager::getInstance()->retriveReservationById($id);
+
+    if ($reservation === null) {
+        $errorView = new VError();
+        $errorView->show("Prenotazione non trovata.");
+        return;
+    }
+
+    $view = new VEmployee();
+    $view->showReservationDetail($reservation);
  }
+}
 
