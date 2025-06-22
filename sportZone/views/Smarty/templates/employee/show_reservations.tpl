@@ -3,72 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <title>Elenco Prenotazioni</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: #f4faff;
+      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
       padding: 2rem;
-      color: #333;
+      margin: 0;
     }
-
     h1 {
       text-align: center;
       color: #0d47a1;
       margin-bottom: 2rem;
     }
-
     form {
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
       margin-bottom: 2rem;
     }
-
     input, button {
-      padding: 0.5rem 0.8rem;
-      margin: 0.3rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 0.5rem 0.9rem;
       font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #90caf9;
     }
-
     input {
       width: 180px;
+      background-color: #ffffff;
     }
-
     button {
       background-color: #1565c0;
       color: white;
       border: none;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-
     button:hover {
       background-color: #0d47a1;
     }
-
     .message {
       text-align: center;
-      color: #d32f2f;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
+      background-color: #ffcdd2;
+      color: #b71c1c;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: 10px;
+      font-weight: 600;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-
     th, td {
       padding: 1rem;
-      border-bottom: 1px solid #ddd;
       text-align: left;
     }
-
     th {
-      background-color: #1565c0;
+      background-color: #1976d2;
       color: white;
     }
-
+    tr:nth-child(even) {
+      background-color: #f1f8ff;
+    }
     tr:hover {
       background-color: #e3f2fd;
     }
@@ -78,10 +80,10 @@
 
   <h1>Elenco Prenotazioni</h1>
 
-  <form method="post" action="/employee/showReservations">
-    <input type="text" name="client" value="{$filters.client|default:''|escape}" placeholder="Nome cliente">
-    <input type="date" name="date" value="{$filters.date|default:''|escape}" placeholder="Data">
+  <form method="get" action="">
+    <input type="date" name="date" value="{$filters.date|default:''|escape}">
     <input type="text" name="sport" value="{$filters.sport|default:''|escape}" placeholder="Sport">
+    <input type="text" name="client" value="{$filters.client|default:''|escape}" placeholder="Nome cliente">
     <button type="submit">Filtra</button>
   </form>
 
@@ -103,21 +105,13 @@
       <tbody>
         {foreach from=$reservations item=res}
           <tr>
-            <td>{$res->getId()|default:"[getId()]"}</td>
-            <td>{$res->getDate()|date_format:"%Y-%m-%d"|default:"[getDate()]"}</td>
-            <td>{$res->getTime()|default:"[getTime()]"}</td>
+            <td>{$res->getId()|default:'[getId()]'}</td>
+            <td>{$res->getDate()|date_format:"%Y-%m-%d"}</td>
+            <td>{$res->getTime()|default:'[getTime()]'}</td>
+            <td>{$res->getField()->getSport()|default:'[getSport()]'}</td>
             <td>
-              {assign var=field value=$res->getField()}
-              {if $field neq null}
-                {$field->getSport()|default:"[getSport()]"}
-              {else}
-                [getField()->getSport()]
-              {/if}
-            </td>
-            <td>
-              {assign var=client value=$res->getClient()}
-              {if $client neq null}
-                {$client->getName()|default:"[getName()]"} {$client->getSurname()|default:"[getSurname()]"}
+              {if $res->getClient() neq null}
+                {$res->getClient()->getName()|default:'[getName()]'} {$res->getClient()->getSurname()|default:'[getSurname()]'}
               {else}
                 [getClient()->getName()] [getClient()->getSurname()]
               {/if}
