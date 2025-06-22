@@ -117,19 +117,19 @@ class CEmployee{
 
     $id = $_POST['id'] ?? null;
 
-//    if ($id === null) {
-  //      $errorView = new VError();
-   //     $errorView->show("ID prenotazione mancante.");
-    //    return;
-    //}
+    if ($id === null) {
+        $errorView = new VError();
+        $errorView->show("ID prenotazione mancante.");
+        return;
+    }
 
-   // $reservation = FPersistentManager::getInstance()->retriveReservationById($id);
+    $reservation = FPersistentManager::getInstance()->retriveReservationById($id);
 
-    //if ($reservation === null) {
-      //  $errorView = new VError();
-       // $errorView->show("Prenotazione non trovata.");
-       // return;
-    //}
+    if ($reservation === null) {
+        $errorView = new VError();
+        $errorView->show("Prenotazione non trovata.");
+        return;
+    }
 
     $view = new VEmployee();
     $view->viewReservation();//dare reservation
