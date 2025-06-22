@@ -6,7 +6,7 @@
 |--------------|-----------------------------|-----------------------------|
 | searchForm   | `/field/searchForm`         | Mostra form di ricerca      |
 | showResults  | `/field/showResults`        | Mostra lista filtrata       |
-| details      | `/field/details/<campo>`    | Dettagli campo              |
+| details      | `/field/details/<id campo>`    | Dettagli campo              |
 | createFieldForm | `/field/createFieldForm` | Mostra form per la creazione di un campo (usato per testing o da admin) |
 | finalizeFieldCreation | `/field/finalizeFieldCreation` | **(INTERNO)** riceve dati dal form e finalizza creazione |
 ---

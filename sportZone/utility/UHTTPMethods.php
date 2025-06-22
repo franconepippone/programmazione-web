@@ -5,6 +5,14 @@
  */
 class UHTTPMethods{
 
+    public static function getIsSet($param){
+        return isset($_GET[$param]);
+    }
+
+    public static function postIsSet($param){
+        return isset($_POST[$param]);
+    }
+
     /**
      * can access to $_GET superglobal
      */

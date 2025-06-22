@@ -27,12 +27,11 @@ class CFrontController{
     public function run($requestUri){
         // Parse the request URI
         
-
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
-        //$requestUri = trim($requestUri, '/');
-        $uriParts = explode('/', $requestUri);
+        $path = parse_url($requestUri, PHP_URL_PATH);
+        $uriParts = explode('/', $path);
         array_shift($uriParts);
         var_dump($uriParts);
         echo "<br><br>";

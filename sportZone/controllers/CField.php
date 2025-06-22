@@ -7,6 +7,8 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 class CField{
 
     public static function searchForm() {
+        CUser::isLogged();
+        
         $view = new VField();
         $view->showSearchForm();
     }
@@ -64,8 +66,6 @@ class CField{
         // If an image was given, saves it for that field
         $imagesInfo = UHTTPMethods::files('images');
         $normImagesInfo = UHTTPMethods::normalizeFilesArray($imagesInfo);
-
-        print_r($normImagesInfo);
 
         // TODO stavi provando a rendere possibile il caricamento di più immagini anziche una sola
 

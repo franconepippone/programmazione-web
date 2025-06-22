@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-05-28 20:53:39
+/* Smarty version 5.5.1, created on 2025-06-23 01:27:38
   from 'file:user/login.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68375bb3c80145_77982022',
+  'unifunc' => 'content_6858916a739285_16578819',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '6fb622ef4e1635600025d57e656d7cda31e78310' => 
     array (
       0 => 'user/login.tpl',
-      1 => 1748458330,
+      1 => 1750634812,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68375bb3c80145_77982022 (\Smarty\Template $_smarty_tpl) {
+function content_6858916a739285_16578819 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\Smarty\\templates\\user';
 ?><!DOCTYPE html>
 <html lang="en">
@@ -99,6 +99,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\
     <h2><?php echo (($tmp = $_smarty_tpl->getValue('login_title') ?? null)===null||$tmp==='' ? "Login" ?? null : $tmp);?>
 </h2>
     <form action="/user/checkLogin" method="POST">
+      <input type="hidden" name="redirectUrl" id="redirectUrl" value=<?php echo $_smarty_tpl->getValue('redirectUrl');?>
+>
+
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
 

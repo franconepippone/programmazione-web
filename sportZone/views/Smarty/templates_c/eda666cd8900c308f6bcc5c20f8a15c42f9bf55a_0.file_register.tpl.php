@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-05-29 01:03:10
+/* Smarty version 5.5.1, created on 2025-06-22 22:48:35
   from 'file:user/register.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_6837962e427e51_35711337',
+  'unifunc' => 'content_68586c23e56134_15946349',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'eda666cd8900c308f6bcc5c20f8a15c42f9bf55a' => 
     array (
       0 => 'user/register.tpl',
-      1 => 1748473344,
+      1 => 1750625311,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6837962e427e51_35711337 (\Smarty\Template $_smarty_tpl) {
+function content_68586c23e56134_15946349 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\Smarty\\templates\\user';
 ?><!DOCTYPE html>
 <html lang="en">
@@ -101,13 +101,16 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\
 <body>
   <div class="login-container">
     <h2>Register</h2>
-    <form action="/user/attemptRegister" method="POST">
+    <form action="/user/finalizeRegister" method="POST">
 
       <label for="name">First name:</label>
       <input type="text" id="name" name="name" required>
 
       <label for="surname">Last name:</label>
       <input type="text" id="surname" name="surname" required>
+
+      <label for="birthday">Birthday:</label>
+      <input type="date" id="birthday" name="birthday" required>
 
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>

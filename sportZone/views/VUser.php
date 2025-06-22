@@ -9,7 +9,8 @@ class VUser{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function showLoginForm() {
+    public function showLoginForm(string $redirectUrl) {
+        $this->smarty->assign("redirectUrl", $redirectUrl);
         $this->smarty->display("user/login.tpl");
     }
 

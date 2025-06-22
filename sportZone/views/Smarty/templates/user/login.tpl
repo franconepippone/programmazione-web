@@ -74,6 +74,8 @@
   <div class="login-container">
     <h2>{$login_title|default:"Login"}</h2>
     <form action="/user/checkLogin" method="POST">
+      <input type="hidden" name="redirectUrl" id="redirectUrl" value={$redirectUrl}>
+
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
 

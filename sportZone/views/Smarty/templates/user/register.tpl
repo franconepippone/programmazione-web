@@ -77,19 +77,22 @@
 <body>
   <div class="login-container">
     <h2>Register</h2>
-    <form action="/user/attemptRegister" method="POST">
-
+    <form action="/user/finalizeRegister" method="POST">
       <label for="name">First name:</label>
       <input type="text" id="name" name="name" required>
 
       <label for="surname">Last name:</label>
       <input type="text" id="surname" name="surname" required>
 
+      <label for="birthday">Birthday:</label>
+      <input type="date" id="birthday" name="birthday" required>
+
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
 
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" required>
+
 <!--
       <label for="birth">Birth Date:</label>
       <input type="date" id="birth" name="birth" required>

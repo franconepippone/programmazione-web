@@ -18,24 +18,7 @@ class EClient extends EUser
     #[ORM\OneToMany(mappedBy: "client", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
     private Collection $reservations;
 
-    public function __construct(        
-        string $name = '',
-        string $surname = '',
-        ?\DateTimeInterface $birthDate = null,
-        ?UserSex $sex = null,
-        string $email = '',
-        string $username = '',
-        string $password = ''
-    ) {
-        parent::__construct(
-            $name, 
-            $surname, 
-            $birthDate ?? new \DateTime("10-10-1990"), 
-            $sex, 
-            $email, 
-            $username, 
-            $password
-        );
+    public function __construct() {
         $this->enrollments = new ArrayCollection();
         $this->reservations = new ArrayCollection();
     }

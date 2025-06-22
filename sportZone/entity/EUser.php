@@ -69,12 +69,12 @@ abstract class EUser
         return UserSex::from($this->sex);
     }
 
-    public function setDataNascita(\DateTimeInterface $birthDate): self {
+    public function setBirthDate(\DateTimeInterface $birthDate): self {
         $this->birthDate = $birthDate;
         return $this;
     }
 
-    public function getDataNascita(): \DateTimeInterface {
+    public function getBirthDate(): \DateTimeInterface {
         return $this->birthDate;
     }
 
