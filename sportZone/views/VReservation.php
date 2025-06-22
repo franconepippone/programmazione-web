@@ -10,6 +10,7 @@ class VReservation{
     }
 
     public function showReservationForm() {
+        //passare avaiable hours, field, date
         $this->smarty->display("reservation/reservation_form.tpl");
     }
 
