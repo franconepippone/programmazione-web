@@ -43,7 +43,7 @@ class CEmployee{
 
        public static function showReservations() {
          
-        CUser::isEmployee();
+       // CUser::isEmployee();
         
 
         $name = trim(UHTTPMethods::get('client')) ?: null;
@@ -52,17 +52,17 @@ class CEmployee{
 
         $persistent = FPersistentManager::getInstance();
 
-        if ($name && !$persistent->existsClientByPartialName($name)) {
-            $errorView = new VError();
-            $errorView->show("Nessun cliente trovato con quel nome.");
-            return;
-        }
+       // if ($name && !$persistent->existsClientByPartialName($name)) {
+         //   $errorView = new VError();
+           // $errorView->show("Nessun cliente trovato con quel nome.");
+           // return;
+        //}
 
-        if ($sport && !$persistent->existsFieldBySport($sport)) {
-            $errorView = new VError();
-            $errorView->show("Nessun campo trovato per quello sport.");
-            return;
-        }
+        //if ($sport && !$persistent->existsFieldBySport($sport)) {
+          //  $errorView = new VError();
+           // $errorView->show("Nessun campo trovato per quello sport.");
+           // return;
+        //}
 
         $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
 
