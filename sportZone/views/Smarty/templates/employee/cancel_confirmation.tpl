@@ -103,7 +103,7 @@
 
   <section class="container" role="main" aria-label="Conferma cancellazione prenotazione">
     <h2>Prenotazione Cancellata</h2>
-    <p>La tua prenotazione è stata cancellata con successo.</p>
+    <p>La prenotazione è stata cancellata con successo.</p>
 
     <a href="/employee/showReservation" class="back-link" title="Torna al modulo di prenotazione" role="link" aria-label="Torna al modulo di prenotazione">
       ← Torna al modulo di prenotazione
