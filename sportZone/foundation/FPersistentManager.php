@@ -78,7 +78,16 @@ class FPersistentManager{
         return FField::getFieldById($id);
     }
 
+     public function existsFieldBySport($sport) {
+        $fields = FEntityManager::getInstance()->getAll(EField::class);
+        foreach ($fields as $field) {
+            if (strtolower($field->getSport()) == strtolower($sport)) {
+                return true;
+            }
+        }
+        return false;
 
+      }
      //-------------------------------------CLIENT--------------------------------------
 
     /**
@@ -86,6 +95,17 @@ class FPersistentManager{
      */
     public static function retriveClientById($id){
         return FClient::getClientById($id);
+    }
+
+    public function existsClientByPartialName($name) {
+        $clients = FEntityManager::getInstance()->getAll(EClient::class);
+        foreach ($clients as $client) {
+            $fullName = strtolower($client->getName() . " " . $client->getSurname());
+            if (strpos($fullName, strtolower($name)) !== false) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //-----------------------------------PAYMENT METHOD-------------------------------
@@ -128,6 +148,11 @@ class FPersistentManager{
     public function retriveFilteredReservations($name = null, $date = null, $sport = null) {
         return FReservation::filterReservations($name, $date, $sport);
     }
+
+   
+
+  
+    
 
 
 
