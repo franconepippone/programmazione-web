@@ -15,6 +15,12 @@ class CReservation{
     //if (!$fieldId) {
        // VError::show("ID del campo non specificato.");
         //return;
+
+     //$date = UHTTPMethods::get('date');
+     //if (!$date) {
+       // VError::show("data non specificata.");
+        //return;
+    
     
     //$field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     //if (!$field) {
@@ -23,8 +29,7 @@ class CReservation{
    
     // Get available hours for this field and date through FReservation
     //$availableHours = FReservation::getAvailableHours($fieldId, $date);
-    //$date = UHTTPMethods::get('date') ?? (new DateTime())->format('Y-m-d');
-    
+   
     $view->showReservationForm();
   
   }
