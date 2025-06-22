@@ -63,7 +63,7 @@ class CEmployee{
         $reservations = [];
         if ($hasFilter) {
             // Validazioni filtri e raccolta messaggi di errore
-
+/*
             if ($name && !$persistent->existsClientByPartialName($name)) {
                 $errorMessages[] = "Nessun cliente trovato con quel nome.";
             }
@@ -90,7 +90,7 @@ class CEmployee{
                 $errorView->show($errorMessages[0]);
                 return;
             }
-
+*/
             // Se nessun errore, carico le prenotazioni filtrate con tutti i criteri
             $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
 
