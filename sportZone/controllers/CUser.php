@@ -125,14 +125,7 @@ class CUser{
         header('Location: /user/login');
     }
 
-    /**
- * This method checks if the current user is logged in and has the role of "employee".
- * It initializes the session if needed, verifies the user session element,
- * and confirms the user's role. If the user is not logged in or does not have
- * the "employee" role, it redirects to the appropriate page (login or access denied).
- * 
- * @return bool Returns true if the user is logged in as employee, otherwise redirects and exits.
- */
+  
     public static function home(){
         if(CUser::isLogged()){
             $view = new VUser();
@@ -143,23 +136,34 @@ class CUser{
         }  
     }
 
-    public static function isEmployee(){
+      /**
+ * This method checks if the current user is logged in and has the role of "employee".
+ * It initializes the session if needed, verifies the user session element,
+ * and confirms the user's role. If the user is not logged in or does not have
+ * the "employee" role, it redirects to the appropriate page (login or access denied).
+ * 
+ * @return bool Returns true if the user is logged in as employee, otherwise redirects and exits.
+ */
 
-    if(UCookie::isSet('PHPSESSID')){
-        if(session_status() == PHP_SESSION_NONE){
+    public static function isEmployee()
+{
+    if (UCookie::isSet('PHPSESSID')) {
+        if (session_status() == PHP_SESSION_NONE) {
             USession::getInstance();
         }
     }
 
-    if(!USession::isSetSessionElement('user')){
+    if (!USession::isSetSessionElement('user')) {
         header('Location: /User/login');
         exit;
     }
 
     $user = USession::getSessionElement('user');
 
-    if(!isset($user['role']) || $user['role'] !== 'employee'){
-        header('Location: /User/accessDenied');
+    if (!isset($user['role']) || $user['role'] !== 'employee') {
+        // Qui mostri l’errore subito senza redirect
+        $errorView = new VError();
+        $errorView->show("Accesso negato. Non hai i permessi per accedere a questa pagina.");
         exit;
     }
 
