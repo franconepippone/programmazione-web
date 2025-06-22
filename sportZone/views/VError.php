@@ -10,7 +10,7 @@ class VError{
     }
 
     public function show(string $message) {
-        $this->smarty->assign("message", $message);
+        $this->smarty->assign("error_message", $message);
         $this->smarty->display("error.tpl");
     }
 }
