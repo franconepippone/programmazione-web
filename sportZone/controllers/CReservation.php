@@ -30,7 +30,7 @@ class CReservation{
     // Get available hours for this field and date through FReservation
     //$availableHours = FReservation::getAvailableHours($fieldId, $date);
    
-    $view->showReservationForm();
+    $view->showReservationForm(); //da passare field, date e avaiablehours
   
   }
 
