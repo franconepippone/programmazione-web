@@ -79,22 +79,22 @@ class CReservation{
    $client = null;
    $fullName = null;
 
-   if ($userId !== null) {
-       $client = FPersistentManager::getInstance()->retriveClientById($userId);
+   //if ($userId !== null) {
+     //  $client = FPersistentManager::getInstance()->retriveClientById($userId);
 
-       if (!$client) {
-           $error = new VError();
-           $error->show("Client information could not be found.");
-           return;
-       }
+       //if (!$client) {
+         //  $error = new VError();
+          // $error->show("Client information could not be found.");
+           //return;
+       //}
 
        // Get full name from client (EClient extends EUser)
-       $fullName = $client->getName() . ' ' . $client->getSurname();
-    } else {
-        $error = new VError();
-        $error->show("User session invalid.");
-        return;
-    }
+       //$fullName = $client->getName() . ' ' . $client->getSurname();
+   // } else {
+     //   $error = new VError();
+      //  $error->show("User session invalid.");
+       // return;
+    //}
 
     // Process reservation if form confirmed with onsite payment
     if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
@@ -109,12 +109,12 @@ class CReservation{
 
     // Otherwise, show the finalize reservation page with data for user to choose payment method
     $view = new VReservation();
-    $view->showFinalizeReservation(['fullName' => $fullName]); //passare i parametri
-      //  ['fullName' => $fullName,
-       // 'date' => $date,
-       // 'time' => $time,
-       // 'field' => $field
-   // ]);
+    $view->showFinalizeReservation(; //passare i parametri
+        ['fullName' => $fullName,
+        'date' => $date,
+        'time' => $time,
+        'field' => $field
+        ]);
  }
 
   
