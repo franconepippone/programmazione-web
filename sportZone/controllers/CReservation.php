@@ -78,19 +78,19 @@ class CReservation{
     // Retrieve client from database
     $client = null;
     $username = null;
-//    if ($userId !== null) {
-  //      $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
-    //    if (!$client) {
-      //      $error = new VError();
-        //    $error->show("Client information could not be found.");
-          //  return;
-        //}
-       // $username = $client->getUser()->getUsername();
-  //  } else {
-    //    $error = new VError();
-      //  $error->show("User session invalid.");
-      //  return;
-    //}
+    if ($userId !== null) {
+        $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
+        if (!$client) {
+            $error = new VError();
+            $error->show("Client information could not be found.");
+            return;
+        }
+        $username = $client->getUser()->getUsername();
+    } else {
+        $error = new VError();
+        $error->show("User session invalid.");
+        return;
+    }
 
     // Process reservation if form confirmed with onsite payment
     if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
