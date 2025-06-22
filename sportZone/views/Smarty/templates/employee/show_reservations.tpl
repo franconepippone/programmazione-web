@@ -16,7 +16,7 @@
       color: #0d47a1;
       margin-bottom: 2rem;
     }
-    form {
+    form.filter-form {
       display: flex;
       justify-content: center;
       gap: 1rem;
@@ -74,13 +74,24 @@
     tr:hover {
       background-color: #e3f2fd;
     }
+    .view-btn {
+      padding: 0.4rem 0.8rem;
+      background-color: #26a69a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .view-btn:hover {
+      background-color: #1b8d82;
+    }
   </style>
 </head>
 <body>
 
   <h1>Elenco Prenotazioni</h1>
 
-  <form method="post" action="/employee/showReservations">
+  <form method="post" action="/employee/showReservations" class="filter-form">
     <input type="date" name="date" value="{$filters.date|default:''|escape}">
     <input type="text" name="sport" value="{$filters.sport|default:''|escape}" placeholder="Sport">
     <input type="text" name="client" value="{$filters.client|default:''|escape}" placeholder="Nome cliente">
@@ -100,6 +111,7 @@
           <th>Orario</th>
           <th>Campo</th>
           <th>Cliente</th>
+          <th>Azioni</th>
         </tr>
       </thead>
       <tbody>
@@ -115,6 +127,12 @@
               {else}
                 [getClient()->getName()] [getClient()->getSurname()]
               {/if}
+            </td>
+            <td>
+              <form method="post" action="/employee/viewReservation">
+                <input type="hidden" name="id" value="{$res->getId()}">
+                <button type="submit" class="view-btn">Visualizza</button>
+              </form>
             </td>
           </tr>
         {/foreach}
