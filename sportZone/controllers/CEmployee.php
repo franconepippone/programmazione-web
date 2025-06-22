@@ -42,10 +42,8 @@ class CEmployee{
 
 
        public static function showReservations() {
-        if (!CUser::isLogged() || !CUser::isEmployee()) {
-            $errorView = new VError();
-            $errorView->show("Accesso negato. Solo il personale può visualizzare le prenotazioni.");
-            return;
+         
+        CUser::isEmployee();;
         }
 
         $name = trim(UHTTPMethods::get('client')) ?: null;
