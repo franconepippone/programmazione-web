@@ -40,7 +40,6 @@ class CEmployee{
       $view->showCancelReservation(); //aggiungere reservation
    }
 
-  class CEmployee {
 
        public static function showReservations() {
         if (!CUser::isLogged() || !CUser::isEmployee()) {
