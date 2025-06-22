@@ -14,8 +14,8 @@
 ## ReservationController (Responsabile: **ALICE**)
 
 | Metodo              | URL                                   | Azione                               |
-|---------------------|---------------------------------------|--------------------------------------|
-| createReservation   | `/reservation/createReservation       | Mostra form prenotazione             |
+|---------------------|----------------------------------------|--------------------------------------|
+| createForm          | `/reservation/createForm`             | Mostra form prenotazione             |
 | finalizeReservation | `/reservation/finalizeReservation`    | Conclude la prenotazione (no pagamento) |
 | cancelReservation   | `/reservation/cancelReservation/<id>` | Cancella prenotazione                |
 
