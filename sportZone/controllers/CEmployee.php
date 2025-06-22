@@ -40,21 +40,42 @@ class CEmployee{
       $view->showCancelReservation(); //aggiungere reservation
    }
 
-  public static function showReservations() {
+  class CEmployee {
+
+       public static function showReservations() {
         if (!CUser::isLogged() || !CUser::isEmployee()) {
             $errorView = new VError();
             $errorView->show("Accesso negato. Solo il personale può visualizzare le prenotazioni.");
             return;
         }
 
-        $name = UHTTPMethods::get('client');
-        $date = UHTTPMethods::get('date');
-        $sport = UHTTPMethods::get('sport');
+        $name = trim(UHTTPMethods::get('client')) ?: null;
+        $date = trim(UHTTPMethods::get('date')) ?: null;
+        $sport = trim(UHTTPMethods::get('sport')) ?: null;
+
+        $persistent = FPersistentManager::getInstance();
+
+        if ($name && !$persistent->existsClientByPartialName($name)) {
+            $errorView = new VError();
+            $errorView->show("Nessun cliente trovato con quel nome.");
+            return;
+        }
+
+        if ($sport && !$persistent->existsFieldBySport($sport)) {
+            $errorView = new VError();
+            $errorView->show("Nessun campo trovato per quello sport.");
+            return;
+        }
+
+        $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
+
+        if (empty($reservations)) {
+            $errorView = new VError();
+            $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+            return;
+        }
 
         $filters = ['client' => $name, 'date' => $date, 'sport' => $sport];
-
-        $reservations = FPersistentManager::getInstance()
-                          ->retriveFilteredReservations($name, $date, $sport);
 
         $view = new VEmployee();
         $view->showReservations($reservations, $filters);
