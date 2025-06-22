@@ -105,7 +105,7 @@
     <h2>Prenotazione Cancellata</h2>
     <p>La prenotazione è stata cancellata con successo.</p>
 
-    <a href="/employee/showReservation" class="back-link" title="Torna al modulo di prenotazione" role="link" aria-label="Torna al modulo di prenotazione">
+    <a href="/employee/showReservations" class="back-link" title="Torna al modulo di prenotazione" role="link" aria-label="Torna al modulo di prenotazione">
       ← Torna al modulo di prenotazione
     </a>
   </section>
