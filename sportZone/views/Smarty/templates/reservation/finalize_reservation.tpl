@@ -5,7 +5,6 @@
   <title>Riepilogo Prenotazione</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* Reset base */
     * {
       box-sizing: border-box;
     }
@@ -69,8 +68,27 @@
       color: #4a3d6e;
     }
 
+    /* Back link styling */
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      color: #764ba2;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.4rem 0.8rem;
+      border: 2px solid #764ba2;
+      border-radius: 12px;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .back-link:hover {
+      background-color: #764ba2;
+      color: #fff;
+      box-shadow: 0 4px 12px #5a367faa;
+    }
+
     form {
-      margin-top: 2.5rem;
+      margin-top: 0;
       display: flex;
       flex-direction: column;
     }
@@ -122,6 +140,11 @@
       button {
         font-size: 1rem;
       }
+      .back-link {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 10px;
+      }
     }
   </style>
 </head>
@@ -129,6 +152,11 @@
 
   <section class="container">
     <h2>Riepilogo Prenotazione</h2>
+
+    <!-- Back link -->
+    <a href="/reservation/createReservation" class="back-link" title="Torna alla pagina precedente">
+      ← Torna indietro
+    </a>
 
     <p><strong>Utente:</strong>
       {if isset($fullName) && $fullName neq ''}{$fullName}{else}[$client->getName() . ' ' . $client->getSurname()]{/if}
