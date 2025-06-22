@@ -118,7 +118,7 @@ class FReservation {
 
     public static function filterReservations($name = null, $date = null, $sport = null) {
         $entityManager = FEntityManager::getInstance();
-        $reservations = $entityManager->getAll(EReservation::class);
+        $reservations = $entityManager->selectAll(EReservation::class);
         $filtered = [];
 
         foreach ($reservations as $res) {
