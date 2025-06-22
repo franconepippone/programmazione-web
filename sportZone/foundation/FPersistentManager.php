@@ -149,6 +149,9 @@ class FPersistentManager{
         return FReservation::filterReservations($name, $date, $sport);
     }
 
+    public function retriveAllReservations() {
+    return FReservation::getAllReservations();
+    }
    
 
   
