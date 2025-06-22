@@ -79,7 +79,7 @@ class CReservation{
     $client = null;
     $username = null;
     if ($userId !== null) {
-        $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
+        $client = FPersistentManager::getInstance()->retriveClientById($userId);
         if (!$client) {
             $error = new VError();
             $error->show("Client information could not be found.");
