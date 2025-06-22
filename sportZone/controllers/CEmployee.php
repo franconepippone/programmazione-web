@@ -123,7 +123,7 @@ class CEmployee{
     //    return;
     //}
 
-    $reservation = FPersistentManager::getInstance()->retriveReservationById($id);
+   // $reservation = FPersistentManager::getInstance()->retriveReservationById($id);
 
     //if ($reservation === null) {
       //  $errorView = new VError();
