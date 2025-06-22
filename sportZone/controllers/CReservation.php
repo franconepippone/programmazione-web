@@ -34,30 +34,67 @@ class CReservation{
   
   }
 
-  public static function finalizeReservation() {
-       if (!CUser::isLogged()) {
+ public static function finalizeReservation() {
+    // Check if user is logged in
+    if (!CUser::isLogged()) {
+        $error = new VError();
+        $error->show("You must be logged in to proceed.");
         return;
     }
 
-    // Prendi userId dalla sessione, se esiste
-    $userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
+    // Get user ID from session
+    $userId = $_SESSION['userId'] ?? null;
 
-    // Prendi parametri POST con controllo esistenza
+    // Get POST parameters
     $fieldId = $_POST['id'] ?? null;
     $date = $_POST['data'] ?? null;
     $time = $_POST['orario'] ?? null;
 
-    $field = null;
-    if ($fieldId !== null) {
-       // $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-    }
+    // Validate parameters individually and show error immediately
+  //  if (!$fieldId) {
+    //    $error = new VError();
+     //   $error->show("Field ID is missing.");
+     //   return;
+   // }
+   // if (!$date) {
+     //   $error = new VError();
+     //   $error->show("Date is not specified.");
+      //  return;
+    //}
+    //if (!$time) {
+      //  $error = new VError();
+       // $error->show("Time is not specified.");
+       // return;
+    //}
 
+    // Retrieve field from database
+    //$field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+    //if (!$field) {
+      //  $error = new VError();
+       // $error->show("Selected field not found.");
+       // return;
+    //}
+
+    // Retrieve client from database
+    $client = null;
+    $username = null;
+//    if ($userId !== null) {
+  //      $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
+    //    if (!$client) {
+      //      $error = new VError();
+        //    $error->show("Client information could not be found.");
+          //  return;
+        //}
+       // $username = $client->getUser()->getUsername();
+  //  } else {
+    //    $error = new VError();
+      //  $error->show("User session invalid.");
+      //  return;
+    //}
+
+    // Process reservation if form confirmed with onsite payment
     if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
-        $client = null;
-        if ($userId !== null) {
-            $client = FPersistentManager::getInstance()->retriveClientByUserId($userId);
-        }
-        //$payment = new EOnsitePayment();
+       // $payment = new EOnsitePayment();
         //$reservation = new EReservation($date, $time, $field, $client, $payment);
         //FPersistentManager::getInstance()->storeReservation($reservation);
 
@@ -66,9 +103,15 @@ class CReservation{
         return;
     }
 
+    // Otherwise, show the finalize reservation page with data for user to choose payment method
     $view = new VReservation();
-    $view->showFinalizeReservation(); // da passare nome utente, data, orario e field
-  }
+    $view->showFinalizeReservation(); //passare i parametri
+      //  ['username' => $username,
+       // 'date' => $date,
+       // 'time' => $time,
+       // 'field' => $field
+   // ]);
+ }
 
   
   public static function cancelReservation() {
