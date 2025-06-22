@@ -80,7 +80,7 @@
 
   <h1>Elenco Prenotazioni</h1>
 
-  <form method="get" action="">
+  <form method="get" action="/employee/showReservation">
     <input type="date" name="date" value="{$filters.date|default:''|escape}">
     <input type="text" name="sport" value="{$filters.sport|default:''|escape}" placeholder="Sport">
     <input type="text" name="client" value="{$filters.client|default:''|escape}" placeholder="Nome cliente">
