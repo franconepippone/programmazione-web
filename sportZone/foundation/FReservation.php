@@ -108,4 +108,52 @@ class FReservation {
     public static function deleteReservation(EReservation $reservation): void {
         FEntityManager::getInstance()->delete($reservation);
     }
+
+    /**
+     * Filter a reservation by name,date and sport
+     *
+     * @param 
+     * @return void
+     */
+
+    public static function filterReservations($name, $date, $sport) {
+        $entityManager = FEntityManager::getInstance();
+        $reservations = $entityManager->getAll(EReservation::class);
+        $filtered = [];
+
+        foreach ($reservations as $res) {
+            $ok = true;
+
+            // Filtra per nome e cognome cliente (parziale)
+            if ($name !== null) {
+                $client = $res->getClient();
+
+                if ($client !== null) {
+                    $fullName = strtolower($client->getName() . " " . $client->getSurname());
+                    $ok = $ok && strpos($fullName, strtolower($name)) !== false;
+                } else {
+                    $ok = false;
+                }
+            }
+
+            // Filtra per data
+            if ($date !== null) {
+                $ok = $ok && $res->getDate() == $date;
+            }
+
+            // Filtra per sport del campo
+            if ($sport !== null) {
+                $field = $res->getField();
+                $ok = $ok && $field !== null && strtolower($field->getSport()) == strtolower($sport);
+            }
+
+            if ($ok) {
+                $filtered[] = $res;
+            }
+        }
+
+        return $filtered;
+    }
+
+
 }
