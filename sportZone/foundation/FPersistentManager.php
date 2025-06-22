@@ -79,13 +79,14 @@ class FPersistentManager{
     }
 
      public function existsFieldBySport($sport) {
-        $fields = FEntityManager::getInstance()->getAll(EField::class);
-        foreach ($fields as $field) {
-            if (strtolower($field->getSport()) == strtolower($sport)) {
-                return true;
-            }
-        }
-        return false;
+     $fields = FField::getAllFields();
+     foreach ($fields as $field) {
+         if (strtolower($field->getSport()) == strtolower($sport)) {
+             return true;
+         }
+     }
+     return false;
+     }
 
       }
      //-------------------------------------CLIENT--------------------------------------
@@ -98,14 +99,14 @@ class FPersistentManager{
     }
 
     public function existsClientByPartialName($name) {
-        $clients = FEntityManager::getInstance()->getAll(EClient::class);
-        foreach ($clients as $client) {
-            $fullName = strtolower($client->getName() . " " . $client->getSurname());
-            if (strpos($fullName, strtolower($name)) !== false) {
-                return true;
-            }
+    $clients = FClient::getAllClients();
+    foreach ($clients as $client) {
+        $fullName = strtolower($client->getName() . " " . $client->getSurname());
+        if (strpos($fullName, strtolower($name)) !== false) {
+            return true;
         }
-        return false;
+    }
+    return false;
     }
 
     //-----------------------------------PAYMENT METHOD-------------------------------
