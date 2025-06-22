@@ -20,5 +20,9 @@ class VEmployee{
      public function showReservations() { //dare array reservation e filtri
         $this->smarty->display("employee/show_reservations.tpl");
     }
+
+     public function viewReservation() { //dare reservation 
+        $this->smarty->display("employee/view_reservation.tpl");
+    }
     
 }
