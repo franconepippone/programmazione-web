@@ -18,7 +18,7 @@ class CEmployee{
       $reservation = null;
       //if ($reservationId !== null && is_numeric($reservationId)) {
         //  $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
-      }
+     // }
 
     // 4. Check reservation exists
      // if (!$reservation) {
