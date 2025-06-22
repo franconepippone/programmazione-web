@@ -42,10 +42,10 @@ class CReservation{
     // Prendi userId dalla sessione, se esiste
     $userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
 
-    // Prendi parametri GET o POST con controllo esistenza
-    $fieldId = isset($_GET['id']) ? $_GET['id'] : (isset($_POST['id']) ? $_POST['id'] : null);
-    $date = isset($_GET['data']) ? $_GET['data'] : (isset($_POST['data']) ? $_POST['data'] : null);
-    $time = isset($_GET['orario']) ? $_GET['orario'] : (isset($_POST['orario']) ? $_POST['orario'] : null);
+    // Prendi parametri POST con controllo esistenza
+    $fieldId = $_POST['id'] ?? null;
+    $date = $_POST['data'] ?? null;
+    $time = $_POST['orario'] ?? null;
 
     $field = null;
     if ($fieldId !== null) {
@@ -67,8 +67,10 @@ class CReservation{
     }
 
     $view = new VReservation();
-    $view->showFinalizeReservation();
+    $view->showFinalizeReservation(); // da passare nome utente, data, orario e field
   }
+
+  
   public static function cancelReservation() {
     if (!CUser::isLogged()) {
         header('Location: index.php?controller=user&task=loginForm');
