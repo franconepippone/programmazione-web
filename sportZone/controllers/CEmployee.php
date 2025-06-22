@@ -132,7 +132,7 @@ class CEmployee{
     }
 
     $view = new VEmployee();
-    $view->showReservationDetail($reservation);
+    $view->viewReservation();//dare reservation
  }
 }
 
