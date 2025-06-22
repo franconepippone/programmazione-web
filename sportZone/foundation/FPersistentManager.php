@@ -155,7 +155,7 @@ class FPersistentManager{
     }
    
     public function retriveReservationById($id) {
-    return FReservation::retriveById($id);
+    return FReservation::getReservationById($id);
     }
   
     
