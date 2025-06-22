@@ -83,7 +83,7 @@ class CEmployee{
             // Gestione messaggi di errore in base al numero di errori
             if (count($errorMessages) > 1) {
                 $errorView = new VError();
-                $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+                $errorView->show("Nessuna prenotazione rispetta i criteri inseriti.");
                 return;
             } elseif (count($errorMessages) === 1) {
                 $errorView = new VError();
