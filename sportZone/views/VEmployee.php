@@ -16,4 +16,9 @@ class VEmployee{
     public function showCancelConfirmation(){
         $this->smarty->display("employee/cancel_confirmation.tpl");
     }
+
+     public function showReservation() { //dare array reservation
+        $this->smarty->display("employee/show_reservation.tpl");
+    }
+    
 }
