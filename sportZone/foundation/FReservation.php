@@ -113,10 +113,10 @@ class FReservation {
      * Filter a reservation by name,date and sport
      *
      * @param 
-     * @return void
+     * @return array EReservation
      */
 
-    public static function filterReservations($name, $date, $sport) {
+    public static function filterReservations($name = null, $date = null, $sport = null) {
         $entityManager = FEntityManager::getInstance();
         $reservations = $entityManager->getAll(EReservation::class);
         $filtered = [];
