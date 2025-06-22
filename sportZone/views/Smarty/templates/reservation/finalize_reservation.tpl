@@ -1,64 +1,179 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Riepilogo Prenotazione</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: Arial, sans-serif; margin: 2rem; background-color: #f5f5f5; }
-    h2, h3 { color: #333; }
-    ul { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); list-style: none; }
-    li { margin-bottom: 0.5rem; }
-    label, select, button { display: block; margin-top: 1rem; }
+    /* Reset base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #333;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .container {
+      background: #fff;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      transition: box-shadow 0.3s ease;
+    }
+    .container:hover {
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+    h2 {
+      font-weight: 600;
+      color: #3c1361;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+    h3 {
+      color: #764ba2;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      border-bottom: 2px solid #764ba2;
+      padding-bottom: 0.3rem;
+    }
+    p {
+      font-size: 1.1rem;
+      margin: 0.4rem 0;
+    }
+    p strong {
+      color: #5a3e85;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      background: #f9f8fd;
+      border-radius: 12px;
+      box-shadow: inset 0 0 8px #e2def9;
+      padding: 1rem 1.2rem;
+    }
+    li {
+      margin-bottom: 0.6rem;
+      font-size: 1rem;
+      color: #4a3d6e;
+    }
+
+    form {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: 600;
+      color: #5a3e85;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    select {
+      padding: 0.5rem 0.7rem;
+      font-size: 1rem;
+      border: 2px solid #9c88ff;
+      border-radius: 8px;
+      transition: border-color 0.3s ease;
+      cursor: pointer;
+      outline-offset: 2px;
+    }
+    select:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 8px #764ba2aa;
+    }
+    button {
+      margin-top: 1.8rem;
+      background: #764ba2;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 12px #613e96;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    button:hover {
+      background: #5a367f;
+      box-shadow: 0 8px 18px #4a2a6b;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+      p, li {
+        font-size: 1rem;
+      }
+      button {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h2>Riepilogo Prenotazione</h2>
+  <section class="container">
+    <h2>Riepilogo Prenotazione</h2>
 
-  <p><strong>Utente:</strong> 
-    {if isset($fullName) && $fullName neq ''}{$fullName}{else}[$client->getName() . ' ' . $client->getSurname()]{/if}
-  </p>
+    <p><strong>Utente:</strong>
+      {if isset($fullName) && $fullName neq ''}{$fullName}{else}[$client->getName() . ' ' . $client->getSurname()]{/if}
+    </p>
 
-  <p><strong>Data:</strong> 
-    {if isset($data) && $data neq ''}{$data}{else}[$date = UHTTPMethods::post('data')]{/if}
-  </p>
+    <p><strong>Data:</strong>
+      {if isset($data) && $data neq ''}{$data}{else}[$date = UHTTPMethods::post('data')]{/if}
+    </p>
 
-  <p><strong>Orario:</strong> 
-    {if isset($orario) && $orario neq ''}{$orario}{else}[$time = UHTTPMethods::post('orario')]{/if}
-  </p>
+    <p><strong>Orario:</strong>
+      {if isset($orario) && $orario neq ''}{$orario}{else}[$time = UHTTPMethods::post('orario')]{/if}
+    </p>
 
-  <h3>Informazioni Campo</h3>
-  <ul>
-    <li><strong>Sport:</strong> 
-      {if isset($campo)}{$campo->getSport()}{else}[$field->getSport()]{/if}
-    </li>
-    <li><strong>Tipo terreno:</strong> 
-      {if isset($campo)}{$campo->getTipoTerreno()}{else}[$field->getTerrainType()]{/if}
-    </li>
-    <li><strong>Indoor:</strong>
-      {if isset($campo)}
-        {if $campo->getIndoor()}Indoor{else}Outdoor{/if}
-      {else}[$field->getIsIndoor()]{/if}
-    </li>
-    <li><strong>Costo orario:</strong> 
-      {if isset($campo)}{$campo->getCostoOrario()} €{else}[$field->getCost()]{/if}
-    </li>
-  </ul>
+    <h3>Informazioni Campo</h3>
+    <ul>
+      <li><strong>Sport:</strong>
+        {if isset($campo)}{$campo->getSport()}{else}[$field->getSport()]{/if}
+      </li>
+      <li><strong>Tipo terreno:</strong>
+        {if isset($campo)}{$campo->getTipoTerreno()}{else}[$field->getTerrainType()]{/if}
+      </li>
+      <li><strong>Indoor:</strong>
+        {if isset($campo)}
+          {if $campo->getIndoor()}Indoor{else}Outdoor{/if}
+        {else}[$field->getIsIndoor()]{/if}
+      </li>
+      <li><strong>Costo orario:</strong>
+        {if isset($campo)}{$campo->getCostoOrario()} €{else}[$field->getCost()]{/if}
+      </li>
+    </ul>
 
-  <form id="reservationForm" method="post" action="/reservation/finalizeReservation">
-    <input type="hidden" name="data" value="{$data|default:''}">
-    <input type="hidden" name="orario" value="{$orario|default:''}">
-    <input type="hidden" name="id" value="{if isset($campo)}{$campo->getId()}{else}[$field->getId()]{/if}">
+    <form id="reservationForm" method="post" action="/reservation/finalizeReservation">
+      <input type="hidden" name="data" value="{$data|default:''}">
+      <input type="hidden" name="orario" value="{$orario|default:''}">
+      <input type="hidden" name="id" value="{if isset($campo)}{$campo->getId()}{else}[$field->getId()]{/if}">
 
-    <label for="paymentMethod">Metodo di pagamento:</label>
-    <select name="paymentMethod" id="paymentMethod" required>
-      <option value="onsite">Pagamento in loco</option>
-      <option value="online">Pagamento online</option>
-    </select>
+      <label for="paymentMethod">Metodo di pagamento:</label>
+      <select name="paymentMethod" id="paymentMethod" required>
+        <option value="onsite">Pagamento in loco</option>
+        <option value="online">Pagamento online</option>
+      </select>
 
-    <br><br>
-    <button type="submit" name="confirm">Conferma Prenotazione</button>
-  </form>
+      <button type="submit" name="confirm">Conferma Prenotazione</button>
+    </form>
+  </section>
 
   <script>
     document.getElementById('reservationForm').addEventListener('submit', function(e) {
