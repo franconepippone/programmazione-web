@@ -151,7 +151,7 @@ class CReservation{
       //  $errorView = new VError();
        // $errorView->show("Non sei autorizzato a cancellare questa prenotazione.");
        // return;
-    }
+    //}
 
     // 7. If confirmed, delete and show confirmation
     if (isset($_POST['confirm'])) {
