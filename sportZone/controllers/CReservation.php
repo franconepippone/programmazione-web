@@ -119,49 +119,50 @@ class CReservation{
 
   
   public static function cancelReservation() {
+    // 1. Check if user is logged in
     if (!CUser::isLogged()) {
-        header('Location: index.php?controller=user&task=loginForm');
-        exit;
+        $errorView = new VError();
+        $errorView->show("You must be logged in to proceed.");
+        return;
     }
 
-    $id = isset($_GET['id']) && is_numeric($_GET['id']) ? intval($_GET['id']) : null;
+    // 2. Get user ID from session
+    $userId = $_SESSION['userId'] ?? null;
 
-   // if ($id === null || $id <= 0) {
+    // 3. Get POST parameter
+    $reservationId = $_POST['id'] ?? null;
+
+    // 4. Retrieve reservation from DB
+    $reservation = null;
+  //  if ($reservationId !== null && is_numeric($reservationId)) {
+   //     $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
+   // }
+
+    // 5. Check reservation exists
+    //if (!$reservation) {
      //   $errorView = new VError();
-       // $errorView->show('ID prenotazione non valido.');
-       // return;
+      //  $errorView->show("Prenotazione non trovata.");
+     //   return;
     //}
 
-    //$reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, $id);
-
-    //if ($reservation === null) {
-      //  $errorView = new VError();
-        //$errorView->show('Prenotazione non trovata.');
-        //return;
-    //}
-
-   // $userId = USession::getSessionElement('userId') ?? null;
-    //if ($userId === null) {
-      //  header('Location: index.php?controller=user&task=loginForm');
-        //exit;
-    //}
-
+    // 6. Check user owns the reservation
     //$client = $reservation->getClient();
-    //if ($client === null || $client->getUserId() !== $userId) {
+    //if (!$client || $client->getId() !== $userId) {
       //  $errorView = new VError();
-        //$errorView->show('Non sei autorizzato a cancellare questa prenotazione.');
-        //return;
-    //}
+       // $errorView->show("Non sei autorizzato a cancellare questa prenotazione.");
+       // return;
+    }
 
-    $view = new VReservation();
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
-      //  FPersistentManager::getInstance()->deleteObj($reservation);
+    // 7. If confirmed, delete and show confirmation
+    if (isset($_POST['confirm'])) {
+     //   FPersistentManager::getInstance()->deleteObj($reservation);
+        $view = new VReservation();
         $view->showCancelConfirmation();
         return;
     }
 
-   // $view->reservation = $reservation;
-    $view->showCancelReservation();
+    // 8. Otherwise, show cancellation form
+    $view = new VReservation();
+    $view->showCancelReservation($reservation);
  }
 }
