@@ -43,8 +43,8 @@ class CEmployee{
 
        public static function showReservations() {
          
-        CUser::isEmployee();;
-        }
+        CUser::isEmployee();
+        
 
         $name = trim(UHTTPMethods::get('client')) ?: null;
         $date = trim(UHTTPMethods::get('date')) ?: null;
