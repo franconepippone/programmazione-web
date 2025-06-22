@@ -12,4 +12,8 @@ class FClient {
     public static function getClientById(int $id): ?EClient {
         return FEntityManager::getInstance()->retriveObj(EClient::class, $id);
     }
+
+    public static function getAllClients() {
+        return FEntityManager::getInstance()->selectAll(EClient::class);
+    }
 }
