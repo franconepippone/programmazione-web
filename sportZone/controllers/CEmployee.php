@@ -45,8 +45,8 @@ class CEmployee{
          
        // CUser::isEmployee();
 
-        // Prendi i filtri da POST (o GET se preferisci, ma qui POST come vuoi)
-        $hasFilter = !empty($_GET);
+        
+        $hasFilter = !empty($_POST);
 
         $name = $_POST['client'] ?? null;
         $date = $_POST['date'] ?? null;
