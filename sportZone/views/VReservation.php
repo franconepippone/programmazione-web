@@ -14,7 +14,7 @@ class VReservation{
         $this->smarty->display("reservation/reservation_form.tpl");
     }
 
-    public function showFinalizeReservation(){
+    public function showFinalizeReservation($fullName,$date,$time){ //aggiungere field
         $this->smarty->assign("fullName", $fullName);
         $this->smarty->assign("field", $field);
         $this->smarty->assign("date", $date);
