@@ -77,11 +77,11 @@ class CEmployee{
             $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
         }
 
-        if (empty($reservations)) {
-            $errorView = new VError();
-            $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
-            return;
-        }
+      //  if (empty($reservations)) {
+        //    $errorView = new VError();
+         //   $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+          //  return;
+        //}
 
         $filters = ['client' => $name, 'date' => $date, 'sport' => $sport];
 
