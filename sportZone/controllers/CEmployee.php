@@ -111,4 +111,4 @@ class CEmployee{
         $view->showReservations($reservations, $filters, null);
     }
  }
-}
+
