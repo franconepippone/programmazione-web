@@ -61,33 +61,44 @@ class CEmployee{
         $filters = ['client' => $name ?? '', 'date' => $date ?? '', 'sport' => $sport ?? ''];
         $message = null;
         $reservations = [];
-if ($hasFilter) {
-        // Validazioni se ci sono filtri
-        if ($name && !$persistent->existsClientByPartialName($name)) {
-            $errorView = new VError();
-            $errorView->show("Nessun cliente trovato con quel nome.");
-            return;
-        } elseif ($sport && !$persistent->existsFieldBySport($sport)) {
-            $errorView = new VError();
-            $errorView->show("Nessun campo trovato per quello sport.");
-            return;
-        } else {
+        if ($hasFilter) {
+        // Validazioni filtri
+            if ($name && !$persistent->existsClientByPartialName($name)) {
+                $errorView = new VError();
+                $errorView->show("Nessun cliente trovato con quel nome.");
+                return;
+            }
+
+            if ($sport && !$persistent->existsFieldBySport($sport)) {
+                $errorView = new VError();
+                $errorView->show("Nessun campo trovato per quello sport.");
+                return;
+            }
+
             $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
 
-            if (empty($reservations)) {
+        // Messaggio specifico se solo data e nessun risultato
+            if ($date && !$name && !$sport && empty($reservations)) {
+                $errorView = new VError();
+                $errorView->show("Nessuna prenotazione trovata per la data selezionata.");
+                return;
+            }
+
+        // Messaggio generico se altri filtri e nessun risultato
+            if (($name || $sport) && empty($reservations)) {
                 $errorView = new VError();
                 $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
                 return;
             }
-        }
-    } else {
-        // Nessun filtro: carica tutte le prenotazioni
-        $reservations = $persistent->retriveFilteredReservations(null, null, null);
-    }
 
-    $view = new VEmployee();
-    $view->showReservations($reservations, $filters, null);
- }
-}
+        } else {
+        // Nessun filtro: prendi tutte le prenotazioni
+            $reservations = $persistent->retriveFilteredReservations(null, null, null);
+        }
+
+        $view = new VEmployee();
+        $view->showReservations($reservations, $filters, null);
+    }
+} 
  
 
