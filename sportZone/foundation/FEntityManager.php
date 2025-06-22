@@ -267,6 +267,44 @@ class FEntityManager{
                 return null;
             }
     }
+    /**
+     * Retrieves an object from the database based on multiple fields.
+     * @param string $class The class name of the entity to retrieve.
+     * @param array $fields An associative array where keys are field names and values are the corresponding values to match.
+     * @return object|null The first matching object, or null if no match is found or an error occurs.
+     * @throws Exception If an error occurs during the retrieval process.   
+    */
+    public static function retriveObjFromFields($class, array $fields): ?object {
+        try {
+            $criteria = [];
+            foreach ($fields as $field => $value) {
+                $criteria[$field] = $value;
+            }
+            $obj = self::$entityManager->getRepository($class)->findOneBy($criteria);
+            return $obj;
+        } catch (Exception $e) {
+            echo "ERROR: " . $e->getMessage();
+            return null;
+        }
+    }
 
-
+    /**
+     * Retrieves a list of objects from the database based on multiple fields.
+     * @param string $class The class name of the entity to retrieve.
+     * @param array $fields An associative array where keys are field names and values are the corresponding values to match.
+     * @return array|null An array of matching objects, or null if no match is found or an error occurs.
+     */
+    public static function retriveObjListFromFields($class, array $fields): ?array {
+        try {
+            $criteria = [];
+            foreach ($fields as $field => $value) {
+                $criteria[$field] = $value;
+            }
+            $obj = self::$entityManager->getRepository($class)->findBy($criteria);
+            return $obj;
+        } catch (Exception $e) {
+            echo "ERROR: " . $e->getMessage();
+            return null;
+        }
+    }
 }
