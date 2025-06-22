@@ -121,5 +121,14 @@ class FPersistentManager{
         return FReservation::getAvailableHours($fieldId, $date);
     }
 
+    /**
+     * fillter by name, date and sport
+     * Returns the list of reservations.
+     */
+    public function retriveFilteredReservations($name = null, $date = null, $sport = null) {
+        return FReservation::filterReservations($name, $date, $sport);
+    }
+
+
 
 }
