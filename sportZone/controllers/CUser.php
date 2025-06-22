@@ -160,7 +160,12 @@ class CUser{
 
     $user = USession::getSessionElement('user');
 
-    
+    if (!isset($user['role']) || $user['role'] !== 'employee') {
+        // Qui mostri l’errore subito senza redirect
+        $errorView = new VError();
+        $errorView->show("Accesso negato. Non hai i permessi per accedere a questa pagina.");
+        exit;
+    }
 
     return true;
 }
