@@ -44,37 +44,49 @@ class CEmployee{
        public static function showReservations() {
          
        // CUser::isEmployee();
-        
 
-       $name = $_POST['client'] ?? null;
-       $date = $_POST['date'] ?? null;
-       $sport = $_POST['sport'] ?? null;
-         
+        // Prendi i filtri da POST (o GET se preferisci, ma qui POST come vuoi)
+        $name = $_POST['client'] ?? null;
+        $date = $_POST['date'] ?? null;
+        $sport = $_POST['sport'] ?? null;
+
+        // Pulizia: trim e fallback a null se stringa vuota
+        $name = ($name !== null && trim($name) !== '') ? trim($name) : null;
+        $date = ($date !== null && trim($date) !== '') ? trim($date) : null;
+        $sport = ($sport !== null && trim($sport) !== '') ? trim($sport) : null;
+
         $persistent = FPersistentManager::getInstance();
 
-       // if ($name && !$persistent->existsClientByPartialName($name)) {
-         //   $errorView = new VError();
-           // $errorView->show("Nessun cliente trovato con quel nome.");
-           // return;
-        //}
+        // Verifica validità filtri, mostra primo errore e ritorna subito
+        if ($name !== null && !$persistent->existsClientByPartialName($name)) {
+            $errorView = new VError();
+            $errorView->show("Nessun cliente trovato con quel nome.");
+            return;
+        }
 
-        //if ($sport && !$persistent->existsFieldBySport($sport)) {
-          //  $errorView = new VError();
-           // $errorView->show("Nessun campo trovato per quello sport.");
-           // return;
-        //}
+        if ($sport !== null && !$persistent->existsFieldBySport($sport)) {
+            $errorView = new VError();
+            $errorView->show("Nessun campo trovato per quello sport.");
+            return;
+        }
 
-        $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
+        // Recupera prenotazioni in base ai filtri o tutte se nessun filtro
+        if ($name === null && $date === null && $sport === null) {
+            $reservations = $persistent->retriveAllReservations();
+        } else {
+            $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
+        }
 
-     //   if (empty($reservations)) {
-       //     $errorView = new VError();
-        //    $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
-         //   return;
-       // }
+        if (empty($reservations)) {
+            $errorView = new VError();
+            $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+            return;
+        }
 
         $filters = ['client' => $name, 'date' => $date, 'sport' => $sport];
 
         $view = new VEmployee();
-        $view->showReservations();// inserire reservation e filters
+        $view->showReservations();// aggiungere reservations e filters
     }
+ }
 } 
