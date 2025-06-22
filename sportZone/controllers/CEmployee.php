@@ -39,4 +39,24 @@ class CEmployee{
       $view = new VEmployee();
       $view->showCancelReservation(); //aggiungere reservation
    }
+
+  public static function showReservations() {
+        if (!CUser::isLogged() || !CUser::isEmployee()) {
+            $errorView = new VError();
+            $errorView->show("Accesso negato. Solo il personale può visualizzare le prenotazioni.");
+            return;
+        }
+
+        $name = UHTTPMethods::get('client');
+        $date = UHTTPMethods::get('date');
+        $sport = UHTTPMethods::get('sport');
+
+        $filters = ['client' => $name, 'date' => $date, 'sport' => $sport];
+
+        $reservations = FPersistentManager::getInstance()
+                          ->retriveFilteredReservations($name, $date, $sport);
+
+        $view = new VEmployee();
+        $view->showReservations($reservations, $filters);
+    }
 } 
