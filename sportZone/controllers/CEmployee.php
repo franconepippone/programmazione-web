@@ -62,48 +62,53 @@ class CEmployee{
         $message = null;
         $reservations = [];
         if ($hasFilter) {
-        $errorMessages = [];
+            // Validazioni filtri e raccolta messaggi di errore
 
-        if ($name && !$persistent->existsClientByPartialName($name)) {
-            $errorMessages[] = "Nessun cliente trovato con quel nome.";
+            if ($name && !$persistent->existsClientByPartialName($name)) {
+                $errorMessages[] = "Nessun cliente trovato con quel nome.";
+            }
+
+            if ($sport && !$persistent->existsFieldBySport($sport)) {
+                $errorMessages[] = "Nessun campo trovato per quello sport.";
+            }
+
+            if ($date) {
+                // Verifico se esistono prenotazioni almeno per quella data
+                $reservationsForDate = $persistent->retriveFilteredReservations(null, $date, null);
+                if (empty($reservationsForDate)) {
+                    $errorMessages[] = "Nessuna prenotazione trovata per la data selezionata.";
+                }
+            }
+
+            // Gestione messaggi di errore in base al numero di errori
+            if (count($errorMessages) > 1) {
+                $errorView = new VError();
+                $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+                return;
+            } elseif (count($errorMessages) === 1) {
+                $errorView = new VError();
+                $errorView->show($errorMessages[0]);
+                return;
+            }
+
+            // Se nessun errore, carico le prenotazioni filtrate con tutti i criteri
+            $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
+
+            // Se nessuna prenotazione trovata con i filtri, messaggio generico
+            if (empty($reservations)) {
+                $errorView = new VError();
+                $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+                return;
+            }
+
+        } else {
+            // Nessun filtro: prendo tutte le prenotazioni
+            $reservations = $persistent->retriveFilteredReservations(null, null, null);
         }
 
-        if ($sport && !$persistent->existsFieldBySport($sport)) {
-            $errorMessages[] = "Nessun campo trovato per quello sport.";
-        }
-
-        if (count($errorMessages) > 1) {
-            // Più errori specifici: messaggio generico
-            $errorView = new VError();
-            $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
-            return;
-        } elseif (count($errorMessages) === 1) {
-            // Un solo errore specifico: mostra quello
-            $errorView = new VError();
-            $errorView->show($errorMessages[0]);
-            return;
-        }
-
-        $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
-
-        if ($date && !$name && !$sport && empty($reservations)) {
-            $errorView = new VError();
-            $errorView->show("Nessuna prenotazione trovata per la data selezionata.");
-            return;
-        }
-
-        if (($name || $sport || $date) && empty($reservations)) {
-            $errorView = new VError();
-            $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
-            return;
-        }
-
-    } else {
-        // Nessun filtro: carica tutte le prenotazioni
-        $reservations = $persistent->retriveFilteredReservations(null, null, null);
+        // Mostro la view con risultati e filtri (messaggi errori gestiti sopra)
+        $view = new VEmployee();
+        $view->showReservations($reservations, $filters, null);
     }
-
-    $view = new VEmployee();
-    $view->showReservations($reservations, $filters, null);
  }
 }
