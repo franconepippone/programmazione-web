@@ -62,43 +62,48 @@ class CEmployee{
         $message = null;
         $reservations = [];
         if ($hasFilter) {
-        // Validazioni filtri
-            if ($name && !$persistent->existsClientByPartialName($name)) {
-                $errorView = new VError();
-                $errorView->show("Nessun cliente trovato con quel nome.");
-                return;
-            }
+        $errorMessages = [];
 
-            if ($sport && !$persistent->existsFieldBySport($sport)) {
-                $errorView = new VError();
-                $errorView->show("Nessun campo trovato per quello sport.");
-                return;
-            }
-
-            $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
-
-        // Messaggio specifico se solo data e nessun risultato
-            if ($date && !$name && !$sport && empty($reservations)) {
-                $errorView = new VError();
-                $errorView->show("Nessuna prenotazione trovata per la data selezionata.");
-                return;
-            }
-
-        // Messaggio generico se altri filtri e nessun risultato
-            if (($name || $sport) && empty($reservations)) {
-                $errorView = new VError();
-                $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
-                return;
-            }
-
-        } else {
-        // Nessun filtro: prendi tutte le prenotazioni
-            $reservations = $persistent->retriveFilteredReservations(null, null, null);
+        if ($name && !$persistent->existsClientByPartialName($name)) {
+            $errorMessages[] = "Nessun cliente trovato con quel nome.";
         }
 
-        $view = new VEmployee();
-        $view->showReservations($reservations, $filters, null);
-    }
-} 
- 
+        if ($sport && !$persistent->existsFieldBySport($sport)) {
+            $errorMessages[] = "Nessun campo trovato per quello sport.";
+        }
 
+        if (count($errorMessages) > 1) {
+            // Più errori specifici: messaggio generico
+            $errorView = new VError();
+            $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+            return;
+        } elseif (count($errorMessages) === 1) {
+            // Un solo errore specifico: mostra quello
+            $errorView = new VError();
+            $errorView->show($errorMessages[0]);
+            return;
+        }
+
+        $reservations = $persistent->retriveFilteredReservations($name, $date, $sport);
+
+        if ($date && !$name && !$sport && empty($reservations)) {
+            $errorView = new VError();
+            $errorView->show("Nessuna prenotazione trovata per la data selezionata.");
+            return;
+        }
+
+        if (($name || $sport || $date) && empty($reservations)) {
+            $errorView = new VError();
+            $errorView->show("Nessuna prenotazione trovata per i criteri inseriti.");
+            return;
+        }
+
+    } else {
+        // Nessun filtro: carica tutte le prenotazioni
+        $reservations = $persistent->retriveFilteredReservations(null, null, null);
+    }
+
+    $view = new VEmployee();
+    $view->showReservations($reservations, $filters, null);
+ }
+}
