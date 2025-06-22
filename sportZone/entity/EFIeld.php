@@ -50,6 +50,7 @@ class EField
     public function __construct() {
         $this->courses = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     // getters/setters...

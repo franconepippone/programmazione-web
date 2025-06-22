@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-06-21 13:40:39
+/* Smarty version 5.5.1, created on 2025-06-21 20:19:40
   from 'file:field/search_results_list.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68569a3714b8e2_80053563',
+  'unifunc' => 'content_6856f7bcaa4e38_64943152',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'bf256efcc63c42276532847057245a8799abe844' => 
     array (
       0 => 'field/search_results_list.tpl',
-      1 => 1750505993,
+      1 => 1750529541,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68569a3714b8e2_80053563 (\Smarty\Template $_smarty_tpl) {
+function content_6856f7bcaa4e38_64943152 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\Smarty\\templates\\field';
 ?><!DOCTYPE html>
 <html lang="it">

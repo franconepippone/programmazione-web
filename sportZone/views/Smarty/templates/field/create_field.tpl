@@ -141,8 +141,9 @@
       placeholder="Inserisci una descrizione del campo"
     ></textarea>
 
-    <label for="fieldImage">Carica una foto del campo:</label>
-    <input type="file" id="image" name="fieldImage" accept="image/*" />
+    <label for="fieldImages">Carica foto del campo:</label>
+    <input type="file" id="images" name="images[]" accept="image/*" multiple />
+
 
     <label>Seleziona la posizione sulla mappa:</label>
     <div id="map"></div>

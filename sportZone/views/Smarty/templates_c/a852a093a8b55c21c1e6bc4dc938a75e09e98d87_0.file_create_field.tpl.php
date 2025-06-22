@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-06-21 20:02:36
+/* Smarty version 5.5.1, created on 2025-06-22 16:39:40
   from 'file:field/create_field.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_6856f3bcb93847_54503063',
+  'unifunc' => 'content_685815acc6fab3_21677380',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a852a093a8b55c21c1e6bc4dc938a75e09e98d87' => 
     array (
       0 => 'field/create_field.tpl',
-      1 => 1750527817,
+      1 => 1750603172,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6856f3bcb93847_54503063 (\Smarty\Template $_smarty_tpl) {
+function content_685815acc6fab3_21677380 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\Smarty\\templates\\field';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -165,8 +165,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\
       placeholder="Inserisci una descrizione del campo"
     ></textarea>
 
-    <label for="fieldImage">Carica una foto del campo:</label>
-    <input type="file" id="image" name="fieldImage" accept="image/*" />
+    <label for="fieldImages">Carica foto del campo:</label>
+    <input type="file" id="images" name="images[]" accept="image/*" multiple />
+
 
     <label>Seleziona la posizione sulla mappa:</label>
     <div id="map"></div>

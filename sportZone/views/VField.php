@@ -30,15 +30,9 @@ class VField{
     public function showSearchResults($fields) {
         $fieldsInfo = [];
         foreach ($fields as $fld) {
-            $imageObj = $fld->getImage();
-            if ($imageObj !== null) {
-                $base64 = $imageObj->getEncodedData();
-                $type = $imageObj->getType(); // e.g. "image/png"
-                $imageDataUri = "data:" . htmlspecialchars($type) . ";base64," . $base64;
-            } else {
-                $imageDataUri = ''; // or a placeholder image URI
-            }
-
+            $images = $fld->getImages();
+            $imageDataUri = UImage::getImageDataUri($images[0]);
+           
             $info = [
                 'id'        => $fld->getId(),
                 'title'     => $fld->getName(),
@@ -59,15 +53,11 @@ class VField{
 
     public function showDetailsPage($field) {
 
-        $imageObj = $fld->getImage();
-            if ($imageObj !== null) {
-                $base64 = $imageObj->getEncodedData();
-                $type = $imageObj->getType(); // e.g. "image/png"
-                $imageDataUri = "data:" . htmlspecialchars($type) . ";base64," . $base64;
-            } else {
-                $imageDataUri = ''; // or a placeholder image URI
-            }
-
+        $images = [];
+        foreach ($field->getImages() as $img) {
+            $imageDataUri = UImage::getImageDataUri($img);
+            $images[] = $imageDataUri;
+        }
 
         $campo = [
             'id' => $field->getId(),
@@ -78,14 +68,11 @@ class VField{
             'illuminazione' => 'Sì',
             'prezzo' => ((string)$field->getCost()).'€/ora',
             'descrizione' => $field->getDescription(),
-            'immagini' => [
-                "https://d26itsb5vlqdeq.cloudfront.net/image/98CE1963-0E26-F9B2-D4713C65A9683442",
-                "https://d26itsb5vlqdeq.cloudfront.net/image/98CE1963-0E26-F9B2-D4713C65A9683442",
-                "https://d26itsb5vlqdeq.cloudfront.net/image/98CE1963-0E26-F9B2-D4713C65A9683442",
-            ],
+            'immagini' => $images,
             'latitude' => $field->getLatitude(),
             'longitude' => $field->getLongitude()
         ];
+
           // Passa i dati a Smarty
         $this->smarty->assign('campo', $campo);
         $this->smarty->display("field/details.tpl");

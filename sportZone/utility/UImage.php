@@ -1,9 +1,26 @@
 <?php
+
+
+require_once __DIR__ . "/../../vendor/autoload.php";
+
 /**
  * Helper class to create / validate images from the $_FILES superglobal
  */
 class UImage
 {
+
+    public static function getImageDataUri(EImage $imageObj): string {
+        if ($imageObj !== null) {
+            $base64 = $imageObj->getEncodedData();
+            $type = $imageObj->getType(); // e.g. "image/png"
+            $imageDataUri = "data:" . htmlspecialchars($type) . ";base64," . $base64;
+        } else {
+            $imageDataUri = ''; // or a placeholder image URI
+        }
+        return $imageDataUri;
+    }
+
+
     /**
     * Create image object
     * @param $file entry on the $_FILES array referring to the file

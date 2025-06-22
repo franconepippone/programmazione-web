@@ -46,4 +46,62 @@ class UHTTPMethods{
         }
         return $data;
     }
+
+    /**
+     * Normalize the structure of the $_FILES array for easier handling of multiple uploaded files.
+     *
+     * PHP's default structure for $_FILES when using multiple file uploads groups data by field
+     * (e.g., 'name', 'type', 'tmp_name', etc.), which can be cumbersome to work with. This function
+     * transforms the array so that each uploaded file is represented as its own associative array
+     * with all its related metadata.
+     *
+     * Example input (`$_FILES['images']`):
+     * [
+     *     'name' => ['file1.jpg', 'file2.jpg'],
+     *     'type' => ['image/jpeg', 'image/jpeg'],
+     *     'tmp_name' => ['/tmp/phpYzdqkD', '/tmp/phpuL4kfd'],
+     *     'error' => [0, 0],
+     *     'size' => [12345, 67890],
+     *     'full_path' => ['file1.jpg', 'file2.jpg'] // Optional, available in PHP 8.1+
+     * ]
+     *
+     * Example output:
+     * [
+     *     [
+     *         'name' => 'file1.jpg',
+     *         'full_path' => 'file1.jpg',
+     *         'type' => 'image/jpeg',
+     *         'tmp_name' => '/tmp/phpYzdqkD',
+     *         'error' => 0,
+     *         'size' => 12345
+     *     ],
+     *     [
+     *         'name' => 'file2.jpg',
+     *         'full_path' => 'file2.jpg',
+     *         'type' => 'image/jpeg',
+     *         'tmp_name' => '/tmp/phpuL4kfd',
+     *         'error' => 0,
+     *         'size' => 67890
+     *     ]
+     * ]
+     *
+     * @param array $files The multi-file $_FILES[fieldName] array structure.
+     * @return array An array of normalized file data, each represented as an associative array.
+     */
+    static function normalizeFilesArray(array $files): array {
+        $normalized = [];
+
+        foreach ($files['name'] as $index => $name) {
+            $normalized[] = [
+                'name'      => $files['name'][$index],
+                'full_path' => $files['full_path'][$index] ?? '',
+                'type'      => $files['type'][$index],
+                'tmp_name'  => $files['tmp_name'][$index],
+                'error'     => $files['error'][$index],
+                'size'      => $files['size'][$index],
+            ];
+        }
+
+        return $normalized;
+    }
 }

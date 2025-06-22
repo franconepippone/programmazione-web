@@ -62,17 +62,24 @@ class CField{
         ->setLongitude(UHTTPMethods::post('longitude'));
 
         // If an image was given, saves it for that field
-        $imageInfo = UHTTPMethods::files('fieldImage');
+        $imagesInfo = UHTTPMethods::files('images');
+        $normImagesInfo = UHTTPMethods::normalizeFilesArray($imagesInfo);
+
+        print_r($normImagesInfo);
+
+        // TODO stavi provando a rendere possibile il caricamento di più immagini anziche una sola
 
         // if entry 'fieldImage' is present in $_FILES
-        if ($imageInfo != null) {
-            $img = UImage::createImageFromInputFile($imageInfo);
-            if ($img != null) {
-                $field->setImage($img);
+        if ($normImagesInfo != null) {
+            foreach($normImagesInfo as $imgInfo) {
+                $img = UImage::createImageFromInputFile($imgInfo);
+                if ($img != null) {
+                    $field->addImage($img);
+                }
             }
         }
 
-        $pm = FPersistentManager::getInstance()->uploadObj($field);
+        FPersistentManager::getInstance()->uploadObj($field);
         echo "uploaded";
     }
 }
