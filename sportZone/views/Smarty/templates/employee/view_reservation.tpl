@@ -7,60 +7,52 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+      background: #f1f8ff;
       padding: 2rem;
-      margin: 0;
+      color: #0d47a1;
     }
     h1 {
       text-align: center;
-      color: #0d47a1;
       margin-bottom: 2rem;
     }
-    .container {
+    .details {
       max-width: 600px;
       margin: 0 auto;
-      background-color: #fff;
+      background: white;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .info {
-      margin-bottom: 1.5rem;
-    }
-    .info p {
-      margin: 0.5rem 0;
-      font-size: 1.1rem;
+    .detail-row {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
     }
     .label {
-      font-weight: 600;
-      color: #1565c0;
+      font-weight: bold;
     }
-    form {
+    .actions {
       text-align: center;
+      margin-top: 2rem;
     }
-    .btn-cancel, .btn-back {
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
+    .button {
+      padding: 0.5rem 1.2rem;
+      margin: 0 0.5rem;
       font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      border: none;
-      display: block;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-    .btn-cancel {
-      background-color: #e53935;
+      background-color: #1565c0;
       color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    .btn-cancel:hover {
-      background-color: #c62828;
+    .button:hover {
+      background-color: #0d47a1;
     }
-    .btn-back {
+    .back-button {
       background-color: #90caf9;
       color: #0d47a1;
     }
-    .btn-back:hover {
+    .back-button:hover {
       background-color: #64b5f6;
     }
   </style>
@@ -69,29 +61,54 @@
 
   <h1>Dettagli Prenotazione</h1>
 
-  <div class="container">
-    <div class="info">
-      <p><span class="label">ID Prenotazione:</span> {$reservation->getId()|default:'[getId()]'}</p>
-      <p><span class="label">Data:</span> {$reservation->getDate()|date_format:"%Y-%m-%d"}</p>
-      <p><span class="label">Orario:</span> {$reservation->getTime()|default:'[getTime()]'}</p>
-      <p><span class="label">Campo:</span> {$reservation->getField()->getSport()|default:'[getSport()]'}</p>
-      <p><span class="label">Cliente:</span>
+  <div class="details">
+    <div class="detail-row">
+      <span class="label">ID Prenotazione:</span>
+      <span>{$reservation->getId()|default:'[getId()]'}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Data:</span>
+      <span>{$reservation->getDate()|date_format:"%Y-%m-%d"|default:'[getDate()]'}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Orario:</span>
+      <span>{$reservation->getTime()|default:'[getTime()]'}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Campo:</span>
+      <span>
+        {if $reservation->getField() neq null}
+          {$reservation->getField()->getSport()|default:'[getSport()]'}
+        {else}
+          [getField()->getSport()]
+        {/if}
+      </span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Cliente:</span>
+      <span>
         {if $reservation->getClient() neq null}
-          {$reservation->getClient()->getName()} {$reservation->getClient()->getSurname()}
+          {$reservation->getClient()->getName()|default:'[getName()]'} {$reservation->getClient()->getSurname()|default:'[getSurname()]'}
         {else}
           [getClient()->getName()] [getClient()->getSurname()]
         {/if}
-      </p>
+      </span>
     </div>
 
-    <form method="post" action="/employee/cancelReservation">
-      <input type="hidden" name="id" value="{$reservation->getId()}">
-      <button type="submit" class="btn-cancel">Cancella Prenotazione</button>
-    </form>
+    <div class="actions">
+      <form method="post" action="/employee/cancelReservation" style="display:inline;">
+        <input type="hidden" name="id" value="{$reservation->getId()|default:'0'}">
+        <button type="submit" class="button">Cancella Prenotazione</button>
+      </form>
 
-    <a href="/employee/showReservations">
-      <button type="button" class="btn-back">Torna all'elenco</button>
-    </a>
+      <form method="post" action="/employee/showReservations" style="display:inline;">
+        <button type="submit" class="button back-button">Torna all’elenco</button>
+      </form>
+    </div>
   </div>
 
 </body>
