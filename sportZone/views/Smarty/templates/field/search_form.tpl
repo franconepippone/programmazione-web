@@ -45,7 +45,7 @@
 
   <h2>Inserisci Giorno e Sport</h2>
 
-  <form action="/field/showResults" method="POST">
+  <form action="/field/showResults" method="GET">
     <label for="giorno">Giorno:</label>
     <input type="date" id="giorno" name="giorno" required>
 

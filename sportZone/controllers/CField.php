@@ -8,15 +8,19 @@ class CField{
 
     public static function searchForm() {
         CUser::isLogged();
-        
+
         $view = new VField();
         $view->showSearchForm();
     }
 
     public static function showResults() {
+        CUser::isLogged();
+
         $pm = FPersistentManager::getInstance();
         $fields = $pm->retrieveAllMatchingFields();
         
+
+        print_r($_GET);
         // TODO Filtering
 
         $view = new VField();
@@ -24,6 +28,8 @@ class CField{
     }
 
     public static function details($field_id) {
+        CUser::isLogged();
+        
         $pm = FPersistentManager::getInstance();
         $fld = $pm->retrieveFieldOnId($field_id);
 
@@ -40,11 +46,15 @@ class CField{
     // ------------------- ADMIN -----------------------------
 
     public static function createFieldForm() {
+        CUser::isLogged();
+
         $view = new VField();
         $view->showCreateFieldForm();
     }
 
     public static function finalizeFieldCreation() {
+        CUser::isLogged();
+
         // riceve i dati dal field form e crea un entry nel database
         echo '<pre>';
         print_r($_FILES);

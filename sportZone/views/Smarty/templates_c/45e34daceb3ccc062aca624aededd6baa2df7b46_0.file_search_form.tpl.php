@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-06-20 17:36:39
+/* Smarty version 5.5.1, created on 2025-06-23 01:40:21
   from 'file:field/search_form.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68558007d191e2_52782603',
+  'unifunc' => 'content_68589465cbd2b5_08855025',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '45e34daceb3ccc062aca624aededd6baa2df7b46' => 
     array (
       0 => 'field/search_form.tpl',
-      1 => 1750433726,
+      1 => 1750635585,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68558007d191e2_52782603 (\Smarty\Template $_smarty_tpl) {
+function content_68589465cbd2b5_08855025 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\Smarty\\templates\\field';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -69,7 +69,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazioneweb\\sportZone\\views\\
 
   <h2>Inserisci Giorno e Sport</h2>
 
-  <form action="/field/showResults" method="POST">
+  <form action="/field/showResults" method="GET">
     <label for="giorno">Giorno:</label>
     <input type="date" id="giorno" name="giorno" required>
 
