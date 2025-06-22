@@ -46,10 +46,10 @@ class CEmployee{
        // CUser::isEmployee();
         
 
-        $name = trim(UHTTPMethods::get('client')) ?: null;
-        $date = trim(UHTTPMethods::get('date')) ?: null;
-        $sport = trim(UHTTPMethods::get('sport')) ?: null;
-
+       $name = $_POST['client'] ?? null;
+       $date = $_POST['date'] ?? null;
+       $sport = $_POST['sport'] ?? null;
+         
         $persistent = FPersistentManager::getInstance();
 
        // if ($name && !$persistent->existsClientByPartialName($name)) {
