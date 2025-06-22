@@ -79,9 +79,9 @@
   <h1>Elenco Prenotazioni</h1>
 
   <form method="post" action="/employee/showReservations">
-    <input type="date" name="date" value="{$filters.date|escape}" placeholder="Data">
-    <input type="text" name="sport" value="{$filters.sport|escape}" placeholder="Sport">
-    <input type="text" name="client" value="{$filters.client|escape}" placeholder="Nome cliente">
+    <input type="text" name="client" value="{$filters.client|default:''|escape}" placeholder="Nome cliente">
+    <input type="date" name="date" value="{$filters.date|default:''|escape}" placeholder="Data">
+    <input type="text" name="sport" value="{$filters.sport|default:''|escape}" placeholder="Sport">
     <button type="submit">Filtra</button>
   </form>
 
