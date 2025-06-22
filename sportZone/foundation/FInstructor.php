@@ -34,10 +34,6 @@ class FInstructor {
         $result = FEntityManager::getInstance()->retriveObjFromFields(EInstructor::class, $fields);
         return $result;
     }
-    public static function getInstructorListByAttributes(array $fields) {
-        $result = FEntityManager::getInstance()->retriveObjListFromFields(EInstructor::class, $fields);
-        return $result;
-    }
     public static function getInstructorsByAttributes(array $fields) {
         $result = FEntityManager::getInstance()->retriveObjListFromFields(EInstructor::class, $fields);
         return $result;
