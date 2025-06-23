@@ -136,59 +136,69 @@ class CEmployee{
  }
 
   public static function createCourseForm() {
-    if (!CUser::isLogged()){ //|| !CUser::isEmployee()) {
+    if (!CUser::isLogged() || !CUser::isEmployee()) {
         header("Location: /login");
         exit;
     }
 
     $view = new VEmployee();
+    $pm = FPersistentManager::getInstance();
+
+    $instructors = $pm->retriveAllInstructors();  // Array di EInstructor
+    $fields = $pm->retriveAllFields();            // Array di EField
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $_POST;
-        $errors = [];
 
         $name = trim($data['name'] ?? '');
         if (empty($name)) {
-            $errors[] = "Il nome del corso è obbligatorio.";
+            (new VError())->show("Il nome del corso è obbligatorio.");
+            return;
         }
 
         $startDateStr = $data['start_date'] ?? '';
         $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
-        $today = new DateTime();
-        $minStartDate = (clone $today)->modify('+7 days');
+        $minStartDate = (new DateTime())->modify('+7 days');
         if (!$startDate || $startDate < $minStartDate) {
-            $errors[] = "La data di inizio deve essere almeno tra 7 giorni.";
+            (new VError())->show("La data di inizio deve essere almeno tra 7 giorni da oggi.");
+            return;
         }
 
         $startTime = $data['start_time'] ?? '';
         $endTime = $data['end_time'] ?? '';
         if (strtotime($startTime) >= strtotime($endTime)) {
-            $errors[] = "L'orario di inizio deve essere prima dell'orario di fine.";
+            (new VError())->show("L'orario di inizio deve precedere l'orario di fine.");
+            return;
         }
 
         $days = $data['days'] ?? [];
         if (!is_array($days) || count($days) === 0) {
-            $errors[] = "Devi selezionare almeno un giorno della settimana.";
+            (new VError())->show("Seleziona almeno un giorno della settimana.");
+            return;
         }
 
         $instructorId = $data['instructor'] ?? '';
-        $instructor = FPersistentManager::getInstance()->retriveInstructorById($instructorId);
+        $instructor = $pm->retriveInstructorById($instructorId);
         if (!$instructor) {
-            $errors[] = "Istruttore non valido.";
+            (new VError())->show("Istruttore selezionato non valido.");
+            return;
         }
 
         $fieldId = $data['field'] ?? '';
-        $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+        $field = $pm->retriveFieldById($fieldId);
         if (!$field) {
-            $errors[] = "Campo non valido.";
+            (new VError())->show("Campo selezionato non valido.");
+            return;
         }
 
-        $errorView = new VError();
-        $errorView->show([$errors]);
-        return;
-    } else {
-        $view->showCreateCourseForm(null, []);
+        // Tutto valido: salva i dati in sessione e reindirizza
+        $_SESSION['course_data'] = $data;
+        header("Location: /employee/finalizeCreateCourse");
+        exit;
     }
+
+    // Primo accesso o GET: mostra form vuoto
+    $view->showCreateCourseForm(null, $instructors, $fields);
  }
 }
 
