@@ -136,7 +136,7 @@ class CEmployee{
  }
 
   public static function createCourseForm() {
-    if (!CUser::isLogged() || !CUser::isEmployee()) {
+    if (!CUser::isLogged()){ //|| !CUser::isEmployee()) {
         header("Location: /login");
         exit;
     }
