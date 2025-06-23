@@ -99,6 +99,11 @@
         </div>
 
         <div class="form-group">
+            <label for="description">📝 Descrizione del corso</label>
+            <textarea name="description" id="description" rows="4">{$description|default:''}</textarea>
+        </div>
+
+        <div class="form-group">
             <label for="start_date">📅 Data di inizio</label>
             <input type="date" name="start_date" id="start_date" value="{$start_date|default:''}">
         </div>
