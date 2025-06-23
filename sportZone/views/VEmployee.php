@@ -35,6 +35,9 @@ class VEmployee{
         $this->smarty->assign('instructor', $data['instructor'] ?? '');
         $this->smarty->assign('field', $data['field'] ?? '');
 
+        $this->smarty->assign('instructors', $instructors);
+        $this->smarty->assign('fields', $fields);
+
         $this->smarty->display('employee/create_course_form.tpl');
     }
     
