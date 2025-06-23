@@ -58,22 +58,25 @@ class CCourse {
 
         //creo corsi fittizi per prova
         $courses = FPersistentManager::getInstance()->retriveCourses();
-        $messaggio = '';
-        
-
         
         $view->showSearchResults($courses,'ciao');
         
     }
 
     public static function courseDetail($course_id) {
+        $course = FPersistentManager::retriveCourseOnId($course_id);
+
         $view = new VCourse();
-        $view->showDetails($course_id);
+        $view->showDetails($course);
     }
 
     public static function enrollForm($course_id) {
+        //prendo l id dell utente dalla sessione
+        $userID= USession::getSessionElement('user');
+        FPersistentManager::retriveUserOnId($userID);
+
         $view = new VCourse();
-        $view->showEnrollForm($course_id);
+        $view->showEnrollForm($course_id,$userID);
     }
 
     public static function manageForm($course_id) {
