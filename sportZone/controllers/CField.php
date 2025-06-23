@@ -58,14 +58,6 @@ class CField{
     public static function finalizeFieldCreation() {
         CUser::isLogged();
 
-        // riceve i dati dal field form e crea un entry nel database
-        echo '<pre>';
-        print_r($_FILES);
-        echo '<\pre>';
-        echo '<pre>';
-        print_r($_POST);
-        echo '<\pre>';
-
         $field = (new EField())
         ->setName(UHTTPMethods::post('name'))
         ->setTerrainType(UHTTPMethods::post('terrainType'))
@@ -79,8 +71,6 @@ class CField{
         // If an image was given, saves it for that field
         $imagesInfo = UHTTPMethods::files('images');
         $normImagesInfo = UHTTPMethods::normalizeFilesArray($imagesInfo);
-
-        // TODO stavi provando a rendere possibile il caricamento di più immagini anziche una sola
 
         // if entry 'fieldImage' is present in $_FILES
         if ($normImagesInfo != null) {

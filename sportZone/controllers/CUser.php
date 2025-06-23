@@ -83,7 +83,8 @@ class CUser{
         if(password_verify(UHTTPMethods::post('password'), $user->getPasswordHashed())){
             if(USession::getSessionStatus() == PHP_SESSION_NONE){
                 USession::getInstance();
-                USession::setSessionElement('user', $user->getId());
+                USession::setSessionElement( 'user', $user->getId());
+                USession::setSessionElement( 'user', $user->getId());
                 
                 // if a redirect url is sent (should always be sent), redirect to that page
                 if (UHTTPMethods::postIsSet('redirectUrl')) {
@@ -104,7 +105,6 @@ class CUser{
      */
     public static function finalizeRegister()
     {
-
         $view = new VUser();
 
         // checks if email and username are already present in the database
