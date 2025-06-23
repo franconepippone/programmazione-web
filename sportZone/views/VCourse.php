@@ -18,9 +18,11 @@ class VCourse
 
     }
 
-    public function showSearchResults($courses = [])
+    public function showSearchResults($courses, $messaggio)
     {
-       // $this->smarty->assign('courses', $courses);     
+        //$this->smarty->assign('courses', $courses);     
+        //echo 'courses: ' . $courses;
+       echo 'course:' . $courses[0]->getTitle();
         $this->smarty->display('course/searchResults.tpl');
     }
 

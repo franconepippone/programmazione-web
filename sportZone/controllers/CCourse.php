@@ -57,10 +57,12 @@ class CCourse {
         }*/
 
         //creo corsi fittizi per prova
-       $courses = FPersistentManager::getInstance()->retriveCourses();
+        $courses = FPersistentManager::getInstance()->retriveCourses();
+        $messaggio = '';
         
 
-        $view->showSearchResults($courses);
+        
+        $view->showSearchResults($courses,'ciao');
         
     }
 

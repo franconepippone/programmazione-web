@@ -13,6 +13,7 @@ class FCourse{
 
     public static function getCourses() {
         $courses = FEntityManager::getInstance()-> selectAll(ECourse::class);
+        return $courses;
     }
 
     public static function getCourseById(int $id){

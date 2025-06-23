@@ -32,6 +32,11 @@ function getEntityManager() : EntityManager
         $isDevMode = false;
         
         $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
+
+        $config->setProxyDir(__DIR__ . '/proxies');
+        $config->setProxyNamespace('Proxies');
+        $config->setAutoGenerateProxyClasses(true);
+
         $connection = DriverManager::getConnection($connectionParams, $config);
         $entityManager = new EntityManager($connection, $config);
     }
