@@ -20,8 +20,8 @@ class EField
     #[ORM\Column(type: "string")]
     private string $sport;
 
-    #[ORM\Column(type: "string")]
-    private string $description;
+    #[ORM\Column(type: "string", nullable: true)]
+    private ?string $description = "";
 
     #[ORM\Column(type: "decimal", precision: 10, scale: 7)]
     private $latitude;

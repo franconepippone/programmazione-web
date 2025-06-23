@@ -27,8 +27,8 @@ class CFrontController{
     public function run($requestUri){
         // Parse the request URI
         
-        //$this->createDummyFields();
-        //$this->createDummyCourses();    
+        $this->createDummyFields();
+        $this->createDummyCourses();    
 
         ob_start();
         // echo $requestUri;
@@ -90,13 +90,17 @@ class CFrontController{
 
         $field1 = new EField();
         $field1->setSport('Calcio')
+        ->setName("porcodio")
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
-        ->setCost(50.0);
+        ->setCost(50.0)
+        ->setLatitude(0)
+        ->setLongitude(0);
         $fields[] = $field1;
 
         $field2 = new EField();
         $field2->setSport('Tennis')
+        ->setName("porcodio")
         ->setTerrainType('Cemento')
         ->setIsIndoor(true)
         ->setCost(40.0);
@@ -104,6 +108,7 @@ class CFrontController{
 
         $field3 = new EField();
         $field3->setSport('Basket')
+        ->setName("porcodio")
         ->setTerrainType('Parquet')
         ->setIsIndoor(true)
         ->setCost(60.0);
@@ -111,6 +116,7 @@ class CFrontController{
 
         $field4 = new EField();
         $field4->setSport('Padel')
+        ->setName("porcodio")
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
         ->setCost(55.0);
