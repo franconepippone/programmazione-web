@@ -27,15 +27,15 @@ class VEmployee{
 
     public function showCreateCourseForm($data) {
 
-        $smarty->assign('name', $data['name'] ?? '');
-        $smarty->assign('start_date', $data['start_date'] ?? '');
-        $smarty->assign('start_time', $data['start_time'] ?? '');
-        $smarty->assign('end_time', $data['end_time'] ?? '');
-        $smarty->assign('days', $data['days'] ?? []);
-        $smarty->assign('instructor', $data['instructor'] ?? '');
-        $smarty->assign('field', $data['field'] ?? '');
+        $this->smarty->assign('name', $data['name'] ?? '');
+        $this->smarty->assign('start_date', $data['start_date'] ?? '');
+        $this->smarty->assign('start_time', $data['start_time'] ?? '');
+        $this->smarty->assign('end_time', $data['end_time'] ?? '');
+        $this->smarty->assign('days', $data['days'] ?? []);
+        $this->smarty->assign('instructor', $data['instructor'] ?? '');
+        $this->smarty->assign('field', $data['field'] ?? '');
 
-        $this->$smarty->display('employee/create_course_form.tpl');
+        $this->smarty->display('employee/create_course_form.tpl');
     }
     
 }
