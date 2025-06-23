@@ -96,7 +96,7 @@ class FReservation {
      * @return void
      */
     public static function saveReservation(EReservation $reservation): void {
-        FEntityManager::getInstance()->save($reservation);
+        FEntityManager::getInstance()->saveObject($reservation);
     }
 
     /**
