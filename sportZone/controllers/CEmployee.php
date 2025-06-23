@@ -136,7 +136,7 @@ class CEmployee{
  }
 
   public static function createCourseForm() {
-    if (!CUser::isLogged()){ //|| !CUser::isEmployee()) {
+    if (!CUser::isLogged()) {
         header("Location: /login");
         exit;
     }
@@ -144,8 +144,8 @@ class CEmployee{
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-    $instructors = $pm->retriveAllInstructors();  // Array di EInstructor
-    $fields = $pm->retriveAllFields();            // Array di EField
+    $instructors = $pm->retriveAllInstructors();
+    $fields = $pm->retriveAllFields();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $_POST;
@@ -177,15 +177,13 @@ class CEmployee{
             return;
         }
 
-        // Nuovi controlli per costo
         $cost = $data['cost'] ?? '';
         if (!is_numeric($cost) || floatval($cost) < 0) {
             (new VError())->show("Inserisci un costo valido (numero positivo).");
             return;
         }
 
-        // Nuovi controlli per max partecipanti
-        $maxParticipants = $data['MaxParticipantsCount'] ?? '';
+        $maxParticipants = $data['max_participants'] ?? '';
         if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
             (new VError())->show("Inserisci un numero valido di partecipanti (intero positivo).");
             return;
@@ -205,16 +203,28 @@ class CEmployee{
             return;
         }
 
-        // Tutto valido: salva i dati in sessione e reindirizza
-        $_SESSION['course_data'] = $data;
+        // Normalizza e salva i dati in sessione con nomi coerenti
+        $courseData = [
+            'name' => $name,
+            'start_date' => $startDateStr,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'days' => $days,
+            'cost' => floatval($cost),
+            'max_participants' => intval($maxParticipants),
+            'instructor' => $instructorId,
+            'field' => $fieldId
+        ];
+
+        USession::setSessionElement('course_data', $courseData);
         header("Location: /employee/finalizeCreateCourse");
         exit;
     }
 
-    // Primo accesso o GET: mostra form vuoto
     $view->showCreateCourseForm(null, $instructors, $fields);
  }
-  public static function finalizeCreateCourse() {
+
+public static function finalizeCreateCourse() {
     if (!CUser::isLogged()) {
         header("Location: /login");
         exit;
@@ -224,7 +234,7 @@ class CEmployee{
     $pm = FPersistentManager::getInstance();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = $_SESSION['course_data'] ?? null;
+        $data = USession::getSessionElement('course_data');
 
         if (!$data) {
             (new VError())->show("Dati del corso mancanti. Ricomincia la procedura.");
@@ -234,11 +244,11 @@ class CEmployee{
         $course = new ECourse();
         $course->setTitle($data['name']);
         $course->setStartDate(new DateTime($data['start_date']));
-        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months')); // o una data predefinita
+        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
         $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
         $course->setDaysOfWeek($data['days']);
-        $course->setEnrollmentCost((float) $data['cost']);
-        $course->setMaxParticipantsCount((int) $data['max_participants']);
+        $course->setEnrollmentCost($data['cost']);
+        $course->setMaxParticipantsCount($data['max_participants']);
 
         $instructor = $pm->retriveInstructorById($data['instructor']);
         $field = $pm->retriveFieldById($data['field']);
@@ -250,20 +260,20 @@ class CEmployee{
         $course->setInstructor($instructor);
         $course->setField($field);
 
-        $pm->storeCourse($course); 
+        $pm->storeCourse($course);
 
-        unset($_SESSION['course_data']);
-        $view->showCourseConfirmation($course); 
+        USession::unsetSessionElement('course_data');
+
+        $view->showCourseConfirmation($course);
         return;
     }
 
-    $data = $_SESSION['course_data'] ?? null;
+    $data = USession::getSessionElement('course_data');
     if (!$data) {
         (new VError())->show("Nessun dato da finalizzare.");
         return;
     }
 
-    // Aggiungiamo anche oggetti istruttore e campo per mostrare i nomi
     $instructor = $pm->retriveInstructorById($data['instructor']);
     $field = $pm->retriveFieldById($data['field']);
 
