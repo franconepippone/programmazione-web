@@ -260,7 +260,7 @@ public static function finalizeCreateCourse() {
         $course->setInstructor($instructor);
         $course->setField($field);
 
-        $pm->storeCourse($course);
+        $pm->saveCourse($course);
 
         USession::unsetSessionElement('course_data');
 
