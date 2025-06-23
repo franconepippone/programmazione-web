@@ -214,5 +214,60 @@ class CEmployee{
     // Primo accesso o GET: mostra form vuoto
     $view->showCreateCourseForm(null, $instructors, $fields);
  }
+  public static function finalizeCreateCourse() {
+    if (!CUser::isLogged()) {
+        header("Location: /login");
+        exit;
+    }
+
+    $view = new VEmployee();
+    $pm = FPersistentManager::getInstance();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $data = $_SESSION['course_data'] ?? null;
+
+        if (!$data) {
+            (new VError())->show("Dati del corso mancanti. Ricomincia la procedura.");
+            return;
+        }
+
+        $course = new ECourse();
+        $course->setTitle($data['name']);
+        $course->setStartDate(new DateTime($data['start_date']));
+        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months')); // o una data predefinita
+        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+        $course->setDaysOfWeek($data['days']);
+        $course->setEnrollmentCost((float) $data['cost']);
+        $course->setMaxParticipantsCount((int) $data['max_participants']);
+
+        $instructor = $pm->retriveInstructorById($data['instructor']);
+        $field = $pm->retriveFieldById($data['field']);
+        if (!$instructor || !$field) {
+            (new VError())->show("Errore durante il recupero di istruttore o campo.");
+            return;
+        }
+
+        $course->setInstructor($instructor);
+        $course->setField($field);
+
+        $pm->storeCourse($course); 
+
+        unset($_SESSION['course_data']);
+        $view->showCourseConfirmation($course); 
+        return;
+    }
+
+    $data = $_SESSION['course_data'] ?? null;
+    if (!$data) {
+        (new VError())->show("Nessun dato da finalizzare.");
+        return;
+    }
+
+    // Aggiungiamo anche oggetti istruttore e campo per mostrare i nomi
+    $instructor = $pm->retriveInstructorById($data['instructor']);
+    $field = $pm->retriveFieldById($data['field']);
+
+    $view->showFinalizeCoursePage($data, $instructor, $field);
+ }
 }
 
