@@ -6,3 +6,4 @@ class FInstructor {
     public static function getAllInstructors() {
         return FEntityManager::getInstance()->selectAll(EInstructor::class);
     }
+}
