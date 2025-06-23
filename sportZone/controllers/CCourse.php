@@ -35,7 +35,7 @@ class CCourse {
         $view = new VCourse();
         
         try {
-            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi);
+            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, true);
         } catch (ValidationException $e) {
             $viewErr = new VError();
             $viewErr->show($e->getMessage());
@@ -48,7 +48,7 @@ class CCourse {
         //creo corsi fittizi per prova
         $courses = FPersistentManager::getInstance()->retriveCourses();
         
-        $view->showSearchResults($courses,'ciao');
+        $view->showSearchResults($courses, 'ciao');
         
     }
 

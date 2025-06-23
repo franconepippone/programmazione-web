@@ -7,13 +7,13 @@ class FField{
     /**
      * Checks if there exists at least one User entity in the db with the specified field equal to the given value.
      *
-     * @param string $field The entity field/property name to check.
+     * @param string $attribute The entity field/property name to check.
      * @param mixed  $value The value to match against the specified field.
      *
      * @return bool True if at least one entity exists with the given field value, false otherwise.
      */
-    public static function attributeExists($field, $value){
-        $result = FEntityManager::getInstance()->verifyAttributeExists(EField::class, $field, $value);
+    public static function attributeExists($attribute, $value){
+        $result = FEntityManager::getInstance()->verifyAttributeExists(EField::class, $attribute, $value);
 
         return $result;
     }
@@ -25,6 +25,11 @@ class FField{
 
     public static function getAllFields() {
         return FEntityManager::getInstance()->selectAll(EField::class);
+    }
+
+    // Returns true if the given field has an available slot of size $hours on given date
+    public static function isAvailableOnDate(int $id, \DateTimeInterface $date, float $hours) {
+        
     }
    
 }

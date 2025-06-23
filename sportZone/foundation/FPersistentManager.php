@@ -22,7 +22,15 @@ class FPersistentManager{
         return self::$instance;
     }
 
-        //-------------------------------------VERIFY---------------------------------------
+    /**
+     * upload any Object in the database
+     */
+    public static function uploadObj($obj){
+        $result = FEntityManager::getInstance()->saveObject($obj);
+        return $result;
+    }
+
+    //-------------------------------------USER---------------------------------------
     
     /**
      * verify if a user with this email exists in the database
@@ -38,16 +46,6 @@ class FPersistentManager{
      */
     public static function verifyUserUsername($username){
         $result = FUser::attributeExists('username', $username);
-
-        return $result;
-    }
-
-    /**
-     * upload any Object in the database
-     */
-    public static function uploadObj($obj){
-
-        $result = FEntityManager::getInstance()->saveObject($obj);
 
         return $result;
     }

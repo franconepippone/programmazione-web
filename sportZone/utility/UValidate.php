@@ -31,7 +31,7 @@ class UValidate {
 
 
     /// TETSTTSTST
-    public static function validateInputArray(array $array, array $attributes, bool $require): array {
+    public static function validateInputArray(array $array, array $attributes, bool $require = false): array {
         $filteredParams = $array;
 
         $paramskeys = array_keys($filteredParams);
@@ -42,8 +42,18 @@ class UValidate {
             } else {
                 // Se il parametro è valido, lo filtro 
                 $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
+                unset($attributes[$key]); // attribute found, we dont need it in the attributes array anymore*
             }
         }
+
+        // throws exceptions if some attributes are still missing and the $require flag is true
+        if ($require && !empty($attributes)) {
+            throw new ValidationException(
+                "Missing required parameters.",
+                details: ["params" => implode(', ', $attributes)]
+            );
+        }
+
         //qui ho una array di parametri che possono richiamare i metodi di validazione
         //per validare i parametri di ricerca
         foreach ($filteredParams as $key => $val) {
