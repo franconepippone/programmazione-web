@@ -134,7 +134,7 @@ class FPersistentManager{
      * Save a Reservation object
      */
     public static function saveReservation($reservation){
-        return FReservation::save($reservation);
+        return FReservation::saveReservation($reservation);
     }
 
     /**
@@ -176,7 +176,7 @@ class FPersistentManager{
 
 
     public static function saveCourse($course){
-        return FCourse::save($course);
+        return FCourse::saveCourse($course);
     }
 
 }
