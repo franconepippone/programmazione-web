@@ -3,4 +3,4 @@
 
 # ms doc temp files
 ~$*.*
-*tpl.php
+*.tpl.php
