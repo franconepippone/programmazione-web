@@ -52,6 +52,6 @@ class VEmployee{
         $this->smarty->assign('max_participants', $data['max_participants']); // <-- già corretto qui
         $this->smarty->assign('instructor', $instructor);
         $this->smarty->assign('field', $field);
-        $this->smarty->display('employee/finalize_course.tpl');
+        $this->smarty->display('employee/finalize_create_course.tpl');
   }
 }
