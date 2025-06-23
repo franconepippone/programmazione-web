@@ -25,7 +25,7 @@ class VEmployee{
         $this->smarty->display("employee/view_reservation.tpl");
     }
 
-    public function showCreateCourseForm($data) {
+    public function showCreateCourseForm($data, $instructors, $fields) {
 
         $this->smarty->assign('name', $data['name'] ?? '');
         $this->smarty->assign('start_date', $data['start_date'] ?? '');
