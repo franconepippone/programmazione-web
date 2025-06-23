@@ -12,18 +12,18 @@ class UValidate {
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
-    public static function validateTitle($title) {
+    public static function validateTitle(string $title): string {
         // Check if the title is empty
         if (empty($title)) {
-            return false;
+            throw new ValidationException("Title is empty");
         }
         // Check if the title is too long
-        if (strlen($title) > 1) {
-            throw new ValidationException("Stringa troppo lunga");
+        if (strlen($title) > 100) {
+            throw new ValidationException("Title exceeds character limit.");
         }
         // Check if the title contains only valid characters (letters, numbers, spaces, and some special characters)
         if (!preg_match('/^[a-zA-Z0-9\s\-\_\.]+$/', $title)) {
-            return false;
+            throw new ValidationException("Title contains invalid characters");
         }
         return $title;
     }
