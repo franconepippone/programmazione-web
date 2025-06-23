@@ -42,7 +42,7 @@ class VEmployee{
         $this->smarty->display('employee/create_course_form.tpl');
    }
 
-   public function showFinalizeCoursePage(array $data, EInstructor $instructor, EField $field) {
+   public function showFinalizeCreateCourse(array $data, EInstructor $instructor, EField $field) {
         $this->smarty->assign('name', $data['name']);
         $this->smarty->assign('start_date', $data['start_date']);
         $this->smarty->assign('start_time', $data['start_time']);
