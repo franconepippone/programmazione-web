@@ -54,4 +54,7 @@ class VEmployee{
         $this->smarty->assign('field', $field);
         $this->smarty->display('employee/finalize_create_course.tpl');
   }
+    public function showConfirmation(){
+        $this->smarty->display("employee/course_confirmation.tpl");
+    }
 }
