@@ -27,11 +27,14 @@ class CFrontController{
     public function run($requestUri){
         // Parse the request URI
         
+        $this->createDummyFields();
+        $this->createDummyCourses();    
+
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
-        $path = parse_url($requestUri, PHP_URL_PATH);
-        $uriParts = explode('/', $path);
+        //$requestUri = trim($requestUri, '/');
+        $uriParts = explode('/', $requestUri);
         array_shift($uriParts);
         var_dump($uriParts);
         echo "<br><br>";
@@ -81,7 +84,6 @@ class CFrontController{
 
         call_user_func_array([$controllerClass, $methodName], $params);
     }
-    
     //creo campi fittizi
     public static function createDummyFields(){
         $fields = [];

@@ -23,7 +23,7 @@ class CCourse {
     //********************************************************* */
     //form per cercare i corsi, anche con filtri
     public static function searchForm() {
-        CUser::isLogged();
+        
         
         //fine creazione corsi fittizi
 
@@ -57,10 +57,12 @@ class CCourse {
         }*/
 
         //creo corsi fittizi per prova
-       $courses = FPersistentManager::getInstance()->retriveCourses();
+        $courses = FPersistentManager::getInstance()->retriveCourses();
+        $messaggio = '';
         
 
-        $view->showSearchResults($courses);
+        
+        $view->showSearchResults($courses,'ciao');
         
     }
 
