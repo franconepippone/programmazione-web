@@ -55,6 +55,7 @@
     <h2>📋 Riepilogo del corso</h2>
 
     <div class="summary-item"><span class="label">Nome:</span><span class="value">{$name}</span></div>
+    <div class="summary-item"><span class="label">Descrizione:</span><span class="value">{$description}</span></div>
     <div class="summary-item"><span class="label">Data inizio:</span><span class="value">{$start_date}</span></div>
     <div class="summary-item"><span class="label">Orario:</span><span class="value">{$start_time} - {$end_time}</span></div>
     <div class="summary-item"><span class="label">Giorni:</span><span class="value">{$days_string}</span></div>
