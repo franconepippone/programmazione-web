@@ -27,6 +27,7 @@ class VEmployee{
 
     public function showCreateCourseForm($data, $instructors, $fields) {
         $this->smarty->assign('name', $data['name'] ?? '');
+        $this->smarty->assign('description', $data['description'] ?? '');
         $this->smarty->assign('start_date', $data['start_date'] ?? '');
         $this->smarty->assign('start_time', $data['start_time'] ?? '');
         $this->smarty->assign('end_time', $data['end_time'] ?? '');
@@ -44,6 +45,7 @@ class VEmployee{
 
    public function showFinalizeCreateCourse(array $data, EInstructor $instructor, EField $field) {
         $this->smarty->assign('name', $data['name']);
+        $this->smarty->assign('description', $data['description']);
         $this->smarty->assign('start_date', $data['start_date']);
         $this->smarty->assign('start_time', $data['start_time']);
         $this->smarty->assign('end_time', $data['end_time']);
