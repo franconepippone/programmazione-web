@@ -277,7 +277,7 @@ public static function finalizeCreateCourse() {
     $instructor = $pm->retriveInstructorById($data['instructor']);
     $field = $pm->retriveFieldById($data['field']);
 
-    $view->showFinalizeCoursePage($data, $instructor, $field);
+    $view->showFinalizeCreateCourse($data, $instructor, $field);
  }
 }
 
