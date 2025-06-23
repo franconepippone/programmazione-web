@@ -150,8 +150,6 @@ class CEmployee{
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $_POST;
 
-      
-
         $name = trim($data['name'] ?? '');
         if (empty($name)) {
             (new VError())->show("Il nome del corso è obbligatorio.");
@@ -176,6 +174,20 @@ class CEmployee{
         $days = $data['days'] ?? [];
         if (!is_array($days) || count($days) === 0) {
             (new VError())->show("Seleziona almeno un giorno della settimana.");
+            return;
+        }
+
+        // Nuovi controlli per costo
+        $cost = $data['cost'] ?? '';
+        if (!is_numeric($cost) || floatval($cost) < 0) {
+            (new VError())->show("Inserisci un costo valido (numero positivo).");
+            return;
+        }
+
+        // Nuovi controlli per max partecipanti
+        $maxParticipants = $data['MaxParticipantsCount'] ?? '';
+        if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
+            (new VError())->show("Inserisci un numero valido di partecipanti (intero positivo).");
             return;
         }
 
