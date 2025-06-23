@@ -34,6 +34,8 @@ class VEmployee{
         $this->smarty->assign('days', $data['days'] ?? []);
         $this->smarty->assign('instructor', $data['instructor'] ?? '');
         $this->smarty->assign('field', $data['field'] ?? '');
+        $this->smarty->assign('cost', $data['cost'] ?? '');
+        $this->smarty->assign('MaxParticipantsCount', $data['MaxParticipantsCount'] ?? '');
 
         $this->smarty->assign('instructors', $instructors);
         $this->smarty->assign('fields', $fields);
