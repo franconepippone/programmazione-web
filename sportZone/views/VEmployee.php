@@ -26,7 +26,6 @@ class VEmployee{
     }
 
     public function showCreateCourseForm($data, $instructors, $fields) {
-
         $this->smarty->assign('name', $data['name'] ?? '');
         $this->smarty->assign('start_date', $data['start_date'] ?? '');
         $this->smarty->assign('start_time', $data['start_time'] ?? '');
@@ -35,23 +34,24 @@ class VEmployee{
         $this->smarty->assign('instructor', $data['instructor'] ?? '');
         $this->smarty->assign('field', $data['field'] ?? '');
         $this->smarty->assign('cost', $data['cost'] ?? '');
-        $this->smarty->assign('MaxParticipantsCount', $data['MaxParticipantsCount'] ?? '');
+        $this->smarty->assign('max_participants', $data['max_participants'] ?? ''); // <-- modificato qui
 
         $this->smarty->assign('instructors', $instructors);
         $this->smarty->assign('fields', $fields);
 
         $this->smarty->display('employee/create_course_form.tpl');
-    }
-    public function showFinalizeCoursePage(array $data, EInstructor $instructor, EField $field) {
-    $this->smarty->assign('name', $data['name']);
-    $this->smarty->assign('start_date', $data['start_date']);
-    $this->smarty->assign('start_time', $data['start_time']);
-    $this->smarty->assign('end_time', $data['end_time']);
-    $this->smarty->assign('days', $data['days']);
-    $this->smarty->assign('cost', $data['cost']);
-    $this->smarty->assign('max_participants', $data['max_participants']);
-    $this->smarty->assign('instructor', $instructor);
-    $this->smarty->assign('field', $field);
-    $this->smarty->display('employee/finalize_course.tpl');
-}
+   }
+
+   public function showFinalizeCoursePage(array $data, EInstructor $instructor, EField $field) {
+        $this->smarty->assign('name', $data['name']);
+        $this->smarty->assign('start_date', $data['start_date']);
+        $this->smarty->assign('start_time', $data['start_time']);
+        $this->smarty->assign('end_time', $data['end_time']);
+        $this->smarty->assign('days', $data['days']);
+        $this->smarty->assign('cost', $data['cost']);
+        $this->smarty->assign('max_participants', $data['max_participants']); // <-- già corretto qui
+        $this->smarty->assign('instructor', $instructor);
+        $this->smarty->assign('field', $field);
+        $this->smarty->display('employee/finalize_course.tpl');
+  }
 }
