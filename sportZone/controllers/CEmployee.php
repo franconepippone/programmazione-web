@@ -144,13 +144,13 @@ class CEmployee{
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-    
+    $instructors = $pm->retriveAllInstructors();  // Array di EInstructor
+    $fields = $pm->retriveAllFields();            // Array di EField
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $_POST;
 
-      $instructors = $pm->retriveAllInstructors();  // Array di EInstructor
-      $fields = $pm->retriveAllFields();            // Array di EField
+      
 
         $name = trim($data['name'] ?? '');
         if (empty($name)) {
