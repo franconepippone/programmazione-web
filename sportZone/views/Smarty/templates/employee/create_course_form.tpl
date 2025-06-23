@@ -155,7 +155,7 @@
 
         <div class="form-group">
             <label for="MaxParticipantsCount">👥 Numero massimo partecipanti</label>
-            <input type="text" name="MaxParticipantsCount" id="MaxParticipantsCount" value="{$MaxParticipantsCount|default:''}">
+            <input type="text" name="max_participants" id="max_participants" value="{$MaxParticipantsCount|default:''}">
         </div>
 
         <button type="submit" class="submit-button">✅ Conferma</button>
