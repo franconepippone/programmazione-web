@@ -134,5 +134,61 @@ class CEmployee{
     $view = new VEmployee();
     $view->viewReservation();//dare reservation
  }
+
+  public static function createCourseForm() {
+    if (!CUser::isLogged() || !CUser::isEmployee()) {
+        header("Location: /login");
+        exit;
+    }
+
+    $view = new VEmployee();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $data = $_POST;
+        $errors = [];
+
+        $name = trim($data['name'] ?? '');
+        if (empty($name)) {
+            $errors[] = "Il nome del corso è obbligatorio.";
+        }
+
+        $startDateStr = $data['start_date'] ?? '';
+        $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
+        $today = new DateTime();
+        $minStartDate = (clone $today)->modify('+7 days');
+        if (!$startDate || $startDate < $minStartDate) {
+            $errors[] = "La data di inizio deve essere almeno tra 7 giorni.";
+        }
+
+        $startTime = $data['start_time'] ?? '';
+        $endTime = $data['end_time'] ?? '';
+        if (strtotime($startTime) >= strtotime($endTime)) {
+            $errors[] = "L'orario di inizio deve essere prima dell'orario di fine.";
+        }
+
+        $days = $data['days'] ?? [];
+        if (!is_array($days) || count($days) === 0) {
+            $errors[] = "Devi selezionare almeno un giorno della settimana.";
+        }
+
+        $instructorId = $data['instructor'] ?? '';
+        $instructor = FPersistentManager::getInstance()->retriveInstructorById($instructorId);
+        if (!$instructor) {
+            $errors[] = "Istruttore non valido.";
+        }
+
+        $fieldId = $data['field'] ?? '';
+        $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+        if (!$field) {
+            $errors[] = "Campo non valido.";
+        }
+
+        $errorView = new VError();
+        $errorView->show([$errors]);
+        return;
+    } else {
+        $view->showCreateCourseForm(null, []);
+    }
+ }
 }
 
