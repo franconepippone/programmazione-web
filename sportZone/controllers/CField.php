@@ -19,12 +19,15 @@ class CField{
         $pm = FPersistentManager::getInstance();
         $fields = $pm->retrieveAllMatchingFields();
         
+        
+        $searchParams = ['date' => '', 'sport' => ''];
+        if (UHTTPMethods::getIsSet('date')) $searchParams['date'] = UHTTPMethods::get('date');
+        if (UHTTPMethods::getIsSet('sport')) $searchParams['sport'] = UHTTPMethods::get('sport');
 
-        print_r($_GET);
-        // TODO Filtering
+        // TODO filtraggio dei campi (usa metodo di alice) 
 
         $view = new VField();
-        $view->showSearchResults($fields);
+        $view->showSearchResults($fields, $searchParams);
     }
 
     public static function details($field_id) {

@@ -14,7 +14,7 @@ class VField{
     }
 
     /*
-    Array of entries if this kind
+    Array of entries matching this structure
     [
             'id'  => 5,  
             'title' => 'Campo Volley Beach',
@@ -27,7 +27,7 @@ class VField{
             'alt' => 'Campo Volley Beach'
         ]
     */
-    public function showSearchResults($fields) {
+    public function showSearchResults($fields, $searchParams) {
         $fieldsInfo = [];
         foreach ($fields as $fld) {
             $images = $fld->getImages();
@@ -47,6 +47,12 @@ class VField{
             $fieldsInfo[] = $info;
         }
 
+        // vengono passati in get alla pagina details, in modo che details possa reinidirizzare alla prenotazione corretta
+        $queryParams = [];
+        if (isset($searchParams['date'])) $queryParams['date'] = $searchParams['date'];
+
+        $this->smarty->assign('queryString', http_build_query($queryParams));
+        $this->smarty->assign('search', $searchParams);
         $this->smarty->assign('fields', $fieldsInfo);
         $this->smarty->display("field/search_results_list.tpl");
     }
