@@ -26,7 +26,6 @@ class VEmployee{
     }
 
     public function showCreateCourseForm($data) {
-        $smarty = USmarty::getSmarty();
 
         $smarty->assign('name', $data['name'] ?? '');
         $smarty->assign('start_date', $data['start_date'] ?? '');
