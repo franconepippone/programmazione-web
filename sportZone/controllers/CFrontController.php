@@ -27,6 +27,9 @@ class CFrontController{
     public function run($requestUri){
         // Parse the request URI
         
+        //$this->createDummyFields();
+        //$this->createDummyCourses();    
+
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
@@ -81,4 +84,78 @@ class CFrontController{
 
         call_user_func_array([$controllerClass, $methodName], $params);
     }
+    //creo campi fittizi
+    public static function createDummyFields(){
+        $fields = [];
+
+        $field1 = new EField();
+        $field1->setSport('Calcio')
+        ->setTerrainType('Erba sintetica')
+        ->setIsIndoor(false)
+        ->setCost(50.0);
+        $fields[] = $field1;
+
+        $field2 = new EField();
+        $field2->setSport('Tennis')
+        ->setTerrainType('Cemento')
+        ->setIsIndoor(true)
+        ->setCost(40.0);
+        $fields[] = $field2;
+
+        $field3 = new EField();
+        $field3->setSport('Basket')
+        ->setTerrainType('Parquet')
+        ->setIsIndoor(true)
+        ->setCost(60.0);
+        $fields[] = $field3;
+
+        $field4 = new EField();
+        $field4->setSport('Padel')
+        ->setTerrainType('Erba sintetica')
+        ->setIsIndoor(false)
+        ->setCost(55.0);
+        $fields[] = $field4;
+        foreach ($fields as $field) {
+            FPersistentManager::getInstance()->uploadObj($field);
+        }
+        
+    }
+
+    public function createDummyCourses(){
+        $field = new EField();
+        $field->setSport('Calcio')
+        ->setTerrainType('Erba sintetica')
+        ->setIsIndoor(false)
+        ->setCost(50.0);
+        FPersistentManager::getInstance()->uploadObj($field);
+        
+        $courses = [];
+
+        $course1 = new ECourse();
+        $course1->setTitle('Corso Calcio Base');
+        $course1->setStartDate(new \DateTime('2025-07-01'));
+        $course1->setEndDate(new \DateTime('2025-07-31'));
+        $course1->setDescription('Corso per principianti che vogliono imparare le basi del calcio.');
+        $course1->setTimeSlot('09:00-11:00');
+        $course1->setEnrollmentCost(100.0); // <-- usa il nome corretto del setter
+        $course1->setMaxParticipantsCount(20);
+        $course1->setField($field);
+        $courses[] = $course1;
+
+        $course2 = new ECourse();
+        $course2->setTitle('Corso Calcio Avanzato');
+        $course2->setStartDate(new \DateTime('2025-08-01'));
+        $course2->setEndDate(new \DateTime('2025-08-31'));
+        $course2->setDescription('Per ragazzi che vogliono migliorare la tecnica.');
+        $course2->setTimeSlot('11:30-13:30');
+        $course2->setEnrollmentCost(120.0); // <-- usa il nome corretto del setter
+        $course2->setMaxParticipantsCount(18);
+        $course2->setField($field);
+        $courses[] = $course2;
+        foreach ($courses as $course) {
+            FPersistentManager::getInstance()->uploadObj($course);
+        }
+    }
+
+    
 }

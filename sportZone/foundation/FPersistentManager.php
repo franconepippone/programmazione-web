@@ -119,9 +119,9 @@ class FPersistentManager{
     /**
      * Retrieve a Payment Method by ID
      */
-    public static function retrivePaymentMethodById($id){
+    /*public static function retrivePaymentMethodById($id){
         return FPaymentMethod::getPaymentMethodById($id);
-    }
+    }*/
 
     //-------------------------------------RESERVATION--------------------------------
 
@@ -129,7 +129,7 @@ class FPersistentManager{
      * Retrieve reservations by field and date
      */
     public static function getReservationsByFieldAndDate($field, $date){
-        return FReservation::getReservationsByFieldAndDate($field, $date);
+        return FReservation::getByFieldAndDate($field, $date);
     }
 
     /**
@@ -173,6 +173,22 @@ class FPersistentManager{
         return FInstructor::getInstructorById($id);
     }
 
+    public static function retriveInstructorOnAttribute($field, $value) {
+        $result = FInstructor::getInstructorByAttribute($field, $value);
+        return $result;
+    }
+    public static function retriveInstructorOnAttributes(array $fields) {
+        $result = FInstructor::getInstructorByAttributes($fields);
+        return $result;
+    }
+    public static function retriveInstructorsOnCourseId(int $course_id) {
+        $result = FInstructor::getInstructorsByCourseId($course_id);
+        return $result;
+    }
+    public static function retriveInstructorsOnAttributes(array $fields) {
+        $result = FInstructor::getInstructorsByAttributes($fields);
+        return $result;
+    }
 
    //-----------------------------------COURSE-------------------------------
 
@@ -181,4 +197,29 @@ class FPersistentManager{
         return FCourse::saveCourse($course);
     }
 
+    public static function retriveCourses() {
+        $result = FCourse::getCourses();
+        return $result;
+    }
+    public static function retriveCourseOnId(int $id) {
+        $result = FCourse::getCourseById($id);
+        return $result;
+    }
+    public static function retriveCourseOnAttribute($field, $value) {
+        $result = FCourse::getCourseByAttribute($field, $value);
+        return $result;
+    }
+    public static function retriveCourseOnAttributes(array $fields) {
+        $result = FCourse::getCourseByAttributes($fields);
+        return $result;
+    }
+    public static function retriveCoursesOnAttributes(array $fields) {
+        $result = FCourse::getCoursesByAttributes($fields);
+        return $result;
+    }
+    public static function retriveCoursesOnInstructorId(int $instructor_id) {
+        $result = FCourse::getCoursesByInstructorId($instructor_id);
+        return $result;
+    }
+    
 }
