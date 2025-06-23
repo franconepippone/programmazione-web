@@ -156,6 +156,12 @@ class CEmployee{
             return;
         }
 
+         $description = trim($data['description'] ?? '');
+         if (empty($description)) {
+            (new VError())->show("La descrizione del corso è obbligatoria.");
+            return;
+         }
+
         $startDateStr = $data['start_date'] ?? '';
         $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
         $minStartDate = (new DateTime())->modify('+7 days');
@@ -206,6 +212,7 @@ class CEmployee{
         // Normalizza e salva i dati in sessione con nomi coerenti
         $courseData = [
             'name' => $name,
+            'description' => $description,
             'start_date' => $startDateStr,
             'start_time' => $startTime,
             'end_time' => $endTime,
@@ -243,6 +250,7 @@ public static function finalizeCreateCourse() {
 
         $course = new ECourse();
         $course->setTitle($data['name']);
+        $course->setDescription($data['description']);
         $course->setStartDate(new DateTime($data['start_date']));
         $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
         $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
