@@ -23,7 +23,7 @@ class CCourse {
     //********************************************************* */
     //form per cercare i corsi, anche con filtri
     public static function searchForm() {
-        CUser::isLogged();
+        
         
         //fine creazione corsi fittizi
 
