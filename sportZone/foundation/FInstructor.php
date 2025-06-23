@@ -6,4 +6,8 @@ class FInstructor {
     public static function getAllInstructors() {
         return FEntityManager::getInstance()->selectAll(EInstructor::class);
     }
+
+    public static function getInstructorById(int $id): ?EInstructor {
+        return FEntityManager::getInstance()->retriveObj(EInstructor::class, $id);
+    }
 }
