@@ -142,10 +142,20 @@
             <select name="field" id="field">
                 {foreach from=$fields item=f}
                     <option value="{$f->getId()}" {if $field == $f->getId()}selected{/if}>
-                        {$f->getSport()} 
+                        {$f->getSport()}
                     </option>
                 {/foreach}
             </select>
+        </div>
+
+        <div class="form-group">
+            <label for="cost">💰 Costo (€)</label>
+            <input type="text" name="cost" id="cost" value="{$cost|default:''}">
+        </div>
+
+        <div class="form-group">
+            <label for="MaxParticipantsCount">👥 Numero massimo partecipanti</label>
+            <input type="text" name="MaxParticipantsCount" id="MaxParticipantsCount" value="{$MaxParticipantsCount|default:''}">
         </div>
 
         <button type="submit" class="submit-button">✅ Conferma</button>
