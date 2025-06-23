@@ -4,3 +4,4 @@
 # ms doc temp files
 ~$*.*
 *.tpl.php
+/proxies
