@@ -12,7 +12,8 @@
             "sportZone/utility/",
             "sportZone/views/",
             "sportZone/controllers/",
-            "sportZone/entity/"
+            "sportZone/entity/",
+            "sportZone/_exceptions"
         ]
     }
     
