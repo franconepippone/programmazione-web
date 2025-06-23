@@ -57,7 +57,7 @@
     <div class="summary-item"><span class="label">Nome:</span><span class="value">{$name}</span></div>
     <div class="summary-item"><span class="label">Data inizio:</span><span class="value">{$start_date}</span></div>
     <div class="summary-item"><span class="label">Orario:</span><span class="value">{$start_time} - {$end_time}</span></div>
-    <div class="summary-item"><span class="label">Giorni:</span><span class="value">{implode(', ', $days)}</span></div>
+    <div class="summary-item"><span class="label">Giorni:</span><span class="value">{$days_string}</span></div>
     <div class="summary-item"><span class="label">Istruttore:</span><span class="value">{$instructor->getFullName()}</span></div>
     <div class="summary-item"><span class="label">Campo:</span><span class="value">{$field->getSport()}</span></div>
     <div class="summary-item"><span class="label">Costo iscrizione:</span><span class="value">{$cost} €</span></div>
