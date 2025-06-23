@@ -89,7 +89,7 @@ class FPersistentManager{
      }
 
      public function retriveAllFields() {
-        return FReservation::getAllFields();
+        return FField::getAllFields();
      }
       
      //-------------------------------------CLIENT--------------------------------------
