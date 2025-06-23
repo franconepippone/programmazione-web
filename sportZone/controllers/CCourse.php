@@ -20,39 +20,46 @@ class CCourse {
         $view = new VCourse();
         $view->showCreateResult();
     }
+    //********************************************************* */
     //form per cercare i corsi, anche con filtri
     public static function searchForm() {
+        
+        
+        //fine creazione corsi fittizi
+
         $view = new VCourse();
         $view->showSearchForm();
     }
 
     public static function showCourses() {     
         $view = new VCourse();
-        if(!empty($_GET)) {
-            // Se ci sono parametri di ricerca, li prendo
-            $filteredParams = $_GET;
+
+/*        if(1==0){
+
+        $filteredParams = $_GET;
+            echo 'filtri applicati' . $filteredParams;
             $paramskeys = array_keys($filteredParams);
-            // Controllo che i parametri siano validi
+
             foreach ($paramskeys as $key) {
+                // Rimuovo i parametri che non sono tra quelli definiti
                 if (!in_array($key, self::$attributi)) {
-                    // Se un parametro non è valido, lo rimuovo
                     unset($filteredParams[$key]);
+                } else {
+                    // Se il parametro è valido, lo filtro 
+                    $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
                 }
+                 $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
             }
-            
-            
-            /*
-            *
-            *valido i dati
-            *
-            */
-            
-            $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
-        }
+        }    
         // Se non ci sono parametri di ricerca, prendo tutti i corsi
         else {
             $courses = FPersistentManager::getInstance()->retriveCourses();
-        }
+        }*/
+
+        //creo corsi fittizi per prova
+       $courses = FPersistentManager::getInstance()->retriveCourses();
+        
+
         $view->showSearchResults($courses);
         
     }
@@ -135,3 +142,40 @@ class CCourse {
 
    
 }
+
+
+/*if(!empty($_GET)) {
+            // Se ci sono parametri di ricerca, li prendo
+            $filteredParams = $_GET;
+            echo 'filtri applicati' . $filteredParams;
+            $paramskeys = array_keys($filteredParams);
+            foreach ($paramskeys as $key) {
+                // Rimuovo i parametri che non sono tra quelli definiti
+                if (!in_array($key, self::$attributi)) {
+                    unset($filteredParams[$key]);
+                } else {
+                    // Se il parametro è valido, lo filtro 
+                    $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
+                }
+            }
+            //qui ho una array di parametri che possono richiamare i metodi di validazione
+            //per validare i parametri di ricerca
+            foreach ($paramskeys as $key) {
+                $methodName = 'validate' . ucfirst($key); // Es: 'title' -> 'validateTitle'
+            
+                if (method_exists(self::class, $methodName)) {
+                // Richiama il metodo statico passando il valore dell'attributo
+                $error = UValidate::$methodName($filteredParams[$key]);
+                    if ($error) {
+                        $errors[] = $error; //gestione degli errori
+                    }
+                }
+            }
+           
+            //non è necessario validare i dati ottenuti dal db, si presuppone che cìgià lo siano
+            $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
+        }
+        // Se non ci sono parametri di ricerca, prendo tutti i corsi
+        else {
+            $courses = FPersistentManager::getInstance()->retriveCourses();
+        }*/

@@ -35,7 +35,7 @@ class ECourse
     private int $MaxParticipantsCount;
 
     // ======= RELAZIONI =======
-
+    
     #[ORM\ManyToOne(targetEntity: EInstructor::class, inversedBy: "courses")]
     private ?EInstructor $instructor = null;
 
@@ -100,7 +100,7 @@ class ECourse
         $this->timeSlot = $timeslot;
     }
 
-    public function getEnrollmentCist(): float {
+    public function getEnrollmentCost(): float {
         return $this->cost;
     }
 
@@ -168,4 +168,6 @@ class ECourse
         }
         return $this;
     }
+
+    
 }

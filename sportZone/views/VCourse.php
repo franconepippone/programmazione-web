@@ -13,12 +13,14 @@ class VCourse
 
     public function showSearchForm()
     {
+    
         $this->smarty->display('course/searchForm.tpl');
+
     }
 
     public function showSearchResults($courses = [])
     {
-        $this->smarty->assign('courses', $courses);     
+       // $this->smarty->assign('courses', $courses);     
         $this->smarty->display('course/searchResults.tpl');
     }
 
