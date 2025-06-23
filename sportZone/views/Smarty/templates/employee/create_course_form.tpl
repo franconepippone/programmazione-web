@@ -142,7 +142,7 @@
             <select name="field" id="field">
                 {foreach from=$fields item=f}
                     <option value="{$f->getId()}" {if $field == $f->getId()}selected{/if}>
-                        {$f->getSport()} - {$f->getType()} ({$f->getCostPerHour()} €/h)
+                        {$f->getSport()} 
                     </option>
                 {/foreach}
             </select>
