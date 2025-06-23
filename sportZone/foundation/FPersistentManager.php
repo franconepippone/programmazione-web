@@ -167,4 +167,8 @@ class FPersistentManager{
         return FInstructor::getAllInstructors();
     }
 
+    public static function retriveInstructorById($id){
+        return FInstructor::getInstructorById($id);
+    }
+
 }
