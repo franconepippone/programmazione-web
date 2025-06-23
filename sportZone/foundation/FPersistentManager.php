@@ -164,7 +164,7 @@ class FPersistentManager{
     //-----------------------------------INSTRUCTOR-------------------------------
 
     public function retriveAllInstructors() {
-        return FReservation::getAllInstructors();
+        return FInstructor::getAllInstructors();
     }
 
 }
