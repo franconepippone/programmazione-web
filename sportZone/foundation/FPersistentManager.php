@@ -151,15 +151,17 @@ class FPersistentManager{
     }
 
     public function retriveAllReservations() {
-    return FReservation::getAllReservations();
+        return FReservation::getAllReservations();
     }
    
     public function retriveReservationById($id) {
-    return FReservation::getReservationById($id);
+        return FReservation::getReservationById($id);
     }
   
-    
+    //-----------------------------------INSTRUCTOR-------------------------------
 
-
+    public function retriveAllInstructors() {
+        return FReservation::getAllInstructors();
+    }
 
 }
