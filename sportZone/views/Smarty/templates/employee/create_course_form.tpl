@@ -131,7 +131,7 @@
             <select name="instructor" id="instructor">
                 {foreach from=$instructors item=i}
                     <option value="{$i->getId()}" {if $instructor == $i->getId()}selected{/if}>
-                        {$i->getFirstName()} {$i->getLastName()}
+                        {$i->getName()} {$i->getLastName()}
                     </option>
                 {/foreach}
             </select>
