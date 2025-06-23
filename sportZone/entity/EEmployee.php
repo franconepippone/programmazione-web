@@ -17,7 +17,6 @@ class EEmployee extends EUser
     private Collection $paymentMethods;
 
     #[ORM\ManyToMany(targetEntity: ECourse::class, inversedBy: "employees")]
-    #[ORM\JoinTable(name: "employees_courses")]
     private Collection $courses;
 
     public function __construct() {

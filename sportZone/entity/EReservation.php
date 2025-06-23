@@ -13,6 +13,9 @@ class EReservation
     #[ORM\Column(type: "date")]
     private \DateTimeInterface $date;
 
+    #[ORM\Column(type: "time")]
+    private \DateTimeInterface $time;
+
     #[ORM\ManyToOne(targetEntity: EField::class, inversedBy: "reservations")]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private EField $field;
@@ -27,11 +30,13 @@ class EReservation
 
     public function __construct(
         \DateTimeInterface $date,
+        \DateTimeInterface $time,
         EField $field,
         EClient $client,
         EPaymentMethod $paymentMethod
     ) {
         $this->date = $date;
+        $this->time = $time;
         $this->field = $field;
         $this->client = $client;
         $this->paymentMethod = $paymentMethod;
@@ -49,6 +54,14 @@ class EReservation
 
     public function setData(\DateTimeInterface $data): void {
         $this->date = $data;
+    }
+
+     public function getTime(): \DateTimeInterface {
+        return $this->time;
+    }
+
+    public function setTime(\DateTimeInterface $data): void {
+        $this->time = $time;
     }
 
     public function getField(): EField {

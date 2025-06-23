@@ -66,14 +66,119 @@ class FPersistentManager{
         return $result;
     }
 
-    public static function retrieveFieldOnId(int $id) {
-        $result = FField::getFieldById($id);
-        return $result;
+     //-------------------------------------FIELD---------------------------------------
+
+    /**
+     * Retrieve a Field by ID
+     */
+    public static function retriveFieldById($id){
+        return FField::getFieldById($id);
     }
 
     public static function retrieveAllMatchingFields(array $filters = []) {
         $result = FEntityManager::getInstance()->selectAll(EField::class);
         return $result;
+    }
+
+     public function existsFieldBySport($sport) {
+     $fields = FField::getAllFields();
+     foreach ($fields as $field) {
+         if (strtolower($field->getSport()) == strtolower($sport)) {
+             return true;
+         }
+     }
+     return false;
+     }
+
+     public function retriveAllFields() {
+        return FField::getAllFields();
+     }
+      
+     //-------------------------------------CLIENT--------------------------------------
+
+    /**
+     * Retrieve a Client by ID
+     */
+    public static function retriveClientById($id){
+        return FClient::getClientById($id);
+    }
+
+    public function existsClientByPartialName($name) {
+    $clients = FClient::getAllClients();
+    foreach ($clients as $client) {
+        $fullName = strtolower($client->getName() . " " . $client->getSurname());
+        if (strpos($fullName, strtolower($name)) !== false) {
+            return true;
+        }
+    }
+    return false;
+    }
+
+    //-----------------------------------PAYMENT METHOD-------------------------------
+
+    /**
+     * Retrieve a Payment Method by ID
+     */
+    public static function retrivePaymentMethodById($id){
+        return FPaymentMethod::getPaymentMethodById($id);
+    }
+
+    //-------------------------------------RESERVATION--------------------------------
+
+    /**
+     * Retrieve reservations by field and date
+     */
+    public static function getReservationsByFieldAndDate($field, $date){
+        return FReservation::getReservationsByFieldAndDate($field, $date);
+    }
+
+    /**
+     * Save a Reservation object
+     */
+    public static function saveReservation($reservation){
+        return FReservation::saveReservation($reservation);
+    }
+
+    /**
+     * Get available hours for a field on a specific date.
+     * Returns the list of free hours by checking existing reservations.
+     */
+    public function getAvailableHours(int $fieldId, string $date): array {
+        return FReservation::getAvailableHours($fieldId, $date);
+    }
+
+    /**
+     * fillter by name, date and sport
+     * Returns the list of reservations.
+     */
+    public function retriveFilteredReservations($name = null, $date = null, $sport = null) {
+        return FReservation::filterReservations($name, $date, $sport);
+    }
+
+    public function retriveAllReservations() {
+        return FReservation::getAllReservations();
+    }
+   
+    public function retriveReservationById($id) {
+        return FReservation::getReservationById($id);
+    }
+  
+    //-----------------------------------INSTRUCTOR-------------------------------
+
+    public function retriveAllInstructors() {
+        return FInstructor::getAllInstructors();
+    }
+
+    public static function retriveInstructorById($id){
+        return FInstructor::getInstructorById($id);
+    }
+
+
+   //-----------------------------------COURSE-------------------------------
+
+
+    public static function saveCourse($course){
+        return FCourse::saveCourse($course);
     }
 
 }

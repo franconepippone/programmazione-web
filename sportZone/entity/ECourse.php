@@ -28,6 +28,9 @@ class ECourse
     #[ORM\Column(type: "string", length: 50)]
     private string $timeSlot;
 
+    #[ORM\Column(type: "json")]
+    private array $daysOfWeek = [];
+
     #[ORM\Column(type: "float")]
     private float $cost;
 
@@ -82,6 +85,14 @@ class ECourse
 
     public function setEndDate(\DateTime $date): void {
         $this->endDate = $date;
+    }
+
+    public function getDaysOfWeek(): array {
+        return $this->daysOfWeek;
+    }
+
+    public function setDaysOfWeek(array $days): void {
+        $this->daysOfWeek = $days;
     }
 
     public function getDescription(): ?string {

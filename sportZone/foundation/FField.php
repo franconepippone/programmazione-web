@@ -22,5 +22,9 @@ class FField{
         $result = FEntityManager::getInstance()->retriveObj(EField::class, $id);
         return $result;
     }
+
+    public static function getAllFields() {
+        return FEntityManager::getInstance()->selectAll(EField::class);
+    }
    
 }
