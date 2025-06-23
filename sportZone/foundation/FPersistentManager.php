@@ -171,4 +171,12 @@ class FPersistentManager{
         return FInstructor::getInstructorById($id);
     }
 
+
+   //-----------------------------------COURSE-------------------------------
+
+
+    public static function saveCourse($course){
+        return FCourse::save($course);
+    }
+
 }
