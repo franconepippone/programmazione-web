@@ -30,8 +30,13 @@ class VField{
     public function showSearchResults($fields, $searchParams) {
         $fieldsInfo = [];
         foreach ($fields as $fld) {
+            
             $images = $fld->getImages();
-            $imageDataUri = UImage::getImageDataUri($images[0]);
+            if (sizeof($images) > 0) {
+                $imageDataUri = UImage::getImageDataUri($images[0]);
+            } else {
+                $imageDataUri = "https://th.bing.com/th/id/OIP.xQLogGqy75CRaZGYTlgdXAHaLG?r=0&rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3";
+            }
            
             $info = [
                 'id'        => $fld->getId(),

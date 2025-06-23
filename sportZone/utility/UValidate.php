@@ -18,14 +18,43 @@ class UValidate {
             return false;
         }
         // Check if the title is too long
-        if (strlen($title) > 100) {
-            return false;
+        if (strlen($title) > 1) {
+            throw new ValidationException("Stringa troppo lunga");
         }
         // Check if the title contains only valid characters (letters, numbers, spaces, and some special characters)
         if (!preg_match('/^[a-zA-Z0-9\s\-\_\.]+$/', $title)) {
             return false;
         }
-        return true;
+        return $title;
     }
     
+
+
+    /// TETSTTSTST
+    public static function validateInputArray(array $array, array $attributes, bool $require): array {
+        $filteredParams = $array;
+
+        $paramskeys = array_keys($filteredParams);
+        foreach ($paramskeys as $key) {
+            // Rimuovo i parametri che non sono tra quelli definiti
+            if (!in_array($key, $attributes) || empty($filteredParams[$key]) ) {
+                unset($filteredParams[$key]);
+            } else {
+                // Se il parametro è valido, lo filtro 
+                $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
+            }
+        }
+        //qui ho una array di parametri che possono richiamare i metodi di validazione
+        //per validare i parametri di ricerca
+        foreach ($filteredParams as $key => $val) {
+            $methodName = 'validate' . ucfirst($key); // Es: 'title' -> 'validateTitle'
+            
+            if (method_exists(self::class, $methodName)) {
+                // Richiama il metodo statico passando il valore dell'attributo
+                $filteredParams[$key] = UValidate::$methodName($filteredParams[$key]);
+            }
+        }
+
+        return $filteredParams;
+    }
 }

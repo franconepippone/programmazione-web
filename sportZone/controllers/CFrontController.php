@@ -103,7 +103,9 @@ class CFrontController{
         ->setName("porcodio")
         ->setTerrainType('Cemento')
         ->setIsIndoor(true)
-        ->setCost(40.0);
+        ->setCost(40.0)
+        ->setLatitude(0)
+        ->setLongitude(0);
         $fields[] = $field2;
 
         $field3 = new EField();
@@ -111,7 +113,9 @@ class CFrontController{
         ->setName("porcodio")
         ->setTerrainType('Parquet')
         ->setIsIndoor(true)
-        ->setCost(60.0);
+        ->setCost(60.0)
+        ->setLatitude(0)
+        ->setLongitude(0);
         $fields[] = $field3;
 
         $field4 = new EField();
@@ -119,7 +123,9 @@ class CFrontController{
         ->setName("porcodio")
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
-        ->setCost(55.0);
+        ->setCost(55.0)
+        ->setLatitude(0)
+        ->setLongitude(0);
         $fields[] = $field4;
         foreach ($fields as $field) {
             FPersistentManager::getInstance()->uploadObj($field);
@@ -129,16 +135,20 @@ class CFrontController{
 
     public function createDummyCourses(){
         $field = new EField();
-        $field->setSport('Calcio')
+        $field->setSport('Padel')
+        ->setName("porcodio")
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
-        ->setCost(50.0);
+        ->setCost(55.0)
+        ->setLatitude(0)
+        ->setLongitude(0);
         FPersistentManager::getInstance()->uploadObj($field);
         
         $courses = [];
-
+        $days = ["monday", "saturday"];
         $course1 = new ECourse();
         $course1->setTitle('Corso Calcio Base');
+        $course1->setDaysOfWeek($days);
         $course1->setStartDate(new \DateTime('2025-07-01'));
         $course1->setEndDate(new \DateTime('2025-07-31'));
         $course1->setDescription('Corso per principianti che vogliono imparare le basi del calcio.');
@@ -149,6 +159,7 @@ class CFrontController{
         $courses[] = $course1;
 
         $course2 = new ECourse();
+        $course1->setDaysOfWeek($days);
         $course2->setTitle('Corso Calcio Avanzato');
         $course2->setStartDate(new \DateTime('2025-08-01'));
         $course2->setEndDate(new \DateTime('2025-08-31'));

@@ -34,7 +34,7 @@ class CField{
         CUser::isLogged();
         
         $pm = FPersistentManager::getInstance();
-        $fld = $pm->retrieveFieldOnId($field_id);
+        $fld = $pm->retriveFieldById($field_id);
 
         if ($fld == null) {
             echo "Invalid field id";
