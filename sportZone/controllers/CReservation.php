@@ -89,7 +89,7 @@ class CReservation{
            return;
        }
 
-        Get full name from client (EClient extends EUser)
+      //  Get full name from client (EClient extends EUser)
        $fullName = $client->getName() . ' ' . $client->getSurname();
     } else {
         $error = new VError();
@@ -135,7 +135,7 @@ class CReservation{
         $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
     }
 
-     5. Check reservation exists
+   //  5. Check reservation exists
     if (!$reservation) {
         $errorView = new VError();
         $errorView->show("Prenotazione non trovata.");
