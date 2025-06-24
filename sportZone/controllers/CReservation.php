@@ -14,7 +14,7 @@ class CReservation{
     if (!$fieldId) {
         VError::show("ID del campo non specificato.");
         return;
-
+    }
      // Get available hours for this field and date through FReservation
     $availableHours = FReservation::getAvailableHours($fieldId, $date);
 
@@ -22,13 +22,13 @@ class CReservation{
     if (!$date) {
         VError::show("data non specificata.");
         return;
-    
+    }
     
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
         VError::show("Campo non trovato.");
         return;
-
+    }
     $fieldData [] = EField::fieldToArray($field);
       
    
@@ -36,7 +36,7 @@ class CReservation{
    
     $view->showReservationForm($fieldData,$date,$avaiableHours); //da passare field, date e avaiablehours
   
-    }
+    
  }
 
  public static function finalizeReservation() {
