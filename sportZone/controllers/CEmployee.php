@@ -160,9 +160,9 @@ public static function finalizeCreateCourse() {
 
     if (!isset($data['confirm'])) {
         // Validazione
-        $name = trim($data['name'] ?? '');
+        $title = trim($data['title'] ?? '');
         if (empty($name)) {
-            (new VError())->show("Il nome del corso è obbligatorio.");
+            (new VError())->show("Il titolo del corso è obbligatorio.");
             return;
         }
 
@@ -221,7 +221,7 @@ public static function finalizeCreateCourse() {
 
     // Se confermato: salva nel DB
     $course = new ECourse();
-    $course->setTitle($data['name']);
+    $course->setTitle($data['title']);
     $course->setDescription($data['description']);
     $course->setStartDate(new DateTime($data['start_date']));
     $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
