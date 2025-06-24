@@ -113,7 +113,7 @@ class CReservation{
     $view->showFinalizeReservation([ //passare i parametri
         $fullName,
         $date,
-        $time;
+        $time,
         'field' => $field
         ]);
  }
