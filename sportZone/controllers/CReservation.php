@@ -10,7 +10,7 @@ class CReservation{
     
     $view = new VReservation();
     
-    $fieldId = $POST('fieldId');
+    $fieldId = $_POST('fieldId');
     if (!$fieldId) {
         VError::show("ID del campo non specificato.");
         return;
