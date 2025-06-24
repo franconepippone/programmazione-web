@@ -15,9 +15,6 @@ class EField
     private int $id;
 
     #[ORM\Column(type: "string")]
-    private string $name;
-
-    #[ORM\Column(type: "string")]
     private string $sport;
 
     #[ORM\Column(type: "string", nullable: true)]
@@ -68,14 +65,6 @@ class EField
         return $this->sport;
     }
 
-    public function setName(string $name): self {
-        $this->name = $name;
-        return $this;
-    }
-    
-    public function getName(): string {
-        return $this->name;
-    }
 
     public function setIsIndoor(bool $isIndoor): self {
         $this->isIndoor = $isIndoor;
