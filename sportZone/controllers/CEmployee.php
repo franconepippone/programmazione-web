@@ -216,11 +216,13 @@ public static function finalizeCreateCourse() {
 
   }
 
-  else if (isset($data['confirm'])) {
+  else {
     // Se confermato: salva nel DB
 
     $data = $_POST;
     $view = new VEmployee(); 
+    $pm = FPersistentManager::getInstance();
+
     
     $course = new ECourse();
     $course->setTitle($data['title']);
