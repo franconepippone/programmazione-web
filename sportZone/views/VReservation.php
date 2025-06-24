@@ -10,13 +10,15 @@ class VReservation{
     }
 
     public function showReservationForm() {
-        //passare avaiable hours, field, date
+        $this->smarty->assign("field", $field);
+        $this->smarty->assign("date", $date);
+        $this->smarty->assign("avaiableHours", $avaiableHours);
         $this->smarty->display("reservation/reservation_form.tpl");
     }
 
-    public function showFinalizeReservation($fullName,$date,$time){ //aggiungere field
+    public function showFinalizeReservation($fullName,$date,$time){ 
         $this->smarty->assign("fullName", $fullName);
-       // $this->smarty->assign("field", $field);
+        $this->smarty->assign("field", $field);
         $this->smarty->assign("date", $date);
         $this->smarty->assign("time", $time);
         $this->smarty->display("reservation/finalize_reservation.tpl");
