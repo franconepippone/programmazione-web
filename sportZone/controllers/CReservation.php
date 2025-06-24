@@ -36,7 +36,8 @@ class CReservation{
    
     $view->showReservationForm($fieldData,$date,$avaiableHours); //da passare field, date e avaiablehours
   
-  }
+    }
+ }
 
  public static function finalizeReservation() {
     // Check if user is logged in
