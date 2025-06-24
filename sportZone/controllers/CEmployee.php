@@ -214,8 +214,9 @@ public static function finalizeCreateCourse() {
 
     
     $view->showFinalizeCreateCourse($data, $instructor, $field);
-    return
+    return;
   }
+  
 
   
     $view = new VEmployee(); 
@@ -240,7 +241,7 @@ public static function finalizeCreateCourse() {
     $pm->saveCourse($course);
     $view->showCourseConfirmation($course);
 
-  }
+  
  }
 }
   
