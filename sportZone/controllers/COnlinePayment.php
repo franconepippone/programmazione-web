@@ -6,28 +6,23 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class COnlinePayment{
 
-    public static function payForm() {
-        CUser::isLogged();
-
-
-
-        $available_payments = [
-            'paypal' => true,  // Mostra box PayPal
-            'card' => true     // Mostra box pagamento con carta
-        ];
-
-        $view = new VOnlinePayment();
-        $view->showPaymentMethodForm($available_payments);
-    }
-
     public static function payOnline() {
         // arrivano:
         //  - somma da pagare
+        //  - il metodo di pagamento scelto
         //  - redirect uri (dove reindirizzare dopo il pagamento)
 
         // L'utente è recuperato dalla sessione
         $userid = USession::getSessionElement('user');
         $user = FPersistentManager::retriveUserOnId($userid);
+
+        try {
+            $inputs = UValidate::validateInputArray($_GET, ["payment_method", "amount", "redirect_url"], true);
+        } catch (ValidationException $e) {
+            $viewErr = new VError();
+            $viewErr->show($e->getMessage());
+            exit;
+        }
         
     }
 

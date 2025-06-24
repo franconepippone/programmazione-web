@@ -9,8 +9,5 @@ class VOnlinePayment{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function showPaymentMethodForm($available_payments) {
-        $this->smarty->assign('available_payments', $available_payments);
-        $this->smarty->display("onlinepayment/choose_method.tpl");
-    }
+    
 }

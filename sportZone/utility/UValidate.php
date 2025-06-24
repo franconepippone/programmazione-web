@@ -1,7 +1,18 @@
 <?php
+
+
 require __DIR__ ."/../../vendor/autoload.php";
 
+
 class UValidate {
+
+    //-------------------------------- PUT HERE THE VALIDATOR METHODS ------------------------------
+
+    // ------ ONLINE PAYMENTS -----------
+
+    public function validatePaymentMethod($method): string {
+        return "";
+    }
 
     /**
      * Validate if a string is a valid email address
@@ -12,6 +23,7 @@ class UValidate {
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
+    #[ValidatorFor("title")]
     public static function validateTitle(string $title): string {
         // Check if the title is empty
         if (empty($title)) {
@@ -28,7 +40,7 @@ class UValidate {
         return $title;
     }
     
-
+    // --------------------------- DO NOT CHANGE -----------------------------------------
 
     /**
      * Validates and filters an input array based on allowed attributes and custom validation methods.
@@ -49,19 +61,17 @@ class UValidate {
     public static function validateInputArray(array $array, array $attributes, bool $require = false): array {
         $filteredParams = $array;
 
-        $paramskeys = array_keys($filteredParams);
-        foreach ($paramskeys as $key) {
-            // Rimuovo i parametri che non sono tra quelli definiti
-            if (!in_array($key, $attributes) || empty($filteredParams[$key]) ) {
+        // Remove any keys not listed in $attributes or that are empty
+        foreach (array_keys($filteredParams) as $key) {
+            if (!in_array($key, $attributes) || empty($filteredParams[$key])) {
                 unset($filteredParams[$key]);
             } else {
-                // Se il parametro è valido, lo filtro 
                 $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
-                unset($attributes[$key]); // attribute found, we dont need it in the attributes array anymore*
+                unset($attributes[$key]); // Mark this attribute as handled
             }
         }
 
-        // throws exceptions if some attributes are still missing and the $require flag is true
+        // If required attributes are missing, throw a validation error
         if ($require && !empty($attributes)) {
             throw new ValidationException(
                 "Missing required parameters.",
@@ -69,17 +79,65 @@ class UValidate {
             );
         }
 
-        //qui ho una array di parametri che possono richiamare i metodi di validazione
-        //per validare i parametri di ricerca
+        // Apply field-specific validation using #[ValidatorFor(...)] annotations
+        $validatorMap = self::getValidatorMap();
+
         foreach ($filteredParams as $key => $val) {
-            $methodName = 'validate' . ucfirst($key); // Es: 'title' -> 'validateTitle'
-            
-            if (method_exists(self::class, $methodName)) {
-                // Richiama il metodo statico passando il valore dell'attributo
-                $filteredParams[$key] = UValidate::$methodName($filteredParams[$key]);
+            if (isset($validatorMap[$key]) && method_exists(self::class, $validatorMap[$key])) {
+                $filteredParams[$key] = self::{$validatorMap[$key]}($val);
             }
         }
 
         return $filteredParams;
+    }
+
+    private static function getValidatorMap(): array {
+        $validators = [];
+        $reflection = new \ReflectionClass(self::class);
+
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_STATIC) as $method) {
+            foreach ($method->getAttributes(ValidatorFor::class) as $attr) {
+                /** @var ValidatorFor $instance */
+                $instance = $attr->newInstance();
+                // for each field in validatorFor fields, add an entry to the table
+                foreach ($instance->fields as $field) {
+                    $validators[$field] = $method->getName();
+                }
+            }
+        }
+
+        return $validators;
+    }
+}
+
+
+/**
+ * Attribute to declare which input fields a static validation method applies to.
+ *
+ * Usage:
+ *     #[ValidatorFor("field_name")]
+ *     public static function validateFieldName(string $value): string { ... }
+ *
+ * You can specify multiple fields if the same method handles them:
+ *     #[ValidatorFor("field_a", "field_b")]
+ *
+ * This attribute is intended to be used on static methods of a validation class.
+ */
+#[\Attribute(\Attribute::TARGET_METHOD)]
+class ValidatorFor {
+    /**
+     * The list of input field names this method validates.
+     *
+     * @var string[]
+     */
+    public array $fields;
+
+    /**
+     * Constructor accepting one or more input field names.
+     *
+     * @param string ...$fields The input field(s) this method validates
+     */
+    public function __construct(string ...$fields) {
+        $this->fields = $fields;
     }
 }
