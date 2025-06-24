@@ -239,7 +239,9 @@ public static function finalizeCreateCourse() {
 
     $pm->saveCourse($course);
     $view->showCourseConfirmation($course);
- }
+  }
 
+ }
 }
+  
 
