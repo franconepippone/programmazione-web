@@ -202,7 +202,7 @@ class EField
         return $this->description;
     }
 
-    public static function FieldToArray(EField $field) {
+    public static function fieldToArray(EField $field) {
         
         return [
             'name' => $field ->getName();
