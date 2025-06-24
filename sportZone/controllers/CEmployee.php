@@ -253,11 +253,11 @@ class CEmployee{
     }
 
     // FASE 1: Primo accesso al form
-    $view->showCreateCourseForm([], $instructors, $fields);
+    $view->showCreateCourseForm( $instructors, $fields);
 }
 
 public static function finalizeCreateCourse() {
-    CUser::isLogged()
+    CUser::isLogged();
         
     
 
