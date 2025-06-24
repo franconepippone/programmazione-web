@@ -84,7 +84,7 @@ class CUser{
             if(USession::getSessionStatus() == PHP_SESSION_NONE){
                 USession::getInstance();
                 USession::setSessionElement( 'user', $user->getId());
-                USession::setSessionElement( 'user', $user->getId());
+                //USession::setSessionElement( 'user', $user->getId());
                 
                 // if a redirect url is sent (should always be sent), redirect to that page
                 if (UHTTPMethods::postIsSet('redirectUrl')) {

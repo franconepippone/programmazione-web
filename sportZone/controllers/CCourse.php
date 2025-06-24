@@ -34,8 +34,8 @@ class CCourse {
     public static function showCourses() {     
         $view = new VCourse();
         
-        try {
-            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, true);
+        /*try {
+            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, false);
         } catch (ValidationException $e) {
             $viewErr = new VError();
             $viewErr->show($e->getMessage());
@@ -46,6 +46,7 @@ class CCourse {
         print_r($filteredParams);
 
         //creo corsi fittizi per prova
+        */
         $courses = FPersistentManager::getInstance()->retriveCourses();
         
         $view->showSearchResults($courses, 'ciao');
@@ -60,12 +61,14 @@ class CCourse {
     }
 
     public static function enrollForm($course_id) {
+        CUser::isLogged();
         //prendo l id dell utente dalla sessione
-        $userID= USession::getSessionElement('user');
-        FPersistentManager::retriveUserOnId($userID);
-
+        $userID = USession::getSessionElement('user');
+        $user= FPersistentManager::retriveUserOnId($userID);
+        $corso=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
+        
         $view = new VCourse();
-        $view->showEnrollForm($course_id,$userID);
+        $view->showEnrollForm($corso,$user);
     }
 
     public static function manageForm($course_id) {

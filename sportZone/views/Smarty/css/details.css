@@ -1,0 +1,75 @@
+body {
+    background: linear-gradient(120deg, #f1f5f9, #e2e8f0);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.details-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    background: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+
+.details-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+}
+
+.details-list {
+    margin-bottom: 2rem;
+}
+
+.details-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.details-label {
+    font-weight: 600;
+    color: #34495e;
+    min-width: 160px;
+}
+
+.details-value {
+    color: #495057;
+    text-align: right;
+    flex: 1;
+}
+
+.action-btn {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #4dabf7, #228be6);
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 10px rgba(77, 171, 247, 0.2);
+    transition: background 0.3s ease;
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, #228be6, #1c7ed6);
+}
+.details-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.action-btn {
+    width: 48%;
+    /* il resto delle regole rimane invariato */
+}

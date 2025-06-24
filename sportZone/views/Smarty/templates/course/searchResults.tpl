@@ -2,27 +2,31 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Elenco Corsi</title>
-    <link rel="stylesheet" href="stile_corsi.css">
+    <title>Risultati Ricerca</title>
+    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css">
+    <!-- Per stili specifici di entità, aggiungi un altro CSS, es: -->
+    <!-- <link rel="stylesheet" href="/sportZone/views/Smarty/css/course.css"> -->
 </head>
 <body>
-
-    <h1 id="titolo-pagina">Elenco dei Corsi Disponibili</h1>
-
-    <div id="corsi-container">
-        {foreach from=$corsi item=corso}
-            <div class="corso-card">
-                <img class="corso-immagine" src="{$corso.immagine}" alt="Immagine del corso: {$corso.nome}">
-                <div class="corso-dettagli">
-                    <h2 class="corso-nome">{$corso.nome|escape}</h2>
-                    <p class="corso-date">
-                        Dal {$corso.data_inizio|date_format:"%d/%m/%Y"} al {$corso.data_fine|date_format:"%d/%m/%Y"}
-                    </p>
+    <div class="results-list">
+        <h2>Risultati della Ricerca</h2>
+        {if $courses|@count > 0}
+            {foreach from=$courses item=course}
+                <div class="result-card">
+                    <!-- id nascosto -->
+                    <input type="hidden" name="id" value="{$course->getId()}">
+                    <div class="result-info">
+                        <div class="result-title" name="title">{$course->getTitle()|escape}</div>
+                        <div class="result-date" name="startDate">
+                            Inizio: {$course->getStartDate()|date_format:"%d/%m/%Y"}
+                        </div>
+                    </div>
+                    <a class="details-btn" href="/course/courseDetail/{$course->getId()}">Dettagli</a>
                 </div>
-            </div>
-        {/foreach}
+            {/foreach}
+        {else}
+            <p>Nessun risultato trovato con i filtri selezionati.</p>
+        {/if}
     </div>
-
 </body>
 </html>
-

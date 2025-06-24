@@ -22,20 +22,26 @@ class VCourse
     {
         //$this->smarty->assign('courses', $courses);     
         //echo 'courses: ' . $courses;
-       echo 'course:' . $courses[0]->getTitle();
-        $this->smarty->display('course/searchResults.tpl');
+       //echo 'course:' . $courses[0]->getTitle();
+       $this->smarty->assign('courses', $courses);
+        //$this->smarty->assign('messaggio', $messaggio);
+        
+        // Mostra i risultati della ricerca
+        // Assicurati che il template 'course/searchResults.tpl' esista e sia configurato correttamente 
+       $this->smarty->display('course/searchResults.tpl');
     }
 
     public function showDetails($course_id)
     {
         // Qui dovresti recuperare i dettagli del corso dal model
-        $this->smarty->assign('course_id', $course_id);
-        $this->smarty->display('course/details.tpl');
+        $this->smarty->assign('course', $course_id);
+        $this->smarty->display('course/courseDetails.tpl');
     }
 
-    public function showEnrollForm($course_id)
+    public function showEnrollForm($course,$user)
     {
-        $this->smarty->assign('course_id', $course_id);
+        $this->smarty->assign('id', $course_id);
+       
         $this->smarty->display('course/enrollForm.tpl');
     }
 

@@ -1,0 +1,51 @@
+body {
+    background: linear-gradient(120deg, #f1f5f9, #e2e8f0);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.results-list {
+    max-width: 700px;
+    margin: 2rem auto;
+}
+
+.result-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.result-info {
+    flex: 1;
+}
+
+.result-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.result-date {
+    color: #555;
+    font-size: 1rem;
+}
+
+.details-btn {
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #4dabf7, #228be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.details-btn:hover {
+    background: linear-gradient(135deg, #228be6, #1c7ed6);
+}
