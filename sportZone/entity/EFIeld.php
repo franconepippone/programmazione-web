@@ -14,6 +14,9 @@ class EField
     #[ORM\Column(type: "integer")]
     private int $id;
 
+    #[ORM\Column(type: "name")]
+    private string $name;
+
     #[ORM\Column(type: "string")]
     private string $sport;
 
@@ -63,6 +66,15 @@ class EField
     
     public function getSport(): string {
         return $this->sport;
+    }
+
+    public function setName(string $name): self {
+        $this->name = $name;
+        return $this;
+    }
+    
+    public function getName(): string {
+        return $this->name;
     }
 
 
