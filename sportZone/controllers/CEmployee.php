@@ -134,10 +134,9 @@ class CEmployee{
  }
 **/
 public static function createCourseForm() {
-    if (!CUser::isLogged()) {
-        header("Location: /login");
-        exit;
-    }
+    CUser::isLogged();
+    CUser::isEmployee();
+      
 
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
@@ -149,7 +148,7 @@ public static function createCourseForm() {
 }
 
 public static function finalizeCreateCourse() {
-  CUser::isLogged();
+  CUser::isEmployee();
   
   $data = $_POST;
   if (!isset($data['confirm'])) {
