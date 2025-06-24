@@ -30,7 +30,22 @@ class UValidate {
     
 
 
-    /// TETSTTSTST
+    /**
+     * Validates and filters an input array based on allowed attributes and custom validation methods.
+     *
+     * @param array $array       The input array to be validated (e.g. $_GET, $_POST).
+     * @param array $attributes  List of accepted attribute keys. Missing required attributes will trigger an exception if $require is true.
+     * @param bool  $require     Whether all listed attributes are required (default: false).
+     *
+     * @return array             The sanitized and validated array with only allowed parameters.
+     *
+     * @throws ValidationException If required attributes are missing and $require is true.
+     *
+     * The function:
+     * - Removes keys not in $attributes or with empty values.
+     * - Trims and escapes each valid input.
+     * - Invokes corresponding static validation methods (e.g., validateTitle for 'title') if they exist.
+     */
     public static function validateInputArray(array $array, array $attributes, bool $require = false): array {
         $filteredParams = $array;
 

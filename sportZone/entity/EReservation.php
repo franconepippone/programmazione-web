@@ -60,7 +60,7 @@ class EReservation
         return $this->time;
     }
 
-    public function setTime(\DateTimeInterface $data): void {
+    public function setTime(\DateTimeInterface $time): void {
         $this->time = $time;
     }
 

@@ -35,7 +35,7 @@ class CCourse {
         $view = new VCourse();
         
         try {
-            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, true);
+            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, false);
         } catch (ValidationException $e) {
             $viewErr = new VError();
             $viewErr->show($e->getMessage());
