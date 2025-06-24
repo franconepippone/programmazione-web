@@ -18,14 +18,14 @@ class CReservation{
      // Get available hours for this field and date through FReservation
     $availableHours = FReservation::getAvailableHours($fieldId, $date);
 
-     $date = $POST('date');
-     if (!$date) {
+    $date = $POST('date');
+    if (!$date) {
         VError::show("data non specificata.");
         return;
     
     
-     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-     if (!$field) {
+    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+    if (!$field) {
         VError::show("Campo non trovato.");
         return;
 
