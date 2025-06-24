@@ -111,7 +111,7 @@ class CEmployee{
 
   public static function viewReservation() {
     
-    // CUser::isEmployee();
+     CUser::isEmployee();
 
     $id = $_POST['id'] ?? null;
 
@@ -130,7 +130,7 @@ class CEmployee{
     }
 
     $view = new VEmployee();
-    $view->viewReservation();//dare reservation
+    $view->viewReservation($reservation);
  }
 
   public static function createCourseForm() {
