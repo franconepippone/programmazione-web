@@ -9,8 +9,9 @@ class VEmployee{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function showCancelReservation() { //dare reservation
-        $this->smarty->display("employee/cancel_reservation.tpl");
+    public function showCancelReservation($reservation) { 
+        $this->smarty->assign('reservation', $reservation);
+        $this->smarty->display("employee/cancel_reservation.tpl");    
     }
 
     public function showCancelConfirmation(){
@@ -21,7 +22,8 @@ class VEmployee{
         $this->smarty->display("employee/show_reservations.tpl");
     }
 
-     public function viewReservation() { //dare reservation 
+     public function viewReservation($reservation) { 
+        $this->smarty->assign('reservation', $reservation);                                         
         $this->smarty->display("employee/view_reservation.tpl");
     }
 
