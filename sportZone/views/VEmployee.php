@@ -27,7 +27,8 @@ class VEmployee{
         $this->smarty->display("employee/view_reservation.tpl");
     }
 
-    public function showCreateCourseForm($data, $instructors, $fields) {
+    public function showCreateCourseForm( $instructors, $fields) {
+        /**
         $this->smarty->assign('name', $data['name'] ?? '');
         $this->smarty->assign('description', $data['description'] ?? '');
         $this->smarty->assign('start_date', $data['start_date'] ?? '');
@@ -38,7 +39,7 @@ class VEmployee{
         $this->smarty->assign('field', $data['field'] ?? '');
         $this->smarty->assign('cost', $data['cost'] ?? '');
         $this->smarty->assign('max_participants', $data['max_participants'] ?? ''); // <-- modificato qui
-
+**/
         $this->smarty->assign('instructors', $instructors);
         $this->smarty->assign('fields', $fields);
 
