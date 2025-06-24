@@ -142,7 +142,7 @@
   </div>
 
   <div class="button-container">
-    <a href="/prenotazione/continua/{$campo.id}" class="btn">Continua con la prenotazione</a>
+    <a href="/reservation/ReservationForm{$campo.id}" class="btn">Continua con la prenotazione</a>
   </div>
 </div>
 
