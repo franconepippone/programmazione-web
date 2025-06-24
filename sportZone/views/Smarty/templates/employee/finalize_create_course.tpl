@@ -49,20 +49,18 @@
     .confirm-button:hover {
         background-color: #2a8700;
     }
-</style>
-
 <div class="summary-wrapper">
     <h2>📋 Riepilogo del corso</h2>
 
-    <div class="summary-item"><span class="label">Nome:</span><span class="value">{$name}</span></div>
-    <div class="summary-item"><span class="label">Descrizione:</span><span class="value">{$description}</span></div>
+    <div class="summary-item"><span class="label">Titolo:</span><span class="value">{$title|escape}</span></div>
+    <div class="summary-item"><span class="label">Descrizione:</span><span class="value">{$description|escape}</span></div>
     <div class="summary-item"><span class="label">Data inizio:</span><span class="value">{$start_date}</span></div>
     <div class="summary-item"><span class="label">Orario:</span><span class="value">{$start_time} - {$end_time}</span></div>
-    <div class="summary-item"><span class="label">Giorni:</span><span class="value">{$days_string}</span></div>
-    <div class="summary-item"><span class="label">Istruttore:</span><span class="value">{$instructor->getFullName()}</span></div>
-    <div class="summary-item"><span class="label">Campo:</span><span class="value">{$field->getSport()}</span></div>
+    <div class="summary-item"><span class="label">Giorni:</span><span class="value">{$days_string|escape}</span></div>
+    <div class="summary-item"><span class="label">Istruttore:</span><span class="value">{$instructor->getFullName()|escape}</span></div>
+    <div class="summary-item"><span class="label">Campo:</span><span class="value">{$field->getSport()|escape}</span></div>
     <div class="summary-item"><span class="label">Costo iscrizione:</span><span class="value">{$cost} €</span></div>
-    <div class="summary-item"><span class="label">Max partecipanti:</span><span class="value">{$max_participants}</span></div>
+    <div class="summary-item"><span class="label">Numero massimo partecipanti:</span><span class="value">{$max_participants}</span></div>
 
     <form method="post" action="/employee/finalizeCreateCourse">
         <button class="confirm-button">✅ Conferma Creazione</button>
