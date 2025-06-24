@@ -10,7 +10,7 @@ class VReservation{
     }
 
     public function showReservationForm() {
-        $this->smarty->assign("field", $field);
+        $this->smarty->assign("fieldData", $fieldData);
         $this->smarty->assign("date", $date);
         $this->smarty->assign("avaiableHours", $avaiableHours);
         $this->smarty->display("reservation/reservation_form.tpl");
