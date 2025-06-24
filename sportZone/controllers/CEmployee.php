@@ -216,7 +216,7 @@ public static function finalizeCreateCourse() {
 
   }
 
-  else if if (isset($data['confirm'])) {
+  else if (isset($data['confirm'])) {
     // Se confermato: salva nel DB
 
     $data = $_POST;
