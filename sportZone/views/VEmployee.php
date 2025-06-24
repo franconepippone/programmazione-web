@@ -41,6 +41,7 @@ class VEmployee{
         $this->smarty->assign('start_date', $data['start_date']);
         $this->smarty->assign('start_time', $data['start_time']);
         $this->smarty->assign('end_time', $data['end_time']);
+        $this->smarty->assign('days', $data['days']);  
         $this->smarty->assign('days_string', implode(', ', $data['days']));
         $this->smarty->assign('cost', $data['cost']);
         $this->smarty->assign('max_participants', $data['max_participants']); 
