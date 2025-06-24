@@ -68,7 +68,7 @@ class CReservation{
         return;
     }
 
-     Retrieve field from database
+    // Retrieve field from database
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
         $error = new VError();
