@@ -149,18 +149,27 @@ class CEmployee{
         $data = $_POST;
 
         $name = trim($data['name'] ?? '');
+        $description = trim($data['description'] ?? '');
+        $startDateStr = $data['start_date'] ?? '';
+        $startTime = $data['start_time'] ?? '';
+        $endTime = $data['end_time'] ?? '';
+        $days = $data['days'] ?? [];
+        $cost = $data['cost'] ?? '';
+        $maxParticipants = $data['max_participants'] ?? '';
+        $instructorId = $data['instructor'] ?? '';
+        $fieldId = $data['field'] ?? '';
+
+        // Validazioni
         if (empty($name)) {
             (new VError())->show("Il nome del corso è obbligatorio.");
             return;
         }
 
-         $description = trim($data['description'] ?? '');
-         if (empty($description)) {
+        if (empty($description)) {
             (new VError())->show("La descrizione del corso è obbligatoria.");
             return;
-         }
+        }
 
-        $startDateStr = $data['start_date'] ?? '';
         $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
         $minStartDate = (new DateTime())->modify('+7 days');
         if (!$startDate || $startDate < $minStartDate) {
@@ -168,47 +177,40 @@ class CEmployee{
             return;
         }
 
-        $startTime = $data['start_time'] ?? '';
-        $endTime = $data['end_time'] ?? '';
         if (strtotime($startTime) >= strtotime($endTime)) {
             (new VError())->show("L'orario di inizio deve precedere l'orario di fine.");
             return;
         }
 
-        $days = $data['days'] ?? [];
         if (!is_array($days) || count($days) === 0) {
             (new VError())->show("Seleziona almeno un giorno della settimana.");
             return;
         }
 
-        $cost = $data['cost'] ?? '';
         if (!is_numeric($cost) || floatval($cost) < 0) {
             (new VError())->show("Inserisci un costo valido (numero positivo).");
             return;
         }
 
-        $maxParticipants = $data['max_participants'] ?? '';
         if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
             (new VError())->show("Inserisci un numero valido di partecipanti (intero positivo).");
             return;
         }
 
-        $instructorId = $data['instructor'] ?? '';
         $instructor = $pm->retriveInstructorById($instructorId);
         if (!$instructor) {
             (new VError())->show("Istruttore selezionato non valido.");
             return;
         }
 
-        $fieldId = $data['field'] ?? '';
         $field = $pm->retriveFieldById($fieldId);
         if (!$field) {
             (new VError())->show("Campo selezionato non valido.");
             return;
         }
 
-        // Normalizza e salva i dati in sessione con nomi coerenti
-        $courseData = [
+        // Costruisco query string da passare a finalizeCreateCourse
+        $query = http_build_query([
             'name' => $name,
             'description' => $description,
             'start_date' => $startDateStr,
@@ -219,15 +221,15 @@ class CEmployee{
             'max_participants' => intval($maxParticipants),
             'instructor' => $instructorId,
             'field' => $fieldId
-        ];
+        ]);
 
-        USession::setSessionElement('course_data', $courseData);
-        header("Location: /employee/finalizeCreateCourse");
+        header("Location: /employee/finalizeCreateCourse?" . $query);
         exit;
     }
 
-    $view->showCreateCourseForm(null, $instructors, $fields);
- }
+    // Mostra il form passando gli istruttori e i campi disponibili
+    $view->showCreateCourseForm($instructors, $fields);
+}
 
 public static function finalizeCreateCourse() {
     if (!CUser::isLogged()) {
