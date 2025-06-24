@@ -77,7 +77,7 @@
     <input type="hidden" name="field" value="{$field->getId()}">
 
     {foreach from=$days item=day}
-        <input type="hidden" name="days[]" value="{$day}">
+        <input type="hidden" name="days" value="{$day}">
     {/foreach}
 
     <button class="confirm-button">✅ Conferma Creazione</button>
