@@ -2,10 +2,11 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CReservation{
+  
 
   public static function reservationForm(){
-
-     CUser::isLogged();
+    
+    CUser::isLogged();
     
     $view = new VReservation();
     
@@ -14,21 +15,26 @@ class CReservation{
         VError::show("ID del campo non specificato.");
         return;
 
+     // Get available hours for this field and date through FReservation
+    $availableHours = FReservation::getAvailableHours($fieldId, $date);
+
      $date = $POST('date');
      if (!$date) {
         VError::show("data non specificata.");
         return;
     
     
-    $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-    if (!$field) {
+     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
+     if (!$field) {
         VError::show("Campo non trovato.");
         return;
+
+    $fieldData [] = EField::fieldToArray($field);
+      
    
-    // Get available hours for this field and date through FReservation
-    $availableHours = FReservation::getAvailableHours($fieldId, $date);
    
-    $view->showReservationForm($field,$date,$avaiableHours); //da passare field, date e avaiablehours
+   
+    $view->showReservationForm($fieldData,$date,$avaiableHours); //da passare field, date e avaiablehours
   
   }
 
