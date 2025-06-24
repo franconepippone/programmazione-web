@@ -149,77 +149,79 @@ public static function createCourseForm() {
 }
 
 public static function finalizeCreateCourse() {
-    if (!CUser::isLogged()) {
-        header("Location: /login");
-        exit;
-    }
+  CUser::isLogged();
+ 
+  if (!isset($data['confirm'])) {
 
     $data = $_POST;
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-    if (!isset($data['confirm'])) {
-        // Validazione
-        $title = trim($data['title'] ?? '');
-        if (empty($title)) {
-            (new VError())->show("Il titolo del corso è obbligatorio.");
-            return;
-        }
+    $title = trim($data['title'] ?? '');
+    if (empty($title)) {
+      (new VError())->show("Il titolo del corso è obbligatorio.");
+      return;
+    }
 
-        $description = trim($data['description'] ?? '');
-        if (empty($description)) {
-            (new VError())->show("La descrizione del corso è obbligatoria.");
-            return;
-        }
+    $description = trim($data['description'] ?? '');
+    if (empty($description)) {
+      (new VError())->show("La descrizione del corso è obbligatoria.");
+      return;
+    }
 
-        $startDateStr = $data['start_date'] ?? '';
-        $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
-        $minStartDate = (new DateTime())->modify('+7 days');
-        if (!$startDate || $startDate < $minStartDate) {
-            (new VError())->show("La data di inizio deve essere almeno tra 7 giorni da oggi.");
-            return;
-        }
+    $startDateStr = $data['start_date'] ?? '';
+    $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
+    $minStartDate = (new DateTime())->modify('+7 days');
+    if (!$startDate || $startDate < $minStartDate) {
+      (new VError())->show("La data di inizio deve essere almeno tra 7 giorni da oggi.");
+      return;
+    }
 
-        $startTime = $data['start_time'] ?? '';
-        $endTime = $data['end_time'] ?? '';
-        if (strtotime($startTime) >= strtotime($endTime)) {
-            (new VError())->show("L'orario di inizio deve precedere quello di fine.");
-            return;
-        }
+    $startTime = $data['start_time'] ?? '';
+    $endTime = $data['end_time'] ?? '';
+    if (strtotime($startTime) >= strtotime($endTime)){ 
+      (new VError())->show("L'orario di inizio deve precedere quello di fine.");
+      return;
+    }
 
-        $days = $data['days'] ?? [];
-        if (!is_array($days) || count($days) === 0) {
-            (new VError())->show("Seleziona almeno un giorno della settimana.");
-            return;
-        }
+    $days = $data['days'] ?? [];
+    if (!is_array($days) || count($days) === 0) {
+      (new VError())->show("Seleziona almeno un giorno della settimana.");
+      return;
+    }
 
-        $cost = $data['cost'] ?? '';
-        if (!is_numeric($cost) || floatval($cost) < 0) {
-            (new VError())->show("Inserisci un costo valido.");
-            return;
-        }
+    $cost = $data['cost'] ?? '';
+    if (!is_numeric($cost) || floatval($cost) < 0) {
+      (new VError())->show("Inserisci un costo valido.");
+      return;
+    }
 
-        $maxParticipants = $data['max_participants'] ?? '';
-        if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
-            (new VError())->show("Numero partecipanti non valido.");
-            return;
-        }
+    $maxParticipants = $data['max_participants'] ?? '';
+    if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
+      (new VError())->show("Numero partecipanti non valido.");
+      return;
+    }
 
-        $instructorId = $data['instructor'] ?? '';
-        $fieldId = $data['field'] ?? '';
-        $instructor = $pm->retriveInstructorById($instructorId);
-        $field = $pm->retriveFieldById($fieldId);
-        if (!$instructor || !$field) {
-            (new VError())->show("Istruttore o campo selezionato non valido.");
-            return;
-        }
-
-        // Mostra riepilogo
-        $view->showFinalizeCreateCourse($data, $instructor, $field);
+    $instructorId = $data['instructor'] ?? '';
+    $fieldId = $data['field'] ?? '';
+    $instructor = $pm->retriveInstructorById($instructorId);
+    $field = $pm->retriveFieldById($fieldId);
+    if (!$instructor || !$field) {
+       (new VError())->show("Istruttore o campo selezionato non valido.");
         return;
     }
 
+        // Mostra riepilogo
+    $view->showFinalizeCreateCourse($data, $instructor, $field);
+
+  }
+
+  else if if (isset($data['confirm'])) {
     // Se confermato: salva nel DB
+
+    $data = $_POST;
+    $view = new VEmployee(); 
+    
     $course = new ECourse();
     $course->setTitle($data['title']);
     $course->setDescription($data['description']);
