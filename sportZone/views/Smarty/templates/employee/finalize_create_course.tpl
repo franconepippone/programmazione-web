@@ -49,6 +49,7 @@
     .confirm-button:hover {
         background-color: #2a8700;
     }
+</style>
 <div class="summary-wrapper">
     <h2>📋 Riepilogo del corso</h2>
 
