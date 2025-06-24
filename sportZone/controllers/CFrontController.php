@@ -84,6 +84,7 @@ class CFrontController{
 
         call_user_func_array([$controllerClass, $methodName], $params);
     }
+    /**
     //creo campi fittizi
     public static function createDummyFields(){
         $fields = [];
@@ -173,6 +174,6 @@ class CFrontController{
             FPersistentManager::getInstance()->uploadObj($course);
         }
     }
-
+**/
     
 }
