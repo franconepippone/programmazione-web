@@ -80,6 +80,6 @@
         <input type="hidden" name="days[]" value="{$day}">
     {/foreach}
 
-    <button class="confirm">✅ Conferma Creazione</button>
+    <button class="confirm-button">✅ Conferma Creazione</button>
 </form>
 </div>
