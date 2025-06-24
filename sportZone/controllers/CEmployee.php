@@ -2,7 +2,7 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CEmployee{
-
+/**
   public static function cancelReservation() {
      //  Check if user is logged in and is employee
       CUser::isLogged();
@@ -132,7 +132,7 @@ class CEmployee{
     $view = new VEmployee();
     $view->viewReservation($reservation);
  }
-
+**/
  public static function createCourseForm() {
     if (!CUser::isLogged()) {
         header("Location: /login");
