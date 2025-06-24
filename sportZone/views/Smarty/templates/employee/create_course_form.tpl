@@ -95,27 +95,27 @@
 
         <div class="form-group">
             <label for="title">📛 Titolo del corso</label>
-            <input type="text" name="title" id="title" value="{$title|default:''}" required>
+            <input type="text" name="title" id="title" value="{$title|default:''}" >
         </div>
 
         <div class="form-group">
             <label for="description">📝 Descrizione del corso</label>
-            <textarea name="description" id="description" rows="4" required>{$description|default:''|escape}</textarea>
+            <textarea name="description" id="description" rows="4">{$description|default:''|escape}</textarea>
         </div>
 
         <div class="form-group">
             <label for="start_date">📅 Data di inizio</label>
-            <input type="date" name="start_date" id="start_date" value="{$start_date|default:''}" required>
+            <input type="date" name="start_date" id="start_date" value="{$start_date|default:''}" >
         </div>
 
         <div class="form-group">
             <label for="start_time">🕒 Orario di inizio</label>
-            <input type="time" name="start_time" id="start_time" value="{$start_time|default:''}" required>
+            <input type="time" name="start_time" id="start_time" value="{$start_time|default:''}" >
         </div>
 
         <div class="form-group">
             <label for="end_time">🕕 Orario di fine</label>
-            <input type="time" name="end_time" id="end_time" value="{$end_time|default:''}" required>
+            <input type="time" name="end_time" id="end_time" value="{$end_time|default:''}" >
         </div>
 
         <div class="form-group">
@@ -145,7 +145,7 @@
 
         <div class="form-group">
             <label for="field">🏟️ Campo</label>
-            <select name="field" id="field" required>
+            <select name="field" id="field" >
                 <option value="">-- Seleziona --</option>
                 {foreach from=$fields item=f}
                     <option value="{$f->getId()}" {if $field == $f->getId()}selected{/if}>
@@ -157,12 +157,12 @@
 
         <div class="form-group">
             <label for="cost">💰 Costo (€)</label>
-            <input type="text" name="cost" id="cost" value="{$cost|default:''}" required>
+            <input type="text" name="cost" id="cost" value="{$cost|default:''}" >
         </div>
 
         <div class="form-group">
             <label for="max_participants">👥 Numero massimo partecipanti</label>
-            <input type="text" name="max_participants" id="max_participants" value="{$max_participants|default:''}" required>
+            <input type="text" name="max_participants" id="max_participants" value="{$max_participants|default:''}" >
         </div>
 
         <button type="submit" class="submit-button">✅ Conferma</button>
