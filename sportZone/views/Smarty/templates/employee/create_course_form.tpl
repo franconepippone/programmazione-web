@@ -133,7 +133,7 @@
 
         <div class="form-group">
             <label for="instructor">👤 Istruttore</label>
-            <select name="instructor" id="instructor" required>
+            <select name="instructor" id="instructor" >
                 <option value="">-- Seleziona --</option>
                 {foreach from=$instructors item=i}
                     <option value="{$i->getId()}" {if $instructor == $i->getId()}selected{/if}>
