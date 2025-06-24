@@ -219,7 +219,7 @@ public static function finalizeCreateCourse() {
 
     // Se confermato: salva nel DB
 
-  else {  
+  else if (isset($data['confirm'])) {  
     $view = new VEmployee(); 
     $pm = FPersistentManager::getInstance();
 
