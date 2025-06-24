@@ -124,7 +124,7 @@
                 {assign var=weekdays value=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"]}
                 {foreach from=$weekdays item=day}
                     <label>
-                        <input type="checkbox" name="days[]" value="{$day}" {if $days && in_array($day, $days)}checked{/if}>
+                        <input type="checkbox" name="days" value="{$day}" {if $days && in_array($day, $days)}checked{/if}>
                         {$day}
                     </label>
                 {/foreach}
