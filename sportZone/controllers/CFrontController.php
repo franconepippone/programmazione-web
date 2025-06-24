@@ -90,6 +90,7 @@ class CFrontController{
 
         $field1 = new EField();
         $field1->setSport('Calcio')
+        ->setName('ahhhh') 
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
         ->setCost(50.0)
@@ -99,6 +100,7 @@ class CFrontController{
 
         $field2 = new EField();
         $field2->setSport('Tennis')
+        ->setName('ahhhh')
         ->setTerrainType('Cemento')
         ->setIsIndoor(true)
         ->setCost(40.0)
@@ -108,6 +110,7 @@ class CFrontController{
 
         $field3 = new EField();
         $field3->setSport('Basket')
+        ->setName('ahhhh')
         ->setTerrainType('Parquet')
         ->setIsIndoor(true)
         ->setCost(60.0)
@@ -117,6 +120,7 @@ class CFrontController{
 
         $field4 = new EField();
         $field4->setSport('Padel')
+        ->setName('ahhhh')
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
         ->setCost(55.0)
@@ -132,6 +136,7 @@ class CFrontController{
     public function createDummyCourses(){
         $field = new EField();
         $field->setSport('Padel')
+        ->setName('ahhhh')
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
         ->setCost(55.0)
