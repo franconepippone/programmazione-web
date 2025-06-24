@@ -62,21 +62,23 @@
     <div class="summary-item"><span class="label">Costo iscrizione:</span><span class="value">{$cost} €</span></div>
     <div class="summary-item"><span class="label">Numero massimo partecipanti:</span><span class="value">{$max_participants}</span></div>
 
-    <form method="post" action="/employee/finalizeCreateCourse">
-        <input type="hidden" name="confirm" value="1">
-        <input type="hidden" name="title" value="{$title|escape}">
-        <input type="hidden" name="description" value="{$description|escape}">
-        <input type="hidden" name="start_date" value="{$start_date}">
-        <input type="hidden" name="start_time" value="{$start_time}">
-        <input type="hidden" name="end_time" value="{$end_time}">
-        {foreach from=$days item=day}
-            <input type="hidden" name="days[]" value="{$day}">
-        {/foreach}
-        <input type="hidden" name="instructor" value="{$instructor->getId()}">
-        <input type="hidden" name="field" value="{$field->getId()}">
-        <input type="hidden" name="cost" value="{$cost}">
-        <input type="hidden" name="max_participants" value="{$max_participants}">
+   <form method="post" action="/employee/finalizeCreateCourse">
+    <input type="hidden" name="confirm" value="1">
 
-        <button class="confirm-button">✅ Conferma Creazione</button>
-    </form>
+    <input type="hidden" name="title" value="{$title|escape}">
+    <input type="hidden" name="description" value="{$description|escape}">
+    <input type="hidden" name="start_date" value="{$start_date}">
+    <input type="hidden" name="start_time" value="{$start_time}">
+    <input type="hidden" name="end_time" value="{$end_time}">
+    <input type="hidden" name="cost" value="{$cost}">
+    <input type="hidden" name="max_participants" value="{$max_participants}">
+    <input type="hidden" name="instructor" value="{$instructor->getId()}">
+    <input type="hidden" name="field" value="{$field->getId()}">
+
+    {foreach from=$days item=day}
+        <input type="hidden" name="days[]" value="{$day}">
+    {/foreach}
+
+    <button class="confirm-button">✅ Conferma Creazione</button>
+</form>
 </div>
