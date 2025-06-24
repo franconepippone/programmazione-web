@@ -14,7 +14,7 @@ class EField
     #[ORM\Column(type: "integer")]
     private int $id;
 
-    #[ORM\Column(type: "name")]
+    #[ORM\Column(type: "string")]
     private string $name;
 
     #[ORM\Column(type: "string")]
