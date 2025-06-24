@@ -226,7 +226,7 @@ public static function finalizeCreateCourse() {
     $course->setStartDate(new DateTime($data['start_date']));
     $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
     $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
-    $course->setDaysOfWeek($data['days[]']);
+    $course->setDaysOfWeek($data['days']);
     $course->setEnrollmentCost(floatval($data['cost']));
     $course->setMaxParticipantsCount(intval($data['max_participants']));
 
