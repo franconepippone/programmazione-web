@@ -150,10 +150,11 @@ public static function createCourseForm() {
 
 public static function finalizeCreateCourse() {
   CUser::isLogged();
- 
+  
+  $data = $_POST;
   if (!isset($data['confirm'])) {
 
-    $data = $_POST;
+   
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
@@ -213,13 +214,10 @@ public static function finalizeCreateCourse() {
 
     
     $view->showFinalizeCreateCourse($data, $instructor, $field);
+    return
   }
 
-  $data = $_POST;
-
-    // Se confermato: salva nel DB
-
-  else if (isset($data['confirm'])) {  
+  
     $view = new VEmployee(); 
     $pm = FPersistentManager::getInstance();
 
