@@ -161,7 +161,7 @@ public static function finalizeCreateCourse() {
     if (!isset($data['confirm'])) {
         // Validazione
         $title = trim($data['title'] ?? '');
-        if (empty($name)) {
+        if (empty($title)) {
             (new VError())->show("Il titolo del corso è obbligatorio.");
             return;
         }
