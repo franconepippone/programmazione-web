@@ -144,35 +144,6 @@ class CEmployee{
     $instructors = $pm->retriveAllInstructors();
     $fields = $pm->retriveAllFields();
 
-    // FASE 3: Inserimento nel DB dopo conferma finale
-    if (isset($_POST['confirm']) && $_POST['confirm'] === '1') {
-        $data = $_POST;
-
-        $course = new ECourse();
-        $course->setTitle(trim($data['title']));
-        $course->setDescription(trim($data['description']));
-        $course->setStartDate(new DateTime($data['start_date']));
-        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
-        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
-        $course->setDaysOfWeek($data['days']);
-        $course->setEnrollmentCost(floatval($data['cost']));
-        $course->setMaxParticipantsCount(intval($data['max_participants']));
-
-        $instructor = $pm->retriveInstructorById($data['instructor']);
-        $field = $pm->retriveFieldById($data['field']);
-
-        if (!$instructor || !$field) {
-            (new VError())->show("Errore durante il recupero di istruttore o campo.");
-            return;
-        }
-
-        $course->setInstructor($instructor);
-        $course->setField($field);
-
-        $pm->saveCourse($course);
-        $view->showCourseConfirmation($course);
-        return;
-    }
 
     // FASE 2: Validazione superata, mostra riepilogo
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
