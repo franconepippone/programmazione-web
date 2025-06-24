@@ -211,15 +211,15 @@ public static function finalizeCreateCourse() {
         return;
     }
 
-        // Mostra riepilogo
+    
     $view->showFinalizeCreateCourse($data, $instructor, $field);
-    return
+  }
 
   $data = $_POST;
 
     // Se confermato: salva nel DB
 
-   
+  else {  
     $view = new VEmployee(); 
     $pm = FPersistentManager::getInstance();
 
@@ -242,7 +242,7 @@ public static function finalizeCreateCourse() {
     $pm->saveCourse($course);
     $view->showCourseConfirmation($course);
 
-
+  }
  }
 }
   
