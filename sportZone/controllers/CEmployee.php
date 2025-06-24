@@ -133,7 +133,7 @@ class CEmployee{
     $view->viewReservation($reservation);
  }
 
-  public static function createCourseForm() {
+ public static function createCourseForm() {
     if (!CUser::isLogged()) {
         header("Location: /login");
         exit;
@@ -141,14 +141,44 @@ class CEmployee{
 
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
-
     $instructors = $pm->retriveAllInstructors();
     $fields = $pm->retriveAllFields();
 
+    // FASE 3: Inserimento nel DB dopo conferma finale
+    if (isset($_POST['confirm']) && $_POST['confirm'] === '1') {
+        $data = $_POST;
+
+        $course = new ECourse();
+        $course->setTitle(trim($data['title']));
+        $course->setDescription(trim($data['description']));
+        $course->setStartDate(new DateTime($data['start_date']));
+        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
+        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+        $course->setDaysOfWeek($data['days']);
+        $course->setEnrollmentCost(floatval($data['cost']));
+        $course->setMaxParticipantsCount(intval($data['max_participants']));
+
+        $instructor = $pm->retriveInstructorById($data['instructor']);
+        $field = $pm->retriveFieldById($data['field']);
+
+        if (!$instructor || !$field) {
+            (new VError())->show("Errore durante il recupero di istruttore o campo.");
+            return;
+        }
+
+        $course->setInstructor($instructor);
+        $course->setField($field);
+
+        $pm->saveCourse($course);
+        $view->showCourseConfirmation($course);
+        return;
+    }
+
+    // FASE 2: Validazione superata, mostra riepilogo
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $_POST;
 
-        $name = trim($data['name'] ?? '');
+        $title = trim($data['title'] ?? '');
         $description = trim($data['description'] ?? '');
         $startDateStr = $data['start_date'] ?? '';
         $startTime = $data['start_time'] ?? '';
@@ -160,8 +190,8 @@ class CEmployee{
         $fieldId = $data['field'] ?? '';
 
         // Validazioni
-        if (empty($name)) {
-            (new VError())->show("Il nome del corso è obbligatorio.");
+        if (empty($title)) {
+            (new VError())->show("Il titolo del corso è obbligatorio.");
             return;
         }
 
@@ -188,30 +218,25 @@ class CEmployee{
         }
 
         if (!is_numeric($cost) || floatval($cost) < 0) {
-            (new VError())->show("Inserisci un costo valido (numero positivo).");
+            (new VError())->show("Inserisci un costo valido.");
             return;
         }
 
         if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
-            (new VError())->show("Inserisci un numero valido di partecipanti (intero positivo).");
+            (new VError())->show("Inserisci un numero valido di partecipanti.");
             return;
         }
 
         $instructor = $pm->retriveInstructorById($instructorId);
-        if (!$instructor) {
-            (new VError())->show("Istruttore selezionato non valido.");
-            return;
-        }
-
         $field = $pm->retriveFieldById($fieldId);
-        if (!$field) {
-            (new VError())->show("Campo selezionato non valido.");
+        if (!$instructor || !$field) {
+            (new VError())->show("Istruttore o campo non validi.");
             return;
         }
 
-        // Costruisco query string da passare a finalizeCreateCourse
-        $query = http_build_query([
-            'name' => $name,
+        // Mostra pagina di conferma
+        $formData = [
+            'title' => $title,
             'description' => $description,
             'start_date' => $startDateStr,
             'start_time' => $startTime,
@@ -221,71 +246,50 @@ class CEmployee{
             'max_participants' => intval($maxParticipants),
             'instructor' => $instructorId,
             'field' => $fieldId
-        ]);
+        ];
 
-        header("Location: /employee/finalizeCreateCourse?" . $query);
-        exit;
+        $view->showFinalizeCreateCourse($formData, $instructor, $field);
+        return;
     }
 
-    // Mostra il form passando gli istruttori e i campi disponibili
-    $view->showCreateCourseForm($instructors, $fields);
+    // FASE 1: Primo accesso al form
+    $view->showCreateCourseForm([], $instructors, $fields);
 }
 
 public static function finalizeCreateCourse() {
-    if (!CUser::isLogged()) {
-        header("Location: /login");
-        exit;
-    }
+    CUser::isLogged()
+        
+    
 
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = USession::getSessionElement('course_data');
+    $data = $_POST;
 
-        if (!$data) {
-            (new VError())->show("Dati del corso mancanti. Ricomincia la procedura.");
-            return;
-        }
-
-        $course = new ECourse();
-        $course->setTitle($data['name']);
-        $course->setDescription($data['description']);
-        $course->setStartDate(new DateTime($data['start_date']));
-        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
-        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
-        $course->setDaysOfWeek($data['days']);
-        $course->setEnrollmentCost($data['cost']);
-        $course->setMaxParticipantsCount($data['max_participants']);
-
-        $instructor = $pm->retriveInstructorById($data['instructor']);
-        $field = $pm->retriveFieldById($data['field']);
-        if (!$instructor || !$field) {
-            (new VError())->show("Errore durante il recupero di istruttore o campo.");
-            return;
-        }
-
-        $course->setInstructor($instructor);
-        $course->setField($field);
-
-        $pm->saveCourse($course);
-
-        USession::unsetSessionElement('course_data');
-
-        $view->showCourseConfirmation($course);
-        return;
-    }
-
-    $data = USession::getSessionElement('course_data');
-    if (!$data) {
-        (new VError())->show("Nessun dato da finalizzare.");
-        return;
-    }
+    $course = new ECourse();
+    $course->setTitle($data['title']);
+    $course->setDescription($data['description']);
+    $course->setStartDate(new DateTime($data['start_date']));
+    $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
+    $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+    $course->setDaysOfWeek($data['days']);
+    $course->setEnrollmentCost(floatval($data['cost']));
+    $course->setMaxParticipantsCount(intval($data['max_participants']));
 
     $instructor = $pm->retriveInstructorById($data['instructor']);
     $field = $pm->retriveFieldById($data['field']);
 
-    $view->showFinalizeCreateCourse($data, $instructor, $field);
+    // Se non li trovi, errore interno, quindi lo lasci
+    if (!$instructor || !$field) {
+        (new VError())->show("Errore durante il recupero di istruttore o campo.");
+        return;
+    }
+
+    $course->setInstructor($instructor);
+    $course->setField($field);
+
+    $pm->saveCourse($course);
+    $view->showCourseConfirmation($course);
  }
 }
 
