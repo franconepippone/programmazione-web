@@ -214,10 +214,9 @@ public static function finalizeCreateCourse() {
         // Mostra riepilogo
     $view->showFinalizeCreateCourse($data, $instructor, $field);
     return
-  }
 
   $data = $_POST;
-  else {
+
     // Se confermato: salva nel DB
 
    
@@ -242,7 +241,7 @@ public static function finalizeCreateCourse() {
 
     $pm->saveCourse($course);
     $view->showCourseConfirmation($course);
-  }
+
 
  }
 }
