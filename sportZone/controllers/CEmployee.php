@@ -9,8 +9,8 @@ class CEmployee{
       CUser::isEmployee();
       
 
-      Get POST parameter (reservation id)
-      $reservationId = $_POST['id'] ?? null;
+      //Get POST parameter (reservation id)
+      //$reservationId = $_POST['id'] ?? null;
 
     //  Retrieve reservation from DB
       $reservation = null;
