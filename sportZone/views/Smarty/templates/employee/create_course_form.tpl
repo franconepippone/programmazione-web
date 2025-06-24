@@ -91,7 +91,7 @@
 <div class="form-wrapper">
     <h2>📘 Crea un nuovo corso</h2>
 
-    <form method="post" action="/employee/createCourseForm">
+    <form method="post" action="/employee/finalizeCourseForm">
 
         <div class="form-group">
             <label for="title">📛 Titolo del corso</label>
