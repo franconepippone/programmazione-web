@@ -52,7 +52,7 @@
 <div class="summary-wrapper">
     <h2>📋 Riepilogo del corso</h2>
 
-    <div class="summary-item"><span class="label">Titolo:</span><span class="value">{$title|escape}</span></div>
+    <div class="summary-item"><span class="label">Titolo:</span><span class="value">{$name|escape}</span></div>
     <div class="summary-item"><span class="label">Descrizione:</span><span class="value">{$description|escape}</span></div>
     <div class="summary-item"><span class="label">Data inizio:</span><span class="value">{$start_date}</span></div>
     <div class="summary-item"><span class="label">Orario:</span><span class="value">{$start_time} - {$end_time}</span></div>
@@ -63,6 +63,20 @@
     <div class="summary-item"><span class="label">Numero massimo partecipanti:</span><span class="value">{$max_participants}</span></div>
 
     <form method="post" action="/employee/finalizeCreateCourse">
+        <input type="hidden" name="confirm" value="1">
+        <input type="hidden" name="name" value="{$name|escape}">
+        <input type="hidden" name="description" value="{$description|escape}">
+        <input type="hidden" name="start_date" value="{$start_date}">
+        <input type="hidden" name="start_time" value="{$start_time}">
+        <input type="hidden" name="end_time" value="{$end_time}">
+        {foreach from=$days item=day}
+            <input type="hidden" name="days[]" value="{$day}">
+        {/foreach}
+        <input type="hidden" name="instructor" value="{$instructor->getId()}">
+        <input type="hidden" name="field" value="{$field->getId()}">
+        <input type="hidden" name="cost" value="{$cost}">
+        <input type="hidden" name="max_participants" value="{$max_participants}">
+
         <button class="confirm-button">✅ Conferma Creazione</button>
     </form>
 </div>
