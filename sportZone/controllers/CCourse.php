@@ -33,33 +33,22 @@ class CCourse {
 
     public static function showCourses() {     
         $view = new VCourse();
-
-/*        if(1==0){
-
-        $filteredParams = $_GET;
-            echo 'filtri applicati' . $filteredParams;
-            $paramskeys = array_keys($filteredParams);
-
-            foreach ($paramskeys as $key) {
-                // Rimuovo i parametri che non sono tra quelli definiti
-                if (!in_array($key, self::$attributi)) {
-                    unset($filteredParams[$key]);
-                } else {
-                    // Se il parametro è valido, lo filtro 
-                    $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
-                }
-                 $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
-            }
-        }    
-        // Se non ci sono parametri di ricerca, prendo tutti i corsi
-        else {
-            $courses = FPersistentManager::getInstance()->retriveCourses();
-        }*/
+        
+        try {
+            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, true);
+        } catch (ValidationException $e) {
+            $viewErr = new VError();
+            $viewErr->show($e->getMessage());
+            exit;
+        }
+        
+        print_r($_POST);
+        print_r($filteredParams);
 
         //creo corsi fittizi per prova
         $courses = FPersistentManager::getInstance()->retriveCourses();
         
-        $view->showSearchResults($courses,'ciao');
+        $view->showSearchResults($courses, 'ciao');
         
     }
 
