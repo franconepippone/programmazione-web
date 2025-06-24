@@ -27,19 +27,7 @@ class VEmployee{
         $this->smarty->display("employee/view_reservation.tpl");
     }
 
-    public function showCreateCourseForm( $instructors, $fields) {
-        /**
-        $this->smarty->assign('name', $data['name'] ?? '');
-        $this->smarty->assign('description', $data['description'] ?? '');
-        $this->smarty->assign('start_date', $data['start_date'] ?? '');
-        $this->smarty->assign('start_time', $data['start_time'] ?? '');
-        $this->smarty->assign('end_time', $data['end_time'] ?? '');
-        $this->smarty->assign('days', $data['days'] ?? []);
-        $this->smarty->assign('instructor', $data['instructor'] ?? '');
-        $this->smarty->assign('field', $data['field'] ?? '');
-        $this->smarty->assign('cost', $data['cost'] ?? '');
-        $this->smarty->assign('max_participants', $data['max_participants'] ?? ''); // <-- modificato qui
-**/
+    public function showCreateCourseForm($instructors, $fields) {
         $this->smarty->assign('instructors', $instructors);
         $this->smarty->assign('fields', $fields);
 
@@ -54,7 +42,7 @@ class VEmployee{
         $this->smarty->assign('end_time', $data['end_time']);
         $this->smarty->assign('days_string', implode(', ', $data['days']));
         $this->smarty->assign('cost', $data['cost']);
-        $this->smarty->assign('max_participants', $data['max_participants']); // <-- già corretto qui
+        $this->smarty->assign('max_participants', $data['max_participants']); 
         $this->smarty->assign('instructor', $instructor);
         $this->smarty->assign('field', $field);
         $this->smarty->display('employee/finalize_create_course.tpl');
