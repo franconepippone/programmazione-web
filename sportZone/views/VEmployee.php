@@ -35,7 +35,8 @@ class VEmployee{
    }
 
    public function showFinalizeCreateCourse(array $data, EInstructor $instructor, EField $field) {
-        $this->smarty->assign('name', $data['name']);
+  
+        $this->smarty->assign('title', $data['title']);  
         $this->smarty->assign('description', $data['description']);
         $this->smarty->assign('start_date', $data['start_date']);
         $this->smarty->assign('start_time', $data['start_time']);
@@ -46,7 +47,7 @@ class VEmployee{
         $this->smarty->assign('instructor', $instructor);
         $this->smarty->assign('field', $field);
         $this->smarty->display('employee/finalize_create_course.tpl');
-  }
+}
     public function showCourseConfirmation(){
         $this->smarty->display("employee/course_confirmation.tpl");
     }
