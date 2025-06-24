@@ -4,32 +4,30 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 class CEmployee{
 
   public static function cancelReservation() {
-     // 1. Check if user is logged in and is employee
-     // if (!CUser::isLogged() || !CUser::isEmployee()) {
-       //   $errorView = new VError();
-        //  $errorView->show("Devi essere un dipendente per effettuare questa operazione.");
-          //return;
-      //}
+     //  Check if user is logged in and is employee
+      CUser::isLogged();
+      CUser::isEmployee();
+      
 
-    // 2. Get POST parameter (reservation id)
+      Get POST parameter (reservation id)
       $reservationId = $_POST['id'] ?? null;
 
-    // 3. Retrieve reservation from DB
+    //  Retrieve reservation from DB
       $reservation = null;
-      //if ($reservationId !== null && is_numeric($reservationId)) {
-        //  $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
-     // }
+      if ($reservationId !== null && is_numeric($reservationId)) {
+          $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
+      }
 
-    // 4. Check reservation exists
-     // if (!$reservation) {
-       //   $errorView = new VError();
-         // $errorView->show("Prenotazione non trovata.");
-          //return;
-      //}
+    //  Check reservation exists
+      if (!$reservation) {
+          $errorView = new VError();
+          $errorView->show("Prenotazione non trovata.");
+          return;
+      }
 
-    // 5. If confirmed, delete and show confirmation
+    //  If confirmed, delete and show confirmation
       if (isset($_POST['confirm'])) {
-        //  FPersistentManager::getInstance()->deleteObj($reservation);
+          FPersistentManager::getInstance()->deleteObj($reservation);
           $view = new VEmployee();
           $view->showCancelConfirmation();
           return;
@@ -37,13 +35,13 @@ class CEmployee{
 
     // 6. Otherwise, show cancellation form
       $view = new VEmployee();
-      $view->showCancelReservation(); //aggiungere reservation
+      $view->showCancelReservation($reservation); 
    }
 
 
        public static function showReservations() {
          
-       // CUser::isEmployee();
+        CUser::isEmployee();
 
         
         $hasFilter = !empty($_POST);
