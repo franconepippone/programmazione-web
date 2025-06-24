@@ -14,14 +14,14 @@
             {foreach from=$courses item=course}
                 <div class="result-card">
                     <!-- id nascosto -->
-                    <input type="hidden" name="id" value="{$course->getId()}">
+                    <input type="hidden" name="id" value="{$course.id}">
                     <div class="result-info">
-                        <div class="result-title" name="title">{$course->getTitle()|escape}</div>
+                        <div class="result-title" name="title">{$course.title|escape}</div>
                         <div class="result-date" name="startDate">
-                            Inizio: {$course->getStartDate()|date_format:"%d/%m/%Y"}
+                            Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
                         </div>
                     </div>
-                    <a class="details-btn" href="/course/courseDetail/{$course->getId()}">Dettagli</a>
+                    <a class="details-btn" href="/course/courseDetail/{$course.id}">Dettagli</a>
                 </div>
             {/foreach}
         {else}

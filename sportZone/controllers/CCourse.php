@@ -48,29 +48,60 @@ class CCourse {
         //creo corsi fittizi per prova
         */
         $courses = FPersistentManager::getInstance()->retriveCourses();
-        
-        $view->showSearchResults($courses, 'ciao');
+        //per ogni corso estraggo i dati e li metto in un array
+        $coursesData = [];
+        foreach ($courses as $course) {
+            $coursesData []= CCourse::courseToArray($course);
+        }
+        $view->showSearchResults($coursesData, 'ciao');
         
     }
-
+    //********************************************************* */
+    // metodo per visualizzare i dettagli di un corso
     public static function courseDetail($course_id) {
         $course = FPersistentManager::retriveCourseOnId($course_id);
+        
+        $coursesData [] = CCourse::courseToArray($course);
 
         $view = new VCourse();
-        $view->showDetails($course);
+        $view->showDetails( $coursesData);
     }
 
-    public static function enrollForm($course_id) {
+    //********************************************************* */
+    // metodo per visualizzare il form di iscrizione ad un corso
+    public static function enrollmentDetails($course_id) {
         CUser::isLogged();
         //prendo l id dell utente dalla sessione
         $userID = USession::getSessionElement('user');
         $user= FPersistentManager::retriveUserOnId($userID);
         $corso=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
         
+        $userData = CUser::userToArray($user);
+        $courseData = CCourse::courseToArray($corso);
         $view = new VCourse();
-        $view->showEnrollForm($corso,$user);
+        $view->showEnrollmentDetails($courseData,$userData);
     }
 
+    //*********************************************************************************** */
+    
+    public static function enrollForm($course_id) {
+        // Qui puoi aggiungere la logica per gestire l'iscrizione al corso
+        // Ad esempio, recuperare i dati del corso e dell'utente, validare l'iscrizione, ecc.
+        
+        $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
+        //$userID = USession::getSessionElement('user');
+        //$user = FPersistentManager::getInstance()->retriveUserOnId($userID);
+        
+        $courseData = CCourse::courseToArray($course);
+        //$userData = CUser::userToArray($user);
+        
+        $view = new VCourse();
+        $view->showEnrollForm($courseData);
+
+    }
+    
+    
+    
     public static function manageForm($course_id) {
         $view = new VCourse();
         $view->showManageForm($course_id);
@@ -80,10 +111,35 @@ class CCourse {
         $view = new VCourse();
         $view->showCreateForm();
     }
+    public static function daysToString(array $daysOfWeek) {
+        $days = '';
+        foreach ($daysOfWeek as $day) {
+            // Converti l'oggetto DayOfWeek in una stringa
+            $days .= $day . ', ';
+        }
+        return rtrim($days, ', '); // Rimuove l'ultima virgola e spazio
+    }
+    // metodo per serializzare un corso in un array
+    public static function courseToArray(ECourse $course) {
+        
+        return [
+            'id' => $course->getId(),
+            'title' => $course->getTitle(),
+            'description' => $course->getDescription(),
+            'timeSlot' => $course->getTimeSlot(),
+            'daysOfWeek' => CCourse::daysToString($course->getDaysOfWeek()),
+            'startDate' => $course->getStartDate(),
+            'endDate' => $course->getEndDate(),
+            'cost' => $course->getEnrollmentCost(),
+            'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
+            'field' => $course->getField() ? $course->getField()->getName() : null,// Assuming getField() returns an EField object
+            'sport' => $course->getField() ? $course->getField()->getSport() : null, // Assuming getField() returns an EField object
+            'instructor' => $course->getInstructor() ? CUser::userToArray($course->getInstructor()) : null, // Assuming getInstructor() returns an EUser object
+            
 
-
-
-
+        ];
+    }
+    
 
 
 

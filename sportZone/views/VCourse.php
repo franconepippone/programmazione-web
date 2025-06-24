@@ -10,6 +10,7 @@ class VCourse
     {
         $this->smarty = USmarty::getInstance();
     }
+    //******************************************************** */
 
     public function showSearchForm()
     {
@@ -17,13 +18,14 @@ class VCourse
         $this->smarty->display('course/searchForm.tpl');
 
     }
-
-    public function showSearchResults($courses, $messaggio)
+    //********************************************************* */
+    // Metodo per visualizzare i risultati della ricerca dei corsi
+    public function showSearchResults($coursesData, $messaggio)
     {
         //$this->smarty->assign('courses', $courses);     
         //echo 'courses: ' . $courses;
        //echo 'course:' . $courses[0]->getTitle();
-       $this->smarty->assign('courses', $courses);
+       $this->smarty->assign('courses', $coursesData);
         //$this->smarty->assign('messaggio', $messaggio);
         
         // Mostra i risultati della ricerca
@@ -31,17 +33,33 @@ class VCourse
        $this->smarty->display('course/searchResults.tpl');
     }
 
-    public function showDetails($course_id)
+    public function showDetails($courseData)
     {
         // Qui dovresti recuperare i dettagli del corso dal model
-        $this->smarty->assign('course', $course_id);
+        $this->smarty->assign('courses', $courseData);
         $this->smarty->display('course/courseDetails.tpl');
     }
 
-    public function showEnrollForm($course,$user)
+    //********************************************************* */
+    // Metodo per visualizzare il form di iscrizione a un corso
+
+
+
+
+
+    public function showEnrollmentDetails($courseData, $userData)
     {
-        $this->smarty->assign('id', $course_id);
-       
+        // Assegna i dati del corso e dell'utente alla vista
+        $this->smarty->assign('course', $courseData);
+        $this->smarty->assign('user', $userData);
+        
+        // Mostra il template per il form di iscrizione
+        $this->smarty->display('course/enrollmentDetails.tpl');
+    }
+
+    public function showEnrollForm($courseData)
+    {
+        $this->smarty->assign('course', $courseData);
         $this->smarty->display('course/enrollForm.tpl');
     }
 
