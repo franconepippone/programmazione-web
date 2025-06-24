@@ -134,10 +134,7 @@ class CEmployee{
  }
 **/
  public static function createCourseForm() {
-    if (!CUser::isLogged()) {
-        header("Location: /login");
-        exit;
-    }
+    CUser::isLogged();
 
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
@@ -145,8 +142,18 @@ class CEmployee{
     $instructors = $pm->retriveAllInstructors();
     $fields = $pm->retriveAllFields();
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = $_POST;
+    
+
+    $view->showCreateCourseForm( $instructors, $fields);
+ }
+
+public static function finalizeCreateCourse() {
+    if (!CUser::isLogged()) {
+        header("Location: /login");
+        exit;
+    }
+
+    $data = $_POST;
 
         $name = trim($data['name'] ?? '');
         if (empty($name)) {
@@ -220,21 +227,11 @@ class CEmployee{
             'field' => $fieldId
         ];
 
-    }
-
-    $view->showCreateCourseForm( $instructors, $fields);
- }
-
-public static function finalizeCreateCourse() {
-    if (!CUser::isLogged()) {
-        header("Location: /login");
-        exit;
-    }
-
+    
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-    $data = $POST;
+ 
 
         if (!$data) {
             (new VError())->show("Dati del corso mancanti. Ricomincia la procedura.");
