@@ -213,13 +213,14 @@ public static function finalizeCreateCourse() {
 
         // Mostra riepilogo
     $view->showFinalizeCreateCourse($data, $instructor, $field);
-
+    return
   }
 
+  $data = $_POST;
   else {
     // Se confermato: salva nel DB
 
-    $data = $_POST;
+   
     $view = new VEmployee(); 
     $pm = FPersistentManager::getInstance();
 
