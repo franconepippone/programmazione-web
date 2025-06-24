@@ -201,6 +201,21 @@ class EField
     {
         return $this->description;
     }
+
+    public static function FieldToArray(EField $field) {
+        
+        return [
+            'name' => $field ->getName();
+            'id' => $field->getId(),
+            'description' => $field->getDescription(),
+            'hourlyCost' => $filed->getCost(),
+            'sport' => $field->getSport(),
+            'latitude' => $field->getLatitude(),
+            'longitude' => $field->getLongitude(),
+            'terrainType' => $filed ->getTerrainType();  
+            'isIndoor' => $field ->getIsIndoor(),
+        ];
+    }
 }
 
 
