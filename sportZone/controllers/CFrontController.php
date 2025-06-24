@@ -23,7 +23,7 @@ Login usecase example:
     3) host/user/home => routes the user to the homepage
 */
 class CFrontController{
-    
+    /**
     public function run($requestUri){
         // Parse the request URI
         
