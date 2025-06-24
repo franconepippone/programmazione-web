@@ -21,9 +21,9 @@ Login usecase example:
     1) host/user/login => shows login form. When sumbit is clicked, post form data to 2)
     2) host/user/checkLogin => receives login data from the form and decides if the user login was succesfull. In which case, 3)
     3) host/user/home => routes the user to the homepage
-
-class CFrontController{
 */
+class CFrontController{
+
     public function run($requestUri){
         // Parse the request URI
         
@@ -175,6 +175,4 @@ class CFrontController{
         }
     }
 **/
-    
-}
 }
