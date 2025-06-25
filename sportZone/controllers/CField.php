@@ -1,10 +1,13 @@
 <?php
 
-use App\Enum\UserSex;
-
 require_once __DIR__ . "/../../vendor/autoload.php";
 
-class CField{
+class CField {
+
+    private static $rulesSearch = [
+        "sport" => 'validateSport',
+        "date" => 'validateDate'
+    ];
 
     public static function searchForm() {
         CUser::isLogged();
@@ -16,14 +19,25 @@ class CField{
     public static function showResults() {
         CUser::isLogged();
 
+        try {
+            $getInputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
+        } catch (ValidationException $e) {
+            echo "INPUT VALIDATION FAILED: " . $e->getMessage();
+            exit;
+        }
+
+        $searchParams = ['date' => '', 'sport' => ''];
+        if (isset($getInputs['date'])) {
+            $dataText = $getInputs['date']->format('Y-m-d');
+            $searchParams['date'] = $dataText; // Convert DateTime to string in 'Y-m-d' format
+        }
+
+        if (isset($getInputs['sport'])) {
+            $searchParams['sport'] = $getInputs['sport'];
+        }
+        
         $pm = FPersistentManager::getInstance();
         $fields = $pm->retrieveAllMatchingFields();
-        
-        
-        $searchParams = ['date' => '', 'sport' => ''];
-        if (UHTTPMethods::getIsSet('date')) $searchParams['date'] = UHTTPMethods::get('date');
-        if (UHTTPMethods::getIsSet('sport')) $searchParams['sport'] = UHTTPMethods::get('sport');
-
         // TODO filtraggio dei campi (usa metodo di alice) 
 
         $view = new VField();
@@ -41,7 +55,13 @@ class CField{
             exit;
         }
 
-        var_dump($_GET);
+        try {
+            $inputs = UValidate::validateInputArray($_GET, ["date"], false);
+        } catch (ValidationException $e) {
+            echo $e->getMessage();
+            exit;
+        }
+
 
         $view = new VField();
         $view->showDetailsPage($fld);
