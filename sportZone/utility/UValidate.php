@@ -207,6 +207,7 @@ class UValidate {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     public static function validateReservationData(string $data): \DateTimeInterface {
         return new \DateTimeImmutable($data);
@@ -321,6 +322,80 @@ class UValidate {
             }
         }
 
+=======
+    /**
+     * Validates a generic string with customizable length and pattern constraints.
+     *
+     * This method checks that the input string meets the specified minimum and maximum length,
+     * and optionally matches a given regular expression pattern.
+     *
+     * Note: This function is not intended to be called directly from input handling code (e.g., validateInputArray).
+     * It is designed to be used inside more specific validation methods (such as validateTitle, validateUsername, etc.)
+     * to enforce common string validation logic.
+     *
+     * @param string $input      The input string to validate.
+     * @param int $minLength     Minimum allowed length (default: 1).
+     * @param int $maxLength     Maximum allowed length (default: 255).
+     * @param string|null $pattern Optional regex pattern the string must match (default: alphanumeric and basic punctuation).
+     * @return string            The validated string.
+     * @throws ValidationException If the string does not meet the requirements.
+     */
+    public static function validateString(
+        string $input,
+        int $minLength = 1,
+        int $maxLength = 255,
+        ?string $pattern = '/^[a-zA-Z0-9\s\-\_\.]+$/'
+    ): string {
+        // controls if the input is empty
+        $length = strlen($input);
+        if ($length < $minLength) {
+            throw new ValidationException("length be at least $minLength characters.", code: -1);
+        }
+        if ($length > $maxLength) {
+            throw new ValidationException("length must not exceed $maxLength characters.", code: -2);
+        }
+
+        // Controlla pattern, se specificato
+        if ($pattern && !preg_match($pattern, $input)) {
+            throw new ValidationException("Input string does not match required criteria: " . $input, code: -3);
+        }
+
+        return $input;
+    }
+        
+    /**
+     * Validates and filters an input array based on allowed attributes and custom validation methods.
+     *
+     * @param array $input            The input array to be validated (e.g. $_GET, $_POST).
+     * @param array $validationRules  Associative array where keys are accepted attribute names and values are the corresponding validation method names.
+     * @param bool  $require          Whether all listed attributes are required (default: false).
+     *
+     * @return array                  The sanitized and validated array containing only allowed and validated parameters.
+     *
+     * @throws ValidationException    If required attributes are missing and $require is true, or if validation fails.
+     *
+     * This function:
+     * - Removes keys that are not in $validationRules or have empty values.
+     * - Trims and escapes each valid input.
+     * - Throws an exception if required attributes are missing.
+     * - Calls the corresponding static validation method (e.g., validateTitle for 'title') for each parameter.
+     */
+    public static function validateInputArray(array $input, array $validationRules, bool $require = false): array {
+        $filteredParams = $input;
+        $fieldNames = array_keys($validationRules);
+
+        foreach (array_keys($filteredParams) as $key) {
+            // Rimuovo i parametri che non sono tra quelli definiti
+            if (!in_array($key, $fieldNames) || empty($filteredParams[$key]) ) {
+                unset($filteredParams[$key]);
+            } else {
+                $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
+                $fieldNames = array_filter($fieldNames, fn($value) => $value !== $key);
+                //unset($fieldNames[$key]); // attribute found, we dont need it in the attributes array anymore*
+            }
+        }
+
+>>>>>>> Stashed changes
         // throws exceptions if some attributes are still missing and the $require flag is true
         if ($require && !empty($fieldNames)) {
             throw new ValidationException(
@@ -336,6 +411,10 @@ class UValidate {
         return $filteredParams;
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -350,7 +429,10 @@ class UValidate {
      * - Max participants: must be an integer between 1 and 1000.
      * - Price: must be a non-negative number with up to two decimal places.
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
      * - Days of the week: must be valid weekday names.
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
      * - Start date: must be a valid date at least 7 days from today.
@@ -398,6 +480,7 @@ class UValidate {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     /**
      * Validates the selected days of the week.
      *
@@ -414,6 +497,9 @@ class UValidate {
     }
 
     /**
+=======
+        /**
+>>>>>>> Stashed changes
 =======
         /**
 >>>>>>> Stashed changes
@@ -469,6 +555,7 @@ class UValidate {
         return $id;
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     public static function validateTime(string $time): string {
         if (!preg_match('/^\d{2}:\d{2}$/', $time)) {
@@ -506,6 +593,9 @@ class UValidate {
         return $value;
     }
 }
+=======
+}
+>>>>>>> Stashed changes
 =======
 }
 >>>>>>> Stashed changes

@@ -48,6 +48,7 @@ class EInstructor extends EUser
         return $this;
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     public static function instructorToArray(EInstructor $inst) {
         return [
@@ -57,6 +58,8 @@ class EInstructor extends EUser
         ];
     }
 =======
+=======
+>>>>>>> Stashed changes
     public static function instructorToArray(EInstructor $instructor): array {
     // Ottieni i nomi dei corsi
     $courses = [];
@@ -76,5 +79,8 @@ class EInstructor extends EUser
         // aggiungi altri dati se necessario
     ];
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

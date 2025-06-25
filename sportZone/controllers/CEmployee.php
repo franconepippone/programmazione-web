@@ -134,6 +134,10 @@ class CEmployee{
  }
 **/
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -152,7 +156,11 @@ public static function createCourseForm($data = []) {
 
 public static function courseSummary() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
    // CUser::isEmployee();
+=======
+    //CUser::isEmployee();
+>>>>>>> Stashed changes
 =======
     //CUser::isEmployee();
 >>>>>>> Stashed changes
@@ -160,6 +168,7 @@ public static function courseSummary() {
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     try {
         $validated = UValidate::validateInputArray($_POST, array_keys(self::$rulesCourse), true);
@@ -186,6 +195,8 @@ public static function courseSummary() {
         $view->showCourseSummary($validated);
 
 =======
+=======
+>>>>>>> Stashed changes
     $rules = [
         'title'            => 'validateTitle',
         'description'      => 'validateDescription',
@@ -228,6 +239,9 @@ public static function courseSummary() {
 
         // Mostra riepilogo
         $view->showCourseSummary($validated);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     } catch (ValidationException $e) {
         (new VError())->show($e->getMessage());
@@ -240,6 +254,7 @@ public static function finalizeCourse() {
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     $data = $_POST;
 
@@ -305,5 +320,36 @@ private static $rulesCourse = [
  }
 >>>>>>> Stashed changes
 }
+=======
+    try {
+        // Ricostruisci oggetti da POST
+        $instructor = $pm->retriveInstructorById($_POST['instructor']);
+        $field = $pm->retriveFieldById($_POST['field']);
+
+        if (!$instructor || !$field) {
+            throw new Exception("Istruttore o campo non valido.");
+        }
+
+        $course = new ECourse();
+        $course->setTitle($_POST['title']);
+        $course->setDescription($_POST['description']);
+        $course->setStartDate(new DateTime($_POST['start_date']));
+        $course->setEndDate((new DateTime($_POST['start_date']))->modify('+2 months'));
+        $course->setTimeSlot($_POST['start_time'] . '-' . $_POST['end_time']);
+        $course->setDaysOfWeek($_POST['days']);
+        $course->setEnrollmentCost(floatval($_POST['cost']));
+        $course->setMaxParticipantsCount(intval($_POST['max_participants']));
+        $course->setInstructor($instructor);
+        $course->setField($field);
+
+        $pm->saveCourse($course);
+
+        $view->confirmReservation($course);
+    } catch (Exception $e) {
+        (new VError())->show("Errore nella creazione del corso: " . $e->getMessage());
+    }
+ }
+}
+>>>>>>> Stashed changes
 
 
