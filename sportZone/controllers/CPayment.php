@@ -88,6 +88,7 @@ class CPayment {
 
 
     // TODO Vulnerability: this method can be called from any browser
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function startPayment(string $amount, string $redirectUrl, string $paymentSecret) {
         CUser::isLogged();
         if (!CUser::isClient()) {
@@ -118,6 +119,7 @@ class CPayment {
         exit;
     }
     
+    #[PathUrl(name: "diocane")]
     public static function selectMethod() {
         $ongoingPaymentData = self::getOngoingPayment();
 
@@ -202,7 +204,7 @@ class CPayment {
     {
         $ongoingPaymentData = self::getOngoingPayment();
         print_r($ongoingPaymentData);
-        
+
         // verify the payment secret
         if (!password_verify($paymentSecret, $ongoingPaymentData['paymentSecretHash'])) {
             echo "Payment secret does not match.";
