@@ -29,12 +29,9 @@ class CReservation{
         VError::show("Campo non trovato.");
         return;
     }
-    $fieldData [] = EField::fieldToArray($field);
-      
+     
    
-   
-   
-    $view->showReservationForm($fieldData,$date,$avaiableHours); //da passare field, date e avaiablehours
+    $view->showReservationForm($field,$date,$avaiableHours); //da passare field, date e avaiablehours
   
     
  }
