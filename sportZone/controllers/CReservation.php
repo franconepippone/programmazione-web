@@ -17,7 +17,7 @@ class CReservation{
         return;
     }
 
-     $date = $GET['date'] ?? null;
+     $date = $_GET['data'] ?? null;
     if (!$date) {
         $error = new VError();
         $error->show("Data non specificata.");
