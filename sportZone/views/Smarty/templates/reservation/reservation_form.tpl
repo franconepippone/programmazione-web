@@ -66,7 +66,7 @@
   <select name="time" id="time" required>
     {if isset($avaiableHours)}
       {foreach $avaiableHours as $hour}
-        <option value="{$hour|escape}">{$hour}:00</option>
+        <option value="{$hour}:00">{$hour}:00</option>
       {/foreach}
     {else}
       <option disabled selected>
