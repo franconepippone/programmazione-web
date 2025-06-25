@@ -12,7 +12,8 @@ class CReservation{
     
     $fieldId = $_POST['fieldId'] ?? null;
     if (!$fieldId){ 
-        VError::show("ID del campo non specificato.");
+        $error = new VError();
+        $error->show("ID non specificato.");
         return;
     }
      // Get available hours for this field and date through FReservation
@@ -20,13 +21,15 @@ class CReservation{
 
     $date = $POST['date'] ?? null;
     if (!$date) {
-        VError::show("data non specificata.");
+        $error = new VError();
+        $error->show("Data non specificata.");
         return;
     }
     
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
-        VError::show("Campo non trovato.");
+ $error = new VError();
+        $error->show("Campo non trovato.");
         return;
     }
      
