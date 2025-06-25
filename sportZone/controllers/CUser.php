@@ -23,6 +23,7 @@ class CUser{
      * 
      * @return bool True if the user is logged in, otherwise redirects to login.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isLogged()
     {
         $logged = false;
@@ -197,6 +198,7 @@ class CUser{
      *
      * @return EUser|null The logged-in user object if available, or null if not logged in.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function getLoggedUser(): ?EUser
     {
         if (self::isLogged()) {
@@ -215,6 +217,7 @@ class CUser{
      *
      * @return string|null The user's role if available, or null if not logged in.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function getUserRole(): ?string
     {
         if (self::isLogged()) {
@@ -228,21 +231,25 @@ class CUser{
         };
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isEmployee()
     {
         return self::getUserRole() === EEmployee::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isInstructor()
     {
         return self::getUserRole() === EInstructor::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isClient()
     {
         return self::getUserRole() === EClient::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function usertoArray($user) {
         return [
             'id' => $user->getId(),

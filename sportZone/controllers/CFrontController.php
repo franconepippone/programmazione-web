@@ -5,7 +5,7 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 #[\Attribute(\Attribute::TARGET_METHOD)]
 class PathUrl {
     public const HIDDEN = '__hidden__';
-    public function __construct(public string $name) {}
+    public function __construct(public string $path) {}
 }
 
 /*
@@ -95,7 +95,12 @@ class CFrontController{
         call_user_func_array([$controllerClass, $methodName], $params);
     }
 
-
+    /**
+     * Generates a map of method names to their URL paths based on the PathUrl attribute.
+     * 
+     * @param string $className The name of the class to inspect.
+     * @return array An associative array mapping URL paths to method names.
+     */
     private function generateMethodsUrlMap(string $className): array {
         $map = [];
         $refClass = new ReflectionClass($className);
@@ -106,7 +111,7 @@ class CFrontController{
             }
             $attrs = $method->getAttributes(PathUrl::class);
             if (!empty($attrs)) {
-                $customName = $attrs[0]->newInstance()->name;
+                $customName = $attrs[0]->newInstance()->path;
                 if ($customName === PathUrl::HIDDEN) {
                     continue; // Skip hidden methods
                 }

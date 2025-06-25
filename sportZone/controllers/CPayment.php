@@ -68,6 +68,7 @@ class CPayment {
         echo "uploaded";
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     private static function getOngoingPayment(): array {
         CUser::isLogged();
         if (!CUser::isClient()) {
@@ -86,8 +87,13 @@ class CPayment {
         return USession::getSessionElement('ongoingPayment');
     }
 
-
-    // TODO Vulnerability: this method can be called from any browser
+    /**
+     * Starts a payment process by storing the payment details in the session.
+     * 
+     * @param string $amount The amount to be paid, in euros.
+     * @param string $redirectUrl The URL to redirect to after the payment is completed.
+     * @param string $paymentSecret A secret key for verifying the payment later.
+     */
     #[PathUrl(PathUrl::HIDDEN)]
     public static function startPayment(string $amount, string $redirectUrl, string $paymentSecret) {
         CUser::isLogged();
@@ -119,7 +125,6 @@ class CPayment {
         exit;
     }
     
-    #[PathUrl(name: "diocane")]
     public static function selectMethod() {
         $ongoingPaymentData = self::getOngoingPayment();
 
