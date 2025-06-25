@@ -44,7 +44,7 @@ class CReservation{
     CUser::isLogged();
       
     // Get user ID from session
-    $userId = $_SESSION['userId'] ?? null;
+    $userId = $_SESSION['user'] ?? null;
 
     // Get POST parameters
     $fieldId = $_POST['field_id'] ?? null;
