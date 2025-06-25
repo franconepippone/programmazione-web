@@ -4,10 +4,64 @@ use App\Enum\EnumSport;
 
 require __DIR__ ."/../../vendor/autoload.php";
 
-
+/**
+ * UValidate
+ *
+ * Utility class providing static methods for validating and sanitizing user input.
+ *
+ * The main entry point for input validation is the static method {@see UValidate::validateInputArray()}.
+ * This method is used throughout the application (see controllers like COnlinePayment and CField)
+ * to validate and sanitize arrays such as $_POST and $_GET, based on a set of rules.
+ *
+ * Usage example:
+ *   $inputs = UValidate::validateInputArray($_POST, [
+ *       "number" => 'validateCreditCardNumber',
+ *       "expirationDate" => 'validateFutureDate',
+ *       "cardNetwork" => 'validateCardNetwork',
+ *       "bank" => 'validateBank',
+ *       "cvv" => 'validateCVV',
+ *       "owner" => 'validateFullName'
+ *   ], true);
+ *
+ * Each rule maps a field name to a static validation method of this class.
+ * The method will:
+ *   - Remove keys not in the rules or with empty values
+ *   - Trim and escape each valid input
+ *   - Throw an exception if required attributes are missing (when $require is true)
+ *   - Call the corresponding static validation method for each parameter
+ *   - Return an array of validated and sanitized values, possibly with type conversion (e.g. DateTime)
+ *
+ * All validation methods throw ValidationException on error.
+ *
+ * @package sportZone\utility
+ */
 class UValidate {
 
     // -------------------------- credit card validation --------------------------
+
+
+    /**
+     * Validates a currency amount string to ensure it is a valid decimal number.
+     *
+     * The amount must:
+     * - Be a valid decimal number (e.g., "10.00", "100.50").
+     * - Not be negative.
+     *
+     * @param string $amount The currency amount to validate.
+     * @return int The validated currency amount in cents.
+     * @throws ValidationException If the amount is invalid or negative.
+     */
+    public static function validateCurrencyAmount(string $amount): int {
+        // Validates a currency amount string
+        $amount = preg_replace('/[^\d.]/', '', $amount); // Remove non-numeric characters except dot
+
+        if (!is_numeric($amount) || $amount < 0) {
+            throw new ValidationException("Invalid currency amount: '$amount'. Must be a positive decimal number.");
+        }
+
+        // Convert to cents (int)
+        return (int) round(((float)$amount) * 100);
+    }
 
     /*     * Validates a credit card number using the Luhn algorithm.
      *
@@ -125,7 +179,6 @@ class UValidate {
 
 
     // -------------------------- other specific validation methods --------------------------
-
 
     /**
      * Validates a future date string to ensure it is in the future.
@@ -406,6 +459,12 @@ class UValidate {
             throw new ValidationException("Input string does not match required criteria: " . $input, code: -3);
         }
 
+        return $input;
+    }
+
+    public static function skipValidation($input) {
+        // This method is used to skip validation for specific parameters
+        // It simply returns the input as is, without any checks
         return $input;
     }
         

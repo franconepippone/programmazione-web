@@ -26,21 +26,21 @@ class EClient extends EUser
         $this->reservations = new ArrayCollection();
     }
 
-        public function getPaymentMethods(): Collection {
+    public function getPaymentMethods(): Collection {
         return $this->paymentMethods;
     }
 
     public function addPaymentMethod(EPaymentMethod $paymentmethod): self {
         if (!$this->paymentMethods->contains($paymentmethod)) {
             $this->paymentMethods[] = $paymentmethod;
-            $paymentmethod->setEmployee($this);
+            $paymentmethod->setClient($this);
         }
         return $this;
     }
 
     public function removePaymentMethod(EPaymentMethod $paymentmethod): self {
         if ($this->paymentMethods->removeElement($paymentmethod)) {
-            $paymentmethod->setEmployee(null);
+            $paymentmethod->setClient(null);
         }
         return $this;
     }

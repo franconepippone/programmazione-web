@@ -154,6 +154,10 @@ class CUser{
         ->setBirthDate(
             new DateTime($formInputs['birthday']->format('Y-m-d'))
         );
+
+        // assigns default payment method
+        $onSitePayment = new EOnSitePayment();
+        $newClient->addPaymentMethod($onSitePayment);
         
         // register was succesfull
         $check = FPersistentManager::getInstance()->uploadObj($newClient);
