@@ -93,7 +93,7 @@ class CReservation{
 
     // Otherwise, show the finalize reservation page with data for user to choose payment method
     $view = new VReservation();
-    $view->showFinalizeReservation( $fullName, $date, $time, 'field' => $field);
+    $view->showFinalizeReservation( $fullName, $date, $time, $field);
  }
 
   
