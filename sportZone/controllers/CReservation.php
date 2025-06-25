@@ -40,18 +40,53 @@ class CReservation{
  }
 
  public static function finalizeReservation() {
-    // Check if user is logged in
     CUser::isLogged();
-      
-    // Get user ID from session
     $userId = $_SESSION['user'] ?? null;
+
+    // 1. Gestione callback da pagamento online
+    if (isset($_GET['payment_status']) && $_GET['payment_status'] === 'success') {
+        if (!isset($_SESSION['pending_reservation'])) {
+            $error = new VError();
+            $error->show("Nessuna prenotazione in sospeso.");
+            return;
+        }
+        $pending = $_SESSION['pending_reservation'];
+
+        $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
+        $client = FPersistentManager::getInstance()->retriveClientById($userId);
+
+        if (!$field || !$client) {
+            $error = new VError();
+            $error->show("Dati prenotazione non validi.");
+            return;
+        }
+
+        $payment = new EOnlinePayment();
+        // se il gateway ti passa un id pagamento, lo puoi settare qui:
+        // $payment->setPaymentGatewayId($_GET['payment_id'] ?? null);
+
+        $dateObj = new DateTime($pending['date']);
+        $timeObj = new DateTime($pending['time']);
+
+        $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
+        FPersistentManager::getInstance()->saveReservation($reservation);
+
+        // Pulisci sessione
+        unset($_SESSION['pending_reservation']);
+
+        $view = new VReservation();
+        $view->showConfirmation($reservation);
+        return;
+    }
+
+    // 2. Gestione normale della funzione (riepilogo e creazione onsite/redirect online)
 
     // Get POST parameters
     $fieldId = $_POST['field_id'] ?? null;
     $date = $_POST['date'] ?? null;
     $time = $_POST['time'] ?? null;
 
-    // Validate parameters individually and show error immediately
+    // Validate parameters
     if (!$fieldId) {
         $error = new VError();
         $error->show("ID non specificato.");
@@ -59,7 +94,7 @@ class CReservation{
     }
     if (!$date) {
         $error = new VError();
-        $error->show("Data non specificato.");
+        $error->show("Data non specificata.");
         return;
     }
     if (!$time) {
@@ -68,7 +103,6 @@ class CReservation{
         return;
     }
 
-    // Retrieve field from database
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
         $error = new VError();
@@ -77,26 +111,39 @@ class CReservation{
     }
 
     $client = FPersistentManager::getInstance()->retriveClientById($userId);
-      //  Get full name from client (EClient extends EUser)
     $fullName = $client->getName() . ' ' . $client->getSurname();
-     
-    // Process reservation if form confirmed with onsite payment
-    if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
-        $dateObj = new DateTime($date);
-        $timeObj = new DateTime($time);
-        $payment = new EOnSitePayment();
-        $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
-        FPersistentManager::getInstance()->saveReservation($reservation);
 
-        $view = new VReservation();
-        $view->showConfirmation();
-        return;
+    // Se pagamento onsite: crea e salva subito
+    if (isset($_POST['confirm']) && isset($_POST['paymentMethod'])) {
+        if ($_POST['paymentMethod'] === 'onsite') {
+            $dateObj = new DateTime($date);
+            $timeObj = new DateTime($time);
+            $payment = new EOnSitePayment();
+            $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
+            FPersistentManager::getInstance()->saveReservation($reservation);
+
+            $view = new VReservation();
+            $view->showConfirmation($reservation);
+            return;
+        } elseif ($_POST['paymentMethod'] === 'online') {
+            // Salva dati in sessione e fai redirect a pagina pagamento online
+            $_SESSION['pending_reservation'] = [
+                'field_id' => $fieldId,
+                'date' => $date,
+                'time' => $time,
+                'user_id' => $userId
+            ];
+
+            header("Location: /onlinepayment/payForm");
+            exit;
+        }
     }
 
-    // Otherwise, show the finalize reservation page with data for user to choose payment method
+    // Mostra pagina di riepilogo con scelta pagamento
     $view = new VReservation();
-    $view->showFinalizeReservation( $fullName, $date, $time, $field);
- }
+    $view->showFinalizeReservation($fullName, $date, $time, $field);
+}
+
 
   
   public static function cancelReservation() {
