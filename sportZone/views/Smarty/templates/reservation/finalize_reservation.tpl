@@ -48,8 +48,8 @@
     </ul>
 
     <form id="reservationForm" method="post" action="/reservation/finalizeReservation">
-      <input type="hidden" name="date" value="{$data|default:''}">
-      <input type="hidden" name="time" value="{$orario|default:''}">
+      <input type="hidden" name="date" value="{$date|default:''}">
+      <input type="hidden" name="time" value="{$time|default:''}">
       <input type="hidden" name="field_id" value="{if isset($fieldData)}{$fieldData.id}{else}0{/if}">
 
       <label for="paymentMethod"><strong>Metodo di pagamento:</strong></label>
