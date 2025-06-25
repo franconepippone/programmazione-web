@@ -179,4 +179,21 @@ class ECourse
         }
         return $this;
     }
+
+    public static function courseToArray(ECourse $course) {
+        return [
+            'id' => $course->getId(),
+            'title' => $course->getTitle(),
+            'description' => $course->getDescription(),
+            'timeSlot' => $course->getTimeSlot(),
+            'daysOfWeek' => is_array($course->getDaysOfWeek()) ? implode(', ', $course->getDaysOfWeek()) : (string)$course->getDaysOfWeek(),
+            'startDate' => $course->getStartDate() instanceof \DateTime ? $course->getStartDate()->format('Y-m-d') : $course->getStartDate(),
+            'endDate' => $course->getEndDate() instanceof \DateTime ? $course->getEndDate()->format('Y-m-d') : $course->getEndDate(),
+            'cost' => $course->getEnrollmentCost(),
+            'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
+            'field' => $course->getField() ? $course->getField()->getName() : null,
+            'sport' => $course->getField() ? $course->getField()->getSport() : null,
+            'instructor' => $course->getInstructor() ? EInstructor::instructorToArray($course->getInstructor()) : null,
+        ];
+    }
 }

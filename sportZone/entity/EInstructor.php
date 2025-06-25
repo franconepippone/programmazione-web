@@ -47,4 +47,12 @@ class EInstructor extends EUser
         }
         return $this;
     }
+
+    public static function instructorToArray(EInstructor $inst) {
+        return [
+            'id' => $inst->getId(),
+            'name' => $inst->getName(),
+            'surname' => $inst->getSurname()
+        ];
+    }
 }

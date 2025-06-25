@@ -27,29 +27,32 @@ class VEmployee{
         $this->smarty->display("employee/view_reservation.tpl");
     }
 
-    public function showCreateCourseForm($instructors, $fields) {
-        $this->smarty->assign('instructors', $instructors);
-        $this->smarty->assign('fields', $fields);
-
+    public function showCreateCourseForm($instructors, $fields, $data = []) {
+        $this->smarty->assign('instructors', array_map(fn($i) => EInstructor::instructorToArray($i), $instructors));
+        $this->smarty->assign('fields', array_map(fn($f) => EField::fieldToArray($f), $fields));
+        foreach (['title','description','start_date','start_time','end_time','cost','max_participants','days','instructor','field'] as $k) {
+            $this->smarty->assign($k, $data[$k] ?? '');
+        }
         $this->smarty->display('employee/create_course_form.tpl');
-   }
+    }
 
-   public function showFinalizeCreateCourse(array $data, EInstructor $instructor, EField $field) {
-  
-        $this->smarty->assign('title', $data['title']);  
+    public function showCourseSummary($data) {
+        $this->smarty->assign('title', $data['title']);
         $this->smarty->assign('description', $data['description']);
         $this->smarty->assign('start_date', $data['start_date']);
         $this->smarty->assign('start_time', $data['start_time']);
         $this->smarty->assign('end_time', $data['end_time']);
-        $this->smarty->assign('days', $data['days']);  
+        $this->smarty->assign('days', $data['days']);
         $this->smarty->assign('days_string', implode(', ', $data['days']));
         $this->smarty->assign('cost', $data['cost']);
-        $this->smarty->assign('max_participants', $data['max_participants']); 
-        $this->smarty->assign('instructor', $instructor);
-        $this->smarty->assign('field', $field);
-        $this->smarty->display('employee/finalize_create_course.tpl');
-}
-    public function showCourseConfirmation(){
-        $this->smarty->display("employee/course_confirmation.tpl");
+        $this->smarty->assign('max_participants', $data['max_participants']);
+        $this->smarty->assign('instructor', EInstructor::instructorToArray($data['instructor']));
+        $this->smarty->assign('field', EField::fieldToArray($data['field']));
+        $this->smarty->display('employee/course_summary.tpl');
+    }
+
+    public function confirmReservation(ECourse $course) {
+        $this->smarty->assign('data', ECourse::courseToArray($course));
+        $this->smarty->display('employee/confirm_reservation.tpl');
     }
 }

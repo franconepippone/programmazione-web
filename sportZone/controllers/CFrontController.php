@@ -75,7 +75,7 @@ class CFrontController{
         }
 
         $params = array_slice($uriParts, 2); // Get optional parameters
-        echo "Calling " . "$controllerClass" . "." . "$methodName" . " with parameters: " . print_r($params, true) . "<br>";
+        //echo "Calling " . "$controllerClass" . "." . "$methodName" . " with parameters: " . print_r($params, true) . "<br>";
         
         
         
