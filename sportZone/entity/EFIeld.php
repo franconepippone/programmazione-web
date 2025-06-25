@@ -205,7 +205,7 @@ class EField
     public static function fieldToArray(EField $field) {
         
         return [
-            'name' => $field ->getName();
+            'name' => $field ->getName(),
             'id' => $field->getId(),
             'description' => $field->getDescription(),
             'hourlyCost' => $filed->getCost(),
