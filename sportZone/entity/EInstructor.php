@@ -47,4 +47,28 @@ class EInstructor extends EUser
         }
         return $this;
     }
+    //********************************************************** */
+    public static function instructorToArray(EInstructor $instructor): array {
+        return [
+            'id' => $instructor->getId(),
+            'name' => $instructor->getName(),
+            'surname' => $instructor->getSurname(),
+            'sex' => $instructor->getSex(),
+            'birth_date' => $instructor->getBirthDate()->format('Y-m-d'),
+            'username' => $instructor->getUsername(),
+            'email' => $instructor->getEmail(),
+            'cv' => $instructor->getCv(),
+            'courses' =>self::coursesToArray($instructor->getCourses())
+        ];
+    }
+    public static function coursesToArray(Collection $courses): array {
+        $coursesArray = [];
+        foreach ($courses as $course) {
+            $coursesArray[] = [
+                'id' => $course->getId(),
+                'title' => $course->getTitle(),
+            ];
+        }
+        return $coursesArray;
+    }
 }

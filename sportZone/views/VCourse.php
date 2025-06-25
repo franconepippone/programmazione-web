@@ -10,6 +10,29 @@ class VCourse
     {
         $this->smarty = USmarty::getInstance();
     }
+    //********************************************************* */
+    // Metodo per visualizzare il form di ricerca dei corsi
+    public function showCreateCourseForm($instructors, $fields) {
+        $instructorsData = [];
+        $fieldsData = [];
+
+        foreach ($fields as $field) {
+            $fieldsData[] = EField::fieldToArray($field);
+        }
+       
+        foreach ($instructors as $instructor) {
+            $instructorsData[] = EInstructor::instructorToArray($instructor);
+        }
+
+        
+        $this->smarty->assign('instructors', $instructors);
+        $this->smarty->assign('fields', $fields);
+
+        $this->smarty->display('course/create_course_form.tpl');
+    }
+
+
+
     //******************************************************** */
 
     public function showSearchForm()

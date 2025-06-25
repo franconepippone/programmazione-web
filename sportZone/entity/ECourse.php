@@ -179,4 +179,25 @@ class ECourse
         }
         return $this;
     }
+
+    //********************************************************************* */
+    public static function courseToArray(ECourse $course) {
+        
+        return [
+            'id' => $course->getId(),
+            'title' => $course->getTitle(),
+            'description' => $course->getDescription(),
+            'timeSlot' => $course->getTimeSlot(),
+            'daysOfWeek' => CCourse::daysToString($course->getDaysOfWeek()),
+            'startDate' => $course->getStartDate(),
+            'endDate' => $course->getEndDate(),
+            'cost' => $course->getEnrollmentCost(),
+            'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
+            'field' => $course->getField() ? $course->getField()->getName() : null,// Assuming getField() returns an EField object
+            'sport' => $course->getField() ? $course->getField()->getSport() : null, // Assuming getField() returns an EField object
+            'instructor' => $course->getInstructor() ? CUser::userToArray($course->getInstructor()) : null, // Assuming getInstructor() returns an EUser object
+            
+
+        ];
+    }
 }
