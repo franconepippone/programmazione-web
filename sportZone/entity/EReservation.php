@@ -98,8 +98,7 @@ class EReservation
             'time' => $reservation->getTime(),
             'field' => $reservation->getField() ? $reservation->getField()->getName() : null,
             'sport' => $reservation->getField() ? $reservation->getField()->getSport() : null,
-            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->get
-            
+            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getType() : null   
             
         ];
     }
