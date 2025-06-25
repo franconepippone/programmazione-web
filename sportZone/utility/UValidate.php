@@ -10,15 +10,83 @@ class UValidate {
     // -------------------------- specific validation methods --------------------------
 
     /**
-     * Validates a username string.
-     * 
-     * @param string $username The username to validate.
-     * @return string The validated username.
-     * @throws ValidationException If the username does not meet the requirements.
+     * Validates a birth date string to ensure the user is at least MINIMUM_AGE years old.
+     *
+     * @param string $dateString The birth date string in 'Y-m-d' format.
+     * @return DateTime The validated birth date as a DateTime object.
+     * @throws ValidationException If the date is invalid or the user is underage.
+     */
+    public static function validateBirthDate(string $dateString): DateTime {
+        // Validates a birth date string
+        $date = self::validateDate($dateString);
+        $today = new DateTime();
+        $age = $today->diff($date)->y;
+
+        if ($age < MINIMUM_AGE) {
+            throw new ValidationException("You must be at least " . MINIMUM_AGE . " years old.");
+        }
+
+        return $date;
+    }
+
+    /**
+     * Validates a name or surname string.
+     *
+     * The name must:
+     * - Be at least 1 character and at most MAX_USERNAME_LENGTH characters long.
+     * - Contain only uppercase and lowercase letters (a-z, A-Z).
+     * - Not contain spaces, numbers, or special characters.
+     *
+     * @param string $name The name to validate.
+     * @return string The validated name.
+     * @throws ValidationException If the name does not meet the requirements.
      */
     public static function validateName(string $name): string {
         // Validates a name string (e.g., first name, last name)
-        return self::validateString($name, 1, MAX_USERNAME_LENGTH, '/^[a-zA-Z\s\-]+$/');
+        try {
+            return self::validateString($name, 1, MAX_USERNAME_LENGTH, '/^[a-zA-Z]+$/');
+        } catch (ValidationException $e) {
+            // simply rethrow the exception with a more specific message
+            $errcode = $e->getCode();
+            switch ($errcode) {
+                case -1:
+                    throw new ValidationException("Name must be at least 1 character long.", code: $errcode);
+                case -2:
+                    throw new ValidationException("Name must not exceed " . MAX_USERNAME_LENGTH . " characters.", code: $errcode);
+                default:
+                    throw new ValidationException("Name can only contain letters (a-z, A-Z).", code: $errcode);
+            }
+        }
+    }
+
+    /**
+     * Validates a username string to ensure it meets minimum security requirements.
+     *
+     * The username must:
+     * - Be at least 3 characters and at most 20 characters long.
+     * - Contain only letters, digits, underscores, and hyphens.
+     * - Start with a letter.
+     * 
+     * @param string $username The username string to validate.
+     * @return string The validated username.
+     * @throws ValidationException If the username does not meet the requirements.
+     */
+    public static function validateUsername(string $username): string {
+        // Validates a username string
+        try {
+            return self::validateString($username, 3, MAX_USERNAME_LENGTH, '/^[a-zA-Z][a-zA-Z0-9\-_]{2,19}$/');
+        } catch (ValidationException $e) {
+            // simply rethrow the exception with a more specific message
+            $errcode = $e->getCode();
+            switch ($errcode) {
+                case -1:
+                    throw new ValidationException("Username must be at least 3 characters long.", code: $errcode);
+                case -2:
+                    throw new ValidationException("Username must not exceed " . MAX_USERNAME_LENGTH . " characters.", code: $errcode);
+                default:
+                    throw new ValidationException("Username must start with a letter and can only contain letters, digits, underscores, and hyphens.", code: $errcode);
+            }
+        }
     }
 
     /**
@@ -38,13 +106,33 @@ class UValidate {
      */
     public static function validatePassword(string $password): string {
         // Validates a password string
-        return self::validateString($password, 8, 255, '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/');
+        try {
+            return self::validateString($password, 8, 255, '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/');
+        } catch (ValidationException $e) {
+            // simply rethrow the exception with a more specific message
+            $errcode = $e->getCode();
+            switch ($errcode) {
+                case -1:
+                    throw new ValidationException("Password must be at least 8 characters long.", code: $errcode);
+                case -2:
+                    throw new ValidationException("Password must not exceed 255 characters.", code: $errcode);
+                default:
+                    throw new ValidationException("Password must contain at least one uppercase letter, one lowercase letter, and one digit.", code: $errcode);
+            }
+        }
     }
 
     public static function validateSport($string): string {
-        return self::validateEnum($string, EnumSport::class);
+        try {
+            return self::validateEnum($string, EnumSport::class);
+        } catch (ValidationException $e) {
+            // Rethrow with a more specific message
+            throw new ValidationException("Invalid sport: '$string'. " . $e->getMessage(), code: $e->getCode());
+        }
     }
 
+
+    
     // -------------------------- general purpose validation methods --------------------------
 
     /**
@@ -144,15 +232,15 @@ class UValidate {
         // controls if the input is empty
         $length = strlen($input);
         if ($length < $minLength) {
-            throw new ValidationException("length be at least $minLength characters.");
+            throw new ValidationException("length be at least $minLength characters.", code: -1);
         }
         if ($length > $maxLength) {
-            throw new ValidationException("length must not exceed $maxLength characters.");
+            throw new ValidationException("length must not exceed $maxLength characters.", code: -2);
         }
 
         // Controlla pattern, se specificato
         if ($pattern && !preg_match($pattern, $input)) {
-            throw new ValidationException("Input string does not match required criteria.");
+            throw new ValidationException("Input string does not match required criteria: " . $input, code: -3);
         }
 
         return $input;

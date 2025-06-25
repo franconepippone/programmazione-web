@@ -12,7 +12,7 @@ class CUser{
         "email" => 'validateEmail',
         "username" => 'validateUsername',
         "password" => 'validatePassword',
-        "birthday" => 'validateDate'
+        "birthday" => 'validateBirthDate'
     ];
 
     /**
@@ -120,6 +120,7 @@ class CUser{
     {
         $verr = new VError();
 
+        // validates form inputs
         try {
             $formInputs = UValidate::validateInputArray($_POST, self::$rulesRegister, true);
         } catch (ValidationException $e) {
@@ -136,8 +137,8 @@ class CUser{
             exit;
         }
         
-        // validate the form inputs
-        $new_user = (new EClient())
+        // creates new client
+        $newClient = (new EClient())
         ->setName($formInputs['name'])
         ->setSurname($formInputs['surname'])
         ->setSex(UserSex::MALE)
@@ -149,7 +150,7 @@ class CUser{
         );
         
         // register was succesfull
-        $check = FPersistentManager::getInstance()->uploadObj($new_user);
+        $check = FPersistentManager::getInstance()->uploadObj($newClient);
         if($check){
             echo "Registration successfull, redirecting to /user/login... (if you see this something went wrong)";
             header("Location: /user/login");
