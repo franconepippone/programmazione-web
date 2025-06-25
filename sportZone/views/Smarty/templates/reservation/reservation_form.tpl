@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Prenotazione Campo (Test)</title>
-  <link rel="stylesheet" href="/htdocs/programmazione-web/sportZone/views/Smarty/css/styleform.css" />
+  <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/styleform.css" />
 </head>
 <body>
 
