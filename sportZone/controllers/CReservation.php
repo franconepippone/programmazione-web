@@ -86,7 +86,7 @@ class CReservation{
         $timeObj = new DateTime($time);
         $payment = new EOnSitePayment();
         $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
-        FPersistentManager::getInstance()->storeReservation($reservation);
+        FPersistentManager::getInstance()->saveReservation($reservation);
 
         $view = new VReservation();
         $view->showConfirmation();
