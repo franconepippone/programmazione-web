@@ -18,7 +18,7 @@ class VReservation{
     }
 
     public function showFinalizeReservation($fullName,$date,$time,$field){ 
-        $fieldData [] = EField::fieldToArray($field);
+        $fieldData = EField::fieldToArray($field);
         $this->smarty->assign("fullName", $fullName);
         $this->smarty->assign("fieldData", $fieldData);
         $this->smarty->assign("date", $date);
