@@ -105,9 +105,9 @@ class UValidate {
      * @throws ValidationException If the password does not meet the requirements.
      */
     public static function validatePassword(string $password): string {
-        // Validates a password string
         try {
-            return self::validateString($password, 8, 255, '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/');
+            return self::validateString($password, 8, 255, 
+            '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_\-+=]{8,}$/');
         } catch (ValidationException $e) {
             // simply rethrow the exception with a more specific message
             $errcode = $e->getCode();
@@ -132,7 +132,7 @@ class UValidate {
     }
 
 
-    
+
     // -------------------------- general purpose validation methods --------------------------
 
     /**
