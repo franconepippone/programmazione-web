@@ -30,7 +30,8 @@ class VReservation{
         $this->smarty->display("reservation/confirmation.tpl");
     }
 
-    public function showCancelReservation() {
+    public function showCancelReservation($reservation) {
+        $reservationData = EReservation::reservationToArray($reservation);
         $this->smarty->display("reservation/cancel_reservation.tpl");
     }
 
