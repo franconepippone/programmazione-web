@@ -3,6 +3,23 @@ require __DIR__ ."/../../vendor/autoload.php";
 
 class UValidate {
 
+
+    public static function validateSport($string) {
+        return $string . " chamato";
+    }
+
+    public static function validateDate($date) {
+        return $date ." piergiorgio";
+    }
+
+    public static function validateString($string, $a, $b, $c) {
+        return $string;
+    }
+
+
+    // metodo per scrivere ciao
+
+
     /**
      * Validate if a string is a valid email address
      * @param string $email
@@ -46,38 +63,35 @@ class UValidate {
      * - Trims and escapes each valid input.
      * - Invokes corresponding static validation methods (e.g., validateTitle for 'title') if they exist.
      */
-    public static function validateInputArray(array $array, array $attributes, bool $require = false): array {
-        $filteredParams = $array;
+    public static function validateInputArray(array $input, array $validationRules, bool $require = false): array {
+        $filteredParams = $input;
+        $fieldNames = array_keys($validationRules);
 
-        $paramskeys = array_keys($filteredParams);
-        foreach ($paramskeys as $key) {
+        foreach (array_keys($filteredParams) as $key) {
             // Rimuovo i parametri che non sono tra quelli definiti
-            if (!in_array($key, $attributes) || empty($filteredParams[$key]) ) {
+            if (!in_array($key, $fieldNames) || empty($filteredParams[$key]) ) {
                 unset($filteredParams[$key]);
             } else {
                 // Se il parametro è valido, lo filtro 
                 $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
-                unset($attributes[$key]); // attribute found, we dont need it in the attributes array anymore*
+                $fieldNames = array_filter($fieldNames, fn($value) => $value !== $key);
+                //unset($fieldNames[$key]); // attribute found, we dont need it in the attributes array anymore*
             }
         }
 
         // throws exceptions if some attributes are still missing and the $require flag is true
-        if ($require && !empty($attributes)) {
+        if ($require && !empty($fieldNames)) {
             throw new ValidationException(
                 "Missing required parameters.",
-                details: ["params" => implode(', ', $attributes)]
+                details: ["params" => implode(', ', $fieldNames)]
             );
         }
 
         //qui ho una array di parametri che possono richiamare i metodi di validazione
         //per validare i parametri di ricerca
         foreach ($filteredParams as $key => $val) {
-            $methodName = 'validate' . ucfirst($key); // Es: 'title' -> 'validateTitle'
-            
-            if (method_exists(self::class, $methodName)) {
-                // Richiama il metodo statico passando il valore dell'attributo
-                $filteredParams[$key] = UValidate::$methodName($filteredParams[$key]);
-            }
+            $validationMethod = $validationRules[$key];
+            $filteredParams[$key] = self::$validationMethod($val);
         }
 
         return $filteredParams;
