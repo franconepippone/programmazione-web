@@ -9,5 +9,8 @@ class VOnlinePayment{
         $this->smarty = USmarty::getInstance();
     }
 
+    public function showAddCreditCardForm() {
+        $this->smarty->display("onlinepayment/add_credit_card.tpl");
+    }
     
 }

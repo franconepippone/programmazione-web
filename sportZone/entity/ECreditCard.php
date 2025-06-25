@@ -15,6 +15,9 @@ class ECreditCard
     #[ORM\Column(type: "string", length: 20)]
     private string $number;
 
+    #[ORM\Column(type: "string", length: 4)]
+    private string $cvv;
+
     #[ORM\Column(type: "date")]
     private \DateTimeInterface $expirationDate;
 
@@ -31,22 +34,6 @@ class ECreditCard
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\OneToMany(targetEntity: EOnlinePayment::class, mappedBy: "creditCard")]
     private Collection $onlinePayments;
-
-    // Constructor
-    public function __construct(
-        int $number,
-        \DateTimeInterface $expirationDate,
-        string $cardNetwork,
-        string $bank,
-        string $owner
-    ) {
-        $this->number = $number;
-        $this->expirationDate = $expirationDate;
-        $this->cardNetwork = $cardNetwork;
-        $this->bank = $bank;
-        $this->owner = $owner;
-        $this->onlinePayments = new ArrayCollection();
-    }
 
     // Getters e setters
     public function getId(): int
@@ -125,6 +112,17 @@ class ECreditCard
         if ($this->onlinePayments->removeElement($onlPayment)) {
             $onlPayment->setCreditCard(null);
         }
+        return $this;
+    }
+
+    public function getCvv(): string
+    {
+        return $this->cvv;
+    }
+
+    public function setCvv(string $cvv): self
+    {
+        $this->cvv = $cvv;
         return $this;
     }
 }

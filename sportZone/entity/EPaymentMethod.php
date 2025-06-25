@@ -19,10 +19,8 @@ abstract class EPaymentMethod
     #[ORM\OneToOne(mappedBy: "paymentMethod", targetEntity: EEnrollment::class)]
     protected ?EEnrollment $enrollment = null;
 
-    #[ORM\ManyToOne(targetEntity: EEmployee::class, inversedBy: "paymentMethods")]
-    protected ?EEmployee $employee = null;
-
-    public function __construct() {}
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "paymentMethods")]
+    protected ?EClient $client = null;
 
     public function getId(): int {
         return $this->id;
@@ -44,12 +42,12 @@ abstract class EPaymentMethod
         $this->enrollment = $enrollment;
     }
 
-    public function getEmployee(): ?EEmployee {
-        return $this->employee;
+    public function getClient(): ?EClient {
+        return $this->client;
     }
 
-    public function setEmployee(?EEmployee $employee): void {
-        $this->employee = $employee;
+    public function setClient(?EClient $client): void {
+        $this->client = $client;
     }
     
     public function getType(): string {

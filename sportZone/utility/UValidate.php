@@ -7,7 +7,151 @@ require __DIR__ ."/../../vendor/autoload.php";
 
 class UValidate {
 
-    // -------------------------- specific validation methods --------------------------
+    // -------------------------- credit card validation --------------------------
+
+    /*     * Validates a credit card number using the Luhn algorithm.
+     *
+     * @param string $number The credit card number to validate.
+     * @return string The validated credit card number.
+     * @throws ValidationException If the credit card number is invalid.
+     */
+    public static function validateCreditCardNumber(string $number): string {
+        // Validates a credit card number using Luhn algorithm
+        $number = preg_replace('/\D/', '', $number); // Remove non-digit characters
+
+        if (strlen($number) < 13 || strlen($number) > 19) {
+            throw new ValidationException("Invalid credit card number length.");
+        }
+
+        $sum = 0;
+        $alt = false;
+
+        for ($i = strlen($number) - 1; $i >= 0; $i--) {
+            $n = (int)$number[$i];
+
+            if ($alt) {
+                $n *= 2;
+                if ($n > 9) {
+                    $n -= 9;
+                }
+            }
+
+            $sum += $n;
+            $alt = !$alt;
+        }
+
+        if ($sum % 10 !== 0) {
+            throw new ValidationException("Invalid credit card number.");
+        }
+
+        return $number;
+    }
+    
+    /**
+     * Validates a CVV (Card Verification Value) for credit cards.
+     *
+     * @param string $cvv The CVV to validate.
+     * @return string The validated CVV.
+     * @throws ValidationException If the CVV is invalid.
+     */
+    public static function validateCVV(string $cvv): string {
+        // Validates a CVV (Card Verification Value)
+        $cvv = preg_replace('/\D/', '', $cvv); // Remove non-digit characters
+
+        if (strlen($cvv) < 3 || strlen($cvv) > 4) {
+            throw new ValidationException("Invalid CVV length. Must be 3 or 4 digits.");
+        }
+
+        return $cvv;
+    }
+
+
+    /**
+     * Validates a bank name string.
+     *
+     * The bank name must:
+     * - Be at least 1 character and at most MAX_USERNAME_LENGTH characters long.
+     * - Contain only letters, digits, spaces, and basic punctuation (.,-).
+     *
+     * @param string $bankName The bank name to validate.
+     * @return string The validated bank name.
+     * @throws ValidationException If the bank name does not meet the requirements.
+     */
+    public static function validateBank(string $bankName): string {
+        // Validates a bank name string
+        try {
+            return self::validateString($bankName, 1, 250, '/^[a-zA-Z0-9\s\.,-]+$/');
+        } catch (ValidationException $e) {
+            // simply rethrow the exception with a more specific message
+            $errcode = $e->getCode();
+            switch ($errcode) {
+                case -1:
+                    throw new ValidationException("Bank name must be at least 1 character long.", code: $errcode);
+                case -2:
+                    throw new ValidationException("Bank name must not exceed " . MAX_USERNAME_LENGTH . " characters.", code: $errcode);
+                default:
+                    throw new ValidationException("Bank name can only contain letters, digits, spaces, and basic punctuation (.,-).", code: $errcode);
+            }
+        }
+
+        // TODO maybe check if the bank name exists in a predefined list of banks
+    }   
+    
+    /**
+     * Validates a card network string against a list of accepted card networks.
+     *
+     * The card network must be one of the following (case-sensitive):
+     * - Visa
+     * - MasterCard
+     * - American Express
+     * - Discover
+     * - Diners Club
+     * - JCB
+     *
+     * @param string $network The card network to validate.
+     * @return string The validated card network.
+     * @throws ValidationException If the card network is not in the list of accepted values.
+     */
+    public static function validateCardNetwork(string $network): string {
+        // Validates a card network (e.g., Visa, MasterCard, etc.)
+        $validNetworks = ['Visa', 'MasterCard', 'American Express', 'Discover', 'Diners Club', 'JCB'];
+
+        if (!in_array($network, $validNetworks)) {
+            throw new ValidationException("Invalid card network: '$network'.");
+        }
+
+        return $network;
+    }
+
+
+    // -------------------------- other specific validation methods --------------------------
+
+
+    /**
+     * Validates a future date string to ensure it is in the future.
+     *
+     * @param string $dateString The date string in 'Y-m-d' format.
+     * @return DateTime The validated date as a DateTime object.
+     * @throws ValidationException If the date is invalid or not in the future.
+     */
+    public static function validateFutureDate(string $dateString): DateTime {
+        // Validates a future date string in 'Y-m' format (year and month)
+        $date = DateTime::createFromFormat('Y-m', $dateString);
+        $errors = DateTime::getLastErrors() ?: ['warning_count' => 0, 'error_count' => 0];
+
+        if (!$date || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
+            throw new ValidationException("Invalid date: '$dateString'");
+        }
+
+        // Set to the first day of the month for comparison
+        $today = new DateTime('first day of this month');
+
+        if ($date < $today) {
+            throw new ValidationException("The date must be in the future.");
+        }
+
+        return $date;
+    }
 
     /**
      * Validates a birth date string to ensure the user is at least MINIMUM_AGE years old.
@@ -55,6 +199,25 @@ class UValidate {
                     throw new ValidationException("Name must not exceed " . MAX_USERNAME_LENGTH . " characters.", code: $errcode);
                 default:
                     throw new ValidationException("Name can only contain letters (a-z, A-Z).", code: $errcode);
+            }
+        }
+    }
+
+    // validate fulls name (name + space + surname)
+    public static function validateFullName(string $fullName): string {
+        // Validates a full name string (e.g., first name + last name)
+        try {
+            return self::validateString($fullName, 1, MAX_USERNAME_LENGTH, '/^[a-zA-Z]+( [a-zA-Z]+)*$/');
+        } catch (ValidationException $e) {
+            // simply rethrow the exception with a more specific message
+            $errcode = $e->getCode();
+            switch ($errcode) {
+                case -1:
+                    throw new ValidationException("Full name must be at least 1 character long.", code: $errcode);
+                case -2:
+                    throw new ValidationException("Full name must not exceed " . MAX_USERNAME_LENGTH . " characters.", code: $errcode);
+                default:
+                    throw new ValidationException("Full name can only contain letters and spaces.", code: $errcode);
             }
         }
     }

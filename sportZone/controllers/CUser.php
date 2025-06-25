@@ -186,6 +186,23 @@ class CUser{
     }
 
     /**
+     * Retrieves the currently logged-in user from the session.
+     *
+     * If the user is logged in, retrieves the user ID from the session and returns the corresponding EUser object.
+     * If the user is not logged in, returns null.
+     *
+     * @return EUser|null The logged-in user object if available, or null if not logged in.
+     */
+    public static function getLoggedUser(): ?EUser
+    {
+        if (self::isLogged()) {
+            $userId = USession::getSessionElement('user');
+            return FPersistentManager::getInstance()->retriveUserOnId($userId);
+        }
+        return null;
+    }
+
+    /**
      * Retrieves the current user's role from the session.
      *
      * If the user is logged in and the 'role' session element is set, returns the user's role as a string.

@@ -13,9 +13,6 @@ class EEmployee extends EUser
     #[ORM\Column(type: "float")]
     private float $salary;
 
-    #[ORM\OneToMany(mappedBy: "employee", targetEntity: EPaymentMethod::class, cascade: ["persist", "remove"])]
-    private Collection $paymentMethods;
-
     #[ORM\ManyToMany(targetEntity: ECourse::class, inversedBy: "employees")]
     private Collection $courses;
 
@@ -31,25 +28,6 @@ class EEmployee extends EUser
 
     public function setSalary(float $salary): void {
         $this->salary = $salary;
-    }
-
-    public function getPaymentMethods(): Collection {
-        return $this->paymentMethods;
-    }
-
-    public function addPaymentMethod(EPaymentMethod $paymentmethod): self {
-        if (!$this->paymentMethods->contains($paymentmethod)) {
-            $this->paymentMethods[] = $paymentmethod;
-            $paymentmethod->setEmployee($this);
-        }
-        return $this;
-    }
-
-    public function removePaymentMethod(EPaymentMethod $paymentmethod): self {
-        if ($this->paymentMethods->removeElement($paymentmethod)) {
-            $paymentmethod->setEmployee(null);
-        }
-        return $this;
     }
 
     public function getCourses(): Collection {

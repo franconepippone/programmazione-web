@@ -4,7 +4,43 @@ use App\Enum\UserSex;
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
-class COnlinePayment{
+class COnlinePayment {
+
+    private static $rulesAddCreditCard = [
+        "number" => 'validateCreditCardNumber',
+        "expirationDate" => 'validateFutureDate',
+        "cardNetwork" => 'validateCardNetwork',
+        "bank" => 'validateBank',
+        "cvv" => 'validateCVV',
+        "owner" => 'validateFullName'
+    ];
+
+    public static function addCreditCardForm() {
+        CUser::isLogged();
+
+        $view = new VOnlinePayment();
+        $view->showAddCreditCardForm();
+    }
+
+    public static function finalizeAddCreditCard() {
+        CUser::isLogged();
+        if (!CUser::isClient()) exit; // only clients can add credit cards
+        
+        /** @var EClient $user */
+        $user = CUser::getLoggedUser();
+
+        try {
+            $inputs = UValidate::validateInputArray($_POST, self::$rulesAddCreditCard, true);
+        } catch (ValidationException $e) {
+            $viewErr = new VError();
+            $viewErr->show($e->getMessage());
+            exit;
+        }
+
+        print_r($inputs);
+
+
+    }
 
     public static function payOnline() {
         // arrivano:
@@ -23,7 +59,6 @@ class COnlinePayment{
             $viewErr->show($e->getMessage());
             exit;
         }
-        
     }
 
     public static function payPaypal() {
