@@ -20,7 +20,7 @@
     </p>
 
     <p><strong>Data:</strong>
-      {if isset($date) && $date neq ''}{$data}{else}[\$date = UHTTPMethods::post('date')]{/if}
+      {if isset($date) && $date neq ''}{$date}{else}[\$date = UHTTPMethods::post('date')]{/if}
     </p>
 
     <p><strong>Orario:</strong>
