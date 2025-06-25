@@ -87,4 +87,19 @@ class EReservation
     public function setPaymentMethod(EPaymentMethod $paymentMethod): void {
         $this->paymentMethod = $paymentMethod;
     }
+
+    public static function reservationToArray(EReservation $reservation) {
+        
+        return [
+            'client_name' => $reservation->getClient() ? $reservation->getClient() -> getName() : null,
+            'client_surname' => $reservation->getClient() ? $reservation->getClient() -> getSurname() : null,
+            'id' => $reservation->getId(),
+            'date' => $reservation->getDate(),
+            'time' => $reservation->getTime(),
+            'field' => $reservation->getField() ? $reservation->getField()->getName() : null,
+            'sport' => $reservation->getField() ? $reservation->getField()->getSport() : null,
+            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getType() : null   
+            
+        ];
+    }
 }

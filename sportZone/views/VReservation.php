@@ -19,6 +19,7 @@ class VReservation{
 
     public function showFinalizeReservation($fullName,$date,$time,$field){ 
         $fieldData = EField::fieldToArray($field);
+        $this->smarty->assign("fieldData", $fieldData);
         $this->smarty->assign("fullName", $fullName);
         $this->smarty->assign("fieldData", $fieldData);
         $this->smarty->assign("date", $date);
@@ -30,7 +31,9 @@ class VReservation{
         $this->smarty->display("reservation/confirmation.tpl");
     }
 
-    public function showCancelReservation() {
+    public function showCancelReservation($reservation) {
+        $reservationData = EReservation::reservationToArray($reservation);
+        $this->smarty->assign("reservation", $reservationData);
         $this->smarty->display("reservation/cancel_reservation.tpl");
     }
 

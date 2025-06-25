@@ -51,4 +51,12 @@ abstract class EPaymentMethod
     public function setEmployee(?EEmployee $employee): void {
         $this->employee = $employee;
     }
+    
+    public function getType(): string {
+    return match (get_class($this)) {
+        EOnlinePayment::class => 'online',
+        EOnSitePayment::class => 'onsite',
+        default => 'unknown',
+    };
+}
 }

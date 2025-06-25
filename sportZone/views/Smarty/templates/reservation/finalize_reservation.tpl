@@ -16,41 +16,43 @@
     </a>
 
     <p><strong>Utente:</strong>
-      {if isset($fullName) && $fullName neq ''}{$fullName}{else}[$client->getName() . ' ' . $client->getSurname()]{/if}
+      {if isset($fullName) && $fullName neq ''}{$fullName}{else}[\$client->getName() . ' ' . \$client->getSurname()]{/if}
     </p>
 
     <p><strong>Data:</strong>
-      {if isset($data) && $data neq ''}{$data}{else}[$date = UHTTPMethods::post('data')]{/if}
+      {if isset($data) && $data neq ''}{$data}{else}[\$data = UHTTPMethods::post('data')]{/if}
     </p>
 
     <p><strong>Orario:</strong>
-      {if isset($orario) && $orario neq ''}{$orario}{else}[$time = UHTTPMethods::post('orario')]{/if}
+      {if isset($orario) && $orario neq ''}{$orario}{else}[\$orario = UHTTPMethods::post('orario')]{/if}
     </p>
 
     <h3>Informazioni Campo</h3>
     <ul>
       <li><strong>Sport:</strong>
-        {if isset($campo)}{$campo->getSport()}{else}[$field->getSport()]{/if}
+        {if isset($fieldData)}{$fieldData.sport|escape}{else}[\$fieldData['sport']]{/if}
       </li>
       <li><strong>Tipo terreno:</strong>
-        {if isset($campo)}{$campo->getTipoTerreno()}{else}[$field->getTerrainType()]{/if}
+        {if isset($fieldData)}{$fieldData.terrainType|escape}{else}[\$fieldData['terrainType']]{/if}
       </li>
       <li><strong>Indoor:</strong>
-        {if isset($campo)}
-          {if $campo->getIndoor()}Indoor{else}Outdoor{/if}
-        {else}[$field->getIsIndoor()]{/if}
+        {if isset($fieldData)}
+          {if $fieldData.isIndoor}Indoor{else}Outdoor{/if}
+        {else}
+          [\$fieldData['isIndoor']]
+        {/if}
       </li>
       <li><strong>Costo orario:</strong>
-        {if isset($campo)}{$campo->getCostoOrario()} €{else}[$field->getCost()]{/if}
+        {if isset($fieldData)}€{$fieldData.hourlyCost|number_format:2}{else}[\$fieldData['hourlyCost']]{/if}
       </li>
     </ul>
 
     <form id="reservationForm" method="post" action="/reservation/finalizeReservation">
       <input type="hidden" name="data" value="{$data|default:''}">
       <input type="hidden" name="orario" value="{$orario|default:''}">
-      <input type="hidden" name="id" value="{if isset($campo)}{$campo->getId()}{else}[$field->getId()]{/if}">
+      <input type="hidden" name="id" value="{if isset($fieldData)}{$fieldData.id}{else}0{/if}">
 
-      <label for="paymentMethod">Metodo di pagamento:</label>
+      <label for="paymentMethod"><strong>Metodo di pagamento:</strong></label>
       <select name="paymentMethod" id="paymentMethod" required>
         <option value="onsite">Pagamento in loco</option>
         <option value="online">Pagamento online</option>
