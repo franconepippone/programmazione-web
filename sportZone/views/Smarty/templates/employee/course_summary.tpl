@@ -1,6 +1,7 @@
 <div class="summary-wrapper">
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <h2>Riepilogo corso</h2>
     <ul>
         <li><b>Titolo:</b> {$title|escape}</li>
@@ -30,6 +31,8 @@
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     <h2>📋 Riepilogo del corso</h2>
     <div class="summary-item"><span class="label">Titolo:</span> <span class="value">{$data.title|escape}</span></div>
     <div class="summary-item"><span class="label">Descrizione:</span> <span class="value">{$data.description|escape}</span></div>
@@ -56,6 +59,9 @@
         {/foreach}
         <button class="confirm-button" type="submit">✅ Conferma Creazione</button>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
