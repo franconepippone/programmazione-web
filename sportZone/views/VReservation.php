@@ -21,7 +21,6 @@ class VReservation{
         $fieldData = EField::fieldToArray($field);
         $this->smarty->assign("fieldData", $fieldData);
         $this->smarty->assign("fullName", $fullName);
-        $this->smarty->assign("fieldData", $fieldData);
         $this->smarty->assign("date", $date);
         $this->smarty->assign("time", $time);
         $this->smarty->display("reservation/finalize_reservation.tpl");
