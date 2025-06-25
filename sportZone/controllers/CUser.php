@@ -6,6 +6,15 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CUser{
 
+    private static $rulesRegister = [
+        "name" => 'validateName',
+        "surname" => 'validateName',
+        "email" => 'validateEmail',
+        "username" => 'validateUsername',
+        "password" => 'validatePassword',
+        "birthday" => 'validateDate'
+    ];
+
     /**
      * check if the user is logged (using session)
      * @return boolean
@@ -109,28 +118,36 @@ class CUser{
      */
     public static function finalizeRegister()
     {
-        $view = new VUser();
+        $verr = new VError();
 
-        // checks if email and username are already present in the database
-        if(FPersistentManager::getInstance()->verifyUserEmail(UHTTPMethods::post('email')) ||
-        FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'))) 
-        {
-            // TODO display error message
-            echo "User already present";
-            return;
+        try {
+            $formInputs = UValidate::validateInputArray($_POST, self::$rulesRegister, true);
+        } catch (ValidationException $e) {
+            // if validation fails, show the error message
+            $verr->show($e->getMessage());
+            exit;
         }
-
+        
+        // checks if email and username are already present in the database
+        if(FPersistentManager::getInstance()->verifyUserEmail($formInputs['email']) ||
+        FPersistentManager::getInstance()->verifyUserUsername($formInputs['username'])) 
+        {
+            $verr->show("The email or username you entered already exists. Please choose a different one.");
+            exit;
+        }
+        
+        // validate the form inputs
         $new_user = (new EClient())
-        ->setName(UHTTPMethods::post('name'))
-        ->setSurname(UHTTPMethods::post('surname'))
+        ->setName($formInputs['name'])
+        ->setSurname($formInputs['surname'])
         ->setSex(UserSex::MALE)
-        ->setEmail(UHTTPMethods::post('email'))
-        ->setUsername(UHTTPMethods::post('username'))
-        ->setPassword(UHTTPMethods::post('password'))
+        ->setEmail($formInputs['email'])
+        ->setUsername($formInputs['username'])
+        ->setPassword($formInputs['password'])
         ->setBirthDate(
-            new DateTime(UHTTPMethods::post('birthday'))
+            new DateTime($formInputs['birthday'])
         );
-
+        
         // register was succesfull
         $check = FPersistentManager::getInstance()->uploadObj($new_user);
         if($check){
@@ -138,7 +155,7 @@ class CUser{
             header("Location: /user/login");
         }
     }
-
+    
     /**
      * this method can logout the User, unsetting all the session element and destroing the session. Return the user to the Login Page
      * @return void

@@ -9,6 +9,38 @@ class UValidate {
 
     // -------------------------- specific validation methods --------------------------
 
+    /**
+     * Validates a username string.
+     * 
+     * @param string $username The username to validate.
+     * @return string The validated username.
+     * @throws ValidationException If the username does not meet the requirements.
+     */
+    public static function validateName(string $name): string {
+        // Validates a name string (e.g., first name, last name)
+        return self::validateString($name, 1, MAX_USERNAME_LENGTH, '/^[a-zA-Z\s\-]+$/');
+    }
+
+    /**
+     * Validates a password string to ensure it meets minimum security requirements.
+     *
+     * The password must:
+     * - Be at least 8 characters and at most 255 characters long.
+     * - Contain at least one lowercase letter, one uppercase letter, and one digit.
+     * - Contain only letters and digits (no special symbols allowed).
+     *
+     * This method uses a regular expression to enforce the above rules.
+     * If the password does not meet the requirements, a ValidationException is thrown.
+     *
+     * @param string $password The password string to validate.
+     * @return string The validated password.
+     * @throws ValidationException If the password does not meet the requirements.
+     */
+    public static function validatePassword(string $password): string {
+        // Validates a password string
+        return self::validateString($password, 8, 255, '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/');
+    }
+
     public static function validateSport($string): string {
         return self::validateEnum($string, EnumSport::class);
     }
@@ -120,7 +152,7 @@ class UValidate {
 
         // Controlla pattern, se specificato
         if ($pattern && !preg_match($pattern, $input)) {
-            throw new ValidationException("string contains invalid characters.");
+            throw new ValidationException("Input string does not match required criteria.");
         }
 
         return $input;
