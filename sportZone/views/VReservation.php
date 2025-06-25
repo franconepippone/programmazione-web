@@ -9,7 +9,7 @@ class VReservation{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function showReservationForm($field,$date) {
+    public function showReservationForm($field){//,$date) {
         $fieldData [] = EField::fieldToArray($field);
         $this->smarty->assign("fieldData", $fieldData);
         //$this->smarty->assign("date", $date);
