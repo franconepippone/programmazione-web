@@ -10,7 +10,7 @@ class VReservation{
     }
 
     public function showReservationForm($field){//,$date) {
-        $fieldData [] = EField::fieldToArray($field);
+        $fieldData = EField::fieldToArray($field);
         $this->smarty->assign("fieldData", $fieldData);
         //$this->smarty->assign("date", $date);
         //$this->smarty->assign("avaiableHours", $avaiableHours);
