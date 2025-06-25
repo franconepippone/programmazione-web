@@ -82,8 +82,9 @@ class CReservation{
      
     // Process reservation if form confirmed with onsite payment
     if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
+        $dateObj = new DateTime($date);
         $payment = new EOnSitePayment();
-        $reservation = new EReservation($date, $time, $field, $client, $payment);
+        $reservation = new EReservation($dateObj, $time, $field, $client, $payment);
         FPersistentManager::getInstance()->storeReservation($reservation);
 
         $view = new VReservation();
