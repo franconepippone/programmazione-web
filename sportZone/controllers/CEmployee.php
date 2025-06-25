@@ -133,22 +133,6 @@ class CEmployee{
     $view->viewReservation($reservation);
  }
 **/
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
 public static function createCourseForm($data = []) {
     CUser::isLogged();
     //CUser::isEmployee();
@@ -163,31 +147,11 @@ public static function createCourseForm($data = []) {
 }
 
 public static function courseSummary() {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
    // CUser::isEmployee();
-=======
-    //CUser::isEmployee();
->>>>>>> Stashed changes
-=======
-    //CUser::isEmployee();
->>>>>>> Stashed changes
-=======
-    //CUser::isEmployee();
->>>>>>> Stashed changes
-=======
-    //CUser::isEmployee();
->>>>>>> Stashed changes
 
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     try {
         $validated = UValidate::validateInputArray($_POST, array_keys(self::$rulesCourse), true);
 
@@ -206,71 +170,10 @@ public static function courseSummary() {
         $validated['instructor'] = $instructor;
         $validated['field'] = $field;
 
-        // Converte la data in stringa per la view
-        // Se start_date è già una stringa:
         $validated['start_date'] = $validated['start_date'];
       
         $view->showCourseSummary($validated);
 
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-    $rules = [
-        'title'            => 'validateTitle',
-        'description'      => 'validateDescription',
-        'start_date'       => 'validateStartDate',
-        'start_time'       => 'validateTime',
-        'end_time'         => 'validateTime',
-        'max_participants' => 'validateMaxParticipants',
-        'cost'             => 'validatePrice',
-    ];
-    
-  
-    try {
-        // Validazione base
-        $validated = UValidate::validateInputArray($_POST, $rules, true);
-
-        // Validazione giorni
-        if (!isset($_POST['days']) || !is_array($_POST['days']) || count($_POST['days']) === 0) {
-            throw new ValidationException("Devi selezionare almeno un giorno della settimana.");
-        }
-        $validated['days'] = $_POST['days'];
-
-        // Validazione istruttore
-        $instructor = $pm->retriveInstructorById($_POST['instructor'] ?? '');
-        if (!$instructor) {
-            throw new ValidationException("Istruttore selezionato non valido.");
-        }
-        $validated['instructor'] = $instructor;
-
-        // Validazione campo
-        $field = $pm->retriveFieldById($_POST['field'] ?? '');
-        if (!$field) {
-            throw new ValidationException("Campo selezionato non valido.");
-        }
-        $validated['field'] = $field;
-
-        // Validazione orari (start < end)
-        if (strtotime($_POST['start_time']) >= strtotime($_POST['end_time'])) {
-            throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
-        }
-
-        // Mostra riepilogo
-        $view->showCourseSummary($validated);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     } catch (ValidationException $e) {
         (new VError())->show($e->getMessage());
     }
@@ -282,10 +185,6 @@ public static function finalizeCourse() {
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     $data = $_POST;
 
     $instructor = $pm->retriveInstructorById($data['instructor']);
@@ -307,6 +206,8 @@ public static function finalizeCourse() {
 
     $view->confirmReservation($course);
 }
+
+
 private static $rulesCourse = [
     'title'            => 'validateTitle',
     'description'      => 'validateDescription',
@@ -319,119 +220,6 @@ private static $rulesCourse = [
     'instructor'       => 'validateInstructorId',
     'field'            => 'validateFieldId'
 ];
-=======
-    try {
-        // Ricostruisci oggetti da POST
-        $instructor = $pm->retriveInstructorById($_POST['instructor']);
-        $field = $pm->retriveFieldById($_POST['field']);
-
-        if (!$instructor || !$field) {
-            throw new Exception("Istruttore o campo non valido.");
-        }
-
-        $course = new ECourse();
-        $course->setTitle($_POST['title']);
-        $course->setDescription($_POST['description']);
-        $course->setStartDate(new DateTime($_POST['start_date']));
-        $course->setEndDate((new DateTime($_POST['start_date']))->modify('+2 months'));
-        $course->setTimeSlot($_POST['start_time'] . '-' . $_POST['end_time']);
-        $course->setDaysOfWeek($_POST['days']);
-        $course->setEnrollmentCost(floatval($_POST['cost']));
-        $course->setMaxParticipantsCount(intval($_POST['max_participants']));
-        $course->setInstructor($instructor);
-        $course->setField($field);
-
-        $pm->saveCourse($course);
-
-        $view->confirmReservation($course);
-    } catch (Exception $e) {
-        (new VError())->show("Errore nella creazione del corso: " . $e->getMessage());
-    }
- }
->>>>>>> Stashed changes
 }
-=======
-    try {
-        // Ricostruisci oggetti da POST
-        $instructor = $pm->retriveInstructorById($_POST['instructor']);
-        $field = $pm->retriveFieldById($_POST['field']);
-
-        if (!$instructor || !$field) {
-            throw new Exception("Istruttore o campo non valido.");
-        }
-
-        $course = new ECourse();
-        $course->setTitle($_POST['title']);
-        $course->setDescription($_POST['description']);
-        $course->setStartDate(new DateTime($_POST['start_date']));
-        $course->setEndDate((new DateTime($_POST['start_date']))->modify('+2 months'));
-        $course->setTimeSlot($_POST['start_time'] . '-' . $_POST['end_time']);
-        $course->setDaysOfWeek($_POST['days']);
-        $course->setEnrollmentCost(floatval($_POST['cost']));
-        $course->setMaxParticipantsCount(intval($_POST['max_participants']));
-        $course->setInstructor($instructor);
-        $course->setField($field);
-
-=======
-    try {
-        // Ricostruisci oggetti da POST
-        $instructor = $pm->retriveInstructorById($_POST['instructor']);
-        $field = $pm->retriveFieldById($_POST['field']);
-
-        if (!$instructor || !$field) {
-            throw new Exception("Istruttore o campo non valido.");
-        }
-
-        $course = new ECourse();
-        $course->setTitle($_POST['title']);
-        $course->setDescription($_POST['description']);
-        $course->setStartDate(new DateTime($_POST['start_date']));
-        $course->setEndDate((new DateTime($_POST['start_date']))->modify('+2 months'));
-        $course->setTimeSlot($_POST['start_time'] . '-' . $_POST['end_time']);
-        $course->setDaysOfWeek($_POST['days']);
-        $course->setEnrollmentCost(floatval($_POST['cost']));
-        $course->setMaxParticipantsCount(intval($_POST['max_participants']));
-        $course->setInstructor($instructor);
-        $course->setField($field);
-
->>>>>>> Stashed changes
-=======
-    try {
-        // Ricostruisci oggetti da POST
-        $instructor = $pm->retriveInstructorById($_POST['instructor']);
-        $field = $pm->retriveFieldById($_POST['field']);
-
-        if (!$instructor || !$field) {
-            throw new Exception("Istruttore o campo non valido.");
-        }
-
-        $course = new ECourse();
-        $course->setTitle($_POST['title']);
-        $course->setDescription($_POST['description']);
-        $course->setStartDate(new DateTime($_POST['start_date']));
-        $course->setEndDate((new DateTime($_POST['start_date']))->modify('+2 months'));
-        $course->setTimeSlot($_POST['start_time'] . '-' . $_POST['end_time']);
-        $course->setDaysOfWeek($_POST['days']);
-        $course->setEnrollmentCost(floatval($_POST['cost']));
-        $course->setMaxParticipantsCount(intval($_POST['max_participants']));
-        $course->setInstructor($instructor);
-        $course->setField($field);
-
->>>>>>> Stashed changes
-        $pm->saveCourse($course);
-
-        $view->confirmReservation($course);
-    } catch (Exception $e) {
-        (new VError())->show("Errore nella creazione del corso: " . $e->getMessage());
-    }
- }
-}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 
