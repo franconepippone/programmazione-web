@@ -212,7 +212,7 @@ class EField
             'sport' => $field->getSport(),
             'latitude' => $field->getLatitude(),
             'longitude' => $field->getLongitude(),
-            'terrainType' => $filed ->getTerrainType();  
+            'terrainType' => $filed ->getTerrainType(),
             'isIndoor' => $field ->getIsIndoor(),
         ];
     }
