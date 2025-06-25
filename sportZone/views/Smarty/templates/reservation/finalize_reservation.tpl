@@ -11,7 +11,7 @@
     <h2>Riepilogo Prenotazione</h2>
 
     <!-- Back link -->
-    <a href="/reservation/createReservation" class="back-link" title="Torna alla pagina precedente">
+    <a href="/reservation/reservationForm" class="back-link" title="Torna alla pagina precedente">
       ← Torna indietro
     </a>
 
