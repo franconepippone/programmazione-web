@@ -67,36 +67,40 @@ class CUser{
      * the User is redirected in the homepage or requested resource
      */
     public static function checkLogin(){
-        $view = new VUser();
-        var_dump($_SERVER['REQUEST_METHOD']);  // Should be "POST"
-        var_dump($_POST);
-        echo "username: ". UHTTPMethods::post('username') . "<br>";
-        echo "password: " . UHTTPMethods::post('password') . "<br>";
-
+        // if username exists
         $username_exists = FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'));                                            
         if(!$username_exists) {
-            $view->loginError();
+            (new VError())->show("sorry, the username you entered does not exist.");
             exit;
         }
         
+        // retrieves user
         $user = FPersistentManager::getInstance()->retriveUserOnUsername(UHTTPMethods::post('username'));
-        if(password_verify(UHTTPMethods::post('password'), $user->getPasswordHashed())){
-            if(USession::getSessionStatus() == PHP_SESSION_NONE){
-                USession::getInstance();
-                USession::setSessionElement( 'user', $user->getId());
-                USession::setSessionElement( 'user', $user->getId());
-                
-                // if a redirect url is sent (should always be sent), redirect to that page
-                if (UHTTPMethods::postIsSet('redirectUrl')) {
-                    header('Location: ' . UHTTPMethods::post('redirectUrl'));
-                } else {
-                    header('Location: /user/home');
-                }
-            }
-        }else{
-            $view->loginError();
+
+        // if password is correct
+        if(!password_verify(UHTTPMethods::post('password'), $user->getPasswordHashed())) {
+            (new VError())->show("sorry, the password you entered is incorrect.");
+            exit;
         }
+
+        // if session is already started, stop execution (this method should only be called at login, not during session)
+        if(USession::getSessionStatus() != PHP_SESSION_NONE) {
+            (new VError())->show("Session already started, please logout first.");
+            exit;
+        }
+
+        // fills session variables with user data
+        USession::getInstance();
+        USession::setSessionElement( 'user', $user->getId());
+        USession::setSessionElement( 'role', $user::class);
         
+        // if a redirect url is sent (should always be sent), redirect to that page
+        if (UHTTPMethods::postIsSet('redirectUrl')) {
+            header('Location: ' . UHTTPMethods::post('redirectUrl'));
+        } else {
+            header('Location: /user/home');
+        }
+
     }
 
     /**
@@ -153,42 +157,45 @@ class CUser{
 
             $userId = USession::getInstance()->getSessionElement('user');
             $user = FPersistentManager::getInstance()->retriveUserOnId($userId);-
-            $view->showHomePage($user->getFullName());
+            $view->showHomePage($user->getFullName() . " " . self::getUserRole());
         }  
     }
 
-      /**
- * This method checks if the current user is logged in and has the role of "employee".
- * It initializes the session if needed, verifies the user session element,
- * and confirms the user's role. If the user is not logged in or does not have
- * the "employee" role, it redirects to the appropriate page (login or access denied).
- * 
- * @return bool Returns true if the user is logged in as employee, otherwise redirects and exits.
- */
+    /**
+     * Retrieves the current user's role from the session.
+     *
+     * If the user is logged in and the 'role' session element is set, returns the user's role as a string.
+     * If the user is logged in but the 'role' session element is missing, logs out the user for safety.
+     * If the user is not logged in, returns null.
+     *
+     * @return string|null The user's role if available, or null if not logged in.
+     */
+    public static function getUserRole(): ?string
+    {
+        if (self::isLogged()) {
+            if (USession::isSetSessionElement('role')) {
+                return USession::getSessionElement('role');
+            } else {
+                // if role is not set, then something is creally wrong with how the user managed to create a session,
+                // therefore we logout just in case
+                self::logout();
+            }
+        };
+    }
 
     public static function isEmployee()
-{
-    if (UCookie::isSet('PHPSESSID')) {
-        if (session_status() == PHP_SESSION_NONE) {
-            USession::getInstance();
-        }
+    {
+        return self::getUserRole() === EEmployee::class;
     }
 
-    if (!USession::isSetSessionElement('user')) {
-        header('Location: /User/login');
-        exit;
+    public static function isInstructor()
+    {
+        return self::getUserRole() === EInstructor::class;
     }
 
-    $user = USession::getSessionElement('user');
-
-    if (!isset($user['role']) || $user['role'] !== 'employee') {
-        // Qui mostri l’errore subito senza redirect
-        $errorView = new VError();
-        $errorView->show("Accesso negato. Non hai i permessi per accedere a questa pagina.");
-        exit;
+    public static function isClient()
+    {
+        return self::getUserRole() === EClient::class;
     }
-
-    return true;
-}
 
 }
