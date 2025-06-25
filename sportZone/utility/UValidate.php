@@ -293,4 +293,111 @@ class UValidate {
 
         return $filteredParams;
     }
+
+    // -------------------------- course creation validation methods --------------------------
+
+    /**
+     * These methods are designed to validate user input related to course creation,
+     * enforcing domain-specific business rules. The validation includes:
+     *
+     * - Title: must be between 3 and 100 characters, alphanumeric with spaces, dashes, apostrophes, dots.
+     * - Description: must be between 10 and 1000 characters.
+     * - Max participants: must be an integer between 1 and 1000.
+     * - Price: must be a non-negative number with up to two decimal places.
+     * - Start date: must be a valid date at least 7 days from today.
+     * - End date: must be a valid date strictly after the start date.
+     * - Instructor ID: must exist in the database, verified through PersistentManager and FInstructor.
+     */
+
+    /**
+     * Validates the course title.
+     */
+    public static function validateTitle(string $title): string {
+        return self::validateString($title, 3, 100, '/^[a-zA-Z0-9\s\-\'\.]+$/');
+    }
+
+    /**
+     * Validates the course description.
+     */
+    public static function validateDescription(string $description): string {
+        return self::validateString($description, 10, 1000);
+    }
+
+    /**
+     * Validates the number of participants.
+     *
+     * Must be an integer between 1 and 1000.
+     */
+    public static function validateMaxParticipants(string|int $num): int {
+        $val = intval($num);
+        if ($val < 1 || $val > 1000) {
+            throw new ValidationException("Number of participants must be between 1 and 1000.");
+        }
+        return $val;
+    }
+
+    /**
+     * Validates the course price.
+     *
+     * Must be a non-negative float.
+     */
+    public static function validatePrice(string|float $price): float {
+        if (!is_numeric($price) || floatval($price) < 0) {
+            throw new ValidationException("Price must be a non-negative number.");
+        }
+        return round(floatval($price), 2);
+    }
+
+        /**
+     * Validates the course start date.
+     *
+     * Must be at least 7 days in the future.
+     */
+    public static function validateStartDate(string $dateString): DateTime {
+        $startDate = self::validateDate($dateString);
+        $today = new DateTime();
+        $minStartDate = (clone $today)->modify('+7 days');
+
+        if ($startDate < $minStartDate) {
+            throw new ValidationException("Course must start at least 7 days from today.");
+        }
+
+        return $startDate;
+    }
+
+    /**
+     * Validates the course end date.
+     *
+     * Must be after the given start date.
+     */
+    public static function validateEndDate(string $endDateString, DateTime $startDate): DateTime {
+        $endDate = self::validateDate($endDateString);
+
+        if ($endDate <= $startDate) {
+            throw new ValidationException("End date must be after the start date.");
+        }
+
+        return $endDate;
+    }
+
+    /**
+     * Validates the instructor ID.
+     *
+     * Must be a positive integer corresponding to an existing instructor in the database.
+     */
+    public static function validateInstructorId(string|int $id): int {
+        $id = intval($id);
+        if ($id <= 0) {
+            throw new ValidationException("Invalid instructor ID.");
+        }
+
+        $pm = FPersistentManager::getInstance();
+        $instructor = $pm->load('FInstructor', $id);
+
+        if (!$instructor) {
+            throw new ValidationException("Instructor with ID $id does not exist.");
+        }
+
+        return $id;
+    }
 }
