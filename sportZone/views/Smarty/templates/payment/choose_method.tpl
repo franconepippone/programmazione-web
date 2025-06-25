@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Choose Payment Method</title>
+    <title>Scegli un metodo di pagamento</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -72,8 +72,8 @@
 </head>
 <body>
     <div class="payment-methods-container">
-        <h2>Choose a Payment Method</h2>
-        <h3>Payment amount: {$amount}€</h3>
+        <h2>Scegli un metodo di pagamento</h2>
+        <h3>Importo: {$amount}€</h3>
         {if $paymentMethods|@count > 0}
             {* First payment method *}
             <form class="payment-method-form" method="post" action="/payment/confirmPay">

@@ -106,9 +106,10 @@ class CPayment {
 
         // stores in session, so they are safe and not modifiable
         $ongoingPayment = [
-            'paymentSecretHash' => password_hash('sha256', PASSWORD_DEFAULT),
+            'paymentSecretHash' => password_hash($paymentSecret, PASSWORD_DEFAULT),
             'amountCents' => $amountCents,
-            'redirectUrl' => $redirectUrl
+            'redirectUrl' => $redirectUrl,
+            'outcome' => null // this will be set later when the payment is confirmed
         ];
         USession::setSessionElement('ongoingPayment', $ongoingPayment); 
         
@@ -137,8 +138,9 @@ class CPayment {
 
         $amountCents = $ongoingPaymentData['amountCents'];
         $redirectUrl = $ongoingPaymentData['redirectUrl'];
+        $outcome = $ongoingPaymentData['outcome'];
 
-        echo "Amount: $amountCents, Redirect URL: $redirectUrl";
+        echo "Amount: $amountCents, Redirect URL: $redirectUrl, Outcome: $outcome";
 
         // arrivano in POST:
         //  - il metodo di pagamento scelto (id)
@@ -172,11 +174,23 @@ class CPayment {
             exit;
         }
 
-        $outcome = $paymentMethod->pay($amountCents); // amount in cents
+        // check if the payment has already been made
+        if ($outcome == null) {
+            $outcome = $paymentMethod->pay($amountCents); // amount in cents
+        } else {
+            $viewErr = new VError();
+            $viewErr->show("Il pagamento è già stato effettuato.");
+            exit;
+        }
+
+        // store the outcome in the session
+        $ongoingPaymentData['outcome'] = $outcome; // store the outcome in the session
+        USession::setSessionElement('ongoingPayment', $ongoingPaymentData);
 
         if (!$outcome) {
             $viewErr = new VError();
             $viewErr->show("Il pagamento non è andato a buon fine. Riprova più tardi.");
+            USession::unsetSessionElement('ongoingPayment'); // remove the ongoing payment from session
             exit;
         }
 
@@ -187,14 +201,17 @@ class CPayment {
     public static function verifyAndEndPayment($paymentSecret): bool
     {
         $ongoingPaymentData = self::getOngoingPayment();
-
+        print_r($ongoingPaymentData);
+        
         // verify the payment secret
         if (!password_verify($paymentSecret, $ongoingPaymentData['paymentSecretHash'])) {
+            echo "Payment secret does not match.";
             return false; // payment secret does not match
         }
 
         // remove the ongoing payment from session
         USession::unsetSessionElement('ongoingPayment');
+        echo "Payment verified and ended successfully.";
         return true; // payment verified and ended successfully
     }
 
