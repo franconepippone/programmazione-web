@@ -24,7 +24,7 @@ class CReservation{
         return;
     }
      // Get available hours for this field and date through FReservation
-    $availableHours = FReservation::getAvailableHours($fieldId, $date);
+    $avaiableHours = FReservation::getAvailableHours($fieldId, $date);
 
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
