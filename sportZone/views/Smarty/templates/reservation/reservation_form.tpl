@@ -62,19 +62,19 @@
       <input type="hidden" name="date" value="{if isset($date)}{$date|escape}{else}''{/if}" />
 
       <div class="field">
-        <label for="time" class="label">Seleziona orario:</label>
-        <select name="time" id="time" required>
-          {if isset($avaiableHours)}
-            {foreach $avaiableHours as $hour}
-              <option value="{$hour|escape}">{$hour|escape}</option>
-            {/foreach}
-          {else}
-            <option disabled selected>
-              -- \$availableHours (es. da FReservation::getAvailableHours()) --
-            </option>
-          {/if}
-        </select>
-      </div>
+  <label for="time" class="label">Seleziona orario:</label>
+  <select name="time" id="time" required>
+    {if isset($avaiableHours)}
+      {foreach $avaiableHours as $hour}
+        <option value="{$hour|escape}">{$hour}:00</option>
+      {/foreach}
+    {else}
+      <option disabled selected>
+        -- \$availableHours (es. da FReservation::getAvailableHours()) --
+      </option>
+    {/if}
+  </select>
+</div>
 
       <button type="submit">Conferma Orario</button>
     </form>
