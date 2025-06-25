@@ -27,8 +27,8 @@ class CFrontController{
     public function run($requestUri){
         // Parse the request URI
         
-      //  $this->createDummyFields();
-//        $this->createDummyCourses();    
+        //$this->createDummyFields();
+        //$this->createDummyCourses();    
 
         ob_start();
         // echo $requestUri;

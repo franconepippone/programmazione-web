@@ -17,7 +17,7 @@ class FCourse{
     }
 
     public static function getCourseById(int $id){
-        $result = FEntityManager::retriveObj(ECourse::class , $id);
+        $result = FEntityManager::getInstance()->retriveObj(ECourse::class , $id);
         return $result;
     }
 
