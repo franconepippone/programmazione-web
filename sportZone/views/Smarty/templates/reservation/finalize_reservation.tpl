@@ -20,11 +20,11 @@
     </p>
 
     <p><strong>Data:</strong>
-      {if isset($data) && $data neq ''}{$data}{else}[\$data = UHTTPMethods::post('data')]{/if}
+      {if isset($date) && $date neq ''}{$data}{else}[\$date = UHTTPMethods::post('date')]{/if}
     </p>
 
     <p><strong>Orario:</strong>
-      {if isset($orario) && $orario neq ''}{$orario}{else}[\$orario = UHTTPMethods::post('orario')]{/if}
+      {if isset($time) && $time neq ''}{$time}{else}[\$time = UHTTPMethods::post('time')]{/if}
     </p>
 
     <h3>Informazioni Campo</h3>
