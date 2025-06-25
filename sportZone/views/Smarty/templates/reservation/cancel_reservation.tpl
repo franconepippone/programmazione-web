@@ -106,72 +106,29 @@
     {else}
       <h3>Riepilogo Prenotazione</h3>
 
-      <p><strong>ID Prenotazione:</strong> 
-        {if $reservation neq null}
-          {$reservation->getId()|default:'[getId()]'}
-        {else}
-          [getId()]
-        {/if}
-      </p>
-
-      <p><strong>Data:</strong> 
-        {if $reservation neq null && $reservation->getDate() neq null}
-          {$reservation->getDate()|date_format:"%Y-%m-%d"}
-        {else}
-          [getDate()]
-        {/if}
-      </p>
-
-      <p><strong>Orario:</strong> 
-        {if $reservation neq null}
-          {$reservation->getTime()|default:'[getTime()]'}
-        {else}
-          [getTime()]
-        {/if}
-      </p>
-
-      {assign var=campo value=$reservation neq null ? $reservation->getField() : null}
+      <p><strong>ID Prenotazione:</strong> {$reservation.id|default:'-'}</p>
+      <p><strong>Data:</strong> {$reservation.date|date_format:"%Y-%m-%d"|default:'-'}</p>
+      <p><strong>Orario:</strong> {$reservation.time|default:'-'}</p>
 
       <p><strong>Campo Sportivo:</strong></p>
       <ul>
-        <li>Sport: 
-          {if $campo neq null}
-            {$campo->getSport()|default:'[getSport()]'}
+        <li><strong>Sport:</strong> {$reservation.sport|default:'-'}</li>
+        <li><strong>Tipo terreno:</strong> {$reservation.field|default:'-'}</li>
+        <li><strong>Indoor:</strong> 
+          {if isset($reservation.field_indoor)}
+            {if $reservation.field_indoor}Sì{else}No{/if}
           {else}
-            [getSport()]
+            -
           {/if}
         </li>
-        <li>Tipo terreno: 
-          {if $campo neq null}
-            {$campo->getTipoTerreno()|default:'[getTipoTerreno()]'}
-          {else}
-            [getTipoTerreno()]
-          {/if}
+        <li><strong>Costo Orario:</strong> 
+          {if isset($reservation.hourlyCost)}€{$reservation.hourlyCost|number_format:2}{else}-{/if}
         </li>
-        <li>Indoor: 
-          {if $campo neq null}
-            {if $campo->getIndoor() === null}
-              [getIndoor()]
-            {elseif $campo->getIndoor()}
-              Indoor
-            {else}
-              Outdoor
-            {/if}
-          {else}
-            [getIndoor()]
-          {/if}
-        </li>
-        <li>Costo Orario: 
-          {if $campo neq null}
-            {$campo->getCostoOrario()|default:'[getCostoOrario()]'} €
-          {else}
-            [getCostoOrario()]
-          {/if}
-        </li>
+        <li><strong>Metodo di Pagamento:</strong> {$reservation.paymentMethod|capitalize|default:'-'}</li>
       </ul>
 
       <form method="post" action="/reservation/cancelReservation">
-        <input type="hidden" name="id" value="{if $reservation neq null}{$reservation->getId()}{else}0{/if}">
+        <input type="hidden" name="id" value="{$reservation.id|default:0}">
         <button type="submit" name="confirm">Conferma cancellazione</button>
       </form>
     {/if}
