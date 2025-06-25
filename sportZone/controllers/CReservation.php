@@ -10,7 +10,7 @@ class CReservation{
     
     $view = new VReservation();
     
-    $fieldId = $_GET['fieldId'] ?? null;
+    $fieldId = $_GET['Id'] ?? null;
     if (!$fieldId){ 
         $error = new VError();
         $error->show("ID non specificato.");
