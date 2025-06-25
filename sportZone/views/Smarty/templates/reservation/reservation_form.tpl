@@ -64,8 +64,8 @@
       <div class="field">
         <label for="time" class="label">Seleziona orario:</label>
         <select name="time" id="time" required>
-          {if isset($availableHours)}
-            {foreach $availableHours as $hour}
+          {if isset($avaiableHours)}
+            {foreach $avaiableHours as $hour}
               <option value="{$hour|escape}">{$hour|escape}</option>
             {/foreach}
           {else}
