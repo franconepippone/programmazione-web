@@ -51,8 +51,8 @@
 <body>
     <div class="error-container">
         <h1>Errore</h1>
-        <p>{$error_message|escape}</p>
-        <button type="button" onclick="history.back()">Torna indietro</button>
+        <p>{$error_message}</p>
+        <a href="javascript:history.back()">Torna indietro</a>
     </div>
 </body>
 </html>

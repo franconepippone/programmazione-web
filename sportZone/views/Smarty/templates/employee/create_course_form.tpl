@@ -90,6 +90,7 @@
 
 <div class="form-wrapper">
     <h2>📘 Crea un nuovo corso</h2>
+<<<<<<< Updated upstream
 
     <form method="post" action="/employee/courseSummary">
         <div class="form-group">
@@ -119,6 +120,36 @@
         <div class="form-group">
             <label for="max_participants">Numero massimo partecipanti</label>
             <input type="number" name="max_participants" id="max_participants" value="{$max_participants|default:''}">
+=======
+    <form method="post" action="/employee/courseSummary">
+        <div class="form-group">
+            <label for="title">Titolo</label>
+            <input type="text" name="title" id="title" value="{$data.form.title|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="description">Descrizione</label>
+            <input type="text" name="description" id="description" value="{$data.form.description|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="start_date">Data inizio</label>
+            <input type="date" name="start_date" id="start_date" value="{$data.form.start_date|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="start_time">Orario inizio</label>
+            <input type="time" name="start_time" id="start_time" value="{$data.form.start_time|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="end_time">Orario fine</label>
+            <input type="time" name="end_time" id="end_time" value="{$data.form.end_time|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="cost">Costo iscrizione</label>
+            <input type="text" name="cost" id="cost" value="{$data.form.cost|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="max_participants">Numero massimo partecipanti</label>
+            <input type="number" name="max_participants" id="max_participants" value="{$data.form.max_participants|default:''}">
+>>>>>>> Stashed changes
         </div>
         <div class="form-group">
             <label>Giorni della settimana</label>
@@ -126,7 +157,11 @@
                 {foreach from=['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'] item=day}
                     <label>
                         <input type="checkbox" name="days[]" value="{$day}"
+<<<<<<< Updated upstream
                             {if isset($days) && $day|in_array:$days}checked{/if}>
+=======
+                            {if isset($data.form.days) && $day|in_array:$data.form.days}checked{/if}>
+>>>>>>> Stashed changes
                         {$day}
                     </label>
                 {/foreach}
@@ -136,8 +171,13 @@
             <label for="instructor">Istruttore</label>
             <select name="instructor" id="instructor">
                 <option value="">Seleziona...</option>
+<<<<<<< Updated upstream
                 {foreach from=$instructors item=inst}
                     <option value="{$inst.id}" {if $inst.id == ($instructor|default:'')}selected{/if}>
+=======
+                {foreach from=$data.instructors item=inst}
+                    <option value="{$inst.id}" {if $inst.id == ($data.form.instructor|default:'')}selected{/if}>
+>>>>>>> Stashed changes
                         {$inst.name} {$inst.surname}
                     </option>
                 {/foreach}
@@ -147,8 +187,13 @@
             <label for="field">Campo</label>
             <select name="field" id="field">
                 <option value="">Seleziona...</option>
+<<<<<<< Updated upstream
                 {foreach from=$fields item=field}
                     <option value="{$field.id}" {if $field.id == ($field|default:'')}selected{/if}>
+=======
+                {foreach from=$data.fields item=field}
+                    <option value="{$field.id}" {if $field.id == ($data.form.field|default:'')}selected{/if}>
+>>>>>>> Stashed changes
                         {$field.name}
                     </option>
                 {/foreach}
