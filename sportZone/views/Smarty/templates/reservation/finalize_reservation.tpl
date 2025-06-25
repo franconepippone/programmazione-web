@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Riepilogo Prenotazione</title>
+  <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/styleform.css" />
 </head>
 <body>
 
