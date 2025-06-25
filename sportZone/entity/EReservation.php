@@ -91,14 +91,16 @@ class EReservation
     public static function reservationToArray(EReservation $reservation) {
         
         return [
+            'client_name' => $reservation->getClient() ? $reservation->getClient() -> getName() : null,
+            'client_surname' => $reservation->getClient() ? $reservation->getClient() -> getSurname() : null,
             'id' => $reservation->getId(),
             'date' => $reservation->getDate(),
             'time' => $reservation->getTime(),
-            'filed_name' => $reservation->getField(),
-            'latitude' => $field->getLatitude(),
-            'longitude' => $field->getLongitude(),
-            'terrainType' => $field ->getTerrainType(),
-            'isIndoor' => $field ->getIsIndoor(),
+            'field' => $reservation->getField() ? $reservation->getField()->getName() : null,
+            'sport' => $reservation->getField() ? $reservation->getField()->getSport() : null,
+            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->get
+            
+            
         ];
     }
 }
