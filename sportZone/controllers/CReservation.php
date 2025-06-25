@@ -10,15 +10,15 @@ class CReservation{
     
     $view = new VReservation();
     
-    $fieldId = $_POST('fieldId');
-    if (!$fieldId) {
+    $fieldId = $_POST['fieldId'] ?? null;
+    if (!$fieldId) 
         VError::show("ID del campo non specificato.");
         return;
     }
      // Get available hours for this field and date through FReservation
     $availableHours = FReservation::getAvailableHours($fieldId, $date);
 
-    $date = $POST('date');
+    $date = $POST['date'] ?? null;
     if (!$date) {
         VError::show("data non specificata.");
         return;
