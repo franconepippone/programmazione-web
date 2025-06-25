@@ -3,18 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <title>Prenotazione Campo (Test)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    /* ... il tuo CSS rimane invariato ... */
-  </style>
+  <link rel="stylesheet" href="/htdocs/programmazione-web/sportZone/views/Smarty/css/styleform.css" />
 </head>
 <body>
 
   <div class="container">
-    <div class="image-box">
-      <!-- Inserisci qui la tua immagine -->
-      <img src="path/to/your/image.jpg" alt="Campo sportivo" />
-    </div>
 
     <h2>Prenotazione Campo (Modalità Test)</h2>
 
