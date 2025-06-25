@@ -16,16 +16,16 @@ class CReservation{
         $error->show("ID non specificato.");
         return;
     }
-     // Get available hours for this field and date through FReservation
-    $availableHours = FReservation::getAvailableHours($fieldId, $date);
 
-    $date = $GET['date'] ?? null;
+     $date = $GET['date'] ?? null;
     if (!$date) {
         $error = new VError();
         $error->show("Data non specificata.");
         return;
     }
-    
+     // Get available hours for this field and date through FReservation
+    $availableHours = FReservation::getAvailableHours($fieldId, $date);
+
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
  $error = new VError();
