@@ -12,10 +12,6 @@ class EOnlinePayment extends EPaymentMethod
     #[ORM\ManyToOne(targetEntity: ECreditCard::class, inversedBy: "onlinePayments", cascade: ["persist", "remove"])]
     private ECreditCard $creditCard;
 
-    public function __construct() {
-        parent::__construct();
-    }
-
     public function setCreditCard(?ECreditCard $creditCard): self {
         $this->creditCard = $creditCard;
         return $this;

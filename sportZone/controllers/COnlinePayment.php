@@ -24,7 +24,11 @@ class COnlinePayment {
 
     public static function finalizeAddCreditCard() {
         CUser::isLogged();
-        if (!CUser::isClient()) exit; // only clients can add credit cards
+        if (!CUser::isClient()) {
+            $viewErr = new VError();
+            $viewErr->show("You are not allowed to add a credit card.");
+            exit;
+        }; // only clients can add credit cards
         
         /** @var EClient $user */
         $user = CUser::getLoggedUser();
@@ -39,6 +43,20 @@ class COnlinePayment {
 
         print_r($inputs);
 
+        $card = (new ECreditCard())
+        ->setBank($inputs['bank'])
+        ->setCardNetwork($inputs['cardNetwork'])
+        ->setCvv($inputs['cvv'])
+        ->setExpirationDate($inputs['expirationDate'])
+        ->setNumber($inputs['number'])
+        ->setOwner($inputs['owner']);
+
+        // HA SENSO CHE PAYMENT METHOD ABBIA LE RESERVATION E ENROLLEMENTS?
+        $paymentMethod = (new EOnlinePayment())
+        ->setClient($user)
+        ->setCreditCard($card);
+
+        $user->addPaymentMethod($paymentMethod);
 
     }
 

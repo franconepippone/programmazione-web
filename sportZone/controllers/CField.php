@@ -59,23 +59,18 @@ class CField {
             exit;
         }
 
-        print_r($_GET);
-
         try {
-            $inputs = UValidate::validateInputArray($_GET, ["date"], false);
+            $inputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
+            // TODO mostra messaggio errore
             echo $e->getMessage();
             exit;
         }
 
-        print_r($inputs);
-
         $query = http_build_query([
             "fieldId" => $field_id,
-            "data" => $inputs["date"]
+            "date" => $inputs["date"]
         ]);
-
-        echo $query;
 
         $view = new VField();
         $view->showDetailsPage($fld, $query);
