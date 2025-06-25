@@ -68,8 +68,27 @@ class CPayment {
         echo "uploaded";
     }
 
+    private static function getOngoingPayment(): array {
+        CUser::isLogged();
+        if (!CUser::isClient()) {
+            $viewErr = new VError();
+            $viewErr->show("Solo i clienti possono pagare.");
+            exit;
+        }; // only clients can pay
+
+        // verify that the user has started a payment
+        if (!USession::isSetSessionElement('ongoingPayment')) {
+            $viewErr = new VError();
+            $viewErr->show("Non hai iniziato un pagamento.");
+            exit;
+        }
+
+        return USession::getSessionElement('ongoingPayment');
+    }
+
+
     // TODO Vulnerability: this method can be called from any browser
-    public static function startPayment(string $amount, string $redirectUrl) {
+    public static function startPayment(string $amount, string $redirectUrl, string $paymentSecret) {
         CUser::isLogged();
         if (!CUser::isClient()) {
             $viewErr = new VError();
@@ -87,6 +106,7 @@ class CPayment {
 
         // stores in session, so they are safe and not modifiable
         $ongoingPayment = [
+            'paymentSecretHash' => password_hash('sha256', PASSWORD_DEFAULT),
             'amountCents' => $amountCents,
             'redirectUrl' => $redirectUrl
         ];
@@ -98,24 +118,10 @@ class CPayment {
     }
     
     public static function selectMethod() {
-        CUser::isLogged();
-        if (!CUser::isClient()) {
-            $viewErr = new VError();
-            $viewErr->show("Solo i clienti possono pagare.");
-            exit;
-        }; // only clients can pay
+        $ongoingPaymentData = self::getOngoingPayment();
 
-        // verify that the user has started a payment
-        if (!USession::isSetSessionElement('ongoingPayment')) {
-            $viewErr = new VError();
-            $viewErr->show("Non hai iniziato un pagamento.");
-            exit;
-        }
-
-        // recupera i dati del pagamento in corso dalla sessione
-        $ongoingPayment = USession::getSessionElement('ongoingPayment');
-        $amountCents = $ongoingPayment['amountCents'];
-        $redirectUrl = $ongoingPayment['redirectUrl'];
+        $amountCents = $ongoingPaymentData['amountCents'];
+        $redirectUrl = $ongoingPaymentData['redirectUrl'];
 
         // mostra la lista dei metodi di pagamento dell'utente
         /** @var EClient $user */
@@ -126,28 +132,13 @@ class CPayment {
         $view->showPaymentMethods($paymentMethods, $amountCents, $redirectUrl);
     }
 
-    public static function pay() {
-        CUser::isLogged();
-        if (!CUser::isClient()) {
-            $viewErr = new VError();
-            $viewErr->show("Solo i clienti possono pagare.");
-            exit;
-        }; // only clients can pay
+    public static function confirmPay() {
+        $ongoingPaymentData = self::getOngoingPayment();
 
-        // verify that the user has started a payment
-        if (!USession::isSetSessionElement('ongoingPayment')) {
-            $viewErr = new VError();
-            $viewErr->show("Non hai iniziato un pagamento.");
-            exit;
-        }
+        $amountCents = $ongoingPaymentData['amountCents'];
+        $redirectUrl = $ongoingPaymentData['redirectUrl'];
 
-        // recupera i dati del pagamento in corso dalla sessione
-        $ongoingPayment = USession::getSessionElement('ongoingPayment');
-        $amount = $ongoingPayment['amount'];
-        $redirectUrl = $ongoingPayment['redirectUrl'];
-        $paymentIdentifierHash = $ongoingPayment['paymentIdentifierHash'];
-
-        echo "Amount: $amount, Redirect URL: $redirectUrl";
+        echo "Amount: $amountCents, Redirect URL: $redirectUrl";
 
         // arrivano in POST:
         //  - il metodo di pagamento scelto (id)
@@ -181,12 +172,30 @@ class CPayment {
             exit;
         }
 
-        $outcome = $paymentMethod->pay((int) ($amount * 100)); // amount in cents
+        $outcome = $paymentMethod->pay($amountCents); // amount in cents
 
-        // effettua il pagamento chiamando pay() sull'oggetto PaymentMethod
+        if (!$outcome) {
+            $viewErr = new VError();
+            $viewErr->show("Il pagamento non è andato a buon fine. Riprova più tardi.");
+            exit;
+        }
 
-        // se il pagamento va a buon fine, reindirizza l'utente alla redirect uri, senno mostra un errore
+        // payment successful, remove the ongoing payment from session
+        header("Location: $redirectUrl");
+    }
 
+    public static function verifyAndEndPayment($paymentSecret): bool
+    {
+        $ongoingPaymentData = self::getOngoingPayment();
+
+        // verify the payment secret
+        if (!password_verify($paymentSecret, $ongoingPaymentData['paymentSecretHash'])) {
+            return false; // payment secret does not match
+        }
+
+        // remove the ongoing payment from session
+        USession::unsetSessionElement('ongoingPayment');
+        return true; // payment verified and ended successfully
     }
 
  

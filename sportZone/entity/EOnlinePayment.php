@@ -20,4 +20,14 @@ class EOnlinePayment extends EPaymentMethod
     public function getCreditCard(): ECreditCard {
         return $this->creditCard;
     }
+
+    public function pay(int $amountCents): bool {
+        // Here you would implement the logic to process the payment using the credit card
+        // For now, we will just simulate a successful payment
+        if ($this->creditCard) {
+            // Simulate payment processing
+            return true; // Payment successful
+        }
+        return false; // Payment failed, no credit card set
+    }
 }

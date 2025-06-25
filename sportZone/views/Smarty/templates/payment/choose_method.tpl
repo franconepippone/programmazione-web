@@ -76,7 +76,7 @@
         <h3>Payment amount: {$amount}€</h3>
         {if $paymentMethods|@count > 0}
             {* First payment method *}
-            <form class="payment-method-form" method="post" action="/payment/pay">
+            <form class="payment-method-form" method="post" action="/payment/confirmPay">
                 <input type="hidden" name="methodId" value="{$paymentMethods[0].id}">
                 <button type="submit" class="payment-method-btn">
                     Select
@@ -92,7 +92,7 @@
                 <hr>
             </div>
             {section name=idx loop=$paymentMethods start=1}
-                <form class="payment-method-form" method="post" action="/payment/pay">
+                <form class="payment-method-form" method="post" action="/payment/confirmPay">
                     <input type="hidden" name="methodId" value="{$paymentMethods[idx].id}">
                     <button type="submit" class="payment-method-btn">
                         Select
