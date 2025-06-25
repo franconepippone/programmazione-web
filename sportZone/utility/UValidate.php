@@ -1,18 +1,59 @@
 <?php
 
+use App\Enum\EnumOnlinePaymentMethods;
+
 
 require __DIR__ ."/../../vendor/autoload.php";
 
 
 class UValidate {
 
-    //-------------------------------- PUT HERE THE VALIDATOR METHODS ------------------------------
+    // =========================== PUT HERE THE VALIDATOR METHODS ===========================
 
-    // ------ ONLINE PAYMENTS -----------
+    // ----------- ONLINE PAYMENTS -----------
 
+    #[ValidatorFor(context: "online_payment", fields: "paymentMethod", "asd")]
     public function validatePaymentMethod($method): string {
-        return "";
+        return validateEnum($method, EnumOnlinePaymentMethods::class);
     }
+    
+    #[ValidatorFor("moneyAmount")]
+    public function validateMoneyAmount($amount): int {
+        $trimmed = trim($amount);
+
+        if (!is_numeric($trimmed)) {
+            throw new ValidationException("Cannot convert '$trimmed' to a valid money amount.");
+        }
+
+        $amountCents = 0; 
+    }
+
+    /**
+     * Validate if a string corresponds to a backed enum value (case-insensitive).
+     *
+     * @param string $value Input string to validate
+     * @param class-string<\BackedEnum> $enumClass Enum class name
+     * @return string Validated enum value (normalized)
+     * @throws ValidationException If value is not valid for the enum
+     */
+    public static function validateEnum(string $value, string $enumClass): \BackedEnum {
+        if (!enum_exists($enumClass)) {
+            throw new \InvalidArgumentException("Class '$enumClass' is not a valid enum.");
+        }
+
+        $normalized = strtolower(trim($value));
+
+        foreach ($enumClass::cases() as $case) {
+            if (strtolower($case->value) === $normalized) {
+                return $case->value;
+            }
+        }
+
+        throw new ValidationException("Invalid value '$value' for enum '$enumClass'.");
+    }
+
+
+    // ---------------------- COURSES --------------------------------
 
     /**
      * Validate if a string is a valid email address
@@ -23,7 +64,7 @@ class UValidate {
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
-    #[ValidatorFor("title")]
+    #[ValidatorFor("title", "name")]
     public static function validateTitle(string $title): string {
         // Check if the title is empty
         if (empty($title)) {
@@ -40,7 +81,7 @@ class UValidate {
         return $title;
     }
     
-    // --------------------------- DO NOT CHANGE -----------------------------------------
+    // =========================== DO NOT CHANGE ===========================
 
     /**
      * Validates and filters an input array based on allowed attributes and custom validation methods.
@@ -83,6 +124,7 @@ class UValidate {
         $validatorMap = self::getValidatorMap();
 
         foreach ($filteredParams as $key => $val) {
+            // ignores attribute if it does not have a registered validation method
             if (isset($validatorMap[$key]) && method_exists(self::class, $validatorMap[$key])) {
                 $filteredParams[$key] = self::{$validatorMap[$key]}($val);
             }
@@ -137,7 +179,7 @@ class ValidatorFor {
      *
      * @param string ...$fields The input field(s) this method validates
      */
-    public function __construct(string ...$fields) {
+    public function __construct(string $context, string ...$fields) {
         $this->fields = $fields;
     }
 }

@@ -5,5 +5,4 @@ enum UserSex: string
 {
     case MALE = 'male';
     case FEMALE = 'female';
-    case TRANS = 'trans';
 }

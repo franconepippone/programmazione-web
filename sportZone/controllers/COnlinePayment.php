@@ -17,7 +17,7 @@ class COnlinePayment{
         $user = FPersistentManager::retriveUserOnId($userid);
 
         try {
-            $inputs = UValidate::validateInputArray($_GET, ["payment_method", "amount", "redirect_url"], true);
+            $inputs = UValidate::validateInputArray($_GET, ["paymentMethod", "amount", "redirect_url"], true);
         } catch (ValidationException $e) {
             $viewErr = new VError();
             $viewErr->show($e->getMessage());

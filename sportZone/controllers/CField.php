@@ -41,6 +41,8 @@ class CField{
             exit;
         }
 
+        var_dump($_GET);
+
         $view = new VField();
         $view->showDetailsPage($fld);
     }
