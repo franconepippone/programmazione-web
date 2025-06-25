@@ -47,9 +47,9 @@ class CReservation{
     $userId = $_SESSION['userId'] ?? null;
 
     // Get POST parameters
-    $fieldId = $_POST['id'] ?? null;
-    $date = $_POST['data'] ?? null;
-    $time = $_POST['orario'] ?? null;
+    $fieldId = $_POST['field_id'] ?? null;
+    $date = $_POST['date'] ?? null;
+    $time = $_POST['time'] ?? null;
 
     // Validate parameters individually and show error immediately
     if (!$fieldId) {
