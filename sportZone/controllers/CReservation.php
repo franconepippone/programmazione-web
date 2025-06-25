@@ -34,7 +34,7 @@ class CReservation{
     }
      
    
-    $view->showReservationForm($field);//,$date,$avaiableHours); //da passare field, date e avaiablehours
+    $view->showReservationForm($field,$date,$avaiableHours); //da passare field, date e avaiablehours
   
     
  }
