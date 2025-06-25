@@ -4,8 +4,8 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CField {
 
-    private static $validationRules = [
-        "sport" => 'validateTitle',
+    private static $rulesSearch = [
+        "sport" => 'validateSport',
         "date" => 'validateDate'
     ];
 
@@ -19,26 +19,26 @@ class CField {
     public static function showResults() {
         CUser::isLogged();
 
-        $pm = FPersistentManager::getInstance();
-        $fields = $pm->retrieveAllMatchingFields();
-        
-        print_r($_GET);
-
         try {
-            $searchParams = UValidate::validateInputArray($_GET, self::$validationRules, true);
+            $getInputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
-            echo $e->getMessage();
+            echo "INPUT VALIDATION FAILED: " . $e->getMessage();
             exit;
         }
 
-        print_r($searchParams);
+        $searchParams = ['date' => '', 'sport' => ''];
+        if (isset($getInputs['date'])) {
+            $dataText = $getInputs['date']->format('Y-m-d');
+            $searchParams['date'] = $dataText; // Convert DateTime to string in 'Y-m-d' format
+        }
 
-        //$searchParams = ['date' => '', 'sport' => ''];
-        //if (UHTTPMethods::getIsSet('date')) $searchParams['date'] = UHTTPMethods::get('date');
-        //if (UHTTPMethods::getIsSet('sport')) $searchParams['sport'] = UHTTPMethods::get('sport');
-
+        if (isset($getInputs['sport'])) {
+            $searchParams['sport'] = $getInputs['sport'];
+        }
+        
+        $pm = FPersistentManager::getInstance();
+        $fields = $pm->retrieveAllMatchingFields();
         // TODO filtraggio dei campi (usa metodo di alice) 
-
 
         $view = new VField();
         $view->showSearchResults($fields, $searchParams);
@@ -55,8 +55,6 @@ class CField {
             exit;
         }
 
-        print_r($_GET);
-
         try {
             $inputs = UValidate::validateInputArray($_GET, ["date"], false);
         } catch (ValidationException $e) {
@@ -65,15 +63,8 @@ class CField {
         }
 
 
-        $query = http_build_query([
-            "fieldId" => $field_id,
-            "data" => $inputs["date"]
-        ]);
-
-        echo $query;
-
         $view = new VField();
-        $view->showDetailsPage($fld, $query);
+        $view->showDetailsPage($fld);
     }
 
 
