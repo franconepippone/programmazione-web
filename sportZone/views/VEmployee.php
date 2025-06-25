@@ -30,6 +30,7 @@ class VEmployee{
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     public function showCreateCourseForm($instructors, $fields, $data = []) {
         $this->smarty->assign('instructors', array_map(fn($i) => EInstructor::instructorToArray($i), $instructors));
         $this->smarty->assign('fields', array_map(fn($f) => EField::fieldToArray($f), $fields));
@@ -64,6 +65,13 @@ public function showCreateCourseForm($instructors, $fields, $data = []) {
     $instructorsArr = array_map(fn($i) => EInstructor::instructorToArray($i), $instructors);
     $fieldsArr = array_map(fn($f) => EField::fieldToArray($f), $fields);
 
+=======
+
+public function showCreateCourseForm($instructors, $fields, $data = []) {
+    $instructorsArr = array_map(fn($i) => EInstructor::instructorToArray($i), $instructors);
+    $fieldsArr = array_map(fn($f) => EField::fieldToArray($f), $fields);
+
+>>>>>>> Stashed changes
 =======
 
 public function showCreateCourseForm($instructors, $fields, $data = []) {
@@ -115,6 +123,9 @@ public function confirmReservation($course) {
 }
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
