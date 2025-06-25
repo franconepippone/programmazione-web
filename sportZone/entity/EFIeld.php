@@ -208,11 +208,11 @@ class EField
             'name' => $field ->getName(),
             'id' => $field->getId(),
             'description' => $field->getDescription(),
-            'hourlyCost' => $filed->getCost(),
+            'hourlyCost' => $field->getCost(),
             'sport' => $field->getSport(),
             'latitude' => $field->getLatitude(),
             'longitude' => $field->getLongitude(),
-            'terrainType' => $filed ->getTerrainType(),
+            'terrainType' => $field ->getTerrainType(),
             'isIndoor' => $field ->getIsIndoor(),
         ];
     }
