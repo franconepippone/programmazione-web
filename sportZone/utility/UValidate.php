@@ -27,6 +27,10 @@ class UValidate {
         }
         return $title;
     }
+
+    public static function validateReservationData(string $data): \DateTimeInterface {
+        return new \DateTimeImmutable($data);
+    }
     
 
 
@@ -45,6 +49,8 @@ class UValidate {
                 unset($attributes[$key]); // attribute found, we dont need it in the attributes array anymore*
             }
         }
+
+        echo empty($attributes);
 
         // throws exceptions if some attributes are still missing and the $require flag is true
         if ($require && !empty($attributes)) {
