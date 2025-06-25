@@ -6,18 +6,22 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CUser{
 
+    // Array of rules for validating user registration inputs
+    // The keys are the input names, and the values are the validation methods (inside the UValidate class)
     private static $rulesRegister = [
         "name" => 'validateName',
         "surname" => 'validateName',
         "email" => 'validateEmail',
         "username" => 'validateUsername',
         "password" => 'validatePassword',
-        "birthday" => 'validateDate'
+        "birthday" => 'validateBirthDate'
     ];
 
     /**
-     * check if the user is logged (using session)
-     * @return boolean
+     * Checks if the user is logged in.
+     * If not, redirects to the login page with a redirect argument set to the current page.
+     * 
+     * @return bool True if the user is logged in, otherwise redirects to login.
      */
     public static function isLogged()
     {
@@ -45,11 +49,13 @@ class CUser{
         return true;
     }
 
+    // Registers a new user by displaying the registration form.
     public static function register(){
         $view = new VUser();
         $view->showRegistrationForm();
     }
 
+    // Displays the login form for the user.
     public static function login(){
         if(UCookie::isSet('PHPSESSID')){
             if(session_status() == PHP_SESSION_NONE){
@@ -59,7 +65,7 @@ class CUser{
 
         // If the login is trying to redirect to a page other than home
         $redirectUrl = "/user/home";
-        if (isset($_GET["redirect"])) {
+        if (UHTTPMethods::getIsSet("redirect")) {
             $redirectUrl = UHTTPMethods::get("redirect");
         }
 
@@ -120,6 +126,7 @@ class CUser{
     {
         $verr = new VError();
 
+        // validates form inputs
         try {
             $formInputs = UValidate::validateInputArray($_POST, self::$rulesRegister, true);
         } catch (ValidationException $e) {
@@ -136,8 +143,8 @@ class CUser{
             exit;
         }
         
-        // validate the form inputs
-        $new_user = (new EClient())
+        // creates new client
+        $newClient = (new EClient())
         ->setName($formInputs['name'])
         ->setSurname($formInputs['surname'])
         ->setSex(UserSex::MALE)
@@ -145,11 +152,11 @@ class CUser{
         ->setUsername($formInputs['username'])
         ->setPassword($formInputs['password'])
         ->setBirthDate(
-            new DateTime($formInputs['birthday'])
+            new DateTime($formInputs['birthday']->format('Y-m-d'))
         );
         
         // register was succesfull
-        $check = FPersistentManager::getInstance()->uploadObj($new_user);
+        $check = FPersistentManager::getInstance()->uploadObj($newClient);
         if($check){
             echo "Registration successfull, redirecting to /user/login... (if you see this something went wrong)";
             header("Location: /user/login");

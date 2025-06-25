@@ -15,3 +15,4 @@ define('COOKIE_EXP_TIME', 2592000); // 30 days in seconds
 
 // fields constraints 
 define('MAX_USERNAME_LENGTH', 20);
+define('MINIMUM_AGE', 10);
