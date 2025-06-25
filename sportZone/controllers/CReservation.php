@@ -28,7 +28,7 @@ class CReservation{
 **/
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
- $error = new VError();
+    $error = new VError();
         $error->show("Campo non trovato.");
         return;
     }
@@ -54,17 +54,17 @@ class CReservation{
     // Validate parameters individually and show error immediately
     if (!$fieldId) {
         $error = new VError();
-        $error->show("Field ID is missing.");
+        $error->show("ID non specificato.");
         return;
     }
     if (!$date) {
         $error = new VError();
-        $error->show("Date is not specified.");
+        $error->show("Data non specificato.");
         return;
     }
     if (!$time) {
         $error = new VError();
-        $error->show("Time is not specified.");
+        $error->show("Orario non specificato.");
         return;
     }
 
@@ -72,31 +72,14 @@ class CReservation{
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
         $error = new VError();
-        $error->show("Selected field not found.");
+        $error->show("Campo non trovato.");
         return;
     }
 
-    // Retrieve client from database
-   $client = null;
-   $fullName = null;
-
-   if ($userId !== null) {
-       $client = FPersistentManager::getInstance()->retriveClientById($userId);
-
-       if (!$client) {
-           $error = new VError();
-           $error->show("Client information could not be found.");
-           return;
-       }
-
+    $client = FPersistentManager::getInstance()->retriveClientById($userId);
       //  Get full name from client (EClient extends EUser)
-       $fullName = $client->getName() . ' ' . $client->getSurname();
-    } else {
-        $error = new VError();
-        $error->show("User session invalid.");
-        return;
-    }
-
+    $fullName = $client->getName() . ' ' . $client->getSurname();
+     
     // Process reservation if form confirmed with onsite payment
     if (isset($_POST['confirm']) && isset($_POST['paymentMethod']) && $_POST['paymentMethod'] === 'onsite') {
         $payment = new EOnsitePayment();
@@ -120,10 +103,8 @@ class CReservation{
 
   
   public static function cancelReservation() {
-    // 1. Check if user is logged in
+    
     CUser::isLogged();
-
-    // 2. Get user ID from session
     $userId = $_SESSION['userId'] ?? null;
 
     // 3. Get POST parameter
@@ -152,7 +133,7 @@ class CReservation{
 
     // 7. If confirmed, delete and show confirmation
     if (isset($_POST['confirm'])) {
-     //   FPersistentManager::getInstance()->deleteObj($reservation);
+        FPersistentManager::getInstance()->deleteObj($reservation);
         $view = new VReservation();
         $view->showCancelConfirmation();
         return;
