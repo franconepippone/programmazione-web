@@ -131,7 +131,7 @@
       </ul>
     {/if}
 
-    <a href="/reservation/reservationForm" class="back-link" title="Torna al modulo di prenotazione">
+    <a href="/user/home" class="back-link" title="Torna alla home">
       ← Torna al modulo di prenotazione
     </a>
   </section>
