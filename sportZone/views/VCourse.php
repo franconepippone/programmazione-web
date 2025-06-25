@@ -25,8 +25,8 @@ class VCourse
         }
 
         
-        $this->smarty->assign('instructors', $instructors);
-        $this->smarty->assign('fields', $fields);
+        $this->smarty->assign('instructors', $instructorsData);
+        $this->smarty->assign('fields', $fieldsData);
 
         $this->smarty->display('course/create_course_form.tpl');
     }

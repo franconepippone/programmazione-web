@@ -9,7 +9,7 @@
 <div class="form-wrapper">
     <h2>📘 Crea un nuovo corso</h2>
 
-    <form method="post" action="/employee/finalizeCreateCourse">
+    <form method="post" action="/course/finalizeCreateCourse">
 
         <div class="form-group">
             <label for="title">📛 Titolo del corso</label>
@@ -39,11 +39,10 @@
         <div class="form-group">
             <label>📆 Giorni della settimana</label>
             <div class="checkbox-group">
-                {assign var=weekdays value=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"]}
+               {assign var=weekdays value=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"]}
                 {foreach from=$weekdays item=day}
                     <label>
-                        <input type="checkbox" name="daysOfWeek[]" value="{$day}" {if $course.daysOfWeek && in_array($day, $course.daysOfWeek)}checked{/if}>
-                        {$day}
+                        <input type="checkbox" name="daysOfWeek[]" value="{$day}"> {$day}
                     </label>
                 {/foreach}
             </div>
@@ -51,11 +50,11 @@
 
         <div class="form-group">
             <label for="instructor">👤 Istruttore</label>
-            <select name="instructor" id="instructor" required>
+            <select name="instructor" id="instructor">
                 <option value="">-- Seleziona --</option>
                 {foreach from=$instructors item=i}
-                    <option value="{$i.id}" {if $course.instructor == $i.id}selected{/if}>
-                        {$i.name} {$i.surname}
+                    <option value="{$i.id|default:''}" {if ($course.instructor|default:'') == $i.id}selected{/if}>
+                        {$i.name|default:''} {$i.surname|default:''}
                     </option>
                 {/foreach}
             </select>
@@ -63,11 +62,11 @@
 
         <div class="form-group">
             <label for="field">🏟️ Campo</label>
-            <select name="field" id="field" required>
+            <select name="field" id="field">
                 <option value="">-- Seleziona --</option>
                 {foreach from=$fields item=f}
-                    <option value="{$f.id}" {if $course.field == $f.id}selected{/if}>
-                        {$f.name}
+                    <option value="{$f.id|default:''}" {if ($course.field|default:'') == $f.id}selected{/if}>
+                        {$f.name|default:''}
                     </option>
                 {/foreach}
             </select>
@@ -75,14 +74,13 @@
 
         <div class="form-group">
             <label for="cost">💰 Costo (€)</label>
-            <input type="number" step="0.01" min="0" name="cost" id="cost" value="{$course.cost|default:''}" required>
+            <input type="number" step="0.01" min="0" name="cost" id="cost" value="{$course.cost|default:''}">
         </div>
 
         <div class="form-group">
             <label for="MaxParticipantsCount">👥 Numero massimo partecipanti</label>
-            <input type="number" min="1" name="MaxParticipantsCount" id="MaxParticipantsCount" value="{$course.MaxParticipantsCount|default:''}" required>
+            <input type="number" min="1" name="MaxParticipantsCount" id="MaxParticipantsCount" value="{$course.MaxParticipantsCount|default:''}">
         </div>
-
         <button type="submit" class="submit-button">✅ Conferma</button>
     </form>
 </div>
