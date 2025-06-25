@@ -6,63 +6,54 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #a8c0ff, #3f2b96); /* sfumatura blu più soft */
+  background: linear-gradient(135deg, #d9e2ff, #a7b8d9);
   margin: 0;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  color: #2e2e2e;
+  color: #2f3a56;
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 3rem 3rem;
-  max-width: 540px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  padding: 2.5rem 2.8rem;
+  max-width: 520px;
   width: 100%;
-  box-shadow: 0 16px 40px rgba(63, 43, 150, 0.3);
+  box-shadow: 0 10px 30px rgba(100, 110, 140, 0.25);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 22px 50px rgba(63, 43, 150, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgba(100, 110, 140, 0.35);
 }
 
 h2 {
   font-weight: 600;
-  color: #2f2f6d;
-  margin-bottom: 2rem;
+  color: #374868;
+  margin-bottom: 1.8rem;
   text-align: center;
-  font-size: 2.3rem;
+  font-size: 2rem;
   letter-spacing: 0.04em;
-}
-
-h3 {
-  font-size: 1.3rem;
-  color: #45458a;
-  margin-bottom: 1.3rem;
-  border-bottom: 2px solid #99aaff;
-  padding-bottom: 0.4rem;
-  font-weight: 600;
 }
 
 ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 2.5rem 0;
+  margin: 0 0 2.2rem 0;
 }
 
 li {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 1.1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1.8px solid #c9d3ff;
-  color: #3b3b66;
+  font-size: 1.15rem;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1.5px solid #cad4f7;
+  color: #44516c;
   font-weight: 400;
   display: flex;
   justify-content: space-between;
@@ -70,48 +61,50 @@ li {
 
 li strong {
   font-weight: 700;
-  color: #2e2e7f; /* colore più scuro e distinto per i label */
-  min-width: 140px;
+  color: #2a3b61;
+  min-width: 130px;
   display: inline-block;
 }
 
 .back-link {
   display: inline-block;
-  margin-top: 2.5rem;
-  padding: 0.7rem 1.4rem;
+  margin-top: 2.2rem;
+  padding: 0.6rem 1.2rem;
   font-weight: 600;
-  color: #45458a;
-  border: 2.5px solid #a3b0ff;
-  border-radius: 14px;
+  color: #5a6a8a;
+  border: 2px solid #a4b1d3;
+  border-radius: 12px;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(105, 115, 255, 0.35);
+  box-shadow: 0 0 10px rgba(164, 177, 211, 0.3);
 }
 
 .back-link:hover {
-  background-color: #4e56d8;
+  background-color: #5a6a8a;
   color: white;
-  box-shadow: 0 0 30px rgba(78, 86, 216, 0.75);
+  box-shadow: 0 0 20px rgba(90, 106, 138, 0.7);
 }
 
 button {
-  margin-top: 3rem;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, #4e56d8, #91a7ff);
+  margin-top: 2.6rem;
+  padding: 0.65rem 1.4rem;
+  background: linear-gradient(135deg, #5368a6, #7e8fc1);
   border: none;
   color: white;
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 600;
-  border-radius: 16px;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 12px 36px rgba(78, 86, 216, 0.5);
+  box-shadow: 0 8px 20px rgba(83, 104, 166, 0.45);
   transition: background 0.3s ease, box-shadow 0.3s ease;
+  max-width: 180px;
+  align-self: center;
 }
 
 button:hover {
-  background: linear-gradient(135deg, #3b3fc4, #7d8cff);
-  box-shadow: 0 14px 44px rgba(59, 63, 196, 0.7);
+  background: linear-gradient(135deg, #445884, #6b7baf);
+  box-shadow: 0 12px 28px rgba(68, 88, 132, 0.6);
 }
 
 @media (max-width: 600px) {
@@ -119,13 +112,13 @@ button:hover {
     padding: 1.2rem;
   }
   .container {
-    padding: 2rem 2rem;
+    padding: 1.8rem 2rem;
   }
   h2 {
-    font-size: 1.9rem;
+    font-size: 1.7rem;
   }
   li {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     flex-direction: column;
     align-items: flex-start;
   }
@@ -134,11 +127,12 @@ button:hover {
     margin-bottom: 0.3rem;
   }
   .back-link {
-    font-size: 1rem;
-    padding: 0.6rem 1.1rem;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
   }
   button {
-    font-size: 1.15rem;
-    padding: 0.85rem 1.3rem;
+    font-size: 1.05rem;
+    padding: 0.55rem 1.1rem;
+    max-width: 100%;
   }
 }
