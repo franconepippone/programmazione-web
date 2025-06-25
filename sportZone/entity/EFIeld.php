@@ -77,6 +77,7 @@ class EField
         return $this->name;
     }
 
+
     public function setIsIndoor(bool $isIndoor): self {
         $this->isIndoor = $isIndoor;
         return $this;
@@ -199,6 +200,21 @@ class EField
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public static function fieldToArray(EField $field) {
+        
+        return [
+            'name' => $field ->getName(),
+            'id' => $field->getId(),
+            'description' => $field->getDescription(),
+            'hourlyCost' => $field->getCost(),
+            'sport' => $field->getSport(),
+            'latitude' => $field->getLatitude(),
+            'longitude' => $field->getLongitude(),
+            'terrainType' => $field ->getTerrainType(),
+            'isIndoor' => $field ->getIsIndoor(),
+        ];
     }
 }
 

@@ -23,12 +23,12 @@ Login usecase example:
     3) host/user/home => routes the user to the homepage
 */
 class CFrontController{
-    
+
     public function run($requestUri){
         // Parse the request URI
         
-        $this->createDummyFields();
-        $this->createDummyCourses();    
+      //  $this->createDummyFields();
+//        $this->createDummyCourses();    
 
         ob_start();
         // echo $requestUri;
@@ -84,13 +84,14 @@ class CFrontController{
 
         call_user_func_array([$controllerClass, $methodName], $params);
     }
+    /**
     //creo campi fittizi
     public static function createDummyFields(){
         $fields = [];
 
         $field1 = new EField();
         $field1->setSport('Calcio')
-        ->setName("porcodio")
+        ->setName('ahhhh') 
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
         ->setCost(50.0)
@@ -100,7 +101,7 @@ class CFrontController{
 
         $field2 = new EField();
         $field2->setSport('Tennis')
-        ->setName("porcodio")
+        ->setName('ahhhh')
         ->setTerrainType('Cemento')
         ->setIsIndoor(true)
         ->setCost(40.0)
@@ -110,7 +111,7 @@ class CFrontController{
 
         $field3 = new EField();
         $field3->setSport('Basket')
-        ->setName("porcodio")
+        ->setName('ahhhh')
         ->setTerrainType('Parquet')
         ->setIsIndoor(true)
         ->setCost(60.0)
@@ -120,7 +121,7 @@ class CFrontController{
 
         $field4 = new EField();
         $field4->setSport('Padel')
-        ->setName("porcodio")
+        ->setName('ahhhh')
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
         ->setCost(55.0)
@@ -136,7 +137,7 @@ class CFrontController{
     public function createDummyCourses(){
         $field = new EField();
         $field->setSport('Padel')
-        ->setName("porcodio")
+        ->setName('ahhhh')
         ->setTerrainType('Erba sintetica')
         ->setIsIndoor(false)
         ->setCost(55.0)
@@ -173,6 +174,5 @@ class CFrontController{
             FPersistentManager::getInstance()->uploadObj($course);
         }
     }
-
-    
+**/
 }

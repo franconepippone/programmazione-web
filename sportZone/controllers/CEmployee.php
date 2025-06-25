@@ -2,34 +2,32 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CEmployee{
-
+/**
   public static function cancelReservation() {
-     // 1. Check if user is logged in and is employee
-     // if (!CUser::isLogged() || !CUser::isEmployee()) {
-       //   $errorView = new VError();
-        //  $errorView->show("Devi essere un dipendente per effettuare questa operazione.");
-          //return;
-      //}
+     //  Check if user is logged in and is employee
+      CUser::isLogged();
+      CUser::isEmployee();
+      
 
-    // 2. Get POST parameter (reservation id)
-      $reservationId = $_POST['id'] ?? null;
+      //Get POST parameter (reservation id)
+      //$reservationId = $_POST['id'] ?? null;
 
-    // 3. Retrieve reservation from DB
+    //  Retrieve reservation from DB
       $reservation = null;
-      //if ($reservationId !== null && is_numeric($reservationId)) {
-        //  $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
-     // }
+      if ($reservationId !== null && is_numeric($reservationId)) {
+          $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
+      }
 
-    // 4. Check reservation exists
-     // if (!$reservation) {
-       //   $errorView = new VError();
-         // $errorView->show("Prenotazione non trovata.");
-          //return;
-      //}
+    //  Check reservation exists
+      if (!$reservation) {
+          $errorView = new VError();
+          $errorView->show("Prenotazione non trovata.");
+          return;
+      }
 
-    // 5. If confirmed, delete and show confirmation
+    //  If confirmed, delete and show confirmation
       if (isset($_POST['confirm'])) {
-        //  FPersistentManager::getInstance()->deleteObj($reservation);
+          FPersistentManager::getInstance()->deleteObj($reservation);
           $view = new VEmployee();
           $view->showCancelConfirmation();
           return;
@@ -37,13 +35,13 @@ class CEmployee{
 
     // 6. Otherwise, show cancellation form
       $view = new VEmployee();
-      $view->showCancelReservation(); //aggiungere reservation
+      $view->showCancelReservation($reservation); 
    }
 
 
        public static function showReservations() {
          
-       // CUser::isEmployee();
+        CUser::isEmployee();
 
         
         $hasFilter = !empty($_POST);
@@ -113,7 +111,7 @@ class CEmployee{
 
   public static function viewReservation() {
     
-    // CUser::isEmployee();
+     CUser::isEmployee();
 
     $id = $_POST['id'] ?? null;
 
@@ -132,14 +130,13 @@ class CEmployee{
     }
 
     $view = new VEmployee();
-    $view->viewReservation();//dare reservation
+    $view->viewReservation($reservation);
  }
-
-  public static function createCourseForm() {
-    if (!CUser::isLogged()) {
-        header("Location: /login");
-        exit;
-    }
+**/
+public static function createCourseForm() {
+    CUser::isLogged();
+    CUser::isEmployee();
+      
 
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
@@ -147,145 +144,104 @@ class CEmployee{
     $instructors = $pm->retriveAllInstructors();
     $fields = $pm->retriveAllFields();
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = $_POST;
-
-        $name = trim($data['name'] ?? '');
-        if (empty($name)) {
-            (new VError())->show("Il nome del corso è obbligatorio.");
-            return;
-        }
-
-         $description = trim($data['description'] ?? '');
-         if (empty($description)) {
-            (new VError())->show("La descrizione del corso è obbligatoria.");
-            return;
-         }
-
-        $startDateStr = $data['start_date'] ?? '';
-        $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
-        $minStartDate = (new DateTime())->modify('+7 days');
-        if (!$startDate || $startDate < $minStartDate) {
-            (new VError())->show("La data di inizio deve essere almeno tra 7 giorni da oggi.");
-            return;
-        }
-
-        $startTime = $data['start_time'] ?? '';
-        $endTime = $data['end_time'] ?? '';
-        if (strtotime($startTime) >= strtotime($endTime)) {
-            (new VError())->show("L'orario di inizio deve precedere l'orario di fine.");
-            return;
-        }
-
-        $days = $data['days'] ?? [];
-        if (!is_array($days) || count($days) === 0) {
-            (new VError())->show("Seleziona almeno un giorno della settimana.");
-            return;
-        }
-
-        $cost = $data['cost'] ?? '';
-        if (!is_numeric($cost) || floatval($cost) < 0) {
-            (new VError())->show("Inserisci un costo valido (numero positivo).");
-            return;
-        }
-
-        $maxParticipants = $data['max_participants'] ?? '';
-        if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
-            (new VError())->show("Inserisci un numero valido di partecipanti (intero positivo).");
-            return;
-        }
-
-        $instructorId = $data['instructor'] ?? '';
-        $instructor = $pm->retriveInstructorById($instructorId);
-        if (!$instructor) {
-            (new VError())->show("Istruttore selezionato non valido.");
-            return;
-        }
-
-        $fieldId = $data['field'] ?? '';
-        $field = $pm->retriveFieldById($fieldId);
-        if (!$field) {
-            (new VError())->show("Campo selezionato non valido.");
-            return;
-        }
-
-        // Normalizza e salva i dati in sessione con nomi coerenti
-        $courseData = [
-            'name' => $name,
-            'description' => $description,
-            'start_date' => $startDateStr,
-            'start_time' => $startTime,
-            'end_time' => $endTime,
-            'days' => $days,
-            'cost' => floatval($cost),
-            'max_participants' => intval($maxParticipants),
-            'instructor' => $instructorId,
-            'field' => $fieldId
-        ];
-
-        USession::setSessionElement('course_data', $courseData);
-        header("Location: /employee/finalizeCreateCourse");
-        exit;
-    }
-
-    $view->showCreateCourseForm(null, $instructors, $fields);
- }
+    $view->showCreateCourseForm($instructors, $fields);
+}
 
 public static function finalizeCreateCourse() {
-    if (!CUser::isLogged()) {
-        header("Location: /login");
-        exit;
-    }
+  CUser::isEmployee();
+  
+  $data = $_POST;
+  if (!isset($data['confirm'])) {
 
+   
     $view = new VEmployee();
     $pm = FPersistentManager::getInstance();
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = USession::getSessionElement('course_data');
+    $title = trim($data['title'] ?? '');
+    if (empty($title)) {
+      (new VError())->show("Il titolo del corso è obbligatorio.");
+      return;
+    }
 
-        if (!$data) {
-            (new VError())->show("Dati del corso mancanti. Ricomincia la procedura.");
-            return;
-        }
+    $description = trim($data['description'] ?? '');
+    if (empty($description)) {
+      (new VError())->show("La descrizione del corso è obbligatoria.");
+      return;
+    }
 
-        $course = new ECourse();
-        $course->setTitle($data['name']);
-        $course->setDescription($data['description']);
-        $course->setStartDate(new DateTime($data['start_date']));
-        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
-        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
-        $course->setDaysOfWeek($data['days']);
-        $course->setEnrollmentCost($data['cost']);
-        $course->setMaxParticipantsCount($data['max_participants']);
+    $startDateStr = $data['start_date'] ?? '';
+    $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
+    $minStartDate = (new DateTime())->modify('+7 days');
+    if (!$startDate || $startDate < $minStartDate) {
+      (new VError())->show("La data di inizio deve essere almeno tra 7 giorni da oggi.");
+      return;
+    }
 
-        $instructor = $pm->retriveInstructorById($data['instructor']);
-        $field = $pm->retriveFieldById($data['field']);
-        if (!$instructor || !$field) {
-            (new VError())->show("Errore durante il recupero di istruttore o campo.");
-            return;
-        }
+    $startTime = $data['start_time'] ?? '';
+    $endTime = $data['end_time'] ?? '';
+    if (strtotime($startTime) >= strtotime($endTime)){ 
+      (new VError())->show("L'orario di inizio deve precedere quello di fine.");
+      return;
+    }
 
-        $course->setInstructor($instructor);
-        $course->setField($field);
+    $days = $data['days'] ?? [];
+    if (!is_array($days) || count($days) === 0) {
+      (new VError())->show("Seleziona almeno un giorno della settimana.");
+      return;
+    }
 
-        $pm->saveCourse($course);
+    $cost = $data['cost'] ?? '';
+    if (!is_numeric($cost) || floatval($cost) < 0) {
+      (new VError())->show("Inserisci un costo valido.");
+      return;
+    }
 
-        USession::unsetSessionElement('course_data');
+    $maxParticipants = $data['max_participants'] ?? '';
+    if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
+      (new VError())->show("Numero partecipanti non valido.");
+      return;
+    }
 
-        $view->showCourseConfirmation($course);
+    $instructorId = $data['instructor'] ?? '';
+    $fieldId = $data['field'] ?? '';
+    $instructor = $pm->retriveInstructorById($instructorId);
+    $field = $pm->retriveFieldById($fieldId);
+    if (!$instructor || !$field) {
+       (new VError())->show("Istruttore o campo selezionato non valido.");
         return;
     }
 
-    $data = USession::getSessionElement('course_data');
-    if (!$data) {
-        (new VError())->show("Nessun dato da finalizzare.");
-        return;
-    }
+    
+    $view->showFinalizeCreateCourse($data, $instructor, $field);
+    return;
+  }
+  
+
+  
+    $view = new VEmployee(); 
+    $pm = FPersistentManager::getInstance();
+
+    
+    $course = new ECourse();
+    $course->setTitle($data['title']);
+    $course->setDescription($data['description']);
+    $course->setStartDate(new DateTime($data['start_date']));
+    $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
+    $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+    $course->setDaysOfWeek($data['days']);
+    $course->setEnrollmentCost(floatval($data['cost']));
+    $course->setMaxParticipantsCount(intval($data['max_participants']));
 
     $instructor = $pm->retriveInstructorById($data['instructor']);
     $field = $pm->retriveFieldById($data['field']);
+    $course->setInstructor($instructor);
+    $course->setField($field);
 
-    $view->showFinalizeCreateCourse($data, $instructor, $field);
+    $pm->saveCourse($course);
+    $view->showCourseConfirmation($course);
+
+  
  }
 }
+  
 

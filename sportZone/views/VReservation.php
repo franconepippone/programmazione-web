@@ -9,14 +9,18 @@ class VReservation{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function showReservationForm() {
-        //passare avaiable hours, field, date
+    public function showReservationForm($field,$date,$avaiableHours) {
+        $fieldData = EField::fieldToArray($field);
+        $this->smarty->assign("fieldData", $fieldData);
+        $this->smarty->assign("date", $date);
+        $this->smarty->assign("avaiableHours", $avaiableHours);
         $this->smarty->display("reservation/reservation_form.tpl");
     }
 
-    public function showFinalizeReservation($fullName,$date,$time){ //aggiungere field
+    public function showFinalizeReservation($fullName,$date,$time,$field){ 
+        $fieldData = EField::fieldToArray($field);
+        $this->smarty->assign("fieldData", $fieldData);
         $this->smarty->assign("fullName", $fullName);
-       // $this->smarty->assign("field", $field);
         $this->smarty->assign("date", $date);
         $this->smarty->assign("time", $time);
         $this->smarty->display("reservation/finalize_reservation.tpl");
@@ -26,7 +30,9 @@ class VReservation{
         $this->smarty->display("reservation/confirmation.tpl");
     }
 
-    public function showCancelReservation() {
+    public function showCancelReservation($reservation) {
+        $reservationData = EReservation::reservationToArray($reservation);
+        $this->smarty->assign("reservation", $reservationData);
         $this->smarty->display("reservation/cancel_reservation.tpl");
     }
 

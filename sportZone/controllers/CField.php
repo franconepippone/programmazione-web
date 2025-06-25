@@ -1,5 +1,8 @@
 <?php
 
+use App\Enum\UserSex;
+use const Dom\VALIDATION_ERR;
+
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CField {
@@ -40,6 +43,7 @@ class CField {
         $fields = $pm->retrieveAllMatchingFields();
         // TODO filtraggio dei campi (usa metodo di alice) 
 
+
         $view = new VField();
         $view->showSearchResults($fields, $searchParams);
     }
@@ -55,6 +59,8 @@ class CField {
             exit;
         }
 
+        print_r($_GET);
+
         try {
             $inputs = UValidate::validateInputArray($_GET, ["date"], false);
         } catch (ValidationException $e) {
@@ -62,9 +68,17 @@ class CField {
             exit;
         }
 
+        print_r($inputs);
+
+        $query = http_build_query([
+            "fieldId" => $field_id,
+            "data" => $inputs["date"]
+        ]);
+
+        echo $query;
 
         $view = new VField();
-        $view->showDetailsPage($fld);
+        $view->showDetailsPage($fld, $query);
     }
 
 

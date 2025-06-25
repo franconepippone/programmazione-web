@@ -48,7 +48,7 @@ class VField{
         $this->smarty->display("field/search_results_list.tpl");
     }
 
-    public function showDetailsPage($field) {
+    public function showDetailsPage($field, $query) {
 
         $images = [];
         foreach ($field->getImages() as $img) {
@@ -72,6 +72,7 @@ class VField{
 
           // Passa i dati a Smarty
         $this->smarty->assign('campo', $campo);
+        $this->smarty->assign('queryString', $query);
         $this->smarty->display("field/details.tpl");
     }
 

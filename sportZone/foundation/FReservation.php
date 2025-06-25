@@ -68,26 +68,29 @@ class FReservation {
      * @return int[] Array of available hours in 24-hour format (e.g., [8, 9, 10, ...])
      */
 
-     public static function getAvailableHours(int $fieldId, string $date): array {
-        $openingHour = 8;
-        $closingHour = 21;
-        $allHours = range($openingHour, $closingHour - 1);
+    public static function getAvailableHours(int $fieldId, string $date): array {
+       $openingHour = 8;
+       $closingHour = 21;
+       $allHours = range($openingHour, $closingHour - 1); // Orari disponibili (es. 8-20)
 
-        // Use EntityManager to get reservations for that field and date
-        $entityManager = FEntityManager::getInstance();
+    // Recupera tutte le prenotazioni per quel campo in quella data
+       $reservations = FEntityManager::getInstance()->retriveObjListFromFields(EReservation::class, [
+           'field' => $fieldId,
+           'date'  => new \DateTime($date)
+       ]);
 
-        $reservations = $entityManager->getRepository(EReservation::class)->findBy([
-            'field' => $fieldId,
-            'date' => new \DateTime($date)
-        ]);
+    // Rimuove gli orari già prenotati
+       if ($reservations) {
+           foreach ($reservations as $reservation) {
+               $reservedHour = (int) $reservation->getTime();
+               if (($key = array_search($reservedHour, $allHours)) !== false) {
+                   unset($allHours[$key]);
+               }
+           }
+       }
 
-        foreach ($reservations as $reservation) {
-            $reservedHour = (int)$reservation->getTime(); // assuming getTime() returns hour as int or string
-            if (($key = array_search($reservedHour, $allHours)) !== false) {
-                unset($allHours[$key]);
-            }
-        }
-     }
+       return array_values($allHours); // Reset delle chiavi numeriche
+   }
 
     /**
      * Save or update a Reservation entity

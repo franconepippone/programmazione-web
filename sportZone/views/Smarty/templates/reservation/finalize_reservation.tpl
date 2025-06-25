@@ -3,150 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Riepilogo Prenotazione</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #333;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-    }
-    .container {
-      background: #fff;
-      max-width: 480px;
-      width: 100%;
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-      transition: box-shadow 0.3s ease;
-    }
-    .container:hover {
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    }
-    h2 {
-      font-weight: 600;
-      color: #3c1361;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      letter-spacing: 0.05em;
-    }
-    h3 {
-      color: #764ba2;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      font-weight: 600;
-      border-bottom: 2px solid #764ba2;
-      padding-bottom: 0.3rem;
-    }
-    p {
-      font-size: 1.1rem;
-      margin: 0.4rem 0;
-    }
-    p strong {
-      color: #5a3e85;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      background: #f9f8fd;
-      border-radius: 12px;
-      box-shadow: inset 0 0 8px #e2def9;
-      padding: 1rem 1.2rem;
-    }
-    li {
-      margin-bottom: 0.6rem;
-      font-size: 1rem;
-      color: #4a3d6e;
-    }
-
-    /* Back link styling */
-    .back-link {
-      display: inline-block;
-      margin-bottom: 2rem;
-      font-weight: 700;
-      color: #764ba2;
-      text-decoration: none;
-      font-size: 1rem;
-      padding: 0.4rem 0.8rem;
-      border: 2px solid #764ba2;
-      border-radius: 12px;
-      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .back-link:hover {
-      background-color: #764ba2;
-      color: #fff;
-      box-shadow: 0 4px 12px #5a367faa;
-    }
-
-    form {
-      margin-top: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      font-weight: 600;
-      color: #5a3e85;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-    }
-    select {
-      padding: 0.5rem 0.7rem;
-      font-size: 1rem;
-      border: 2px solid #9c88ff;
-      border-radius: 8px;
-      transition: border-color 0.3s ease;
-      cursor: pointer;
-      outline-offset: 2px;
-    }
-    select:focus {
-      border-color: #764ba2;
-      box-shadow: 0 0 8px #764ba2aa;
-    }
-    button {
-      margin-top: 1.8rem;
-      background: #764ba2;
-      color: white;
-      font-size: 1.1rem;
-      font-weight: 600;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 6px 12px #613e96;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
-    button:hover {
-      background: #5a367f;
-      box-shadow: 0 8px 18px #4a2a6b;
-    }
-
-    /* Responsive */
-    @media (max-width: 500px) {
-      .container {
-        padding: 2rem 1rem;
-      }
-      p, li {
-        font-size: 1rem;
-      }
-      button {
-        font-size: 1rem;
-      }
-      .back-link {
-        font-size: 0.9rem;
-        padding: 0.3rem 0.6rem;
-        border-radius: 10px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/styleform.css" />
 </head>
 <body>
 
@@ -154,46 +11,48 @@
     <h2>Riepilogo Prenotazione</h2>
 
     <!-- Back link -->
-    <a href="/reservation/createReservation" class="back-link" title="Torna alla pagina precedente">
+    <a href="/reservation/reservationForm" class="back-link" title="Torna alla pagina precedente">
       ← Torna indietro
     </a>
 
     <p><strong>Utente:</strong>
-      {if isset($fullName) && $fullName neq ''}{$fullName}{else}[$client->getName() . ' ' . $client->getSurname()]{/if}
+      {if isset($fullName) && $fullName neq ''}{$fullName}{else}[\$client->getName() . ' ' . \$client->getSurname()]{/if}
     </p>
 
     <p><strong>Data:</strong>
-      {if isset($data) && $data neq ''}{$data}{else}[$date = UHTTPMethods::post('data')]{/if}
+      {if isset($date) && $date neq ''}{$date}{else}[\$date = UHTTPMethods::post('date')]{/if}
     </p>
 
     <p><strong>Orario:</strong>
-      {if isset($orario) && $orario neq ''}{$orario}{else}[$time = UHTTPMethods::post('orario')]{/if}
+      {if isset($time) && $time neq ''}{$time}{else}[\$time = UHTTPMethods::post('time')]{/if}
     </p>
 
     <h3>Informazioni Campo</h3>
     <ul>
       <li><strong>Sport:</strong>
-        {if isset($campo)}{$campo->getSport()}{else}[$field->getSport()]{/if}
+        {if isset($fieldData)}{$fieldData.sport|escape}{else}[\$fieldData['sport']]{/if}
       </li>
       <li><strong>Tipo terreno:</strong>
-        {if isset($campo)}{$campo->getTipoTerreno()}{else}[$field->getTerrainType()]{/if}
+        {if isset($fieldData)}{$fieldData.terrainType|escape}{else}[\$fieldData['terrainType']]{/if}
       </li>
       <li><strong>Indoor:</strong>
-        {if isset($campo)}
-          {if $campo->getIndoor()}Indoor{else}Outdoor{/if}
-        {else}[$field->getIsIndoor()]{/if}
+        {if isset($fieldData)}
+          {if $fieldData.isIndoor}Indoor{else}Outdoor{/if}
+        {else}
+          [\$fieldData['isIndoor']]
+        {/if}
       </li>
       <li><strong>Costo orario:</strong>
-        {if isset($campo)}{$campo->getCostoOrario()} €{else}[$field->getCost()]{/if}
+        {if isset($fieldData)}€{$fieldData.hourlyCost|number_format:2}{else}[\$fieldData['hourlyCost']]{/if}
       </li>
     </ul>
 
     <form id="reservationForm" method="post" action="/reservation/finalizeReservation">
-      <input type="hidden" name="data" value="{$data|default:''}">
-      <input type="hidden" name="orario" value="{$orario|default:''}">
-      <input type="hidden" name="id" value="{if isset($campo)}{$campo->getId()}{else}[$field->getId()]{/if}">
+      <input type="hidden" name="date" value="{$date|default:''}">
+      <input type="hidden" name="time" value="{$time|default:''}">
+      <input type="hidden" name="field_id" value="{if isset($fieldData)}{$fieldData.id}{else}0{/if}">
 
-      <label for="paymentMethod">Metodo di pagamento:</label>
+      <label for="paymentMethod"><strong>Metodo di pagamento:</strong></label>
       <select name="paymentMethod" id="paymentMethod" required>
         <option value="onsite">Pagamento in loco</option>
         <option value="online">Pagamento online</option>
