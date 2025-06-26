@@ -30,8 +30,15 @@
                 <input type="text" id="timeSlot" name="timeSlot" value="{$course.timeSlot|escape}" required>
             </div>
             <div class="form-group">
-                <label for="daysOfWeek">Giorni della settimana (separati da virgola)</label>
-                <input type="text" id="daysOfWeek" name="daysOfWeek" value="{$course.daysOfWeek|escape}" required>
+                <label>Giorni della settimana</label>
+                {assign var=weekdays value=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"]}
+                {foreach from=$weekdays item=day}
+                    <label style="margin-right:1em;">
+                        <input type="checkbox" name="daysOfWeek[]" value="{$day}"
+                            {if $course.daysOfWeek && $day|in_array:$course.daysOfWeek}checked{/if}>
+                        {$day}
+                    </label>
+                {/foreach}
             </div>
             <div class="form-group">
                 <label for="cost">Costo (€)</label>

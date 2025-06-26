@@ -91,6 +91,10 @@ class FPersistentManager{
      public function retriveAllFields() {
         return FField::getAllFields();
      }
+
+     public static function retriveFieldByAttribute($field, $value){
+        return FField::getFieldByAttribute($field,$value);
+     }
       
      //-------------------------------------CLIENT--------------------------------------
 
@@ -243,5 +247,6 @@ class FPersistentManager{
         $result = FEnrollment::getEnrollmentsByAttributes($fields);
         return $result;
     }
+
 
 }

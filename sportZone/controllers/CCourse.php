@@ -107,9 +107,25 @@ private static $rulesCourse = [
     'instructor'       => 'validateInstructorId',
     'field'            => 'validateFieldId'
 ];
-    //********************************************************* */
+    //************************************************************************** */
     //here starts Kevin's code, please do not modify it
     
+
+
+    private static $rulesCourseKevin = [
+        'title'                => 'validateTitle',
+        'description'          => 'validateDescription',
+        'startDate'            => 'validateStartDate',
+        'endDate'              => 'validateDate', // oppure 'validateEndDate' se vuoi controllare rispetto a startDate
+        'timeSlot'             => 'validateTimeSlot', // oppure crea un metodo specifico se vuoi validare il formato
+        'daysOfWeek'           => 'validateDays',   // assicurati che arrivi come array
+        'cost'                 => 'validatePrice',
+        'MaxParticipantsCount' => 'validateMaxParticipants',
+        'instructor'           => 'validateName',
+        'field'                => 'validateFieldName'
+    ];
+
+
     //form per cercare i corsi, anche con filtri
     public static function searchForm() {
         
@@ -148,15 +164,17 @@ private static $rulesCourse = [
        
         $course = FPersistentManager::retriveCourseOnId($course_id);
         $modifyPermission = false;
+        echo CUser::getUserRole();
         echo CUser::isLoggedBool();
         if(CUser::isLoggedBool()) {
             $userID = USession::getSessionElement('user');
 
             $user = FPersistentManager::retriveUserOnId($userID);
-            if(CUser::isClient()) {
+            if(!CUser::isClient()) {
                 $modifyPermission = true;
                 
             } 
+            
 
         }
         
@@ -196,60 +214,82 @@ private static $rulesCourse = [
 
    
 
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-    public static function modifyForm($course_id) {
+   public static function modifyForm($course_id) {
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
 
         $view = new VCourse();
         $view->showModifyCourseForm($course);
     }
 
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+    public static function finalizeModifyCourse($course_id) {
+        $pm = FPersistentManager::getInstance();
+
+        try {
+            $attributes = UValidate::validateInputArray($_POST, self::$rulesCourseKevin, true);
+            
+            self::dateSlot($attributes['startDate'], $attributes['endDate']);
+            //echo var_dump($attributes);
+            //echo var_dump($_POST);
+            // Validazione custom per orari (start < end)
+        } catch (ValidationException $e) {
+            $msg = $e->getMessage();
+            $view = new VError();
+            $view->show($msg);
+            return;
+        }
+
+
+            // Recupera oggetti istruttore , campo e corso
+        try{    
+            $course = $pm->retriveCourseOnId($course_id);
+            $instructor = $pm->retriveInstructorOnAttribute('name',$attributes['instructor']);
+            $field = $pm->retriveFieldByAttribute('name',$attributes['field']);
+            if (!$instructor || !$field || !$course) {
+                $view = new VError();
+                $view->show("errore durante il recupero dei dati: istruttore, campo o idcorso non valido.");
+                return;  
+            }
+        } catch (Exception $e) {
+            $view = new VError();
+            $view->show("Si è verificato un errore imprevisto. Riprova più tardi.");
+            return;
+        }
+        echo "corso in aggiornamento";
+            // Aggiorna il corso
+            $course->setTitle($attributes['title']);
+            $course->setDescription($attributes['description']);
+            $course->setStartDate($attributes['startDate']);
+            $course->setEndDate(($attributes['startDate'])->modify('+2 months'));
+            $course->setTimeSlot($attributes['timeSlot']);
+            $course->setDaysOfWeek($attributes['daysOfWeek']);
+            $course->setEnrollmentCost(floatval($attributes['cost']));
+            $course->setMaxParticipantsCount(intval($attributes['MaxParticipantsCount']));
+            $course->setInstructor($instructor);
+            $course->setField($field);
+
+            // Salva le modifiche
+            $pm->saveCourse($course);
+    }
+
+    private static function dateSlot($start, $end) {
+        // Controlla che l'orario di inizio sia prima di quello di fine
+        if ($start >= $end) {
+            throw new ValidationException("La data di inizio deve essere prima della data di fine.");
+        }
+        return true;
+    }
     // metodo per serializzare un corso in un array
     
     

@@ -72,7 +72,7 @@
             </div>
             <div class="details-row">
                 <span class="details-label" name="instructor">Istruttore:</span>
-                <span class="details-value">{$course.instructor|default:'N/D'}</span>
+                <span class="details-value">{$course.instructor.name|default:'N/D'}</span>
             </div>
         </div>
         <div class="details-actions" style="display: flex; justify-content: space-between; align-items: center;">
