@@ -18,11 +18,11 @@ class VField{
         $fieldsInfo = [];
         foreach ($fields as $fld) {
             
-            $images = $fld->getImages();
-            if (sizeof($images) > 0) {
-                $imageDataUri = UImage::getImageDataUri($images[0]);
+            $imagesNames = $fld->getImages();
+            if (sizeof($imagesNames) > 0) {
+                $imageSrc = UImage::getImageFullPath($imagesNames[0]);
             } else {
-                $imageDataUri = "https://th.bing.com/th/id/OIP.xQLogGqy75CRaZGYTlgdXAHaLG?r=0&rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3";
+                $imageSrc = "https://th.bing.com/th/id/OIP.xQLogGqy75CRaZGYTlgdXAHaLG?r=0&rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3";
             }
            
             $info = [
@@ -32,7 +32,7 @@ class VField{
                 'orario'    => '09:00 - 22:00',
                 'superficie'=> $fld->getTerrainType(),
                 'price'     => $fld->getCost(),
-                'image'     => $imageDataUri,
+                'image'     => $imageSrc,
                 'alt'       => $fld->getName()
             ];
 
@@ -53,9 +53,9 @@ class VField{
     public function showDetailsPage($field, $query) {
 
         $images = [];
-        foreach ($field->getImages() as $img) {
-            $imageDataUri = UImage::getImageDataUri($img);
-            $images[] = $imageDataUri;
+        foreach ($field->getImages() as $imgName) {
+            $imagePath = UImage::getImageFullPath($imgName);
+            $images[] = $imagePath;
         }
 
         $campo = [

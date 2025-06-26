@@ -9,9 +9,10 @@ define('DB_PASS', '');
 // Images configs
 define('MAX_IMAGE_SIZE', 5242880); // 5MB
 define('ALLOWED_IMAGE_TYPE',['image/jpeg', 'image/png', 'image/jpg']);
+define('IMAGE_FOLDER_PATH', 'images/');
 
+// Cookies
 define('COOKIE_EXP_TIME', 2592000); // 30 days in seconds
-
 
 // fields constraints 
 define('MAX_USERNAME_LENGTH', 20);

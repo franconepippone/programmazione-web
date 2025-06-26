@@ -81,6 +81,25 @@ class CField {
         $view->showCreateFieldForm();
     }
 
+    public static function uploadImage() {
+        echo '<form action="/field/acceptImage" method="post" enctype="multipart/form-data">';
+        echo '<input type="file" name="image">';
+        echo '<button type="submit">Upload</button>';
+        echo '</form>';
+    }
+
+    public static function acceptImage() {
+        print_r($_FILES['image']);
+        $name = UImage::storeImageGetFilename($_FILES['image']);
+        echo $name;
+
+        $path = UImage::getImageFullPath($name);
+        echo $path;
+
+        echo '<img src="'.$path.'" alt="Uploaded Image" style="max-width: 400px;">';
+
+    }
+
     public static function finalizeFieldCreation() {
         CUser::isLogged();
 
@@ -101,9 +120,9 @@ class CField {
         // if entry 'fieldImage' is present in $_FILES
         if ($normImagesInfo != null) {
             foreach($normImagesInfo as $imgInfo) {
-                $img = UImage::createImageFromInputFile($imgInfo);
-                if ($img != null) {
-                    $field->addImage($img);
+                $imgFilename = UImage::storeImageGetFilename($imgInfo);
+                if ($imgFilename != null) {
+                    $field->addImage($imgFilename);
                 }
             }
         }

@@ -6,3 +6,4 @@
 *.tpl.php
 /proxies
 /sportZone/views/Smarty/templates_c
+/images
