@@ -18,10 +18,33 @@ class EClient extends EUser
     #[ORM\OneToMany(mappedBy: "client", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
     private Collection $reservations;
 
+    #[ORM\OneToMany(mappedBy: "client", targetEntity: EPaymentMethod::class, cascade: ["persist", "remove"])]
+    private Collection $paymentMethods;
+
     public function __construct() {
         $this->enrollments = new ArrayCollection();
         $this->reservations = new ArrayCollection();
     }
+
+    public function getPaymentMethods(): Collection {
+        return $this->paymentMethods;
+    }
+
+    public function addPaymentMethod(EPaymentMethod $paymentmethod): self {
+        if (!$this->paymentMethods->contains($paymentmethod)) {
+            $this->paymentMethods[] = $paymentmethod;
+            $paymentmethod->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removePaymentMethod(EPaymentMethod $paymentmethod): self {
+        if ($this->paymentMethods->removeElement($paymentmethod)) {
+            $paymentmethod->setClient(null);
+        }
+        return $this;
+    }
+
     // ISCRIZIONI
     public function getEnrollments(): Collection {
         return $this->enrollments;

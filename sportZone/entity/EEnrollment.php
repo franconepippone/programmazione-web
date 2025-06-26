@@ -18,6 +18,10 @@ class EEnrollment
 
     // ======= RELAZIONI =======
 
+    #[ORM\OneToOne(targetEntity: EPaymentMethod::class, cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(nullable: false)]
+    private EPaymentMethod $paymentMethod;
+
     #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "courses")]
     private ?EClient $client = null;
 

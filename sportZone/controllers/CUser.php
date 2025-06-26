@@ -1,6 +1,7 @@
 <?php
 
 use App\Enum\UserSex;
+use Doctrine\DBAL\Exception as DBALException;
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
@@ -17,12 +18,39 @@ class CUser{
         "birthday" => 'validateBirthDate'
     ];
 
+    private static $rulesModifyClient = [
+        "name" => 'validateName',
+        "surname" => 'validateName',
+        "email" => 'validateEmail',
+        "username" => 'validateUsername',
+        "password" => 'validatePassword',
+        "birthday" => 'validateBirthDate',
+        "gender" => 'validateGender'
+    ];
+
+    public static function isLoggedBool(): bool 
+    {
+        $logged = false;
+
+        if(UCookie::isSet('PHPSESSID')){
+            if(session_status() == PHP_SESSION_NONE){
+                USession::getInstance();
+            }
+        }
+        if(USession::isSetSessionElement('user')){
+            $logged = true;
+        }
+
+        return $logged;
+    }
+
     /**
      * Checks if the user is logged in.
      * If not, redirects to the login page with a redirect argument set to the current page.
      * 
      * @return bool True if the user is logged in, otherwise redirects to login.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isLogged()
     {
         $logged = false;
@@ -154,6 +182,10 @@ class CUser{
         ->setBirthDate(
             new DateTime($formInputs['birthday']->format('Y-m-d'))
         );
+
+        // assigns default payment method
+        $onSitePayment = new EOnSitePayment();
+        $newClient->addPaymentMethod($onSitePayment);
         
         // register was succesfull
         $check = FPersistentManager::getInstance()->uploadObj($newClient);
@@ -171,18 +203,126 @@ class CUser{
         USession::getInstance();
         USession::unsetSession();
         USession::destroySession();
-        header('Location: /user/login');
+
+        $redirectUrl = "/user/home";
+        if (UHTTPMethods::getIsSet("redirect")) {
+            header('Location: ' . UHTTPMethods::get("redirect"));
+        } else {
+            header('Location: /user/home');
+        }
     }
 
-  
-    public static function home(){
-        if(CUser::isLogged()){
-            $view = new VUser();
+    
+    public static function profile(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        $view = new VUser();
 
-            $userId = USession::getInstance()->getSessionElement('user');
-            $user = FPersistentManager::getInstance()->retriveUserOnId($userId);-
-            $view->showHomePage($user->getFullName() . " " . self::getUserRole());
-        }  
+        $user = self::getLoggedUser();
+        $view->showDashboardProfile($user, $role);
+    
+    }
+
+
+    public static function myCourses(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        
+        $view = new VUser();
+
+        $user = self::getLoggedUser();
+        $view->showDashboardMyCourses($user, $role);
+    
+    }
+
+
+    public static function myReservations(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        
+        $view = new VUser();
+        
+        $user = self::getLoggedUser();
+        $view->showDashboarMyReservations($user, $role);
+    
+    }
+
+    public static function settings(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        $view = new VUser();
+
+        $user = self::getLoggedUser();
+        $view->showDashboardSettings($user, $role);
+    
+    }
+
+    public static function home() {
+        $logged = CUser::isLoggedBool();
+
+        $view = new VUser();
+        $view->showHome($logged);
+    }
+
+    public static function modifyUserRequest() {
+        CUser::isLogged();
+        $user = CUser::getLoggedUser();
+
+        // TODO this should work also for instructors and employees
+        try {
+            $inputs = UValidate::validateInputArray($_POST, self::$rulesModifyClient, false);
+        } catch (ValidationException $e) {
+            // if validation fails, show the error message
+            (new VError())->show($e->getMessage());
+            exit;
+        }
+
+        if (isset($inputs['name'])) $user->setName($inputs['name']);
+        if (isset($inputs['surname'])) $user->setSurname($inputs['surname']);
+        if (isset($inputs['email'])) $user->setEmail($inputs['email']);
+        if (isset($inputs['password'])) $user->setPassword($inputs['password']);
+        if (isset($inputs['birthday'])) $user->setBirthDate($inputs['birthday']);
+        if (isset($inputs["gender"])) $user->setSex(UserSex::from($inputs["gender"]));
+        // TODO Non aggiorna il gender
+        
+        $view = new VError();
+        
+        // TODO da un messaggio di errroe anche con lo stesso username
+        if (isset($inputs['username'])) {
+            if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
+                $view->show("Username già preso da qualcun'altro.");
+                exit;
+            }
+            $user->setUsername($inputs['username']);
+        }
+        
+        $ok = FPersistentManager::getInstance()->uploadObj($user);
+        if (!$ok) {
+            $view->show("Errore di caricamento sul database");
+            exit;
+        }
+ 
+        $view->showSuccess("Dati modificati con successo.");
+        exit;
+    }
+    
+
+    /**
+     * Retrieves the currently logged-in user from the session.
+     *
+     * If the user is logged in, retrieves the user ID from the session and returns the corresponding EUser object.
+     * If the user is not logged in, returns null.
+     *
+     * @return EUser|null The logged-in user object if available, or null if not logged in.
+     */
+    #[PathUrl(PathUrl::HIDDEN)]
+    public static function getLoggedUser(): ?EUser
+    {
+        if (self::isLogged()) {
+            $userId = USession::getSessionElement('user');
+            return FPersistentManager::getInstance()->retriveUserOnId($userId);
+        }
+        return null;
     }
 
     /**
@@ -194,6 +334,7 @@ class CUser{
      *
      * @return string|null The user's role if available, or null if not logged in.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function getUserRole(): ?string
     {
         if (self::isLogged()) {
@@ -207,20 +348,22 @@ class CUser{
         };
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isEmployee()
     {
         return self::getUserRole() === EEmployee::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isInstructor()
     {
         return self::getUserRole() === EInstructor::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isClient()
     {
         return self::getUserRole() === EClient::class;
     }
 
-    
 }

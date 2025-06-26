@@ -10,7 +10,14 @@ class VError{
     }
 
     public function show(string $message) {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign("error_message", $message);
-        $this->smarty->display("error.tpl");
+        $this->smarty->display("status/error.tpl");
+    }
+
+    public function showSuccess(string $message) {
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->assign("success_message", $message);
+        $this->smarty->display("status/success.tpl");      
     }
 }
