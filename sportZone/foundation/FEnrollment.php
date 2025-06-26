@@ -17,7 +17,7 @@ class FEnrollment {
     }
 
     public static function getEnrollmentsByUserId(int $user_id) {
-        $result = FEntityManager::getInstance()->objectList(EEnrollment::class, 'user', $user_id);
+        $result = FEntityManager::getInstance()->objectList(EEnrollment::class, 'client', $user_id);
         return $result;
     }
 

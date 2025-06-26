@@ -36,9 +36,8 @@
             </div>
         </div>
         <div class="details-actions">
-            <a href="/course/enrollForm/{$course.id}" class="action-btn back-btn">Modifica dati</a>
-            <a href="/course/confirmEnrollment/{$course.id}" class="action-btn">Conferma iscrizione</a>
+            <a href="/enrollment/enrollForm/{$course.id}" class="action-btn back-btn">Modifica dati</a>
+            <a href="/enrollment/finalizeEnrollment/{$course.id}" class="action-btn">Conferma iscrizione</a>
         </div>
     </div>
 </body>
-</html>

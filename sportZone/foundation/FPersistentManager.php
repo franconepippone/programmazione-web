@@ -219,5 +219,29 @@ class FPersistentManager{
         $result = FCourse::getCoursesByInstructorId($instructor_id);
         return $result;
     }
-    
+    //------------------------------------ENROLLMENT-------------------------------
+    public static function saveEnrollment($enrollment){
+        return FEnrollment::saveEnrollment($enrollment);
+    }
+    public static function retriveEnrollmentOnId(int $id) {
+        $result = FEnrollment::getEnrollmentById($id);
+        return $result;
+    }
+    public static function retriveEnrollmentsOnUserId(int $user_id) {
+        $result = FEnrollment::getEnrollmentsByUserId($user_id);
+        return $result;
+    }
+    public static function retriveEnrollmentsOnCourseId(int $course_id) {
+        $result = FEnrollment::getEnrollmentsByCourseId($course_id);
+        return $result;
+    }
+    public static function retriveEnrollmentOnAttributes(array $fields) {
+        $result = FEnrollment::getEnrollmentByAttributes($fields);
+        return $result;
+    }
+    public static function retriveEnrollmentsOnAttributes(array $fields) {
+        $result = FEnrollment::getEnrollmentsByAttributes($fields);
+        return $result;
+    }
+
 }

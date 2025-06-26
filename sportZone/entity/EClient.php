@@ -85,4 +85,9 @@ class EClient extends EUser
         return $this;
     }
     
+    public static function clientToArray(EClient $client): array {
+        return [
+            EUser::userToArray($client)
+        ];
+    }
 }

@@ -3,24 +3,116 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CCourse {
 
-    private static $attributi = ["title", "description", "timeSlot", "startDate", "endDate", "cost", "MaxParticipantsCount"];
 
-     public static function createCourse() {
-        // Qui puoi aggiungere la logica per salvare il corso (es. validazione, chiamata a un model, ecc.)
-        $course = new ECourse();
-        // Recupera i dati del corso dalla richiesta (ad esempio, $_POST)
-        //valido i dati del corso
-        // se non sono validi, mostro gli errori
-        //$view = new VError();
-        //$view->showError($errors);
-        //altrimenti
-        
-        // Salva il corso nel database (qui dovresti chiamare un model per gestire la persistenza)
-        
-        $view = new VCourse();
-        $view->showCreateResult();
+     private static $rulesCourse = [
+        'title'            => 'validateTitle',
+        'description'      => 'validateDescription',
+        'start_date'       => 'validateStartDate',
+        'end_date'         => 'validateEndDate',
+        'start_time'       => 'validateTime',
+        'end_time'         => 'validateTime',
+        'cost'             => 'validatePrice',
+        'max_participants' => 'validateMaxParticipants',
+        'days'             => 'validateDays',
+        'instructor'       => 'validateInstructorId',
+        'field'            => 'validateFieldId'
+    ];
+
+    public static function createCourseForm($data = []) {
+    CUser::isLogged();
+    //CUser::isEmployee();
+
+    $view = new VCourse();
+    $pm = FPersistentManager::getInstance();
+
+    $instructors = $pm->retriveAllInstructors();
+    $fields = $pm->retriveAllFields();
+
+    $view->showCreateCourseForm($instructors, $fields, $data);
     }
+    
+
+    public static function courseSummary() {
+       // CUser::isEmployee();
+
+        $view = new VCourse();
+        $pm = FPersistentManager::getInstance();
+
+        try {
+            $validated = UValidate::validateInputArray($_POST, self::$rulesCourse, true);
+
+        // Validazione incrociata date
+            if ($validated['end_date'] <= $validated['start_date']) {
+                throw new ValidationException("La data di fine deve essere successiva a quella di inizio.");
+            }
+
+        // Validazione incrociata orari
+            if ($validated['start_time'] >= $validated['end_time']) {
+                throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
+            }
+
+        // Recupera oggetti istruttore e campo
+            $instructor = $pm->retriveInstructorById($validated['instructor']);
+            $field = $pm->retriveFieldById($validated['field']);
+            if (!$instructor || !$field) {
+                throw new ValidationException("Istruttore o campo selezionato non valido.");
+            }
+
+            $validated['instructor'] = $instructor;
+            $validated['field'] = $field;
+
+           
+            $validated['start_date'] = $validated['start_date']->format('Y-m-d');
+            $validated['end_date'] = $validated['end_date']->format('Y-m-d');
+            $validated['start_time'] = $validated['start_time']->format('H:i');
+            $validated['end_time'] = $validated['end_time']->format('H:i');
+            
+            $view->showCourseSummary($validated);
+
+             
+        } catch (ValidationException $e) {
+            $msg = $e->getMessage();
+            if (isset($e->details['params'])) {
+                $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+            }
+            (new VError())->show($msg);
+        }
+         
+    }
+
+    public static function finalizeCourse() {
+        //CUser::isEmployee();
+
+        $view = new VCourse();
+        $pm = FPersistentManager::getInstance();
+
+        $data = $_POST;
+
+        $instructor = $pm->retriveInstructorById($data['instructor']);
+        $field = $pm->retriveFieldById($data['field']);
+
+        $course = new ECourse();
+        $course->setTitle($data['title']);
+        $course->setDescription($data['description']);
+        $course->setStartDate(new DateTime($data['start_date']));
+        $course->setEndDate(new DateTime($data['end_date']));
+        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+        $course->setDaysOfWeek($data['days']);
+        $course->setEnrollmentCost(floatval($data['cost']));
+        $course->setMaxParticipantsCount(intval($data['max_participants']));
+        $course->setInstructor($instructor);
+        $course->setField($field);
+
+        $pm->saveCourse($course);
+
+        $view->confirmCourse($course);
+    }
+
+
+   
     //********************************************************* */
+    //here starts Kevin's code, please do not modify it
+    
     //form per cercare i corsi, anche con filtri
     public static function searchForm() {
         
@@ -31,40 +123,60 @@ class CCourse {
         $view->showSearchForm();
     }
 
-    public static function showCourses() {     
-        $view = new VCourse();
-        
-        /*try {
-            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, false);
-        } catch (ValidationException $e) {
-            $viewErr = new VError();
-            $viewErr->show($e->getMessage());
-            exit;
-        }
-        
-        print_r($_POST);
-        print_r($filteredParams);
+    public static function showCoursesOfInstructor() {  
+        CUser::isLogged();
+        $userID = USession::getSessionElement('user');
 
-        //creo corsi fittizi per prova
-        */
-        $courses = FPersistentManager::getInstance()->retriveCourses();
-        //per ogni corso estraggo i dati e li metto in un array
-        $coursesData = [];
-        foreach ($courses as $course) {
-            $coursesData []= CCourse::courseToArray($course);
+        try {
+            if(CUser::isInstructor()) {
+                $courses = FPersistentManager::getInstance()->retriveCoursesOnInstructorId($userID);
+                $view = new VCourse();
+                $view->showSearchResults($courses, 'I tuoi corsi');
+            }
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
         }
-        $view->showSearchResults($coursesData, 'ciao');
+        
+    }
+
+    public static function showCourses() {  
+        
+           
+        try {       
+            if(!empty($_GET)){
+                $filteredParams = UValidate::validateInputArray($_GET, self::$attributi,false);
+                $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
+            }
+            else{
+                $courses = FPersistentManager::getInstance()->retriveCourses();
+            }
+               
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
+        }        
+
+        $view = new VCourse();
+        $view->showSearchResults($courses, 'I tuoi corsi');
         
     }
     //********************************************************* */
     // metodo per visualizzare i dettagli di un corso
     public static function courseDetail($course_id) {
         $course = FPersistentManager::retriveCourseOnId($course_id);
+        $modifyPermission = false;
+        if(USession::isSetSessionElement('user') === true) {
+            $userID = USession::getSessionElement('user');
+            
+            $user= FPersistentManager::retriveUserOnId($userID);
+            if(CUser::isClient()) {
+                $modifyPermission = true;
+            } 
+        }
         
-        $coursesData [] = CCourse::courseToArray($course);
-
+        
+         
         $view = new VCourse();
-        $view->showDetails( $coursesData);
+        $view->showDetails( $course , $modifyPermission);
     }
 
     //********************************************************* */
@@ -74,35 +186,27 @@ class CCourse {
         //prendo l id dell utente dalla sessione
         $userID = USession::getSessionElement('user');
         $user= FPersistentManager::retriveUserOnId($userID);
-        $corso=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
+        $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
         
-        $userData = CUser::userToArray($user);
-        $courseData = CCourse::courseToArray($corso);
+        
         $view = new VCourse();
-        $view->showEnrollmentDetails($courseData,$userData);
+        $view->showEnrollmentDetails($course,$user);
     }
 
     //*********************************************************************************** */
     
     public static function enrollForm($course_id) {
-        // Qui puoi aggiungere la logica per gestire l'iscrizione al corso
-        // Ad esempio, recuperare i dati del corso e dell'utente, validare l'iscrizione, ecc.
         
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        //$userID = USession::getSessionElement('user');
-        //$user = FPersistentManager::getInstance()->retriveUserOnId($userID);
-        
-        $courseData = CCourse::courseToArray($course);
-        //$userData = CUser::userToArray($user);
-        
         $view = new VCourse();
-        $view->showEnrollForm($courseData);
+        $view->showEnrollForm($course);
 
     }
     
     
     
     public static function manageForm($course_id) {
+
         $view = new VCourse();
         $view->showManageForm($course_id);
     }
@@ -120,115 +224,43 @@ class CCourse {
         return rtrim($days, ', '); // Rimuove l'ultima virgola e spazio
     }
     // metodo per serializzare un corso in un array
-    public static function courseToArray(ECourse $course) {
+    
+    
+    public static function manageMyCourses()
+    {
+        if (!CUser::isLogged()) {
+            (new VError())->show("Devi essere loggato per accedere a questa pagina.");
+            return;
+        }
+        if (CUser::isInstructor()) {
+            (new VError())->show("Devi essere un istruttore per accedere a queste funzionalità.");
+            return;
+        }
+
         
-        return [
-            'id' => $course->getId(),
-            'title' => $course->getTitle(),
-            'description' => $course->getDescription(),
-            'timeSlot' => $course->getTimeSlot(),
-            'daysOfWeek' => CCourse::daysToString($course->getDaysOfWeek()),
-            'startDate' => $course->getStartDate(),
-            'endDate' => $course->getEndDate(),
-            'cost' => $course->getEnrollmentCost(),
-            'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
-            'field' => $course->getField() ? $course->getField()->getName() : null,// Assuming getField() returns an EField object
-            'sport' => $course->getField() ? $course->getField()->getSport() : null, // Assuming getField() returns an EField object
-            'instructor' => $course->getInstructor() ? CUser::userToArray($course->getInstructor()) : null, // Assuming getInstructor() returns an EUser object
-            
+        $userID = USession::getSessionElement('user');
+        $courses = FPersistentManager::getInstance()->retriveCoursesByInstructor($userID);
+        
 
-        ];
-    }
-    
-
-
-
-
-    //*********************************************************** */
-    // la validazione andrà in una classe separata di utilità, ma per ora la metto qui
-    public static function validateCourse(array $courseData){
-        // Qui puoi aggiungere la logica per validare i dati del corso
-        $errors = [];
-        //validazione titolo
-        if (empty($CourseData['title'])) {
-            $errors[] = "Il titolo del corso è obbligatorio.";
-        }   
-        if( strlen($courseData['title'])>255){
-            $errors[] = "Il titolo del corso non può superare i 255 caratteri.";
-        }
-
-        //validazione descrizione
-        if (empty($CourseData['description'])) {
-            $errors[] = "La descrizione del corso è obbligatoria."; 
-        }
-
-        //validazione orario
-        if (empty($courseData['timeSlot'])) {
-            $errors[] = "L'orario del corso è obbligatorio.";
-        } elseif (!preg_match('/^\d{2}:\d{2}-\d{2}:\d{2}$/', $courseData['timeSlot'])) {
-            $errors[] = "L'orario deve essere nel formato HH:MM-HH:MM.";
-        }
-        //validazione date
-        if (empty($courseData['startDate']) || empty($courseData['endDate'])) {
-            $errors[] = "Le date di inizio e fine sono obbligatorie.";
-        }
-        if ($courseData['startDate'] >= $courseData['endDate']) {
-            $errors[] = "La data di inizio non può essere successiva o uguale alla data di fine.";
-        }
-        //validazione costo
-       if (empty($courseData['cost']) || !is_numeric($courseData['cost']) || $courseData['cost'] < 0) {
-            $errors[] = "Il costo del corso deve essere un numero positivo.";
-        }
-        //validazione numero massimo di partecipanti   
-        if (empty($courseData['MaxParticipantsCount']) || !is_numeric($courseData['MaxParticipantsCount']) || $courseData['MaxParticipantsCount'] <= 0) {
-            $errors[] = "Il numero massimo di partecipanti deve essere un numero positivo.";
-        }
-
-        return $errors;
-
+        // Mostra la vista di gestione corsi istruttore
+        $view = new Vcourse();
+        $view->showCourses($courses, $userID, 'I tuoi corsi');
     }
 
 
-
-
-    
-
-   
 }
 
 
-/*if(!empty($_GET)) {
-            // Se ci sono parametri di ricerca, li prendo
-            $filteredParams = $_GET;
-            echo 'filtri applicati' . $filteredParams;
-            $paramskeys = array_keys($filteredParams);
-            foreach ($paramskeys as $key) {
-                // Rimuovo i parametri che non sono tra quelli definiti
-                if (!in_array($key, self::$attributi)) {
-                    unset($filteredParams[$key]);
-                } else {
-                    // Se il parametro è valido, lo filtro 
-                    $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
-                }
-            }
-            //qui ho una array di parametri che possono richiamare i metodi di validazione
-            //per validare i parametri di ricerca
-            foreach ($paramskeys as $key) {
-                $methodName = 'validate' . ucfirst($key); // Es: 'title' -> 'validateTitle'
-            
-                if (method_exists(self::class, $methodName)) {
-                // Richiama il metodo statico passando il valore dell'attributo
-                $error = UValidate::$methodName($filteredParams[$key]);
-                    if ($error) {
-                        $errors[] = $error; //gestione degli errori
-                    }
-                }
-            }
-           
-            //non è necessario validare i dati ottenuti dal db, si presuppone che cìgià lo siano
-            $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
-        }
-        // Se non ci sono parametri di ricerca, prendo tutti i corsi
-        else {
-            $courses = FPersistentManager::getInstance()->retriveCourses();
-        }*/
+
+
+
+
+
+
+
+
+
+
+
+
+

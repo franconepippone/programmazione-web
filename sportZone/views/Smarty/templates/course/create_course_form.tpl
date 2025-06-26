@@ -91,80 +91,73 @@
 <div class="form-wrapper">
     <h2>📘 Crea un nuovo corso</h2>
 
-    <form method="post" action="/employee/finalizeCreateCourse">
-
+    <form method="post" action="/course/courseSummary">
         <div class="form-group">
-            <label for="title">📛 Titolo del corso</label>
-            <input type="text" name="title" id="title" value="{$title|default:''}" >
+            <label for="title">Titolo</label>
+            <input type="text" name="title" id="title" value="{$title|default:''}">
         </div>
-
         <div class="form-group">
-            <label for="description">📝 Descrizione del corso</label>
-            <textarea name="description" id="description" rows="4">{$description|default:''|escape}</textarea>
+            <label for="description">Descrizione</label>
+            <input type="text" name="description" id="description" value="{$description|default:''}">
         </div>
-
         <div class="form-group">
-            <label for="start_date">📅 Data di inizio</label>
-            <input type="date" name="start_date" id="start_date" value="{$start_date|default:''}" >
+            <label for="start_date">Data inizio</label>
+            <input type="date" name="start_date" id="start_date" value="{$start_date|default:''}">
         </div>
-
         <div class="form-group">
-            <label for="start_time">🕒 Orario di inizio</label>
-            <input type="time" name="start_time" id="start_time" value="{$start_time|default:''}" >
+            <label for="end_date">Data fine</label>
+            <input type="date" name="end_date" id="end_date" value="{$end_date|default:''}">
         </div>
-
         <div class="form-group">
-            <label for="end_time">🕕 Orario di fine</label>
-            <input type="time" name="end_time" id="end_time" value="{$end_time|default:''}" >
+            <label for="start_time">Orario inizio</label>
+            <input type="time" name="start_time" id="start_time" value="{$start_time|default:''}">
         </div>
-
         <div class="form-group">
-            <label>📆 Giorni della settimana</label>
+            <label for="end_time">Orario fine</label>
+            <input type="time" name="end_time" id="end_time" value="{$end_time|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="cost">Costo iscrizione</label>
+            <input type="text" name="cost" id="cost" value="{$cost|default:''}">
+        </div>
+        <div class="form-group">
+            <label for="max_participants">Numero massimo partecipanti</label>
+            <input type="number" name="max_participants" id="max_participants" value="{$max_participants|default:''}">
+        </div>
+        <div class="form-group">
+            <label>Giorni della settimana</label>
             <div class="checkbox-group">
-                {assign var=weekdays value=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"]}
-                {foreach from=$weekdays item=day}
+                {foreach from=['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'] item=day}
                     <label>
-                        <input type="checkbox" name="days[]" value="{$day}" {if $days && in_array($day, $days)}checked{/if}>
+                        <input type="checkbox" name="days[]" value="{$day}"
+                            {if isset($days) && $day|in_array:$days}checked{/if}>
                         {$day}
                     </label>
                 {/foreach}
             </div>
         </div>
-
         <div class="form-group">
-            <label for="instructor">👤 Istruttore</label>
-            <select name="instructor" id="instructor" >
-                <option value="">-- Seleziona --</option>
-                {foreach from=$instructors item=i}
-                    <option value="{$i->getId()}" {if $instructor == $i->getId()}selected{/if}>
-                        {$i->getName()} {$i->getSurname()}
+            <label for="instructor">Istruttore</label>
+            <select name="instructor" id="instructor">
+                <option value="">Seleziona...</option>
+                {foreach from=$instructors item=inst}
+                    <option value="{$inst.id}" {if $inst.id == ($instructor|default:'')}selected{/if}>
+                        {$inst.name} {$inst.surname}
                     </option>
                 {/foreach}
             </select>
         </div>
-
         <div class="form-group">
-            <label for="field">🏟️ Campo</label>
-            <select name="field" id="field" >
-                <option value="">-- Seleziona --</option>
-                {foreach from=$fields item=f}
-                    <option value="{$f->getId()}" {if $field == $f->getId()}selected{/if}>
-                        {$f->getSport()}
+            <label for="field">Campo</label>
+            <select name="field" id="field">
+                <option value="">Seleziona...</option>
+                {foreach from=$fields item=field}
+                    <option value="{$field.id}" {if $field.id == ($field|default:'')}selected{/if}>
+                        {$field.name}
                     </option>
                 {/foreach}
             </select>
         </div>
-
-        <div class="form-group">
-            <label for="cost">💰 Costo (€)</label>
-            <input type="text" name="cost" id="cost" value="{$cost|default:''}" >
-        </div>
-
-        <div class="form-group">
-            <label for="max_participants">👥 Numero massimo partecipanti</label>
-            <input type="text" name="max_participants" id="max_participants" value="{$max_participants|default:''}" >
-        </div>
-
-        <button type="submit" class="submit-button">✅ Conferma</button>
+        <button class="submit-button" type="submit">Continua</button>
     </form>
 </div>

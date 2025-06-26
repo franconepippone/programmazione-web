@@ -21,7 +21,7 @@ class EEnrollment
     #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "courses")]
     private ?EClient $client = null;
 
-    #[ORM\OneToOne(targetEntity: ECourse::class, cascade: ["persist", "remove"])]
+    #[ORM\ManyToOne(targetEntity: ECourse::class, inversedBy: "enrollments")]
     #[ORM\JoinColumn(nullable: false)]
     private ?ECourse $course = null;
 
@@ -54,4 +54,16 @@ class EEnrollment
     public function setCourse(?ECourse $course): void {
         $this->course = $course;
     }
+
+    public static function enrollmentToArray(EEnrollment $enrollment): array {
+        return [
+            'id' => $enrollment->getId(),
+            'enrollmentDate' => $enrollment->getEnrollmentDate()->format('Y-m-d H:i:s'),
+            'client' => $enrollment->getClient() ? EClient::clientToArray($enrollment->getClient()) : null,
+            'course' => $enrollment->getCourse() ? ECourse::courseToArray($enrollment->getCourse()) : null,
+        ];
+    }
+
+    public function __construct(){}
 }
+
