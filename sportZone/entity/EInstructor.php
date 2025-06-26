@@ -17,7 +17,6 @@ class EInstructor extends EUser
     private Collection $courses;
 
     public function __construct() {
-        parent::__construct();
         $this->courses = new ArrayCollection();
     }
 

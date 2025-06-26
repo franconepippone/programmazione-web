@@ -2,6 +2,8 @@
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
+use App\Enum\UserSex;
+
 /*
 The front controller is the main entry point of the server. All requests made to the server pass though the run()
 method of this class. 
@@ -28,7 +30,19 @@ class CFrontController{
         // Parse the request URI
         
         //$this->createDummyFields();
-        //$this->createDummyCourses();    
+        //$this->createDummyCourses();
+        /*
+        $instructor = (new EInstructor())
+            ->setName('Mario')
+            ->setSurname('Rossi')
+            ->setEmail('ciro')
+            ->setBirthDate(new DateTime('1990-01-01'))
+            ->setSex(UserSex::MALE)
+            ->setUsername('mario.rossi')
+            ->setPassword('password123'); // Assuming you have a setPassword method
+
+        //FPersistentManager::getInstance()->uploadObj($instructor);
+        */
 
         ob_start();
         // echo $requestUri;
