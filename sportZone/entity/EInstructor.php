@@ -58,7 +58,7 @@ class EInstructor extends EUser
             'username' => $instructor->getUsername(),
             'email' => $instructor->getEmail(),
             'cv' => $instructor->getCv(),
-            'courses' =>self::coursesToArray($instructor->getCourses())
+          //  'courses' =>self::coursesToArray($instructor->getCourses())
         ];
     }
     public static function coursesToArray(Collection $courses): array {
