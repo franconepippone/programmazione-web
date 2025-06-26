@@ -86,6 +86,7 @@
         }
 
     </style>
+    {block name="styles"}{/block}
 </head>
 <body>
     <div class="page-wrapper">
@@ -94,7 +95,7 @@
         {if true}
             <!-- Topbar for guests -->
             <div class="topbar">
-                <a href="/user/login">Login</a>
+                <a href="/user/login?{$loginQueryString}">Login</a>
                 <a href="/user/register">Register</a>
             </div>
         {/if}

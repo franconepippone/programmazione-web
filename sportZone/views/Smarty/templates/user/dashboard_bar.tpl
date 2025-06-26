@@ -1,19 +1,7 @@
 {extends file=$layout}
 
-{block name="content"}
-  <section class="dashboard">
-    <div class="dashboard-tabs">
-        <a href="/user/profile" class="tab{if $active_tab == 'profile'} active{/if}">Profile</a>
-        <a href="/user/myCourses" class="tab{if $active_tab == 'courses'} active{/if}">My Courses</a>
-        <a href="/user/myReservations" class="tab{if $active_tab == 'reservations'} active{/if}">My Reservations</a>
-        <a href="/user/settings" class="tab{if $active_tab == 'settings'} active{/if}">Settings</a>
-    </div>
-      {block name="dashboard_content"}
-      <!-- Contenuto specifico della tab qui -->
-      {/block}
-  </section>
-
-  <style>
+{block name="styles"}
+   <style>
     .dashboard {
       max-width: 960px;
       margin: 0 auto;
@@ -72,4 +60,18 @@
       margin-top: 0;
     }
   </style>
+{/block}
+
+{block name="content"}
+  <section class="dashboard">
+    <div class="dashboard-tabs">
+        <a href="/user/profile" class="tab{if $active_tab == 'profile'} active{/if}">Profile</a>
+        <a href="/user/myCourses" class="tab{if $active_tab == 'courses'} active{/if}">My Courses</a>
+        <a href="/user/myReservations" class="tab{if $active_tab == 'reservations'} active{/if}">My Reservations</a>
+        <a href="/user/settings" class="tab{if $active_tab == 'settings'} active{/if}">Settings</a>
+    </div>
+      {block name="dashboard_content"}
+      <!-- Contenuto specifico della tab qui -->
+      {/block}
+  </section>
 {/block}

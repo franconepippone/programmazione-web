@@ -5,7 +5,7 @@ class VUser{
 
     private $smarty;
 
-    public function __construct(){
+    public function __construct() {
         $this->smarty = USmarty::getInstance();
     }
 
@@ -21,7 +21,7 @@ class VUser{
     public function showDashboardMyCourses(EUser $user, string $role) {
         $userArray = EUser::usertoArray($user);
 
-        $this->chooseLayout(true);
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userArray);
         $this->smarty->display('user/dashboard/courses.tpl');
     }
@@ -29,7 +29,7 @@ class VUser{
     public function showDashboardProfile(EUser $user, string $role) {
         $userArray = EUser::usertoArray($user);
 
-        $this->chooseLayout(true);
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userArray);
         $this->smarty->display('user/dashboard/profile.tpl');
     }
@@ -37,27 +37,22 @@ class VUser{
     public function showDashboarMyReservations(EUser $user, string $role) {
         $userArray = EUser::usertoArray($user);
 
-        $this->chooseLayout(true);
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userArray);
         $this->smarty->display('user/dashboard/reservations.tpl');
     }
 
     public function showDashboardSettings(EUser $user, string $role) {
         $userArray = EUser::usertoArray($user);
-        
-        $this->chooseLayout(true);
+
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userArray);
         $this->smarty->display('user/dashboard/settings.tpl');
     }
 
     public function showHome($logged) {
-        $this->chooseLayout($logged);
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display('user/home.tpl');
-    }
-
-    private function chooseLayout($logged) {
-        $this->smarty->assign('layout', !$logged ? 
-        'sportZone/views/Smarty/templates/layouts/guest_base.tpl' : 'sportZone/views/Smarty/templates/layouts/logged_base.tpl');
     }
 
 }

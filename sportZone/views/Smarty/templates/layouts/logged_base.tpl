@@ -86,75 +86,76 @@
         }
 
         .profile-dropdown {
-    position: relative;
-    display: inline-block;
-    margin-left: 2rem;
-}
-.profile-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.2rem;
-    border-radius: 50%;
-    transition: background 0.15s;
-}
-.profile-btn:hover {
-    background: #374151;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #fff;
-    min-width: 140px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-    border-radius: 0.5rem;
-    z-index: 10;
-    margin-top: 0.5rem;
-}
-.profile-dropdown:hover .dropdown-content,
-.profile-dropdown:focus-within .dropdown-content {
-    display: block;
-}
-.dropdown-content a {
-    color: #1f2937;
-    padding: 0.7rem 1rem;
-    text-decoration: none;
-    display: block;
-    border-radius: 0.5rem;
-    transition: background 0.15s;
-}
-.dropdown-content a:hover {
-    background: #f3f4f6;
-}
-.navbar {
-    background-color: #1f2937;
-    color: #ffffff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-}
-.navbar-right {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-}
-.navbar nav {
-    display: flex;
-    align-items: center;
-}
-.navbar nav a {
-    color: #d1d5db;
-    text-decoration: none;
-    margin-left: 2rem;
-    font-weight: 500;
-}
-.navbar nav a:first-child {
-    margin-left: 0;
-}
+        position: relative;
+        display: inline-block;
+        margin-left: 2rem;
+        }
+        .profile-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.2rem;
+            border-radius: 50%;
+            transition: background 0.15s;
+        }
+        .profile-btn:hover {
+            background: #374151;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #fff;
+            min-width: 140px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            border-radius: 0.5rem;
+            z-index: 10;
+            margin-top: 0.5rem;
+        }
+        .profile-dropdown:hover .dropdown-content,
+        .profile-dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+        .dropdown-content a {
+            color: #1f2937;
+            padding: 0.7rem 1rem;
+            text-decoration: none;
+            display: block;
+            border-radius: 0.5rem;
+            transition: background 0.15s;
+        }
+        .dropdown-content a:hover {
+            background: #f3f4f6;
+        }
+        .navbar {
+            background-color: #1f2937;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .navbar nav {
+            display: flex;
+            align-items: center;
+        }
+        .navbar nav a {
+            color: #d1d5db;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+        }
+        .navbar nav a:first-child {
+            margin-left: 0;
+        }
 
     </style>
+    {block name="styles"}{/block}
 </head>
 <body>
     <div class="page-wrapper">
@@ -178,7 +179,7 @@
                     </button>
                     <div class="dropdown-content">
                         <a href="/user/profile">Profile</a>
-                        <a href="/user/logout">Logout</a>
+                        <a href="/user/logout?{$loginQueryString}">Logout</a>
                     </div>
                 </div>
             </div>

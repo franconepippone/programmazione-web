@@ -192,7 +192,13 @@ class CUser{
         USession::getInstance();
         USession::unsetSession();
         USession::destroySession();
-        header('Location: /user/home');
+
+        $redirectUrl = "/user/home";
+        if (UHTTPMethods::getIsSet("redirect")) {
+            header('Location: ' . UHTTPMethods::get("redirect"));
+        } else {
+            header('Location: /user/home');
+        }
     }
 
     

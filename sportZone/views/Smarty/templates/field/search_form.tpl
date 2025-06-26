@@ -1,6 +1,6 @@
-{extends file='sportZone/views/Smarty/templates/layouts/guest_base.tpl'}
+{extends file=$layout}
 
-{block name="content"}
+{block name="styles"}
   <style>
     .searchbox {
       padding: 20px 0;
@@ -59,20 +59,23 @@
       background-color: #0056b3;
     }
   </style>
+{/block}
+
+{block name="content"}
   <section class="searchbox">
     <h2>Inserisci Giorno e Sport</h2>
 
     <form action="/field/showResults" method="GET">
       <div class="form-group">
         <label for="date">Giorno:</label>
-        <input type="date" id="date" name="date">
+        <input type="date" id="date" name="date" required>
       </div>
 
       <div class="form-group">
         <label for="sport">Seleziona uno sport:</label>
         <select name="sport" id="sport">
           <option value="">-- Tutti gli sport --</option>
-          <option value="calcio">Calcio</option>
+          <option value="football">Calcio</option>
           <option value="tennis" selected>Tennis</option>
           <option value="basket">Basket</option>
           <option value="padel">Padel</option>

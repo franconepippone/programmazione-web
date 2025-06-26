@@ -1,4 +1,4 @@
-{extends file='sportZone/views/Smarty/templates/layouts/guest_base.tpl'}
+{extends file=$layout}
 
 {block name="content"}
   <style>
