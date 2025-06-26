@@ -7,7 +7,7 @@ class CCourse {
     CUser::isLogged();
     //CUser::isEmployee();
 
-    $view = new VEmployee();
+    $view = new VCourse();
     $pm = FPersistentManager::getInstance();
 
     $instructors = $pm->retriveAllInstructors();
@@ -21,7 +21,7 @@ class CCourse {
 public static function courseSummary() {
    // CUser::isEmployee();
 
-    $view = new VEmployee();
+    $view = new VCourse();
     $pm = FPersistentManager::getInstance();
 
     try {
@@ -68,7 +68,7 @@ public static function courseSummary() {
 public static function finalizeCourse() {
     //CUser::isEmployee();
 
-    $view = new VEmployee();
+    $view = new VCourse();
     $pm = FPersistentManager::getInstance();
 
     $data = $_POST;
