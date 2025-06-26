@@ -54,7 +54,8 @@
             </div>
             <div class="form-group">
                 <label for="instructor">Istruttore</label>
-                <input type="text" id="instructor" name="instructor" value="{$course.instructor|escape}" required>
+                <input type="text" id="instructor" value="{$course.instructor|escape}" disabled>
+                <input type="hidden" name="instructor" value="{$course.instructor|escape}">
             </div>
             <button type="submit" class="submit-button">Salva modifiche</button>
         </form>

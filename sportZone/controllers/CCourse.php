@@ -127,28 +127,21 @@ private static $rulesCourse = [
 
 
     //form per cercare i corsi, anche con filtri
-    public static function searchForm() {
+    /*public static function searchForm() {
         
         
         //fine creazione corsi fittizi
 
         $view = new VCourse();
         $view->showSearchForm();
-    }
+    }*/
 
     
     public static function showCourses() {  
         
            
         try {       
-            if(!empty($_GET)){
-                $filteredParams = UValidate::validateInputArray($_GET, self::$rulesCourse,false);
-                $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
-            }
-            else{
-                $courses = FPersistentManager::getInstance()->retriveCourses();
-            }
-               
+                $courses = FPersistentManager::getInstance()->retriveCourses();               
         } catch (Exception $e) {
             (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
         }        
@@ -164,16 +157,14 @@ private static $rulesCourse = [
        
         $course = FPersistentManager::retriveCourseOnId($course_id);
         $modifyPermission = false;
-        echo CUser::getUserRole();
-        echo CUser::isLoggedBool();
+        ;
         if(CUser::isLoggedBool()) {
-            $userID = USession::getSessionElement('user');
+            $role = CUser::getUserRole();
 
-            $user = FPersistentManager::retriveUserOnId($userID);
             if(!CUser::isClient()) {
-                $modifyPermission = true;
-                
+                $modifyPermission = true;    
             } 
+
             
 
         }
@@ -206,7 +197,6 @@ private static $rulesCourse = [
         }
 
         
-
         // Mostra la vista di gestione corsi istruttore
         $view = new VCourse();
         $view->showCourses($mycourses, 'I miei corsi');
@@ -216,9 +206,14 @@ private static $rulesCourse = [
 
    public static function modifyForm($course_id) {
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-
+        $user=CUser::getCurrentUser();
+        $modifyPermission=true;
+        if($course->getInstructor()->getId() !== $user->getId()){
+            (new VError())->show("non possiedi i permessi per modificare questo corso");
+            return;
+        }
         $view = new VCourse();
-        $view->showModifyCourseForm($course);
+        $view->showModifyCourseForm($course,$modifyPermission);
     }
 
 
@@ -254,7 +249,7 @@ private static $rulesCourse = [
             // Recupera oggetti istruttore , campo e corso
         try{    
             $course = $pm->retriveCourseOnId($course_id);
-            $instructor = $pm->retriveInstructorOnAttribute('name',$attributes['instructor']);
+            $instructor = CUser::getCurrentUser();
             $field = $pm->retriveFieldByAttribute('name',$attributes['field']);
             if (!$instructor || !$field || !$course) {
                 $view = new VError();
@@ -266,7 +261,7 @@ private static $rulesCourse = [
             $view->show("Si è verificato un errore imprevisto. Riprova più tardi.");
             return;
         }
-        echo "corso in aggiornamento";
+        //echo "corso in aggiornamento";
             // Aggiorna il corso
             $course->setTitle($attributes['title']);
             $course->setDescription($attributes['description']);
@@ -281,6 +276,9 @@ private static $rulesCourse = [
 
             // Salva le modifiche
             $pm->saveCourse($course);
+            $view = new VCourse;
+            $view->confirmCourseModifies();
+
     }
 
     private static function dateSlot($start, $end) {

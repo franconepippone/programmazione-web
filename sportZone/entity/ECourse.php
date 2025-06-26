@@ -188,15 +188,15 @@ class ECourse
             'title' => $course->getTitle(),
             'description' => $course->getDescription(),
             'timeSlot' => $course->getTimeSlot(),
-            'daysOfWeek' => ECourse::daysToString($course->getDaysOfWeek()),
+            'daysOfWeek' => $course->getDaysOfWeek(),//ECourse::daysToString($course->getDaysOfWeek()),
             'startDate' => $course->getStartDate(),
             'endDate' => $course->getEndDate(),
             'cost' => $course->getEnrollmentCost(),
             'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
             'field' => $course->getField() ? $course->getField()->getName() : null,// Assuming getField() returns an EField object
             'sport' => $course->getField() ? $course->getField()->getSport() : null, // Assuming getField() returns an EField object
-            'instructor' => $course->getInstructor() ? $course->getInstructor()->getName() : null, // Assuming getInstructor() returns an EUser object
-            
+            'instructor' => $course->getInstructor() ? $course->getInstructor()->getName()   : null, // Assuming getInstructor() returns an EUser object
+            'instructor_id'=>$course->getInstructor() ? $course->getInstructor()->getId() : null
 
         ];
     }

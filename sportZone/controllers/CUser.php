@@ -118,6 +118,7 @@ class CUser{
 
         // fills session variables with user data
         USession::getInstance();
+        session_regenerate_id(true);
         USession::setSessionElement( 'user', $user->getId());
         USession::setSessionElement( 'role', $user::class);
         

@@ -51,6 +51,7 @@ class VCourse
     //********************************************************* */
     public function showCourses($courses, $messaggio)
     {
+        $coursesData = [];
         foreach ($courses as $course) {
             $coursesData []= ECourse::courseToArray($course);
         }
@@ -59,7 +60,7 @@ class VCourse
         $this->smarty->display('course/showCourses.tpl');
     }
 
-    public function showDetails($course,$modifyPermission = false)
+    public function showDetails($course,$modifyPermission = false )
     {
         // Controlla se il corso è stato trovato
         if ($course === null) {
@@ -72,6 +73,7 @@ class VCourse
 
         $this->smarty->assign('courses', $courseData);
         $this->smarty->assign('modifyPermission', $modifyPermission);
+        
         $this->smarty->display('course/courseDetails.tpl');
     
     }
@@ -103,7 +105,7 @@ class VCourse
 
     
     //********************************************************* */
-    public function showModifyCourseForm($course)
+    public function showModifyCourseForm($course,$modifyPermission)
     {
         $courseData = ECourse::courseToArray($course);
         ///print_r($courseData);
@@ -117,7 +119,12 @@ class VCourse
         $this->smarty->assign('result', $result);
         $this->smarty->display('course/createResult.tpl');
     }
-}
+
+    public function confirmCourseModifies(){
+        $this->smarty->display('course/confirmCourseModifies.tpl');
+    }
+}   
+
 // End of VCourse.php
 // This class handles the view logic for courses, including displaying forms and results.   
 // It uses Smarty for templating and expects templates to be located in the specified directories.
