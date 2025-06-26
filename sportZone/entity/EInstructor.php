@@ -53,7 +53,7 @@ class EInstructor extends EUser
             'id' => $instructor->getId(),
             'name' => $instructor->getName(),
             'surname' => $instructor->getSurname(),
-            'sex' => $instructor->getSex(),
+            //'sex' => $instructor->getSex(),
             'birth_date' => $instructor->getBirthDate()->format('Y-m-d'),
             'username' => $instructor->getUsername(),
             'email' => $instructor->getEmail(),
