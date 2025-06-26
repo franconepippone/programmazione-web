@@ -8,6 +8,7 @@ class CCourse {
         'title'            => 'validateTitle',
         'description'      => 'validateDescription',
         'start_date'       => 'validateStartDate',
+        'end_date'         => 'validateEndDate',
         'start_time'       => 'validateTime',
         'end_time'         => 'validateTime',
         'cost'             => 'validatePrice',
@@ -40,7 +41,12 @@ class CCourse {
         try {
             $validated = UValidate::validateInputArray($_POST, self::$rulesCourse, true);
 
-        // Validazione custom per orari (start < end)
+        // Validazione incrociata date
+            if ($validated['end_date'] <= $validated['start_date']) {
+                throw new ValidationException("La data di fine deve essere successiva a quella di inizio.");
+            }
+
+        // Validazione incrociata orari
             if ($validated['start_time'] >= $validated['end_time']) {
                 throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
             }
@@ -57,6 +63,7 @@ class CCourse {
 
            
             $validated['start_date'] = $validated['start_date']->format('Y-m-d');
+            $validated['end_date'] = $validated['end_date']->format('Y-m-d');
             $validated['start_time'] = $validated['start_time']->format('H:i');
             $validated['end_time'] = $validated['end_time']->format('H:i');
             
@@ -88,7 +95,7 @@ class CCourse {
         $course->setTitle($data['title']);
         $course->setDescription($data['description']);
         $course->setStartDate(new DateTime($data['start_date']));
-        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
+        $course->setEndDate(new DateTime($data['end_date']));
         $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
         $course->setDaysOfWeek($data['days']);
         $course->setEnrollmentCost(floatval($data['cost']));
@@ -243,17 +250,17 @@ class CCourse {
 
 }
 
-    
-    
-
-    
 
 
-    
 
-    
 
-   
+
+
+
+
+
+
+
 
 
 

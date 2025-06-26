@@ -24,6 +24,7 @@ class VCourse
         $this->smarty->assign('title', $data['title']);
         $this->smarty->assign('description', $data['description']);
         $this->smarty->assign('start_date', $data['start_date']);
+        $this->smarty->assign('end_date', $data['end_date']);
         $this->smarty->assign('start_time', $data['start_time']);
         $this->smarty->assign('end_time', $data['end_time']);
         $this->smarty->assign('days', $data['days']);
@@ -127,4 +128,4 @@ class VCourse
 // Ensure that the Smarty library is properly included and configured in your project for this to function correctly.
 // Make sure to handle any necessary data retrieval and processing in the controller before calling these view methods.
 // This class is part of a larger MVC framework, so it assumes that the controller will handle the logic and data retrieval.
-// Ensure that the Smarty library is properly included and configured in your project for this to function correctly 
+// Ensure that the Smarty library is properly included and configured in your project for this to function correctly

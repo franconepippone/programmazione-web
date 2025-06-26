@@ -180,21 +180,23 @@ class UValidate {
         $errors = DateTime::getLastErrors() ?: ['warning_count' => 0, 'error_count' => 0];
 
         if (!$time || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
-            throw new ValidationException("Invalid time: '$timeString'");
+            throw new ValidationException("Orario non valido: '$timeString'");
         }
 
         return $time;
     }
 
     /**
-     * Validate if a string is a valid email address
-     * @param string $email
-     * @return bool
+     * Validates an email address.
+     *
+     * @param string $email The email address to validate.
+     * @return string The validated email address.
+     * @throws ValidationException If the email address is invalid.
      */
     public static function validateEmail(string $email): string {
         // Usa FILTER_VALIDATE_EMAIL per validare la struttura
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new ValidationException("Invalid email: '$email'");
+            throw new ValidationException("Email non valida: '$email'");
         }
 
         // Eventuali controlli aggiuntivi (es. dominio con record MX)
@@ -231,15 +233,15 @@ class UValidate {
         // controls if the input is empty
         $length = strlen($input);
         if ($length < $minLength) {
-            throw new ValidationException("length be at least $minLength characters.", code: -1);
+            throw new ValidationException("Il testo deve essere lungo almeno $minLength caratteri.", code: -1);
         }
         if ($length > $maxLength) {
-            throw new ValidationException("length must not exceed $maxLength characters.", code: -2);
+            throw new ValidationException("Il testo non può superare $maxLength caratteri.", code: -2);
         }
 
         // Controlla pattern, se specificato
         if ($pattern && !preg_match($pattern, $input)) {
-            throw new ValidationException("Input string does not match required criteria: " . $input, code: -3);
+            throw new ValidationException("Il formato del testo non è valido: $input", code: -3);
         }
 
         return $input;
@@ -342,7 +344,7 @@ class UValidate {
     public static function validateMaxParticipants(string|int $num): int {
         $val = intval($num);
         if ($val < 1 || $val > 1000) {
-            throw new ValidationException("Number of participants must be between 1 and 1000.");
+            throw new ValidationException("Il numero di partecipanti deve essere compreso tra 1 e 1000.");
         }
         return $val;
     }
@@ -354,7 +356,7 @@ class UValidate {
      */
     public static function validatePrice(string|float $price): float {
         if (!is_numeric($price) || floatval($price) < 0) {
-            throw new ValidationException("Price must be a non-negative number.");
+            throw new ValidationException("Il prezzo deve essere un numero positivo.");
         }
         return round(floatval($price), 2);
     }
@@ -370,9 +372,8 @@ class UValidate {
         $minStartDate = (clone $today)->modify('+7 days');
 
         if ($startDate < $minStartDate) {
-            throw new ValidationException("Course must start at least 7 days from today.");
+            throw new ValidationException("Il corso deve iniziare almeno tra 7 giorni.");
         }
-
         return $startDate;
     }
 
@@ -381,13 +382,14 @@ class UValidate {
      *
      * Must be after the given start date.
      */
-    public static function validateEndDate(string $endDateString, DateTime $startDate): DateTime {
+    public static function validateEndDate(string $endDateString, ?string $startDateString = null): DateTime {
         $endDate = self::validateDate($endDateString);
-
-        if ($endDate <= $startDate) {
-            throw new ValidationException("End date must be after the start date.");
+        if ($startDateString) {
+            $startDate = self::validateDate($startDateString);
+            if ($endDate <= $startDate) {
+                throw new ValidationException("La data di fine deve essere successiva a quella di inizio.");
+            }
         }
-
         return $endDate;
     }
 

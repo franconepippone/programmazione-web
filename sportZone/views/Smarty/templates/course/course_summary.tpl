@@ -4,7 +4,9 @@
         <li><b>Titolo:</b> {$title|escape}</li>
         <li><b>Descrizione:</b> {$description|escape}</li>
         <li><b>Data inizio:</b> {$start_date}</li>
-        <li><b>Orario:</b> {$start_time} - {$end_time}</li>
+        <li><b>Data fine:</b> {$end_date}</li>
+        <li><b>Orario inizio:</b> {$start_time}</li>
+        <li><b>Orario fine:</b> {$end_time}</li>
         <li><b>Giorni:</b> {$days_string}</li>
         <li><b>Costo:</b> {$cost} €</li>
         <li><b>Max partecipanti:</b> {$max_participants}</li>
@@ -15,6 +17,7 @@
         <input type="hidden" name="title" value="{$title|escape}">
         <input type="hidden" name="description" value="{$description|escape}">
         <input type="hidden" name="start_date" value="{$start_date}">
+        <input type="hidden" name="end_date" value="{$end_date}">
         <input type="hidden" name="start_time" value="{$start_time}">
         <input type="hidden" name="end_time" value="{$end_time}">
         {foreach from=$days item=day}

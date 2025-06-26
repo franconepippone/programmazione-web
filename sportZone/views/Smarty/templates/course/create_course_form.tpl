@@ -105,6 +105,10 @@
             <input type="date" name="start_date" id="start_date" value="{$start_date|default:''}">
         </div>
         <div class="form-group">
+            <label for="end_date">Data fine</label>
+            <input type="date" name="end_date" id="end_date" value="{$end_date|default:''}">
+        </div>
+        <div class="form-group">
             <label for="start_time">Orario inizio</label>
             <input type="time" name="start_time" id="start_time" value="{$start_time|default:''}">
         </div>
