@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <title>Dettagli Campo - {$campo.titolo}</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #eef0f4;
-      margin: 0;
-      padding: 20px;
-    }
+{extends file=$layout}
+{assign var="title" value="Dettagli Campo Sportivo"}
 
+{block name="styles"}
+  <style>
     .main {
       max-width: 1000px;
       margin: 0 auto;
@@ -100,65 +92,63 @@
       background-color: #0056b3;
     }
   </style>
-</head>
-<body>
+{/block}
 
-<div class="main">
-  <h1>{$campo.titolo}</h1>
+{block name="content"}
+  <div class="main">
+    <h1>{$campo.titolo}</h1>
 
-  <div class="gallery-slider">
-    <div class="slides" id="slides">
-      {foreach $campo.immagini as $img}
-        <div class="slide">
-          <img src="{$img}" alt="Immagine del campo">
-        </div>
-      {/foreach}
+    <div class="gallery-slider">
+      <div class="slides" id="slides">
+        {foreach $campo.immagini as $img}
+          <div class="slide">
+            <img src="{$img}" alt="Immagine del campo">
+          </div>
+        {/foreach}
+      </div>
+    </div>
+
+    <div class="details">
+      <h2>Informazioni Generali</h2>
+      <div class="info">
+        <strong>Sport:</strong> {$campo.sport}<br>
+        <strong>Orario:</strong> {$campo.orario}<br>
+        {if isset($campo.superficie)}<strong>Superficie:</strong> {$campo.superficie}<br>{/if}
+        {if isset($campo.illuminazione)}<strong>Illuminazione:</strong> {$campo.illuminazione}<br>{/if}
+        <strong>Prezzo:</strong> {$campo.prezzo}<br><br>
+        <strong>Descrizione:</strong><br>
+        {$campo.descrizione}
+      </div>
+    </div>
+
+    <div class="map-container">
+      <iframe
+        width="600"
+        height="450"
+        style="border:0"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q={$campo.latitude},{$campo.longitude}&hl=it&z=15&output=embed">
+      </iframe>
+    </div>
+
+    <div class="button-container">
+      <a href="/reservation/ReservationForm?{$queryString}" class="btn">Continua con la prenotazione</a>
     </div>
   </div>
 
-  <div class="details">
-    <h2>Informazioni Generali</h2>
-    <div class="info">
-      <strong>Sport:</strong> {$campo.sport}<br>
-      <strong>Orario:</strong> {$campo.orario}<br>
-      {if isset($campo.superficie)}<strong>Superficie:</strong> {$campo.superficie}<br>{/if}
-      {if isset($campo.illuminazione)}<strong>Illuminazione:</strong> {$campo.illuminazione}<br>{/if}
-      <strong>Prezzo:</strong> {$campo.prezzo}<br><br>
-      <strong>Descrizione:</strong><br>
-      {$campo.descrizione}
-    </div>
-  </div>
+  {literal}
+  <script>
+    const slides = document.getElementById('slides');
+    let index = 0;
 
-  <div class="map-container">
-    <iframe
-      width="600"
-      height="450"
-      style="border:0"
-      loading="lazy"
-      allowfullscreen
-      referrerpolicy="no-referrer-when-downgrade"
-      src="https://maps.google.com/maps?q={$campo.latitude},{$campo.longitude}&hl=it&z=15&output=embed">
-    </iframe>
-  </div>
+    function nextSlide() {
+      index = (index + 1) % slides.children.length;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
 
-  <div class="button-container">
-    <a href="/reservation/ReservationForm?{$queryString}" class="btn">Continua con la prenotazione</a>
-  </div>
-</div>
-
-{literal}
-<script>
-  const slides = document.getElementById('slides');
-  let index = 0;
-
-  function nextSlide() {
-    index = (index + 1) % slides.children.length;
-    slides.style.transform = `translateX(-${index * 100}%)`;
-  }
-
-  setInterval(nextSlide, 5000);
-</script>
-{/literal}
-
-</body>
-</html>
+    setInterval(nextSlide, 5000);
+  </script>
+  {/literal}
+{/block}

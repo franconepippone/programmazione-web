@@ -70,7 +70,7 @@
 <body>
     <div class="card-form-container">
         <h2>Add Credit Card</h2>
-        <form method="post" action="/onlinePayment/finalizeAddCreditCard">
+        <form method="post" action="/payment/finalizeAddCreditCard">
             <div class="form-group">
                 <label for="number">Card Number</label>
                 {literal}

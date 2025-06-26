@@ -30,26 +30,34 @@ abstract class EPaymentMethod
         return $this->reservation;
     }
 
-    public function setReservation(?EReservation $reservation): void {
+    public function setReservation(?EReservation $reservation): self {
         $this->reservation = $reservation;
+        return $this;
     }
 
     public function getEnrollment(): ?EEnrollment {
         return $this->enrollment;
     }
 
-    public function setEnrollment(?EEnrollment $enrollment): void {
+    public function setEnrollment(?EEnrollment $enrollment): self {
         $this->enrollment = $enrollment;
+        return $this;
     }
 
     public function getClient(): ?EClient {
         return $this->client;
     }
 
-    public function setClient(?EClient $client): void {
+    public function setClient(?EClient $client): self {
         $this->client = $client;
+        return $this;
     }
     
+    public function pay(int $amountCents): bool {
+        // This method should be implemented by subclasses
+        return false;
+    }
+
     public function getType(): string {
     return match (get_class($this)) {
         EOnlinePayment::class => 'online',

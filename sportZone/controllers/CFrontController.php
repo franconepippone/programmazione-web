@@ -4,6 +4,12 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 use App\Enum\UserSex;
 
+#[\Attribute(\Attribute::TARGET_METHOD)]
+class PathUrl {
+    public const HIDDEN = '__hidden__';
+    public function __construct(public string $path) {}
+}
+
 /*
 The front controller is the main entry point of the server. All requests made to the server pass though the run()
 method of this class. 
@@ -56,9 +62,9 @@ class CFrontController{
         // Extract controller and method names
         $controllerName = !empty($uriParts[0]) ? ucfirst($uriParts[0]) : 'User';
         var_dump($controllerName);
-        $methodName = (!empty($uriParts[1]) ? $uriParts[1] : 'login');
+        $controllerMethodKey = (!empty($uriParts[1]) ? $uriParts[1] : 'login');
         echo "Requested controller: " . $controllerName . "<br>";
-        echo "Requested method: " . $methodName . "<br>";
+        echo "Requested method key: " . $controllerMethodKey . "<br>";
 
         // Load the controller class
         $controllerClass = 'C' . $controllerName;
@@ -81,13 +87,17 @@ class CFrontController{
             exit;            
         }
 
-        if (!method_exists($controllerClass, $methodName)) {
-            echo "<br> Method ". $methodName ." not found <br>";
+        $map = self::generateMethodsUrlMap($controllerClass);
+        //print_r($map);
+
+        if (!array_key_exists($controllerMethodKey, $map)) {
+            echo "<br> No method mapped to ". $controllerMethodKey ." key in controller ". $controllerClass ."<br>";
             // Method not found, handle appropriately (e.g., show 404 page)
             //header('Location: /Agora/User/home')
             exit;
         }
-
+        
+        $methodName = $map[$controllerMethodKey];
         $params = array_slice($uriParts, 2); // Get optional parameters
         echo "Calling " . "$controllerClass" . "." . "$methodName" . " with parameters: " . print_r($params, true) . "<br>";
         
@@ -98,6 +108,35 @@ class CFrontController{
 
         call_user_func_array([$controllerClass, $methodName], $params);
     }
+
+    /**
+     * Generates a map of method names to their URL paths based on the PathUrl attribute.
+     * 
+     * @param string $className The name of the class to inspect.
+     * @return array An associative array mapping URL paths to method names.
+     */
+    private function generateMethodsUrlMap(string $className): array {
+        $map = [];
+        $refClass = new ReflectionClass($className);
+        foreach ($refClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            // Skip constructor, destructor, and static methods
+            if ($method->isConstructor() || $method->isDestructor()) {
+                continue;
+            }
+            $attrs = $method->getAttributes(PathUrl::class);
+            if (!empty($attrs)) {
+                $customName = $attrs[0]->newInstance()->path;
+                if ($customName === PathUrl::HIDDEN) {
+                    continue; // Skip hidden methods
+                }
+                $map[$customName] = $method->getName();
+            } else {
+                $map[$method->getName()] = $method->getName();
+            }
+        }
+        return $map;
+    }
+
     /**
     //creo campi fittizi
     public static function createDummyFields(){

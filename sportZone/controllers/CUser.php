@@ -17,12 +17,29 @@ class CUser{
         "birthday" => 'validateBirthDate'
     ];
 
+    public static function isLoggedBool(): bool 
+    {
+        $logged = false;
+
+        if(UCookie::isSet('PHPSESSID')){
+            if(session_status() == PHP_SESSION_NONE){
+                USession::getInstance();
+            }
+        }
+        if(USession::isSetSessionElement('user')){
+            $logged = true;
+        }
+
+        return $logged;
+    }
+
     /**
      * Checks if the user is logged in.
      * If not, redirects to the login page with a redirect argument set to the current page.
      * 
      * @return bool True if the user is logged in, otherwise redirects to login.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isLogged()
     {
         $logged = false;
@@ -154,6 +171,10 @@ class CUser{
         ->setBirthDate(
             new DateTime($formInputs['birthday']->format('Y-m-d'))
         );
+
+        // assigns default payment method
+        $onSitePayment = new EOnSitePayment();
+        $newClient->addPaymentMethod($onSitePayment);
         
         // register was succesfull
         $check = FPersistentManager::getInstance()->uploadObj($newClient);
@@ -171,19 +192,67 @@ class CUser{
         USession::getInstance();
         USession::unsetSession();
         USession::destroySession();
-        header('Location: /user/login');
+
+        $redirectUrl = "/user/home";
+        if (UHTTPMethods::getIsSet("redirect")) {
+            header('Location: ' . UHTTPMethods::get("redirect"));
+        } else {
+            header('Location: /user/home');
+        }
     }
 
-  
-    public static function home(){
-        if(CUser::isLogged()){
-            $view = new VUser();
+    
+    public static function profile(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        $view = new VUser();
 
-            $userId = USession::getInstance()->getSessionElement('user');
-            $user = FPersistentManager::getInstance()->retriveUserOnId($userId);-
-            $view->showHomePage($user->getFullName() . " " . self::getUserRole());
-        }  
+        $user = self::getLoggedUser();
+        $view->showDashboardProfile($user, $role);
+    
     }
+
+
+    public static function myCourses(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        
+        $view = new VUser();
+
+        $user = self::getLoggedUser();
+        $view->showDashboardMyCourses($user, $role);
+    
+    }
+
+
+    public static function myReservations(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        
+        $view = new VUser();
+        
+        $user = self::getLoggedUser();
+        $view->showDashboarMyReservations($user, $role);
+    
+    }
+
+    public static function settings(){
+        CUser::isLogged();
+        $role = CUser::getUserRole();
+        $view = new VUser();
+
+        $user = self::getLoggedUser();
+        $view->showDashboardSettings($user, $role);
+    
+    }
+
+    public static function home() {
+        $logged = CUser::isLoggedBool();
+
+        $view = new VUser();
+        $view->showHome($logged);
+    }
+    
 
     /**
      * Retrieves the currently logged-in user from the session.
@@ -193,6 +262,7 @@ class CUser{
      *
      * @return EUser|null The logged-in user object if available, or null if not logged in.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function getLoggedUser(): ?EUser
     {
         if (self::isLogged()) {
@@ -211,6 +281,7 @@ class CUser{
      *
      * @return string|null The user's role if available, or null if not logged in.
      */
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function getUserRole(): ?string
     {
         if (self::isLogged()) {
@@ -224,20 +295,22 @@ class CUser{
         };
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isEmployee()
     {
         return self::getUserRole() === EEmployee::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isInstructor()
     {
         return self::getUserRole() === EInstructor::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function isClient()
     {
         return self::getUserRole() === EClient::class;
     }
 
-    
 }

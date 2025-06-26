@@ -10,6 +10,7 @@ class VField{
     }
 
     public function showSearchForm() {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display("field/search_form.tpl");
     }
 
@@ -42,6 +43,7 @@ class VField{
         $queryParams = [];
         if (isset($searchParams['date'])) $queryParams['date'] = $searchParams['date'];
 
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('queryString', http_build_query($queryParams));
         $this->smarty->assign('search', $searchParams);
         $this->smarty->assign('fields', $fieldsInfo);
@@ -71,6 +73,7 @@ class VField{
         ];
 
           // Passa i dati a Smarty
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('campo', $campo);
         $this->smarty->assign('queryString', $query);
         $this->smarty->display("field/details.tpl");
@@ -79,6 +82,7 @@ class VField{
     // ------------------- ADMIN -----------------------------
 
     public function showCreateFieldForm() {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display("field/create_field.tpl");
     }
 
