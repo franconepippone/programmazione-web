@@ -55,19 +55,14 @@ class CCourse {
             $validated['instructor'] = $instructor;
             $validated['field'] = $field;
 
-            if ($validated['start_date'] instanceof DateTime) {
-                $validated['start_date'] = $validated['start_date']->format('Y-m-d');
-            }
-            if ($validated['start_time'] instanceof DateTime) {
-                $validated['start_time'] = $validated['start_time']->format('H:i');
-            }
-        
-                $validated['end_time'] = $validated['end_time']->format('H:i');
-            
-
            
+            $validated['start_date'] = $validated['start_date']->format('Y-m-d');
+            $validated['start_time'] = $validated['start_time']->format('H:i');
+            $validated['end_time'] = $validated['end_time']->format('H:i');
+            
             $view->showCourseSummary($validated);
 
+             
         } catch (ValidationException $e) {
             $msg = $e->getMessage();
             if (isset($e->details['params'])) {
@@ -75,6 +70,7 @@ class CCourse {
             }
             (new VError())->show($msg);
         }
+         
     }
 
     public static function finalizeCourse() {
