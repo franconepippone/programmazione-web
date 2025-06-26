@@ -18,39 +18,34 @@ class VReservation{
     }
 
 
-    public function showConfirmation(){
-        $this->smarty->display("reservation/confirmation.tpl");
-    }
-
-    public function showCancelReservation($reservation) {
-        $reservationData = EReservation::reservationToArray($reservation);
-        $this->smarty->assign("reservation", $reservationData);
-        $this->smarty->display("reservation/cancel_reservation.tpl");
-    }
-
-     public function showCancelConfirmation() {
-        $this->smarty->display("reservation/cancel_confirmation.tpl");
-    }
-
-    public function showReservationSummary($fullName, $date, $time, $field, $paymentMethod) {
+    public function showReservationSummary($fullName, $date, $time, $field) {
         $fieldData = EField::fieldToArray($field);
         $this->smarty->assign("fullName", $fullName);
         $this->smarty->assign("date", $date);
         $this->smarty->assign("time", $time);
         $this->smarty->assign("fieldData", $fieldData);
-        $this->smarty->assign("paymentMethod", $paymentMethod);
         $this->smarty->display("reservation/reservation_summary.tpl");
     }
-        
-    public function showMyReservations($reservations) {
-        $reservationsArray = [];
-        foreach ($reservations as $reservation) {
-            $reservationsArray[] = EReservation::reservationToArray($reservation);
-        }
-    
-        $this->smarty->assign("reservations", $reservationsArray);
-        $this->smarty->display("reservation/my_reservations.tpl");
+
+    public function showConfirmation() {
+        $this->smarty->display("reservation/confirmation.tpl");
     }
+
+    public function showCancelReservation($reservation) {
+        $reservationData = EReservation::reservationToArray($reservation);
+    
+        $this->smarty->assign("reservation", $reservationData);
+        $this->smarty->display("reservation/cancel_reservation.tpl");
+    }
+
+    public function showCancelConfirmation() {
+        $this->smarty->display("reservation/cancel_confirmation.tpl");
+    }
+
+    public function showCancelInfo() {
+        $this->smarty->display('reservation/cancel_info.tpl');
+    }
+
 
     public function showAllReservations(array $reservations) {
         $reservationsArray = [];
@@ -65,5 +60,10 @@ class VReservation{
         $reservationArray = EReservation::reservationToArray($reservation);
         $this->smarty->assign('reservation', $reservationArray);
         $this->smarty->display('reservation/reservation_details.tpl');
+    }
+
+
+    public function showNoActiveReservation() {
+        $this->smarty->display('reservation/no_active_reservation.tpl');
     }
 }

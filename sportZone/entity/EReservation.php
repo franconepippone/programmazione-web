@@ -89,17 +89,18 @@ class EReservation
     }
 
     public static function reservationToArray(EReservation $reservation) {
-        
-        return [
-            'client_name' => $reservation->getClient() ? $reservation->getClient() -> getName() : null,
-            'client_surname' => $reservation->getClient() ? $reservation->getClient() -> getSurname() : null,
-            'id' => $reservation->getId(),
-            'date' => $reservation->getDate(),
-            'time' => $reservation->getTime(),
-            'field' => $reservation->getField() ? $reservation->getField()->getName() : null,
-            'sport' => $reservation->getField() ? $reservation->getField()->getSport() : null,
-            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getPaymentMethod()->getType() : null
+        $client = $reservation->getClient();
+        $field = $reservation->getField();
 
+        return [
+            'fullname' => $client ? $client->getName() . ' ' . $client->getSurname() : null,
+            'id' => $reservation->getId(),
+            'date' => $reservation->getDate() instanceof DateTimeInterface ? $reservation->getDate()->format('Y-m-d') : $reservation->getDate(),
+            'time' => $reservation->getTime() instanceof DateTimeInterface ? $reservation->getTime()->format('H:i') : $reservation->getTime(),
+            'field' => $field ? $field->getName() : null,
+            'sport' => $field ? $field->getSport() : null,
+            'cost' => $field ? $field->getCost() : null,
+            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getPaymentMethod()->getType() : null
         ];
     }
 }

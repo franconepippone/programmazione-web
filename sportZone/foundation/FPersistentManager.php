@@ -59,6 +59,18 @@ class FPersistentManager{
         return $result;
     }
 
+    /**
+     * return a User finding it not on the id but on it's email
+     */
+    public static function retriveUserOnEmail($email)
+    {
+        $result = FUser::getUserByEmail($email);
+        return $result;
+    }
+
+    /**
+     * return a User finding it on the id
+     */
     public static function retriveUserOnId(int $id) {
         $result = FUser::getUserById($id);
         return $result;
@@ -73,10 +85,14 @@ class FPersistentManager{
         return FField::getFieldById($id);
     }
 
+    /**
+     * Retrieve a Field by attribute
+     */
     public static function retrieveAllMatchingFields(array $filters = []) {
         $result = FEntityManager::getInstance()->selectAll(EField::class);
         return $result;
     }
+    
 
      public function existsFieldBySport($sport) {
      $fields = FField::getAllFields();
@@ -87,7 +103,10 @@ class FPersistentManager{
      }
      return false;
      }
-
+     
+    /**
+    * Retrieve all fields
+    */
      public function retriveAllFields() {
         return FField::getAllFields();
      }
@@ -126,8 +145,8 @@ class FPersistentManager{
     /**
      * Retrieve reservations by field and date
      */
-    public static function retriveReservationsByFieldId($fieldId, $date){
-        return FReservation::getReservationsByFieldId($fieldId, $date);
+    public static function retriveReservationByFieldId($fieldId){
+        return FReservation::getReservationByFieldId($fieldId);
     }
 
     /**
@@ -137,10 +156,16 @@ class FPersistentManager{
         return FReservation::saveReservation($reservation);
     }
 
-    
+    /**
+     * Delete a Reservation object
+     */
+    public static function removeReservation(EReservation $reservation){
+        return FReservation::deleteReservation($reservation);
+    }    
 
     /**
-     * fillter by name, date and sport
+     * filter by name, date and sport
+     *
      * Returns the list of reservations.
      */
     public function retriveFilteredReservations($name = null, $date = null, $sport = null) {
@@ -195,6 +220,23 @@ class FPersistentManager{
 
         // Restituisci gli orari liberi ordinati
         return array_values($availableHours);
+    }
+
+    /**
+     * Retrieve a reservation by client ID and check if it is active (today or future)
+     */
+    public static function retriveActiveReservationByClientId(int $clientId) {
+        $reservations = FReservation::getReservationsByClientId($clientId);
+        if (!is_array($reservations)) {
+            $reservations = $reservations ? [$reservations] : [];
+        }
+        $today = new DateTime('today');
+        foreach ($reservations as $res) {
+            if ($res->getDate() instanceof DateTimeInterface && $res->getDate() >= $today) {
+                return $res;
+            }
+        }
+        return null;
     }
   
     //-----------------------------------INSTRUCTOR-------------------------------
@@ -280,13 +322,5 @@ class FPersistentManager{
         return $result;
     }
 
-    /**
-     * Get available hours for a field on a specific date.
-     * Returns the list of free hours by checking existing reservations.
-     */
     
-
-
-
-
 }

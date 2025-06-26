@@ -69,7 +69,7 @@ class FReservation {
      * @return void
      */
     public static function deleteReservation(EReservation $reservation): void {
-        FEntityManager::getInstance()->delete($reservation);
+        FEntityManager::getInstance()->deleteObj($reservation);
     }
 
     /**

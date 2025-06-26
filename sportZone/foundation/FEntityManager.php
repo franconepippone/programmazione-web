@@ -1,8 +1,11 @@
 <?php
+require_once __DIR__ . "/../../vendor/autoload.php";
+
 require_once(__DIR__ . '/../../bootstrap.php');
 require_once(__DIR__ . '/../entity/EClient.php');
 require_once(__DIR__ . '/../entity/EEmployee.php');
 require_once(__DIR__ . '/../entity/EInstructor.php');
+
 
 class FEntityManager{
     private static $instance;
