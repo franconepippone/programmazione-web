@@ -1,5 +1,4 @@
 <?php
-
 use App\Enum\EnumSport;
 
 require __DIR__ ."/../../vendor/autoload.php";
@@ -268,27 +267,39 @@ class UValidate {
         $fieldNames = array_keys($validationRules);
 
         foreach (array_keys($filteredParams) as $key) {
-            // Rimuovo i parametri che non sono tra quelli definiti
-            if (!in_array($key, $fieldNames) || empty($filteredParams[$key]) ) {
+            if (!in_array($key, $fieldNames)) {
                 unset($filteredParams[$key]);
             } else {
-                $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
+                if (is_array($filteredParams[$key])) {
+                    if (count($filteredParams[$key]) === 0) {
+                        unset($filteredParams[$key]);
+                        continue;
+                    }
+                    $filteredParams[$key] = array_map(
+                        fn($v) => is_string($v) ? htmlspecialchars(trim($v)) : $v,
+                        $filteredParams[$key]
+                    );
+                } else {
+                    if (trim($filteredParams[$key]) === '') {
+                        unset($filteredParams[$key]);
+                        continue;
+                    }
+                    $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
+                }
                 $fieldNames = array_filter($fieldNames, fn($value) => $value !== $key);
-                //unset($fieldNames[$key]); // attribute found, we dont need it in the attributes array anymore*
             }
         }
 
-        // throws exceptions if some attributes are still missing and the $require flag is true
         if ($require && !empty($fieldNames)) {
             throw new ValidationException(
                 "Missing required parameters.",
                 details: ["params" => implode(', ', $fieldNames)]
             );
         }
-        
+
         foreach ($filteredParams as $key => $val) {
             $validationMethod = $validationRules[$key];
-            $filteredParams[$key] = self::$validationMethod($val);
+            $filteredParams[$key] = self::{$validationMethod}($val);
         }
 
         return $filteredParams;
@@ -385,19 +396,39 @@ class UValidate {
      *
      * Must be a positive integer corresponding to an existing instructor in the database.
      */
-    public static function validateInstructorId(string|int $id): int {
+    public static function validateInstructorId($id) {
         $id = intval($id);
         if ($id <= 0) {
-            throw new ValidationException("Invalid instructor ID.");
+            throw new ValidationException("ID istruttore non valido.");
         }
-
         $pm = FPersistentManager::getInstance();
-        $instructor = $pm->load('FInstructor', $id);
-
+        $instructor = $pm->retriveInstructorById($id);
         if (!$instructor) {
-            throw new ValidationException("Instructor with ID $id does not exist.");
+            throw new ValidationException("Istruttore non trovato.");
         }
+        return $id;
+    }
 
+    public static function validateDays(array $days): array {
+        $allowed = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'];
+        foreach ($days as $day) {
+            if (!in_array($day, $allowed)) {
+                throw new ValidationException("Giorno della settimana non valido: '$day'.");
+            }
+        }
+        return $days;
+    }
+
+    public static function validateFieldId($id) {
+        $id = intval($id);
+        if ($id <= 0) {
+            throw new ValidationException("ID campo non valido.");
+        }
+        $pm = FPersistentManager::getInstance();
+        $field = $pm->retriveFieldById($id);
+        if (!$field) {
+            throw new ValidationException("Campo non trovato.");
+        }
         return $id;
     }
 }
