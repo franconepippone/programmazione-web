@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Errore</title>
+{extends file=$layout}
+{assign var="page_title" value="Errore"}
+
+{block name="style"}
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -16,7 +15,9 @@
             height: 100vh;
         }
         .error-container {
+            color: #b71c1c;
             background-color: #fce4e4;
+            background-color: #fff3f3;
             border: 1px solid #f5c6cb;
             padding: 30px 40px;
             border-radius: 8px;
@@ -47,12 +48,13 @@
             background-color: #8a1414;
         }
     </style>
-</head>
-<body>
-    <div class="error-container">
+{/block}
+
+{block name="content"}
+    
+        <div class="error-container">
         <h1>Errore</h1>
         <p>{$error_message|escape}</p>
         <button type="button" onclick="history.back()">Torna indietro</button>
     </div>
-</body>
-</html>
+{/block}

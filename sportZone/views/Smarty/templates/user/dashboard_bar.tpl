@@ -1,6 +1,7 @@
 {extends file=$layout}
 
 {block name="styles"}
+  {block name="dashboard_tabs_styles"}{/block}
    <style>
     .dashboard {
       max-width: 960px;

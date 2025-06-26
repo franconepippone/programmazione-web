@@ -1,5 +1,6 @@
 <?php
 use App\Enum\EnumSport;
+use App\Enum\UserSex;;
 
 require __DIR__ ."/../../vendor/autoload.php";
 
@@ -345,8 +346,15 @@ class UValidate {
             throw new ValidationException("Invalid sport: '$string'. " . $e->getMessage(), code: $e->getCode());
         }
     }
-
-
+    
+    public static function validateGender(string $sex): string {
+        try {
+            return self::validateEnum($sex, UserSex::class);
+        } catch (ValidationException $e) {
+            // Rethrow with a more specific message
+            throw new ValidationException("Invalid gender: '$sex'. " . $e->getMessage(), code: $e->getCode());
+        }
+    }
 
     // -------------------------- general purpose validation methods --------------------------
 

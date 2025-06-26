@@ -1,6 +1,7 @@
 <?php
 
 use App\Enum\UserSex;
+use Doctrine\DBAL\Exception as DBALException;
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
@@ -15,6 +16,16 @@ class CUser{
         "username" => 'validateUsername',
         "password" => 'validatePassword',
         "birthday" => 'validateBirthDate'
+    ];
+
+    private static $rulesModifyClient = [
+        "name" => 'validateName',
+        "surname" => 'validateName',
+        "email" => 'validateEmail',
+        "username" => 'validateUsername',
+        "password" => 'validatePassword',
+        "birthday" => 'validateBirthDate',
+        "gender" => 'validateGender'
     ];
 
     public static function isLoggedBool(): bool 
@@ -251,6 +262,48 @@ class CUser{
 
         $view = new VUser();
         $view->showHome($logged);
+    }
+
+    public static function modifyUserRequest() {
+        CUser::isLogged();
+        $user = CUser::getLoggedUser();
+
+        // TODO this should work also for instructors and employees
+        try {
+            $inputs = UValidate::validateInputArray($_POST, self::$rulesModifyClient, false);
+        } catch (ValidationException $e) {
+            // if validation fails, show the error message
+            (new VError())->show($e->getMessage());
+            exit;
+        }
+
+        if (isset($inputs['name'])) $user->setName($inputs['name']);
+        if (isset($inputs['surname'])) $user->setSurname($inputs['surname']);
+        if (isset($inputs['email'])) $user->setEmail($inputs['email']);
+        if (isset($inputs['password'])) $user->setPassword($inputs['password']);
+        if (isset($inputs['birthday'])) $user->setBirthDate($inputs['birthday']);
+        if (isset($inputs["gender"])) $user->setSex(UserSex::from($inputs["gender"]));
+        // TODO Non aggiorna il gender
+        
+        $view = new VError();
+        
+        // TODO da un messaggio di errroe anche con lo stesso username
+        if (isset($inputs['username'])) {
+            if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
+                $view->show("Username già preso da qualcun'altro.");
+                exit;
+            }
+            $user->setUsername($inputs['username']);
+        }
+        
+        $ok = FPersistentManager::getInstance()->uploadObj($user);
+        if (!$ok) {
+            $view->show("Errore di caricamento sul database");
+            exit;
+        }
+ 
+        $view->showSuccess("Dati modificati con successo.");
+        exit;
     }
     
 
