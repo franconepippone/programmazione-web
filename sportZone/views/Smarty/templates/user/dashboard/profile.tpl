@@ -1,18 +1,18 @@
-{extends file="../layout.tpl"}
+{extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="profile"}
 
-{block name="content"}
+{block name="dashboard_content"}
 <h2>My Profile</h2>
 <p>Update your personal information below.</p>
 
 <form action="update_profile.php" method="post" class="profile-form">
     <div class="form-group">
         <label for="first_name">First Name</label>
-        <input type="text" id="first_name" name="first_name" value="{$user.first_name|escape}" required>
+        <input type="text" id="first_name" name="first_name" value="{$user.name|escape}" required>
     </div>
     <div class="form-group">
         <label for="last_name">Last Name</label>
-        <input type="text" id="last_name" name="last_name" value="{$user.last_name|escape}" required>
+        <input type="text" id="last_name" name="last_name" value="{$user.surname|escape}" required>
     </div>
     <div class="form-group">
         <label for="username">Username</label>
@@ -25,18 +25,14 @@
     <div class="form-group">
         <label for="gender">Gender</label>
         <select id="gender" name="gender">
-            <option value="male" {if $user.gender == 'male'}selected{/if}>Male</option>
-            <option value="female" {if $user.gender == 'female'}selected{/if}>Female</option>
-            <option value="other" {if $user.gender == 'other'}selected{/if}>Other</option>
+            <option value="male" {if $user.sex == 'male'}selected{/if}>Male</option>
+            <option value="female" {if $user.sex == 'female'}selected{/if}>Female</option>
+            <option value="other" {if $user.sex == 'other'}selected{/if}>Other</option>
         </select>
     </div>
     <div class="form-group">
-        <label for="age">Age</label>
-        <input type="number" id="age" name="age" value="{$user.age|escape}" min="0">
-    </div>
-    <div class="form-group">
         <label for="phone">Phone Number</label>
-        <input type="text" id="phone" name="phone" value="{$user.phone|escape}">
+        <input type="text" id="phone" name="phone" value="123123">
     </div>
     <div class="form-group">
         <label for="password">New Password</label>

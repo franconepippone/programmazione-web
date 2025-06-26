@@ -13,15 +13,11 @@ class CField {
     ];
 
     public static function searchForm() {
-        CUser::isLogged();
-
         $view = new VField();
         $view->showSearchForm();
     }
 
     public static function showResults() {
-        CUser::isLogged();
-
         try {
             $getInputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
@@ -49,8 +45,6 @@ class CField {
     }
 
     public static function details($field_id) {
-        CUser::isLogged();
-        
         $pm = FPersistentManager::getInstance();
         $fld = $pm->retriveFieldById($field_id);
 

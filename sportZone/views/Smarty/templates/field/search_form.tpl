@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <title>Modulo Giorno e Sport</title>
+{extends file='sportZone/views/Smarty/templates/layouts/guest_base.tpl'}
+
+{block name="content"}
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f5f5f5;
+    .searchbox {
+      padding: 20px 0;
     }
 
     h2 {
@@ -63,30 +59,27 @@
       background-color: #0056b3;
     }
   </style>
-</head>
-<body>
+  <section class="searchbox">
+    <h2>Inserisci Giorno e Sport</h2>
 
-  <h2>Inserisci Giorno e Sport</h2>
+    <form action="/field/showResults" method="GET">
+      <div class="form-group">
+        <label for="date">Giorno:</label>
+        <input type="date" id="date" name="date">
+      </div>
 
-  <form action="/field/showResults" method="GET">
-    <div class="form-group">
-      <label for="date">Giorno:</label>
-      <input type="date" id="date" name="date">
-    </div>
+      <div class="form-group">
+        <label for="sport">Seleziona uno sport:</label>
+        <select name="sport" id="sport">
+          <option value="">-- Tutti gli sport --</option>
+          <option value="calcio">Calcio</option>
+          <option value="tennis" selected>Tennis</option>
+          <option value="basket">Basket</option>
+          <option value="padel">Padel</option>
+        </select>
+      </div>
 
-    <div class="form-group">
-      <label for="sport">Seleziona uno sport:</label>
-      <select name="sport" id="sport">
-        <option value="">-- Tutti gli sport --</option>
-        <option value="calcio">Calcio</option>
-        <option value="tennis" selected>Tennis</option>
-        <option value="basket">Basket</option>
-        <option value="padel">Padel</option>
-      </select>
-    </div>
-
-    <button type="submit">Invia</button>
-  </form>
-
-</body>
-</html>
+      <button type="submit">Invia</button>
+    </form>
+  </section>
+{/block}

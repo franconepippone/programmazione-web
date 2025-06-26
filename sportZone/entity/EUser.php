@@ -110,5 +110,16 @@ abstract class EUser
         return $this->getName() .' '. $this->getSurname();
     }
 
+    public static function usertoArray($user) {
+        return [
+            'id' => $user->getId(),
+            'name' => $user->getName(),
+            'surname' => $user->getSurname(),
+            'sex'=> 'male',
+            'email' => $user->getEmail(),
+            'username' => $user->getUsername(),
+            'birthDate' => $user->getBirthDate()->format('Y-m-d'),
+        ];
+    }
 
 }

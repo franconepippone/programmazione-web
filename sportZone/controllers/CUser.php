@@ -17,6 +17,22 @@ class CUser{
         "birthday" => 'validateBirthDate'
     ];
 
+    public static function isLoggedBool(): bool 
+    {
+        $logged = false;
+
+        if(UCookie::isSet('PHPSESSID')){
+            if(session_status() == PHP_SESSION_NONE){
+                USession::getInstance();
+            }
+        }
+        if(USession::isSetSessionElement('user')){
+            $logged = true;
+        }
+
+        return $logged;
+    }
+
     /**
      * Checks if the user is logged in.
      * If not, redirects to the login page with a redirect argument set to the current page.
@@ -176,50 +192,61 @@ class CUser{
         USession::getInstance();
         USession::unsetSession();
         USession::destroySession();
-        header('Location: /user/login');
+        header('Location: /user/home');
     }
 
     
     public static function profile(){
         CUser::isLogged();
-        
+        $role = CUser::getUserRole();
         $view = new VUser();
 
         $user = self::getLoggedUser();
-        $view->showDashboardProfile($user->getFullName() . " " . self::getUserRole());
+        $view->showDashboardProfile($user, $role);
     
     }
 
 
     public static function myCourses(){
         CUser::isLogged();
+        $role = CUser::getUserRole();
         
         $view = new VUser();
 
         $user = self::getLoggedUser();
-        $view->showDashboardMyCourses($user->getFullName() . " " . self::getUserRole());
+        $view->showDashboardMyCourses($user, $role);
     
     }
 
+
     public static function myReservations(){
         CUser::isLogged();
+        $role = CUser::getUserRole();
         
         $view = new VUser();
-
+        
         $user = self::getLoggedUser();
-        $view->showDashboarMyReservations($user->getFullName() . " " . self::getUserRole());
+        $view->showDashboarMyReservations($user, $role);
     
     }
 
     public static function settings(){
         CUser::isLogged();
-        
+        $role = CUser::getUserRole();
         $view = new VUser();
 
         $user = self::getLoggedUser();
-        $view->showDashboardSettings($user->getFullName() . " " . self::getUserRole());
+        $view->showDashboardSettings($user, $role);
     
     }
+
+    public static function home() {
+        $logged = CUser::isLoggedBool();
+
+        $view = new VUser();
+        $view->showHome($logged);
+    }
+    
 
     /**
      * Retrieves the currently logged-in user from the session.

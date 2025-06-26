@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <title>Campi Sportivi</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #eef0f4;
-      margin: 0;
-      padding: 20px;
-    }
+{extends file='sportZone/views/Smarty/templates/layouts/guest_base.tpl'}
 
-    h1 {
+{block name="content"}
+  <style>
+    .results-header {
       margin-bottom: 10px;
+      text-align: center;
+      color: #1f2937;
     }
 
     .search-form {
@@ -20,18 +13,24 @@
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
+      margin: 0 0 30px 0;
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
       align-items: center;
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
+      justify-content: center;
     }
 
     .search-form label {
       display: flex;
       flex-direction: column;
       font-weight: bold;
-      font-size: 0.9em;
+      font-size: 0.95em;
+      color: #1f2937;
+      min-width: 180px;
     }
 
     .search-form input,
@@ -42,24 +41,33 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       margin-top: 5px;
+      font-family: inherit;
     }
 
     .search-form button {
-      background-color: #007BFF;
+      background-color: #2563eb;
       color: white;
       border: none;
       cursor: pointer;
       transition: background-color 0.2s;
+      font-weight: 600;
+      min-width: 120px;
     }
 
     .search-form button:hover {
-      background-color: #0056b3;
+      background-color: #1e40af;
     }
 
-    .container {
+    .results-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 20px;
+      margin-top: 1.5rem;
+      width: 100vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
+      padding: 0 2vw;
     }
 
     .card {
@@ -70,43 +78,54 @@
       cursor: pointer;
       text-decoration: none;
       color: inherit;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      min-height: 340px;
     }
 
     .card:hover {
       transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.13);
     }
 
     .card img {
       width: 100%;
       height: 180px;
       object-fit: cover;
+      background: #f3f4f6;
     }
 
     .card-body {
       padding: 15px;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .card-title {
-      font-size: 1.2em;
+      font-size: 1.15em;
       margin-bottom: 8px;
+      color: #1f2937;
+      font-weight: 600;
     }
 
     .card-details {
-      font-size: 0.9em;
-      color: #555;
+      font-size: 0.97em;
+      color: #374151;
+      margin-bottom: 8px;
     }
 
     .price {
       margin-top: 10px;
       font-weight: bold;
-      color: #007BFF;
+      color: #2563eb;
+      font-size: 1.08em;
     }
   </style>
-</head>
-<body>
 
-  <h1>Seleziona un Campo Sportivo</h1>
+  <h1 class="results-header">Seleziona un Campo Sportivo</h1>
 
   <form class="search-form" method="GET" action="/field/showResults">
     <label>
@@ -127,23 +146,23 @@
     <button type="submit">Cerca</button>
   </form>
 
-  <div class="container">
+  <div class="results-container">
     {foreach $fields as $field}
       <a class="card" href="/field/details/{$field.id}?{$queryString}">
         <img src="{$field.image}" alt="{$field.alt}">
         <div class="card-body">
-          <div class="card-title">{$field.title}</div>
-          <div class="card-details">
-            Sport: {$field.sport}<br>
-            Orario: {$field.orario}<br>
-            {if isset($field.superficie)}Superficie: {$field.superficie}<br>{/if}
-            {if isset($field.illuminazione)}Illuminazione: {$field.illuminazione}<br>{/if}
+          <div>
+            <div class="card-title">{$field.title}</div>
+            <div class="card-details">
+              Sport: {$field.sport}<br>
+              Orario: {$field.orario}<br>
+              {if isset($field.superficie)}Superficie: {$field.superficie}<br>{/if}
+              {if isset($field.illuminazione)}Illuminazione: {$field.illuminazione}<br>{/if}
+            </div>
           </div>
           <div class="price">{$field.price}</div>
         </div>
       </a>
     {/foreach}
   </div>
-
-</body>
-</html>
+{/block}

@@ -18,32 +18,46 @@ class VUser{
         $this->smarty->display("user/register.tpl");
     }
 
-    public function showDashboardMyCourses(string $username) {
-        $this->smarty->assign('username', $username);
-        $this->smarty->display('user/home/tabs/courses.tpl');
+    public function showDashboardMyCourses(EUser $user, string $role) {
+        $userArray = EUser::usertoArray($user);
+
+        $this->chooseLayout(true);
+        $this->smarty->assign('user', $userArray);
+        $this->smarty->display('user/dashboard/courses.tpl');
     }
 
-    public function showDashboardProfile(string $username) {
-        $this->smarty->assign('user', [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'username' => 'johndoe',
-            'email' => 'john@example.com',
-            'gender' => 'male',
-            'age' => 30,
-            'phone' => '123-456-7890'
-        ]);
-        $this->smarty->display('user/home/tabs/profile.tpl');
+    public function showDashboardProfile(EUser $user, string $role) {
+        $userArray = EUser::usertoArray($user);
+
+        $this->chooseLayout(true);
+        $this->smarty->assign('user', $userArray);
+        $this->smarty->display('user/dashboard/profile.tpl');
     }
 
-    public function showDashboarMyReservations(string $username) {
-        $this->smarty->assign('username', $username);
-        $this->smarty->display('user/home/tabs/reservations.tpl');
+    public function showDashboarMyReservations(EUser $user, string $role) {
+        $userArray = EUser::usertoArray($user);
+
+        $this->chooseLayout(true);
+        $this->smarty->assign('user', $userArray);
+        $this->smarty->display('user/dashboard/reservations.tpl');
     }
 
-    public function showDashboardSettings(string $username) {
-        $this->smarty->assign('username', $username);
-        $this->smarty->display('user/home/tabs/settings.tpl');
+    public function showDashboardSettings(EUser $user, string $role) {
+        $userArray = EUser::usertoArray($user);
+        
+        $this->chooseLayout(true);
+        $this->smarty->assign('user', $userArray);
+        $this->smarty->display('user/dashboard/settings.tpl');
+    }
+
+    public function showHome($logged) {
+        $this->chooseLayout($logged);
+        $this->smarty->display('user/home.tpl');
+    }
+
+    private function chooseLayout($logged) {
+        $this->smarty->assign('layout', !$logged ? 
+        'sportZone/views/Smarty/templates/layouts/guest_base.tpl' : 'sportZone/views/Smarty/templates/layouts/logged_base.tpl');
     }
 
 }

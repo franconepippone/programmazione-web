@@ -1,7 +1,7 @@
-{extends file="../layout.tpl"}
+{extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="courses"}
 
-{block name="content"}
+{block name="dashboard_content"}
     <h2>My Courses</h2>
     <p>Here are the courses you're enrolled in:</p>
     <ul>
