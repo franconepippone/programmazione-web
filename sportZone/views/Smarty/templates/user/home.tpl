@@ -1,4 +1,95 @@
 {extends file=$layout}
+{assign var="page_title" value="Home"}
+
+{block name="styles"}
+    <style>
+        .featured-courses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 30px;
+}
+
+.courses-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 900px;
+    align-items: center;
+}
+
+.course-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 200px;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(31,41,55,0.10);
+    width: 100%;
+    max-width: 900px;
+    padding: 1.5rem 2rem;
+    margin: 0 auto;
+}
+
+.course-card img {
+    width: 300px;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: none;
+    border-right: 1px solid #e5e7eb;
+    border-radius: 0.8rem 0 0 0.8rem;
+    margin-right: 2rem;
+}
+
+.course-info {
+    padding: 1rem 1.5rem 1rem 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.featured-courses h2 {
+    font-size: 2rem;
+    color: #1e40af;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 0.3rem;
+    text-align: center;
+}
+
+.course-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    color: #111827;
+}
+
+.course-info p {
+    flex-grow: 1;
+    font-size: 1.1rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    align-self: flex-start;
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.7rem 1.4rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #2563eb;
+}
+ </style>
+{/block}
 
 {block name="content"}
 <section class="featured-courses">
@@ -32,72 +123,4 @@
         </div>
     </div>
 </section>
-
-<style>
-    .featured-courses {
-        margin-top: 2rem;
-    }
-    .featured-courses h2 {
-        font-size: 1.5rem;
-        color: #1e40af;
-        margin-bottom: 1rem;
-        border-bottom: 2px solid #3b82f6;
-        padding-bottom: 0.3rem;
-    }
-    .courses-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1.5rem;
-    }
-    .course-card {
-        background: #fff;
-        border-radius: 0.5rem;
-        box-shadow: 0 1px 5px rgb(0 0 0 / 0.1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.2s ease;
-    }
-    .course-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgb(0 0 0 / 0.15);
-    }
-    .course-card img {
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        border-bottom: 1px solid #e5e7eb;
-    }
-    .course-info {
-        padding: 1rem;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .course-info h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.25rem;
-        color: #111827;
-    }
-    .course-info p {
-        flex-grow: 1;
-        font-size: 0.9rem;
-        color: #6b7280;
-        margin-bottom: 1rem;
-    }
-    .btn {
-        align-self: flex-start;
-        background-color: #3b82f6;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 0.4rem;
-        text-decoration: none;
-        font-weight: 600;
-        transition: background-color 0.2s ease;
-    }
-    .btn:hover {
-        background-color: #2563eb;
-    }
-</style>
 {/block}

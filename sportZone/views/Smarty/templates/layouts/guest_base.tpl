@@ -116,7 +116,7 @@
         </div>
 
         <!-- Page content -->
-        <main class="container content-area">
+        <main class="content-area">
             {block name="content"}{/block}
         </main>
 
