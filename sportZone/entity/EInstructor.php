@@ -13,7 +13,7 @@ class EInstructor extends EUser
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $cv = null;
 
-    #[ORM\OneToMany(mappedBy: "instructor", targetEntity: ECourse::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "Instructor", targetEntity: ECourse::class, cascade: ["persist", "remove"])]
     private Collection $courses;
 
     public function __construct() {
@@ -47,10 +47,6 @@ class EInstructor extends EUser
         }
         return $this;
     }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
     public static function instructorToArray(EInstructor $inst) {
         return [
@@ -59,40 +55,4 @@ class EInstructor extends EUser
             'surname' => $inst->getSurname()
         ];
     }
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-    public static function instructorToArray(EInstructor $instructor): array {
-    // Ottieni i nomi dei corsi
-    $courses = [];
-    foreach ($instructor->getCourses() as $course) {
-        if (method_exists($course, 'getTitle')) {
-            $courses[] = $course->getTitle();
-        }
-    }
-
-    return [
-        'id' => $instructor->getId(),
-        'name' => $instructor->getName(),
-        'surname' => $instructor->getSurname(),
-        'email' => $instructor->getEmail(),
-        'cv' => $instructor->getCv(),
-        'courses' => $courses,
-        // aggiungi altri dati se necessario
-    ];
-}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
