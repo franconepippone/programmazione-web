@@ -283,7 +283,7 @@ class CUser{
 
         if (UHTTPMethods::files("profilePicture", "name") != null) {
             $imgName = UImage::storeImageGetFilename(UHTTPMethods::files("profilePicture"));
-            $user->setProfilePicture(UImage::getImageFullPath($imgName));
+            $user->setProfilePicture($imgName);
         }
 
         if (isset($inputs["profilePicture"])) $user->setSex($inputs["profilePicture"]);

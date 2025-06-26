@@ -131,7 +131,7 @@ abstract class EUser
             'email' => $user->getEmail(),
             'username' => $user->getUsername(),
             'birthDate' => $user->getBirthDate()->format('Y-m-d'),
-            'profilePicture' => $user->getProfilePicture()
+            'profilePicture' => UImage::getImageFullPath($user->getProfilePicture())
         ];
     }
 }
