@@ -25,16 +25,7 @@ class CUser{
      */
     public static function isLogged()
     {
-        $logged = false;
-
-        if(UCookie::isSet('PHPSESSID')){
-            if(session_status() == PHP_SESSION_NONE){
-                USession::getInstance();
-            }
-        }
-        if(USession::isSetSessionElement('user')){
-            $logged = true;
-        }
+        $logged =  self::IsLoggedBool();
 
         // if not logged, redirects the user to the login page with a redirect argument set the caller's path
         // This way, when user finishes login, he is redirected back to the site he was visiting
@@ -47,6 +38,19 @@ class CUser{
             exit;
         }
         return true;
+    }
+    public static function isLoggedBool(){
+        $logged = false;
+
+        if(UCookie::isSet('PHPSESSID')){
+            if(session_status() == PHP_SESSION_NONE){
+                USession::getInstance();
+            }
+        }
+        if(USession::isSetSessionElement('user')){
+            $logged = true;
+        }
+        return $logged;
     }
 
     // Registers a new user by displaying the registration form.
@@ -77,6 +81,14 @@ class CUser{
         $view->showLoginForm($redirectUrl);
     }
 
+    public static function getCurrentUser(){
+        if(!CUser::isLoggedBool()){
+            return null;
+        }
+        USession::getInstance();
+        $userID = USession::getSessionElement('user');
+        return FPersistentManager::getInstance()->retriveUserOnId($userID);
+    }
     /**
      * check if exist the Username inserted, and for this username check the password. If is everything correct the session is created and
      * the User is redirected in the homepage or requested resource

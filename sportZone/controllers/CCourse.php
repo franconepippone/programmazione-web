@@ -16,13 +16,10 @@ class CCourse {
     $view->showCreateCourseForm($instructors, $fields, $data);
 }
     //********************************************************* */
-    public static function finalizeCreateCourse() {
-        //CUser::isEmployee();
+    
         
-        $data = $_POST;
-        if (!isset($data['confirm'])) {
 
-public static function courseSummary() {
+    public static function courseSummary() {
    // CUser::isEmployee();
 
     $view = new VEmployee();
@@ -123,28 +120,13 @@ private static $rulesCourse = [
         $view->showSearchForm();
     }
 
-    public static function showCoursesOfInstructor() {  
-        CUser::isLogged();
-        $userID = USession::getSessionElement('user');
-
-        try {
-            if(CUser::isInstructor()) {
-                $courses = FPersistentManager::getInstance()->retriveCoursesOnInstructorId($userID);
-                $view = new VCourse();
-                $view->showSearchResults($courses, 'I tuoi corsi');
-            }
-        } catch (Exception $e) {
-            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
-        }
-        
-    }
-
+    
     public static function showCourses() {  
         
            
         try {       
             if(!empty($_GET)){
-                $filteredParams = UValidate::validateInputArray($_GET, self::$attributi,false);
+                $filteredParams = UValidate::validateInputArray($_GET, self::$rulesCourse,false);
                 $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
             }
             else{
@@ -156,96 +138,122 @@ private static $rulesCourse = [
         }        
 
         $view = new VCourse();
-        $view->showSearchResults($courses, 'I tuoi corsi');
+        $view->showCourses($courses, 'I tuoi corsi');
         
     }
+
     //********************************************************* */
     // metodo per visualizzare i dettagli di un corso
-    public static function courseDetail($course_id) {
+    public static function courseDetails($course_id) {
+       
         $course = FPersistentManager::retriveCourseOnId($course_id);
         $modifyPermission = false;
-        if(USession::isSetSessionElement('user') === true) {
+        echo CUser::isLoggedBool();
+        if(CUser::isLoggedBool()) {
             $userID = USession::getSessionElement('user');
-            
-            $user= FPersistentManager::retriveUserOnId($userID);
+
+            $user = FPersistentManager::retriveUserOnId($userID);
             if(CUser::isClient()) {
                 $modifyPermission = true;
+                
             } 
+
         }
         
-        
-         
         $view = new VCourse();
         $view->showDetails( $course , $modifyPermission);
     }
 
     //********************************************************* */
-    // metodo per visualizzare il form di iscrizione ad un corso
-    public static function enrollmentDetails($course_id) {
-        CUser::isLogged();
-        //prendo l id dell utente dalla sessione
-        $userID = USession::getSessionElement('user');
-        $user= FPersistentManager::retriveUserOnId($userID);
-        $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        
-        
-        $view = new VCourse();
-        $view->showEnrollmentDetails($course,$user);
-    }
-
-    //*********************************************************************************** */
-    
-    public static function enrollForm($course_id) {
-        
-        $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        $view = new VCourse();
-        $view->showEnrollForm($course);
-
-    }
-    
-    
-    
-    public static function manageForm($course_id) {
-
-        $view = new VCourse();
-        $view->showManageForm($course_id);
-    }
-
-    public static function createForm() {
-        $view = new VCourse();
-        $view->showCreateForm();
-    }
-    public static function daysToString(array $daysOfWeek) {
-        $days = '';
-        foreach ($daysOfWeek as $day) {
-            // Converti l'oggetto DayOfWeek in una stringa
-            $days .= $day . ', ';
-        }
-        return rtrim($days, ', '); // Rimuove l'ultima virgola e spazio
-    }
-    // metodo per serializzare un corso in un array
-    
-    
-    public static function manageMyCourses()
-    {
-        if (!CUser::isLogged()) {
+   
+    public static function MyCourses(){
+        if (!CUser::isLoggedBool()) {
             (new VError())->show("Devi essere loggato per accedere a questa pagina.");
             return;
         }
-        if (CUser::isInstructor()) {
-            (new VError())->show("Devi essere un istruttore per accedere a queste funzionalità.");
+        
+        $user = CUser::getCurrentUser();
+        if(Cuser::isInstructor()){
+            $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
+        }
+        else if(Cuser::isClient()){
+            $myenrollmens= FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($user->getId());
+            foreach ($myenrollmens as $enrollment) {
+                $mycourses[] = $enrollment->getCourse();
+            }
+        }
+        else{
+            (new VError())->show("Devi essere un istruttore o un cliente per accedere a questa pagina.");
             return;
         }
 
         
-        $userID = USession::getSessionElement('user');
-        $courses = FPersistentManager::getInstance()->retriveCoursesByInstructor($userID);
-        
 
         // Mostra la vista di gestione corsi istruttore
-        $view = new Vcourse();
-        $view->showCourses($courses, $userID, 'I tuoi corsi');
+        $view = new VCourse();
+        $view->showCourses($mycourses, 'I miei corsi');
     }
+
+   
+
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    public static function modifyForm($course_id) {
+        $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
+
+        $view = new VCourse();
+        $view->showModifyCourseForm($course);
+    }
+
+    
+    
+    // metodo per serializzare un corso in un array
+    
+    
+    
 
 
 

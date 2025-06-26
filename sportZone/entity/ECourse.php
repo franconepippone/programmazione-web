@@ -188,16 +188,25 @@ class ECourse
             'title' => $course->getTitle(),
             'description' => $course->getDescription(),
             'timeSlot' => $course->getTimeSlot(),
-            'daysOfWeek' => CCourse::daysToString($course->getDaysOfWeek()),
+            'daysOfWeek' => ECourse::daysToString($course->getDaysOfWeek()),
             'startDate' => $course->getStartDate(),
             'endDate' => $course->getEndDate(),
             'cost' => $course->getEnrollmentCost(),
             'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
             'field' => $course->getField() ? $course->getField()->getName() : null,// Assuming getField() returns an EField object
             'sport' => $course->getField() ? $course->getField()->getSport() : null, // Assuming getField() returns an EField object
-            'instructor' => $course->getInstructor() ? CUser::userToArray($course->getInstructor()) : null, // Assuming getInstructor() returns an EUser object
+            'instructor' => $course->getInstructor() ? EUser::userToArray($course->getInstructor()) : null, // Assuming getInstructor() returns an EUser object
             
 
         ];
+    }
+
+    public static function daysToString(array $daysOfWeek) {
+        $days = '';
+        foreach ($daysOfWeek as $day) {
+            // Converti l'oggetto DayOfWeek in una stringa
+            $days .= $day . ', ';
+        }
+        return rtrim($days, ', '); // Rimuove l'ultima virgola e spazio
     }
 }
