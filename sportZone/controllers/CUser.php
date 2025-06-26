@@ -119,31 +119,6 @@ class CUser{
 
     }
 
-
-    #[PathUrl('paga')]
-    public static function testPayment() {
-        CPayment::startPayment(
-            '10.00', // amount in euros
-            '/user/testPaymentEnd', // redirect URL after payment
-            'alicescema' // secret for verifying the payment
-        );
-    }
-
-    public static function testPaymentEnd() {
-
-        $outcome = CPayment::verifyAndEndPayment('alicescema');
-        echo $outcome;
-
-    }
-
-
-
-
-
-
-
-
-
     /**
      * verify if the choosen username and email already exist, create the User Obj and set a default profile image 
      * @return void
@@ -204,15 +179,46 @@ class CUser{
         header('Location: /user/login');
     }
 
-  
-    public static function home(){
-        if(CUser::isLogged()){
-            $view = new VUser();
+    
+    public static function profile(){
+        CUser::isLogged();
+        
+        $view = new VUser();
 
-            $userId = USession::getInstance()->getSessionElement('user');
-            $user = FPersistentManager::getInstance()->retriveUserOnId($userId);-
-            $view->showHomePage($user->getFullName() . " " . self::getUserRole());
-        }  
+        $user = self::getLoggedUser();
+        $view->showDashboardProfile($user->getFullName() . " " . self::getUserRole());
+    
+    }
+
+
+    public static function myCourses(){
+        CUser::isLogged();
+        
+        $view = new VUser();
+
+        $user = self::getLoggedUser();
+        $view->showDashboardMyCourses($user->getFullName() . " " . self::getUserRole());
+    
+    }
+
+    public static function myReservations(){
+        CUser::isLogged();
+        
+        $view = new VUser();
+
+        $user = self::getLoggedUser();
+        $view->showDashboarMyReservations($user->getFullName() . " " . self::getUserRole());
+    
+    }
+
+    public static function settings(){
+        CUser::isLogged();
+        
+        $view = new VUser();
+
+        $user = self::getLoggedUser();
+        $view->showDashboardSettings($user->getFullName() . " " . self::getUserRole());
+    
     }
 
     /**
@@ -274,16 +280,4 @@ class CUser{
         return self::getUserRole() === EClient::class;
     }
 
-    #[PathUrl(PathUrl::HIDDEN)]
-    public static function usertoArray($user) {
-        return [
-            'id' => $user->getId(),
-            'name' => $user->getName(),
-            'surname' => $user->getSurname(),
-            'sex'=> 'male',
-            'email' => $user->getEmail(),
-            'username' => $user->getUsername(),
-            'birthDate' => $user->getBirthDate()->format('Y-m-d')
-        ];
-    }
 }

@@ -18,9 +18,32 @@ class VUser{
         $this->smarty->display("user/register.tpl");
     }
 
-    public function showHomePage(string $username) {
+    public function showDashboardMyCourses(string $username) {
         $this->smarty->assign('username', $username);
-        $this->smarty->display('user/home.tpl');
+        $this->smarty->display('user/home/tabs/courses.tpl');
+    }
+
+    public function showDashboardProfile(string $username) {
+        $this->smarty->assign('user', [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johndoe',
+            'email' => 'john@example.com',
+            'gender' => 'male',
+            'age' => 30,
+            'phone' => '123-456-7890'
+        ]);
+        $this->smarty->display('user/home/tabs/profile.tpl');
+    }
+
+    public function showDashboarMyReservations(string $username) {
+        $this->smarty->assign('username', $username);
+        $this->smarty->display('user/home/tabs/reservations.tpl');
+    }
+
+    public function showDashboardSettings(string $username) {
+        $this->smarty->assign('username', $username);
+        $this->smarty->display('user/home/tabs/settings.tpl');
     }
 
 }

@@ -6,7 +6,15 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CPayment {
 
-    public static function pay2() {
+    #[PathUrl('pay')]
+    public static function paymentEntryPoint() {
+        $ongoingPaymentData = self::getOngoingPayment();
+        if ($ongoingPaymentData == null) exit;
+
+        header("Location: /payment/selectMethod");
+    }
+
+    public static function selectMethod() {
        
         $view = new VOnlinePayment();
         $view->showPaymentMethodSelection(); 
@@ -137,16 +145,8 @@ class CPayment {
         if ($redirectNow) header("Location: /payment/pay");
         exit;
     }
-
-    #[PathUrl('pay')]
-    public static function paymentEntryPoint() {
-        $ongoingPaymentData = self::getOngoingPayment();
-        if ($ongoingPaymentData == null) exit;
-
-        header("Location: /payment/selectMethod");
-    }
     
-    public static function selectMethod() {
+    public static function __selectMethod() {
         $ongoingPaymentData = self::getOngoingPayment();
 
         $amountCents = $ongoingPaymentData['amountCents'];
@@ -241,5 +241,5 @@ class CPayment {
         USession::unsetSessionElement('ongoingPayment');
         return true; // payment verified and ended successfully
     }
-    
+
 }   
