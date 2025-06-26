@@ -11,7 +11,7 @@
         <li><b>Istruttore:</b> {$instructor.name} {$instructor.surname}</li>
         <li><b>Campo:</b> {$field.name}</li>
     </ul>
-    <form method="post" action="/employee/finalizeCourse">
+    <form method="post" action="/course/finalizeCourse">
         <input type="hidden" name="title" value="{$title|escape}">
         <input type="hidden" name="description" value="{$description|escape}">
         <input type="hidden" name="start_date" value="{$start_date}">
