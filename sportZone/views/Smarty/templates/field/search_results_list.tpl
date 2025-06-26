@@ -1,6 +1,7 @@
 {extends file=$layout}
+{assign var="page_title" value="Selezione Campo Sportivo"}
 
-{block name="content"}
+{block name="styles"}
   <style>
     .results-header {
       margin-bottom: 10px;
@@ -124,7 +125,9 @@
       font-size: 1.08em;
     }
   </style>
+{/block}
 
+{block name="content"}
   <h1 class="results-header">Seleziona un Campo Sportivo</h1>
 
   <form class="search-form" method="GET" action="/field/showResults">

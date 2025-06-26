@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Login Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      background-color: #f5f5f5;
-    }
+{extends file="sportZone/views/Smarty/templates/layouts/bare_base.tpl"}
+{assign var="page_title" value="Login"}
+
+{block name="styles"}
+   <style>
 
     .login-container {
       max-width: 300px;
       margin: auto;
+      margin-top: 20px;
       background: white;
       padding: 2rem;
       border-radius: 8px;
@@ -69,9 +64,10 @@
       text-decoration: underline;
     }
   </style>
-</head>
-<body>
-  <div class="login-container">
+{/block}
+
+{block name="content"}
+    <div class="login-container">
     <h2>{$login_title|default:"Login"}</h2>
     <form action="/user/checkLogin" method="POST">
       <input type="hidden" name="redirectUrl" id="redirectUrl" value={$redirectUrl}>
@@ -89,5 +85,4 @@
       Don't have an account? <a href="/user/register">Register here</a>
     </div>
   </div>
-</body>
-</html>
+{/block}

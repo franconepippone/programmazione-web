@@ -191,10 +191,7 @@
         </main>
 
         <!-- Footer -->
-        <footer>
-            &copy; 2025 MyWebsite. All rights reserved. |
-            <a href="privacy.php" style="color: #93c5fd;">Privacy Policy</a>
-        </footer>
+        {include file='layouts/footer.tpl'}
 
     </div>
 </body>

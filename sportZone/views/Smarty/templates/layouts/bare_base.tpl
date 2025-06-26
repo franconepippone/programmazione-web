@@ -91,28 +91,11 @@
 <body>
     <div class="page-wrapper">
 
-        <!-- Topbar for login/register -->
-        {if true}
-            <!-- Topbar for guests -->
-            <div class="topbar">
-                <a href="/user/login?{$loginQueryString}">Login</a>
-                <a href="/user/register">Register</a>
-            </div>
-        {/if}
-
-
         <!-- Main navbar -->
         <div class="navbar">
             <div class="logo">
                 MyWebsite
             </div>
-            <nav>
-                <a href="/user/home">Home</a>
-                <a href="/field/searchForm">Prenota un campo</a>
-                <a href="index.php">Iscriviti a un corso</a>
-                <a href="about.php">About Us</a>
-                <a href="contact.php">Contact</a>
-            </nav>
         </div>
 
         <!-- Page content -->

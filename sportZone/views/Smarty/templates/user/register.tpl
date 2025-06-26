@@ -1,20 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Register Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      background-color: #f5f5f5;
-    }
+{extends file="sportZone/views/Smarty/templates/layouts/bare_base.tpl"}
+{assign var="page_title" value="Register"}
 
+{block name="styles"}
+    <style>
     .login-container {
       max-width: 300px;
       margin: auto;
       background: white;
       padding: 2rem;
+      margin-top: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
@@ -73,8 +67,10 @@
       text-decoration: underline;
     }
   </style>
-</head>
-<body>
+{/block}
+
+
+{block name="content"}
   <div class="login-container">
     <h2>Register</h2>
     <form action="/user/finalizeRegister" method="POST">
@@ -111,5 +107,4 @@
       <button type="submit">Register Now</button>
     </form>
   </div>
-</body>
-</html>
+{/block}

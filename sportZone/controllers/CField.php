@@ -57,13 +57,14 @@ class CField {
             $inputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
             // TODO mostra messaggio errore
-            echo $e->getMessage();
+            $verr = new VError();
+            $verr->show($e->getMessage());
             exit;
         }
 
         $query = http_build_query([
             "fieldId" => $field_id,
-            "date" => $inputs["date"]
+            "date" => $inputs["date"]->format('Y-m-d'), // Convert DateTime to string in 'Y-m-d' format
         ]);
 
         $view = new VField();

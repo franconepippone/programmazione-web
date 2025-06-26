@@ -1,4 +1,5 @@
 {extends file=$layout}
+{assign var="page_title" value="Ricerca Campo Sportivo"}
 
 {block name="styles"}
   <style>
