@@ -110,8 +110,6 @@
                 <a href="/user/home">Home</a>
                 <a href="/field/searchForm">Prenota un campo</a>
                 <a href="index.php">Iscriviti a un corso</a>
-                <a href="about.php">About Us</a>
-                <a href="contact.php">Contact</a>
             </nav>
         </div>
 
