@@ -130,7 +130,8 @@ abstract class EUser
             'sex'=> 'male',
             'email' => $user->getEmail(),
             'username' => $user->getUsername(),
-            'birthDate' => $user->getBirthDate()->format('Y-m-d')
+            'birthDate' => $user->getBirthDate()->format('Y-m-d'),
+            'profilePicture' => $user->getProfilePicture()
         ];
     }
 }
