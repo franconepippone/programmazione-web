@@ -91,7 +91,7 @@
 <div class="form-wrapper">
     <h2>📘 Crea un nuovo corso</h2>
 
-    <form method="post" action="/employee/courseSummary">
+    <form method="post" action="/course/courseSummary">
         <div class="form-group">
             <label for="title">Titolo</label>
             <input type="text" name="title" id="title" value="{$title|default:''}">
