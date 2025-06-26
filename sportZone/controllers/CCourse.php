@@ -16,11 +16,7 @@ class CCourse {
     $view->showCreateCourseForm($instructors, $fields, $data);
 }
     //********************************************************* */
-    public static function finalizeCreateCourse() {
-        //CUser::isEmployee();
-        
-        $data = $_POST;
-        if (!isset($data['confirm'])) {
+   
 
 public static function courseSummary() {
    // CUser::isEmployee();
@@ -248,19 +244,19 @@ private static $rulesCourse = [
     }
 
 
+}
+
+    
+    
+
+    
 
 
     
-    
-
-    
-
-
-
 
     
 
    
-}
+
 
 
