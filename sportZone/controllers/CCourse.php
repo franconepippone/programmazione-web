@@ -20,7 +20,7 @@ class CCourse {
 }
     //********************************************************* */
     public static function finalizeCreateCourse() {
-        CUser::isEmployee();
+        //CUser::isEmployee();
         
         $data = $_POST;
         if (!isset($data['confirm'])) {
@@ -115,6 +115,8 @@ class CCourse {
         
     }
     //********************************************************* */
+    //here starts Kevin's code, please do not modify it
+    
     //form per cercare i corsi, anche con filtri
     public static function searchForm() {
         
@@ -125,40 +127,60 @@ class CCourse {
         $view->showSearchForm();
     }
 
-    public static function showCourses() {     
-        $view = new VCourse();
-        
-        /*try {
-            $filteredParams = UValidate::validateInputArray($_POST, self::$attributi, false);
-        } catch (ValidationException $e) {
-            $viewErr = new VError();
-            $viewErr->show($e->getMessage());
-            exit;
-        }
-        
-        print_r($_POST);
-        print_r($filteredParams);
+    public static function showCoursesOfInstructor() {  
+        CUser::isLogged();
+        $userID = USession::getSessionElement('user');
 
-        //creo corsi fittizi per prova
-        */
-        $courses = FPersistentManager::getInstance()->retriveCourses();
-        //per ogni corso estraggo i dati e li metto in un array
-        $coursesData = [];
-        foreach ($courses as $course) {
-            $coursesData []= CCourse::courseToArray($course);
+        try {
+            if(CUser::isInstructor()) {
+                $courses = FPersistentManager::getInstance()->retriveCoursesOnInstructorId($userID);
+                $view = new VCourse();
+                $view->showSearchResults($courses, 'I tuoi corsi');
+            }
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
         }
-        $view->showSearchResults($coursesData, 'ciao');
+        
+    }
+
+    public static function showCourses() {  
+        
+           
+        try {       
+            if(!empty($_GET)){
+                $filteredParams = UValidate::validateInputArray($_GET, self::$attributi,false);
+                $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
+            }
+            else{
+                $courses = FPersistentManager::getInstance()->retriveCourses();
+            }
+               
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
+        }        
+
+        $view = new VCourse();
+        $view->showSearchResults($courses, 'I tuoi corsi');
         
     }
     //********************************************************* */
     // metodo per visualizzare i dettagli di un corso
     public static function courseDetail($course_id) {
         $course = FPersistentManager::retriveCourseOnId($course_id);
+        $modifyPermission = false;
+        if(USession::isSetSessionElement('user') === true) {
+            $userID = USession::getSessionElement('user');
+            
+            $user= FPersistentManager::retriveUserOnId($userID);
+            if(CUser::isClient()) {
+                $modifyPermission = true;
+            } 
+        }
         
-        $coursesData [] = CCourse::courseToArray($course);
-
+        
+         
         $view = new VCourse();
-        $view->showDetails( $coursesData);
+        $view->showDetails( $course , $modifyPermission);
     }
 
     //********************************************************* */
@@ -168,35 +190,27 @@ class CCourse {
         //prendo l id dell utente dalla sessione
         $userID = USession::getSessionElement('user');
         $user= FPersistentManager::retriveUserOnId($userID);
-        $corso=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
+        $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
         
-        $userData = CUser::userToArray($user);
-        $courseData = CCourse::courseToArray($corso);
+        
         $view = new VCourse();
-        $view->showEnrollmentDetails($courseData,$userData);
+        $view->showEnrollmentDetails($course,$user);
     }
 
     //*********************************************************************************** */
     
     public static function enrollForm($course_id) {
-        // Qui puoi aggiungere la logica per gestire l'iscrizione al corso
-        // Ad esempio, recuperare i dati del corso e dell'utente, validare l'iscrizione, ecc.
         
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        //$userID = USession::getSessionElement('user');
-        //$user = FPersistentManager::getInstance()->retriveUserOnId($userID);
-        
-        $courseData = CCourse::courseToArray($course);
-        //$userData = CUser::userToArray($user);
-        
         $view = new VCourse();
-        $view->showEnrollForm($courseData);
+        $view->showEnrollForm($course);
 
     }
     
     
     
     public static function manageForm($course_id) {
+
         $view = new VCourse();
         $view->showManageForm($course_id);
     }
@@ -216,53 +230,34 @@ class CCourse {
     // metodo per serializzare un corso in un array
     
     
-
-
-
-
-    //*********************************************************** */
-    // la validazione andrà in una classe separata di utilità, ma per ora la metto qui
-    public static function validateCourse(array $courseData){
-        // Qui puoi aggiungere la logica per validare i dati del corso
-        $errors = [];
-        //validazione titolo
-        if (empty($CourseData['title'])) {
-            $errors[] = "Il titolo del corso è obbligatorio.";
-        }   
-        if( strlen($courseData['title'])>255){
-            $errors[] = "Il titolo del corso non può superare i 255 caratteri.";
+    public static function manageMyCourses()
+    {
+        if (!CUser::isLogged()) {
+            (new VError())->show("Devi essere loggato per accedere a questa pagina.");
+            return;
+        }
+        if (CUser::isInstructor()) {
+            (new VError())->show("Devi essere un istruttore per accedere a queste funzionalità.");
+            return;
         }
 
-        //validazione descrizione
-        if (empty($CourseData['description'])) {
-            $errors[] = "La descrizione del corso è obbligatoria."; 
-        }
+        
+        $userID = USession::getSessionElement('user');
+        $courses = FPersistentManager::getInstance()->retriveCoursesByInstructor($userID);
+        
 
-        //validazione orario
-        if (empty($courseData['timeSlot'])) {
-            $errors[] = "L'orario del corso è obbligatorio.";
-        } elseif (!preg_match('/^\d{2}:\d{2}-\d{2}:\d{2}$/', $courseData['timeSlot'])) {
-            $errors[] = "L'orario deve essere nel formato HH:MM-HH:MM.";
-        }
-        //validazione date
-        if (empty($courseData['startDate']) || empty($courseData['endDate'])) {
-            $errors[] = "Le date di inizio e fine sono obbligatorie.";
-        }
-        if ($courseData['startDate'] >= $courseData['endDate']) {
-            $errors[] = "La data di inizio non può essere successiva o uguale alla data di fine.";
-        }
-        //validazione costo
-       if (empty($courseData['cost']) || !is_numeric($courseData['cost']) || $courseData['cost'] < 0) {
-            $errors[] = "Il costo del corso deve essere un numero positivo.";
-        }
-        //validazione numero massimo di partecipanti   
-        if (empty($courseData['MaxParticipantsCount']) || !is_numeric($courseData['MaxParticipantsCount']) || $courseData['MaxParticipantsCount'] <= 0) {
-            $errors[] = "Il numero massimo di partecipanti deve essere un numero positivo.";
-        }
-
-        return $errors;
-
+        // Mostra la vista di gestione corsi istruttore
+        $view = new Vcourse();
+        $view->showCourses($courses, $userID, 'I tuoi corsi');
     }
+
+
+
+
+    
+    
+
+    
 
 
 
@@ -273,38 +268,3 @@ class CCourse {
 }
 
 
-/*if(!empty($_GET)) {
-            // Se ci sono parametri di ricerca, li prendo
-            $filteredParams = $_GET;
-            echo 'filtri applicati' . $filteredParams;
-            $paramskeys = array_keys($filteredParams);
-            foreach ($paramskeys as $key) {
-                // Rimuovo i parametri che non sono tra quelli definiti
-                if (!in_array($key, self::$attributi)) {
-                    unset($filteredParams[$key]);
-                } else {
-                    // Se il parametro è valido, lo filtro 
-                    $filteredParams[$key] = htmlspecialchars(trim($filteredParams[$key]));
-                }
-            }
-            //qui ho una array di parametri che possono richiamare i metodi di validazione
-            //per validare i parametri di ricerca
-            foreach ($paramskeys as $key) {
-                $methodName = 'validate' . ucfirst($key); // Es: 'title' -> 'validateTitle'
-            
-                if (method_exists(self::class, $methodName)) {
-                // Richiama il metodo statico passando il valore dell'attributo
-                $error = UValidate::$methodName($filteredParams[$key]);
-                    if ($error) {
-                        $errors[] = $error; //gestione degli errori
-                    }
-                }
-            }
-           
-            //non è necessario validare i dati ottenuti dal db, si presuppone che cìgià lo siano
-            $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
-        }
-        // Se non ci sono parametri di ricerca, prendo tutti i corsi
-        else {
-            $courses = FPersistentManager::getInstance()->retriveCourses();
-        }*/

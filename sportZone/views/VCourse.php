@@ -43,26 +43,32 @@ class VCourse
     }
     //********************************************************* */
     // Metodo per visualizzare i risultati della ricerca dei corsi
-    public function showSearchResults($coursesData, $messaggio)
+    public function showSearchResults($courses, $messaggio)
     {
-        //$this->smarty->assign('courses', $courses);     
-        //echo 'courses: ' . $courses;
-       //echo 'course:' . $courses[0]->getTitle();
-       $this->smarty->assign('courses', $coursesData);
-        //$this->smarty->assign('messaggio', $messaggio);
-        
-        // Mostra i risultati della ricerca
-        // Assicurati che il template 'course/searchResults.tpl' esista e sia configurato correttamente 
-       $this->smarty->display('course/searchResults.tpl');
+        foreach ($courses as $course) {
+            $coursesData []= ECourse::courseToArray($course);
+        }
+
+        $this->smarty->assign('courses', $coursesData);
+        $this->smarty->display('course/searchResults.tpl');
     }
 
-    public function showDetails($courseData)
+    public function showDetails($course,$modifyPermission = false)
     {
-        // Qui dovresti recuperare i dettagli del corso dal model
+        // Controlla se il corso è stato trovato
+        if ($course === null) {
+            (new VError())->show("Corso non trovato.");
+            return;
+        }
+        $courseData = [];
+    
+        $courseData [] = ECourse::courseToArray($course);
+
         $this->smarty->assign('courses', $courseData);
+        $this->smarty->assign('modifyPermission', $modifyPermission);
         $this->smarty->display('course/courseDetails.tpl');
+    
     }
-
     //********************************************************* */
     // Metodo per visualizzare il form di iscrizione a un corso
 
@@ -70,8 +76,10 @@ class VCourse
 
 
 
-    public function showEnrollmentDetails($courseData, $userData)
+    public function showEnrollmentDetails($course, $user)
     {
+        $userData = CUser::userToArray($user);
+        $courseData = ECourse::courseToArray($course);
         // Assegna i dati del corso e dell'utente alla vista
         $this->smarty->assign('course', $courseData);
         $this->smarty->assign('user', $userData);
@@ -80,28 +88,21 @@ class VCourse
         $this->smarty->display('course/enrollmentDetails.tpl');
     }
 
-    public function showEnrollForm($courseData)
+    public function showEnrollForm($course)
     {
+        $courseData = ECourse::courseToArray($course);
         $this->smarty->assign('course', $courseData);
         $this->smarty->display('course/enrollForm.tpl');
     }
 
-    public function showManageForm($course_id)
+    
+    //********************************************************* */
+    public function showManageForm($course)
     {
         $this->smarty->assign('course_id', $course_id);
         $this->smarty->display('course/manageForm.tpl');
     }
 
-    public function showCreateForm()
-    {
-        $this->smarty->display('course/createForm.tpl');
-    }
-
-    public function showCreateResult($result = null)
-    {
-        $this->smarty->assign('result', $result);
-        $this->smarty->display('course/createResult.tpl');
-    }
 }
 // End of VCourse.php
 // This class handles the view logic for courses, including displaying forms and results.   

@@ -222,15 +222,5 @@ class CUser{
         return self::getUserRole() === EClient::class;
     }
 
-    public static function usertoArray($user) {
-        return [
-            'id' => $user->getId(),
-            'name' => $user->getName(),
-            'surname' => $user->getSurname(),
-            'sex'=> 'male',
-            'email' => $user->getEmail(),
-            'username' => $user->getUsername(),
-            'birthDate' => $user->getBirthDate()->format('Y-m-d')
-        ];
-    }
+    
 }

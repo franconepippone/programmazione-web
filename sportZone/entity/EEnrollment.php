@@ -54,4 +54,16 @@ class EEnrollment
     public function setCourse(?ECourse $course): void {
         $this->course = $course;
     }
+
+    public static function enrollmentToArray(EEnrollment $enrollment): array {
+        return [
+            'id' => $enrollment->getId(),
+            'enrollmentDate' => $enrollment->getEnrollmentDate()->format('Y-m-d H:i:s'),
+            'client' => $enrollment->getClient() ? EClient::clientToArray($enrollment->getClient()) : null,
+            'course' => $enrollment->getCourse() ? ECourse::courseToArray($enrollment->getCourse()) : null,
+        ];
+    }
+
+    public function __construct(){}
 }
+
