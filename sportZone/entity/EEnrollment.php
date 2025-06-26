@@ -21,7 +21,7 @@ class EEnrollment
     #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "courses")]
     private ?EClient $client = null;
 
-    #[ORM\OneToOne(targetEntity: ECourse::class, cascade: ["persist", "remove"])]
+    #[ORM\ManyToOne(targetEntity: ECourse::class, inversedBy: "enrollments")]
     #[ORM\JoinColumn(nullable: false)]
     private ?ECourse $course = null;
 

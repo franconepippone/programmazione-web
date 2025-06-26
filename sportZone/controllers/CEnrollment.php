@@ -69,7 +69,7 @@ class CEnrollment
     {
         CUser::isLogged();
         $userID = USession::getSessionElement('user');
-        $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsByUser($userID);
+        $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($userID);
 
         $view = new VEnrollment();
         $view->showMyEnrollments($enrollments);
@@ -80,7 +80,7 @@ class CEnrollment
     {
         CUser::isLogged();
         $userID = USession::getSessionElement('user');
-        $enrollment = FPersistentManager::getInstance()->retriveEnrollmentById($enrollment_id);
+        $enrollment = FPersistentManager::getInstance()->retriveEnrollmentOnId($enrollment_id);
 
         if (!$enrollment || $enrollment->getUser()->getId() != $userID) {
             (new VError())->show("Iscrizione non trovata o non autorizzato.");
