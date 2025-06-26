@@ -3,20 +3,17 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CCourse {
 
-    private static $attributi = ["title", "description", "timeSlot", "startDate", "endDate", "cost", "MaxParticipantsCount"];
+    public static function createCourseForm($data = []) {
+    CUser::isLogged();
+    //CUser::isEmployee();
 
-    public static function createCourseForm() {
-        CUser::isLogged();
-        //CUser::isEmployee();  
-      
+    $view = new VEmployee();
+    $pm = FPersistentManager::getInstance();
 
-        $view = new VCourse();
-        $pm = FPersistentManager::getInstance();
+    $instructors = $pm->retriveAllInstructors();
+    $fields = $pm->retriveAllFields();
 
-        $instructors = $pm->retriveAllInstructors();
-        $fields = $pm->retriveAllFields();
-
-        $view->showCreateCourseForm($instructors, $fields);
+    $view->showCreateCourseForm($instructors, $fields, $data);
 }
     //********************************************************* */
     public static function finalizeCreateCourse() {
@@ -25,95 +22,94 @@ class CCourse {
         $data = $_POST;
         if (!isset($data['confirm'])) {
 
-        
-            $view = new VEmployee();
-            $pm = FPersistentManager::getInstance();
+public static function courseSummary() {
+   // CUser::isEmployee();
 
-            $title = trim($data['title'] ?? '');
-            if (empty($title)) {
-            (new VError())->show("Il titolo del corso è obbligatorio.");
-            return;
-            }
+    $view = new VEmployee();
+    $pm = FPersistentManager::getInstance();
 
-            $description = trim($data['description'] ?? '');
-            if (empty($description)) {
-            (new VError())->show("La descrizione del corso è obbligatoria.");
-            return;
-            }
+    try {
+        $validated = UValidate::validateInputArray($_POST, self::$rulesCourse, true);
 
-            $startDateStr = $data['start_date'] ?? '';
-            $startDate = DateTime::createFromFormat('Y-m-d', $startDateStr);
-            $minStartDate = (new DateTime())->modify('+7 days');
-            if (!$startDate || $startDate < $minStartDate) {
-            (new VError())->show("La data di inizio deve essere almeno tra 7 giorni da oggi.");
-            return;
-            }
-
-            $startTime = $data['start_time'] ?? '';
-            $endTime = $data['end_time'] ?? '';
-            if (strtotime($startTime) >= strtotime($endTime)){ 
-            (new VError())->show("L'orario di inizio deve precedere quello di fine.");
-            return;
-            }
-
-            $days = $data['days'] ?? [];
-            if (!is_array($days) || count($days) === 0) {
-            (new VError())->show("Seleziona almeno un giorno della settimana.");
-            return;
-            }
-
-            $cost = $data['cost'] ?? '';
-            if (!is_numeric($cost) || floatval($cost) < 0) {
-            (new VError())->show("Inserisci un costo valido.");
-            return;
-            }
-
-            $maxParticipants = $data['max_participants'] ?? '';
-            if (!ctype_digit($maxParticipants) || intval($maxParticipants) < 1) {
-            (new VError())->show("Numero partecipanti non valido.");
-            return;
-            }
-
-            $instructorId = $data['instructor'] ?? '';
-            $fieldId = $data['field'] ?? '';
-            $instructor = $pm->retriveInstructorById($instructorId);
-            $field = $pm->retriveFieldById($fieldId);
-            if (!$instructor || !$field) {
-            (new VError())->show("Istruttore o campo selezionato non valido.");
-                return;
-            }
-
-            
-            $view->showFinalizeCreateCourse($data, $instructor, $field);
-            return;
+        // Validazione custom per orari (start < end)
+        if ($validated['start_time'] >= $validated['end_time']) {
+            throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
         }
-        
 
-        
-            $view = new VEmployee(); 
-            $pm = FPersistentManager::getInstance();
+        // Recupera oggetti istruttore e campo
+        $instructor = $pm->retriveInstructorById($validated['instructor']);
+        $field = $pm->retriveFieldById($validated['field']);
+        if (!$instructor || !$field) {
+            throw new ValidationException("Istruttore o campo selezionato non valido.");
+        }
 
-            
-            $course = new ECourse();
-            $course->setTitle($data['title']);
-            $course->setDescription($data['description']);
-            $course->setStartDate(new DateTime($data['start_date']));
-            $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
-            $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
-            $course->setDaysOfWeek($data['days']);
-            $course->setEnrollmentCost(floatval($data['cost']));
-            $course->setMaxParticipantsCount(intval($data['max_participants']));
+        $validated['instructor'] = $instructor;
+        $validated['field'] = $field;
 
-            $instructor = $pm->retriveInstructorById($data['instructor']);
-            $field = $pm->retriveFieldById($data['field']);
-            $course->setInstructor($instructor);
-            $course->setField($field);
+        if ($validated['start_date'] instanceof DateTime) {
+            $validated['start_date'] = $validated['start_date']->format('Y-m-d');
+        }
+        if ($validated['start_time'] instanceof DateTime) {
+            $validated['start_time'] = $validated['start_time']->format('H:i');
+        }
+        if ($validated['end_time'] instanceof DateTime) {
+            $validated['end_time'] = $validated['end_time']->format('H:i');
+        }
 
-            $pm->saveCourse($course);
-            $view->showCourseConfirmation($course);
+        $validated['start_date'] = $validated['start_date'];
+      
+        $view->showCourseSummary($validated);
 
-        
+    } catch (ValidationException $e) {
+        $msg = $e->getMessage();
+        if (isset($e->details['params'])) {
+            $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+        }
+        (new VError())->show($msg);
     }
+}
+
+public static function finalizeCourse() {
+    //CUser::isEmployee();
+
+    $view = new VEmployee();
+    $pm = FPersistentManager::getInstance();
+
+    $data = $_POST;
+
+    $instructor = $pm->retriveInstructorById($data['instructor']);
+    $field = $pm->retriveFieldById($data['field']);
+
+    $course = new ECourse();
+    $course->setTitle($data['title']);
+    $course->setDescription($data['description']);
+    $course->setStartDate(new DateTime($data['start_date']));
+    $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
+    $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+    $course->setDaysOfWeek($data['days']);
+    $course->setEnrollmentCost(floatval($data['cost']));
+    $course->setMaxParticipantsCount(intval($data['max_participants']));
+    $course->setInstructor($instructor);
+    $course->setField($field);
+
+    $pm->saveCourse($course);
+
+    $view->confirmCourse($course);
+}
+
+
+private static $rulesCourse = [
+    'title'            => 'validateTitle',
+    'description'      => 'validateDescription',
+    'start_date'       => 'validateStartDate',
+    'start_time'       => 'validateTime',
+    'end_time'         => 'validateTime',
+    'cost'             => 'validatePrice',
+    'max_participants' => 'validateMaxParticipants',
+    'days'             => 'validateDays',
+    'instructor'       => 'validateInstructorId',
+    'field'            => 'validateFieldId'
+];
     //********************************************************* */
     //here starts Kevin's code, please do not modify it
     

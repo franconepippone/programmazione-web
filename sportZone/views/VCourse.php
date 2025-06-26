@@ -11,27 +11,34 @@ class VCourse
         $this->smarty = USmarty::getInstance();
     }
     //********************************************************* */
-    // Metodo per visualizzare il form di ricerca dei corsi
-    public function showCreateCourseForm($instructors, $fields) {
-        $instructorsData = [];
-        $fieldsData = [];
-
-        foreach ($fields as $field) {
-            $fieldsData[] = EField::fieldToArray($field);
+   public function showCreateCourseForm($instructors, $fields, $data = []) {
+        $this->smarty->assign('instructors', array_map(fn($i) => EInstructor::instructorToArray($i), $instructors));
+        $this->smarty->assign('fields', array_map(fn($f) => EField::fieldToArray($f), $fields));
+        foreach (['title','description','start_date','start_time','end_time','cost','max_participants','days','instructor','field'] as $k) {
+            $this->smarty->assign($k, $data[$k] ?? '');
         }
-       
-        foreach ($instructors as $instructor) {
-            $instructorsData[] = EInstructor::instructorToArray($instructor);
-        }
-
-        
-        $this->smarty->assign('instructors', $instructorsData);
-        $this->smarty->assign('fields', $fieldsData);
-
         $this->smarty->display('course/create_course_form.tpl');
     }
 
+    public function showCourseSummary($data) {
+        $this->smarty->assign('title', $data['title']);
+        $this->smarty->assign('description', $data['description']);
+        $this->smarty->assign('start_date', $data['start_date']);
+        $this->smarty->assign('start_time', $data['start_time']);
+        $this->smarty->assign('end_time', $data['end_time']);
+        $this->smarty->assign('days', $data['days']);
+        $this->smarty->assign('days_string', implode(', ', $data['days']));
+        $this->smarty->assign('cost', $data['cost']);
+        $this->smarty->assign('max_participants', $data['max_participants']);
+        $this->smarty->assign('instructor', EInstructor::instructorToArray($data['instructor']));
+        $this->smarty->assign('field', EField::fieldToArray($data['field']));
+        $this->smarty->display('course/course_summary.tpl');
+    }
 
+    public function confirmCourse(ECourse $course) {
+        $this->smarty->assign('data', ECourse::courseToArray($course));
+        $this->smarty->display('course/confirm_course.tpl');
+    }
 
     //******************************************************** */
 
@@ -103,6 +110,12 @@ class VCourse
         $this->smarty->display('course/manageForm.tpl');
     }
 
+
+    public function showCreateResult($result = null)
+    {
+        $this->smarty->assign('result', $result);
+        $this->smarty->display('course/createResult.tpl');
+    }
 }
 // End of VCourse.php
 // This class handles the view logic for courses, including displaying forms and results.   
