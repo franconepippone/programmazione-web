@@ -6,6 +6,14 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CPayment {
 
+    public static function pay2() {
+       
+        $view = new VOnlinePayment();
+        $view->showPaymentMethodSelection(); 
+    }
+    
+    
+
     private static $rulesAddCreditCard = [
         "number" => 'validateCreditCardNumber',
         "expirationDate" => 'validateFutureDate',
@@ -13,11 +21,6 @@ class CPayment {
         "bank" => 'validateBank',
         "cvv" => 'validateCVV',
         "owner" => 'validateFullName'
-    ];
-
-    private static $rulesPay = [
-        "amount" => 'validateCurrencyAmount',
-        "redirectUrl" => 'skipValidation'
     ];
 
     public static function addCreditCardForm() {
@@ -35,7 +38,7 @@ class CPayment {
             exit;
         }; // only clients can add credit cards
         
-        /** @var EClient $user */
+        // @var EClient $user 
         $user = CUser::getLoggedUser();
 
         try {
@@ -89,13 +92,22 @@ class CPayment {
 
     /**
      * Starts a payment process by storing the payment details in the session.
+     * If 'redirectNow' is true, it redirects to the payment method selection page.
+     * Otherwise, you must manually redirect to '/payment/pay' (i.e. through form).
      * 
      * @param string $amount The amount to be paid, in euros.
-     * @param string $redirectUrl The URL to redirect to after the payment is completed.
+     * @param string $success_url The URL to redirect to after the payment is completed.
+     * @param string $cancel_url The URL to redirect to after the payment is cancelled or fails.
      * @param string $paymentSecret A secret key for verifying the payment later.
      */
     #[PathUrl(PathUrl::HIDDEN)]
-    public static function startPayment(string $amount, string $redirectUrl, string $paymentSecret) {
+    public static function startPayment(
+        string $amount, 
+        string $success_url, 
+        string $cancel_url, 
+        string $paymentSecret, 
+        bool $redirectNow = false
+    ): never {
         CUser::isLogged();
         if (!CUser::isClient()) {
             $viewErr = new VError();
@@ -115,21 +127,29 @@ class CPayment {
         $ongoingPayment = [
             'paymentSecretHash' => password_hash($paymentSecret, PASSWORD_DEFAULT),
             'amountCents' => $amountCents,
-            'redirectUrl' => $redirectUrl,
+            'successRedirectUrl' => $success_url,
+            'cancelRedirectUrl' => $cancel_url,
             'outcome' => null // this will be set later when the payment is confirmed
         ];
         USession::setSessionElement('ongoingPayment', $ongoingPayment); 
         
         // redirects to the payment method selection page
-        header("Location: /payment/selectMethod");
+        if ($redirectNow) header("Location: /payment/pay");
         exit;
+    }
+
+    #[PathUrl('pay')]
+    public static function paymentEntryPoint() {
+        $ongoingPaymentData = self::getOngoingPayment();
+        if ($ongoingPaymentData == null) exit;
+
+        header("Location: /payment/selectMethod");
     }
     
     public static function selectMethod() {
         $ongoingPaymentData = self::getOngoingPayment();
 
         $amountCents = $ongoingPaymentData['amountCents'];
-        $redirectUrl = $ongoingPaymentData['redirectUrl'];
 
         // mostra la lista dei metodi di pagamento dell'utente
         /** @var EClient $user */
@@ -137,23 +157,24 @@ class CPayment {
         $paymentMethods = $user->getPaymentMethods();
 
         $view = new VOnlinePayment();
-        $view->showPaymentMethods($paymentMethods, $amountCents, $redirectUrl);
+        $view->showPaymentMethods($paymentMethods, $amountCents);
     }
 
     public static function confirmPay() {
         $ongoingPaymentData = self::getOngoingPayment();
 
         $amountCents = $ongoingPaymentData['amountCents'];
-        $redirectUrl = $ongoingPaymentData['redirectUrl'];
+        $successRedirectUrl = $ongoingPaymentData['successRedirectUrl'];
+        $cancelRedirectUrl = $ongoingPaymentData['cancelRedirectUrl'];
         $outcome = $ongoingPaymentData['outcome'];
 
-        echo "Amount: $amountCents, Redirect URL: $redirectUrl, Outcome: $outcome";
+        echo "Amount: $amountCents, Redirect URL: $successRedirectUrl, Outcome: $outcome, Cancel URL: $cancelRedirectUrl";
 
         // arrivano in POST:
         //  - il metodo di pagamento scelto (id)
 
         try {
-            $inputs = UValidate::validateInputArray($_POST, ['methodId' => 'skipValidation'], true);
+            $inputs = UValidate::validateInputArray($_POST, ['methodId' => 'validateId'], true);
         } catch (ValidationException $e) {
             $viewErr = new VError();
             $viewErr->show($e->getMessage());
@@ -162,7 +183,7 @@ class CPayment {
 
         $methodId = $inputs['methodId'];
         
-        // recupera il metodo di pagamento scelto dall'utente
+        // check if the methodId is valid and belongs to the user and recovers it
         /** @var EClient $user */
         $user = CUser::getLoggedUser();
         $paymentMethods = $user->getPaymentMethods();
@@ -202,13 +223,13 @@ class CPayment {
         }
 
         // payment successful, remove the ongoing payment from session
-        header("Location: $redirectUrl");
+        header("Location: $successRedirectUrl");
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function verifyAndEndPayment($paymentSecret): bool
     {
         $ongoingPaymentData = self::getOngoingPayment();
-        print_r($ongoingPaymentData);
 
         // verify the payment secret
         if (!password_verify($paymentSecret, $ongoingPaymentData['paymentSecretHash'])) {
@@ -218,9 +239,7 @@ class CPayment {
 
         // remove the ongoing payment from session
         USession::unsetSessionElement('ongoingPayment');
-        echo "Payment verified and ended successfully.";
         return true; // payment verified and ended successfully
     }
-
- 
-}
+    
+}   

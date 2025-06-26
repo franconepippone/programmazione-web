@@ -13,7 +13,11 @@ class VOnlinePayment{
         $this->smarty->display("payment/add_credit_card.tpl");
     }
 
-    public function showPaymentMethods($paymentMethods, $amount, $redirectUrl) {
+    public function showPaymentMethodSelection() {
+        $this->smarty->display("payment/select_payment_method.tpl");
+    }
+
+    public function showUserPaymentMethods($paymentMethods, $amount) {
         $methodsInfo = [];
         foreach ($paymentMethods as $method) {
             $info = [
@@ -41,7 +45,6 @@ class VOnlinePayment{
 
         $amount_eur = number_format($amount / 100, 2, ',', '.');
 
-        $this->smarty->assign('redirect', $redirectUrl);
         $this->smarty->assign('amount', $amount_eur);
         $this->smarty->assign('paymentMethods', $methodsInfo);
         $this->smarty->display("payment/choose_method.tpl");

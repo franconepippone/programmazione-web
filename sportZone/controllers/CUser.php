@@ -119,6 +119,31 @@ class CUser{
 
     }
 
+
+    #[PathUrl('paga')]
+    public static function testPayment() {
+        CPayment::startPayment(
+            '10.00', // amount in euros
+            '/user/testPaymentEnd', // redirect URL after payment
+            'alicescema' // secret for verifying the payment
+        );
+    }
+
+    public static function testPaymentEnd() {
+
+        $outcome = CPayment::verifyAndEndPayment('alicescema');
+        echo $outcome;
+
+    }
+
+
+
+
+
+
+
+
+
     /**
      * verify if the choosen username and email already exist, create the User Obj and set a default profile image 
      * @return void

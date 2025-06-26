@@ -352,6 +352,20 @@ class UValidate {
     // -------------------------- general purpose validation methods --------------------------
 
     /**
+     * Validates an ID to ensure it is a positive integer.
+     *
+     * @param mixed $id The ID to validate.
+     * @return int The validated ID as an integer.
+     * @throws ValidationException If the ID is not a positive integer.
+     */
+    public static function validateId($id): int {
+        if (!is_numeric($id) || intval($id) != $id || intval($id) <= 0) {
+            throw new ValidationException("Invalid ID: must be a positive integer.");
+        }
+        return intval($id);
+    }
+
+    /**
      * Validate if a string corresponds to a backed enum value (case-insensitive).
      *
      * @param string $value Input string to validate
