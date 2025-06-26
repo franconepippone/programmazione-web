@@ -3,6 +3,20 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CCourse {
 
+
+     private static $rulesCourse = [
+        'title'            => 'validateTitle',
+        'description'      => 'validateDescription',
+        'start_date'       => 'validateStartDate',
+        'start_time'       => 'validateTime',
+        'end_time'         => 'validateTime',
+        'cost'             => 'validatePrice',
+        'max_participants' => 'validateMaxParticipants',
+        'days'             => 'validateDays',
+        'instructor'       => 'validateInstructorId',
+        'field'            => 'validateFieldId'
+    ];
+
     public static function createCourseForm($data = []) {
     CUser::isLogged();
     //CUser::isEmployee();
@@ -14,98 +28,85 @@ class CCourse {
     $fields = $pm->retriveAllFields();
 
     $view->showCreateCourseForm($instructors, $fields, $data);
-}
-    //********************************************************* */
-   
+    }
+    
 
-public static function courseSummary() {
-   // CUser::isEmployee();
+    public static function courseSummary() {
+       // CUser::isEmployee();
 
-    $view = new VCourse();
-    $pm = FPersistentManager::getInstance();
+        $view = new VCourse();
+        $pm = FPersistentManager::getInstance();
 
-    try {
-        $validated = UValidate::validateInputArray($_POST, self::$rulesCourse, true);
+        try {
+            $validated = UValidate::validateInputArray($_POST, self::$rulesCourse, true);
 
         // Validazione custom per orari (start < end)
-        if ($validated['start_time'] >= $validated['end_time']) {
-            throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
-        }
+            if ($validated['start_time'] >= $validated['end_time']) {
+                throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
+            }
 
         // Recupera oggetti istruttore e campo
-        $instructor = $pm->retriveInstructorById($validated['instructor']);
-        $field = $pm->retriveFieldById($validated['field']);
-        if (!$instructor || !$field) {
-            throw new ValidationException("Istruttore o campo selezionato non valido.");
-        }
+            $instructor = $pm->retriveInstructorById($validated['instructor']);
+            $field = $pm->retriveFieldById($validated['field']);
+            if (!$instructor || !$field) {
+                throw new ValidationException("Istruttore o campo selezionato non valido.");
+            }
 
-        $validated['instructor'] = $instructor;
-        $validated['field'] = $field;
+            $validated['instructor'] = $instructor;
+            $validated['field'] = $field;
 
-        if ($validated['start_date'] instanceof DateTime) {
-            $validated['start_date'] = $validated['start_date']->format('Y-m-d');
-        }
-        if ($validated['start_time'] instanceof DateTime) {
-            $validated['start_time'] = $validated['start_time']->format('H:i');
-        }
-        if ($validated['end_time'] instanceof DateTime) {
-            $validated['end_time'] = $validated['end_time']->format('H:i');
-        }
+            if ($validated['start_date'] instanceof DateTime) {
+                $validated['start_date'] = $validated['start_date']->format('Y-m-d');
+            }
+            if ($validated['start_time'] instanceof DateTime) {
+                $validated['start_time'] = $validated['start_time']->format('H:i');
+            }
+        
+                $validated['end_time'] = $validated['end_time']->format('H:i');
+            
 
-        $validated['start_date'] = $validated['start_date'];
-      
-        $view->showCourseSummary($validated);
+           
+            $view->showCourseSummary($validated);
 
-    } catch (ValidationException $e) {
-        $msg = $e->getMessage();
-        if (isset($e->details['params'])) {
-            $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+        } catch (ValidationException $e) {
+            $msg = $e->getMessage();
+            if (isset($e->details['params'])) {
+                $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+            }
+            (new VError())->show($msg);
         }
-        (new VError())->show($msg);
     }
-}
 
-public static function finalizeCourse() {
-    //CUser::isEmployee();
+    public static function finalizeCourse() {
+        //CUser::isEmployee();
 
-    $view = new VCourse();
-    $pm = FPersistentManager::getInstance();
+        $view = new VCourse();
+        $pm = FPersistentManager::getInstance();
 
-    $data = $_POST;
+        $data = $_POST;
 
-    $instructor = $pm->retriveInstructorById($data['instructor']);
-    $field = $pm->retriveFieldById($data['field']);
+        $instructor = $pm->retriveInstructorById($data['instructor']);
+        $field = $pm->retriveFieldById($data['field']);
 
-    $course = new ECourse();
-    $course->setTitle($data['title']);
-    $course->setDescription($data['description']);
-    $course->setStartDate(new DateTime($data['start_date']));
-    $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
-    $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
-    $course->setDaysOfWeek($data['days']);
-    $course->setEnrollmentCost(floatval($data['cost']));
-    $course->setMaxParticipantsCount(intval($data['max_participants']));
-    $course->setInstructor($instructor);
-    $course->setField($field);
+        $course = new ECourse();
+        $course->setTitle($data['title']);
+        $course->setDescription($data['description']);
+        $course->setStartDate(new DateTime($data['start_date']));
+        $course->setEndDate((new DateTime($data['start_date']))->modify('+2 months'));
+        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+        $course->setDaysOfWeek($data['days']);
+        $course->setEnrollmentCost(floatval($data['cost']));
+        $course->setMaxParticipantsCount(intval($data['max_participants']));
+        $course->setInstructor($instructor);
+        $course->setField($field);
 
-    $pm->saveCourse($course);
+        $pm->saveCourse($course);
 
-    $view->confirmCourse($course);
-}
+        $view->confirmCourse($course);
+    }
 
 
-private static $rulesCourse = [
-    'title'            => 'validateTitle',
-    'description'      => 'validateDescription',
-    'start_date'       => 'validateStartDate',
-    'start_time'       => 'validateTime',
-    'end_time'         => 'validateTime',
-    'cost'             => 'validatePrice',
-    'max_participants' => 'validateMaxParticipants',
-    'days'             => 'validateDays',
-    'instructor'       => 'validateInstructorId',
-    'field'            => 'validateFieldId'
-];
+   
     //********************************************************* */
     //here starts Kevin's code, please do not modify it
     
