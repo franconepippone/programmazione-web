@@ -153,10 +153,10 @@ public static function courseSummary() {
     $pm = FPersistentManager::getInstance();
 
     try {
-        $validated = UValidate::validateInputArray($_POST, array_keys(self::$rulesCourse), true);
+        $validated = UValidate::validateInputArray($_POST, self::$rulesCourse, true);
 
         // Validazione custom per orari (start < end)
-        if (strtotime($validated['start_time']) >= strtotime($validated['end_time'])) {
+        if ($validated['start_time'] >= $validated['end_time']) {
             throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
         }
 
@@ -170,12 +170,26 @@ public static function courseSummary() {
         $validated['instructor'] = $instructor;
         $validated['field'] = $field;
 
+        if ($validated['start_date'] instanceof DateTime) {
+            $validated['start_date'] = $validated['start_date']->format('Y-m-d');
+        }
+        if ($validated['start_time'] instanceof DateTime) {
+            $validated['start_time'] = $validated['start_time']->format('H:i');
+        }
+        if ($validated['end_time'] instanceof DateTime) {
+            $validated['end_time'] = $validated['end_time']->format('H:i');
+        }
+
         $validated['start_date'] = $validated['start_date'];
       
         $view->showCourseSummary($validated);
 
     } catch (ValidationException $e) {
-        (new VError())->show($e->getMessage());
+        $msg = $e->getMessage();
+        if (isset($e->details['params'])) {
+            $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+        }
+        (new VError())->show($msg);
     }
 }
 
@@ -204,7 +218,7 @@ public static function finalizeCourse() {
 
     $pm->saveCourse($course);
 
-    $view->confirmReservation($course);
+    $view->confirmCourse($course);
 }
 
 

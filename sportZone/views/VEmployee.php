@@ -51,8 +51,8 @@ class VEmployee{
         $this->smarty->display('employee/course_summary.tpl');
     }
 
-    public function confirmReservation(ECourse $course) {
+    public function confirmCourse(ECourse $course) {
         $this->smarty->assign('data', ECourse::courseToArray($course));
-        $this->smarty->display('employee/confirm_reservation.tpl');
+        $this->smarty->display('employee/confirm_course.tpl');
     }
 }
