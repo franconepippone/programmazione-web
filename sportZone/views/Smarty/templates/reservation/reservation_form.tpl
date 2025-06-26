@@ -9,9 +9,9 @@
 
   <div class="container">
 
-    <h2>Prenotazione Campo (Modalità Test)</h2>
+    <h2>Prenotazione Campo</h2>
 
-    <form method="POST" action="/reservation/finalizeReservation" novalidate>
+    <form method="POST" action="/reservation/reservationSummary" novalidate>
 
       <div class="field">
         <label class="label">Sport:</label>
@@ -49,14 +49,14 @@
         {/if}
       </div>
 
-      <div class="field">
+      
+      </div><div class="field">
         <label class="label">Data:</label>
         {if isset($date)}
           <div>{$date|escape}</div>
         {else}
           <div class="method-hint">\$date (passata via GET o da controller)</div>
         {/if}
-      </div>
 
       <input type="hidden" name="field_id" value="{if isset($fieldData)}{$fieldData.id}{else}0{/if}" />
       <input type="hidden" name="date" value="{if isset($date)}{$date|escape}{else}''{/if}" />
@@ -66,15 +66,24 @@
   <select name="time" id="time" required>
     {if isset($avaiableHours)}
       {foreach $avaiableHours as $hour}
-        <option value="{$hour}:00">{$hour}:00</option>
+        {assign var="h" value=$hour|regex_replace:"/^0?(\d+):.*$/":"$1:00"}
+        <option value="{$h}">{$h}</option>
       {/foreach}
     {else}
       <option disabled selected>
-        -- \$availableHours (es. da FReservation::getAvailableHours()) --
+        -- \$avaiableHours (es. da FReservation::getAvaiableHours()) --
       </option>
     {/if}
   </select>
 </div>
+
+<div class="field">
+        <label for="paymentMethod" class="label">Metodo di pagamento:</label>
+        <select name="paymentMethod" id="paymentMethod" required>
+            <option value="onsite">Pagamento in loco</option>
+            <option value="online">Pagamento online</option>
+        </select>
+    </div>
 
       <button type="submit">Conferma Orario</button>
     </form>

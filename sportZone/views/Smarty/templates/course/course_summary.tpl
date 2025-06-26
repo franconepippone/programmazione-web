@@ -12,6 +12,11 @@
         <li><b>Max partecipanti:</b> {$max_participants}</li>
         <li><b>Istruttore:</b> {$instructor.name} {$instructor.surname}</li>
         <li><b>Campo:</b> {$field.name}</li>
+        <li><b>Metodo di pagamento:</b> 
+            {if $paymentMethod == "onsite"}Pagamento in loco
+            {elseif $paymentMethod == "online"}Pagamento online
+            {else}{$paymentMethod|escape}{/if}
+        </li>
     </ul>
     <form method="post" action="/course/finalizeCourse">
         <input type="hidden" name="title" value="{$title|escape}">

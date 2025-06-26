@@ -27,7 +27,7 @@ class CFrontController{
     public function run($requestUri){
         // Parse the request URI
         
-        //$this->createDummyFields();
+       // $this->createDummyFields();
         //$this->createDummyCourses();    
 
         ob_start();
@@ -84,8 +84,9 @@ class CFrontController{
 
         call_user_func_array([$controllerClass, $methodName], $params);
     }
-    /**
+    
     //creo campi fittizi
+    /** 
     public static function createDummyFields(){
         $fields = [];
 
@@ -174,5 +175,5 @@ class CFrontController{
             FPersistentManager::getInstance()->uploadObj($course);
         }
     }
-**/
+**/ 
 }

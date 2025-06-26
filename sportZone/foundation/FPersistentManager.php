@@ -126,8 +126,8 @@ class FPersistentManager{
     /**
      * Retrieve reservations by field and date
      */
-    public static function getReservationsByFieldAndDate($field, $date){
-        return FReservation::getByFieldAndDate($field, $date);
+    public static function retriveReservationsByFieldId($fieldId, $date){
+        return FReservation::getReservationsByFieldId($fieldId, $date);
     }
 
     /**
@@ -137,13 +137,7 @@ class FPersistentManager{
         return FReservation::saveReservation($reservation);
     }
 
-    /**
-     * Get available hours for a field on a specific date.
-     * Returns the list of free hours by checking existing reservations.
-     */
-    public function getAvailableHours(int $fieldId, string $date): array {
-        return FReservation::getAvailableHours($fieldId, $date);
-    }
+    
 
     /**
      * fillter by name, date and sport
@@ -159,6 +153,48 @@ class FPersistentManager{
    
     public function retriveReservationById($id) {
         return FReservation::getReservationById($id);
+    }
+
+    public static function retriveReservationsByClientId(int $clientId) {
+    $result = FReservation::getReservationsByClientId($clientId);
+    return $result;
+  }
+
+/**
+ * Retrieve available hours for a specific field and date
+ */
+    public function retriveAvaiableHoursForFieldAndDate(int $fieldId, string $date): array {
+
+        // Recupera tutte le reservation per quel campo
+        $allReservations = FReservation::getReservationByFieldId($fieldId);
+
+        // Filtra solo quelle con la data richiesta
+        $filteredReservations = [];
+        $dateObj = new DateTime($date);
+        $dateString = $dateObj->format('Y-m-d');
+        foreach ($allReservations as $reservation) {
+            if ($reservation->getDate()->format('Y-m-d') === $dateString) {
+                $filteredReservations[] = $reservation;
+            }
+        }
+
+        // Estrai gli orari occupati (formato H:i:s)
+        $occupiedHours = [];
+        foreach ($filteredReservations as $reservation) {
+            $occupiedHours[] = $reservation->getTime()->format('H:i:s');
+        }
+
+        // Costruisci tutti gli orari possibili tra le 8 e le 21 (formato H:i:s)
+        $allHours = [];
+        for ($hour = 8; $hour < 21; $hour++) {
+            $allHours[] = sprintf('%02d:00:00', $hour); // "08:00:00"
+        }
+
+        // Rimuovi gli orari occupati
+        $availableHours = array_diff($allHours, $occupiedHours);
+
+        // Restituisci gli orari liberi ordinati
+        return array_values($availableHours);
     }
   
     //-----------------------------------INSTRUCTOR-------------------------------
@@ -243,5 +279,14 @@ class FPersistentManager{
         $result = FEnrollment::getEnrollmentsByAttributes($fields);
         return $result;
     }
+
+    /**
+     * Get available hours for a field on a specific date.
+     * Returns the list of free hours by checking existing reservations.
+     */
+    
+
+
+
 
 }

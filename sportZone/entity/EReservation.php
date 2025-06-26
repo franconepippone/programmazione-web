@@ -48,12 +48,12 @@ class EReservation
         return $this->id;
     }
 
-    public function getData(): \DateTimeInterface {
+    public function getDate(): \DateTimeInterface {
         return $this->date;
     }
 
-    public function setData(\DateTimeInterface $data): void {
-        $this->date = $data;
+    public function setDate(\DateTimeInterface $date): void {
+        $this->date = $date;
     }
 
      public function getTime(): \DateTimeInterface {
@@ -98,8 +98,8 @@ class EReservation
             'time' => $reservation->getTime(),
             'field' => $reservation->getField() ? $reservation->getField()->getName() : null,
             'sport' => $reservation->getField() ? $reservation->getField()->getSport() : null,
-            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getType() : null   
-            
+            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getPaymentMethod()->getType() : null
+
         ];
     }
 }

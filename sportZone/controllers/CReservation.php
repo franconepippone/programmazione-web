@@ -3,7 +3,13 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CReservation{
   
-
+  private static $rulesReservation = [
+    'field_id' => 'validateFieldId',
+    'date'     => 'validateReservationDate',
+    'time'     => 'validateReservationTime',
+    'user_id'  => 'validateClientId', 
+];
+  
   public static function reservationForm(){
     
     CUser::isLogged();
@@ -17,14 +23,14 @@ class CReservation{
         return;
     }
 
-     $date = $_GET['data'] ?? null;
+     $date = $_GET['date'] ?? null;
     if (!$date) {
         $error = new VError();
         $error->show("Data non specificata.");
         return;
     }
      // Get available hours for this field and date through FReservation
-    $avaiableHours = FReservation::getAvailableHours($fieldId, $date);
+    $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $date);
 
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
     if (!$field) {
@@ -32,159 +38,180 @@ class CReservation{
         $error->show("Campo non trovato.");
         return;
     }
-     
-   
-    $view->showReservationForm($field,$date,$avaiableHours); //da passare field, date e avaiablehours
+
+
+    $view->showReservationForm($field,$date,$avaiableHours); //da passare field, date e availableHours
   
     
  }
 
- public static function finalizeReservation() {
+  
+
+
+ public static function reservationSummary() {
+    CUser::isLogged();
+    $userId = $_SESSION['user'] ;
+
+    $data = $_POST;
+    $data['user_id'] = $userId;
+    $paymentMethod = $data['paymentMethod'] ?? null;
+    unset($data['paymentMethod']);
+
+
+    try {
+        $validated = UValidate::validateInputArray($data, self::$rulesReservation, true);
+        UValidate::validateNoActiveReservation($validated['user_id']);
+
+        $field = FPersistentManager::getInstance()->retriveFieldById($validated['field_id']);
+        $client = FPersistentManager::getInstance()->retriveClientById($validated['user_id']);
+        $fullName = $client->getName() . ' ' . $client->getSurname();
+
+        // Salva in sessione i dati della reservation se pagamento online
+        if ($paymentMethod === 'online') {
+            $_SESSION['pending_reservation'] = [
+                'field_id' => $validated['field_id'],
+                'date' => $validated['date'],
+                'time' => $validated['time'],
+                'user_id' => $userId,
+                'cost' => $field->getCost()
+            ];
+        }
+
+        $view = new VReservation();
+        $view->showReservationSummary($fullName, $validated['date'], $validated['time'], $field, $paymentMethod, $userId);
+
+    } catch (ValidationException $e) {
+        (new VError())->show($e->getMessage());
+        return;
+    }
+}
+public static function finalizeOnsiteReservation() {
     CUser::isLogged();
     $userId = $_SESSION['user'] ?? null;
 
-    // 1. Gestione callback da pagamento online
-    if (isset($_GET['payment_status']) && $_GET['payment_status'] === 'success') {
-        if (!isset($_SESSION['pending_reservation'])) {
-            $error = new VError();
-            $error->show("Nessuna prenotazione in sospeso.");
-            return;
-        }
-        $pending = $_SESSION['pending_reservation'];
-
-        $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
-        $client = FPersistentManager::getInstance()->retriveClientById($userId);
-
-        if (!$field || !$client) {
-            $error = new VError();
-            $error->show("Dati prenotazione non validi.");
-            return;
-        }
-
-        $payment = new EOnlinePayment();
-        // se il gateway ti passa un id pagamento, lo puoi settare qui:
-        // $payment->setPaymentGatewayId($_GET['payment_id'] ?? null);
-
-        $dateObj = new DateTime($pending['date']);
-        $timeObj = new DateTime($pending['time']);
-
-        $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
-        FPersistentManager::getInstance()->saveReservation($reservation);
-
-        // Pulisci sessione
-        unset($_SESSION['pending_reservation']);
-
-        $view = new VReservation();
-        $view->showConfirmation($reservation);
-        return;
-    }
-
-    // 2. Gestione normale della funzione (riepilogo e creazione onsite/redirect online)
-
-    // Get POST parameters
+    // I dati sono già validati dal riepilogo
     $fieldId = $_POST['field_id'] ?? null;
     $date = $_POST['date'] ?? null;
     $time = $_POST['time'] ?? null;
 
-    // Validate parameters
-    if (!$fieldId) {
-        $error = new VError();
-        $error->show("ID non specificato.");
-        return;
-    }
-    if (!$date) {
-        $error = new VError();
-        $error->show("Data non specificata.");
-        return;
-    }
-    if (!$time) {
-        $error = new VError();
-        $error->show("Orario non specificato.");
-        return;
-    }
-
     $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
-    if (!$field) {
-        $error = new VError();
-        $error->show("Campo non trovato.");
+    $client = FPersistentManager::getInstance()->retriveClientById($userId);
+
+    if (!$field || !$client || !$date || !$time) {
+        (new VError())->show("Dati prenotazione non validi.");
         return;
     }
 
-    $client = FPersistentManager::getInstance()->retriveClientById($userId);
-    $fullName = $client->getName() . ' ' . $client->getSurname();
+    $dateObj = new DateTime($date);
+    $timeObj = new DateTime($time);
 
-    // Se pagamento onsite: crea e salva subito
-    if (isset($_POST['confirm']) && isset($_POST['paymentMethod'])) {
-        if ($_POST['paymentMethod'] === 'onsite') {
-            $dateObj = new DateTime($date);
-            $timeObj = new DateTime($time);
-            $payment = new EOnSitePayment();
-            $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
-            FPersistentManager::getInstance()->saveReservation($reservation);
+    $payment = new EOnSitePayment();
+    $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
+    FPersistentManager::getInstance()->saveReservation($reservation);
 
-            $view = new VReservation();
-            $view->showConfirmation($reservation);
-            return;
-        } elseif ($_POST['paymentMethod'] === 'online') {
-            // Salva dati in sessione e fai redirect a pagina pagamento online
-            $_SESSION['pending_reservation'] = [
-                'field_id' => $fieldId,
-                'date' => $date,
-                'time' => $time,
-                'user_id' => $userId
-            ];
-
-            header("Location: /onlinepayment/payForm");
-            exit;
-        }
-    }
-
-    // Mostra pagina di riepilogo con scelta pagamento
     $view = new VReservation();
-    $view->showFinalizeReservation($fullName, $date, $time, $field);
+    $view->showConfirmation($reservation);
 }
 
 
-  
-  public static function cancelReservation() {
-    
+
+public static function finalizeOnlineReservation() {
     CUser::isLogged();
-    $userId = $_SESSION['userId'] ?? null;
+    $userId = $_SESSION['user'] ?? null;
 
-    // 3. Get POST parameter
-    $reservationId = $_POST['id'] ?? null;
-
-    // 4. Retrieve reservation from DB
-    $reservation = null;
-    if ($reservationId !== null && is_numeric($reservationId)) {
-        $reservation = FPersistentManager::getInstance()->retriveObj(EReservation::class, intval($reservationId));
-    }
-
-   //  5. Check reservation exists
-    if (!$reservation) {
-        $errorView = new VError();
-        $errorView->show("Prenotazione non trovata.");
+    // Controlla che ci siano dati in sessione
+    if (!isset($_SESSION['pending_reservation'])) {
+        (new VError())->show("Nessuna prenotazione in sospeso.");
         return;
     }
 
-   //  6. Check user owns the reservation
-    $client = $reservation->getClient();
-    if (!$client || $client->getId() !== $userId) {
-        $errorView = new VError();
-        $errorView->show("Non sei autorizzato a cancellare questa prenotazione.");
+    $pending = $_SESSION['pending_reservation'];
+
+    // (Opzionale: puoi validare di nuovo i dati qui)
+    $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
+    $client = FPersistentManager::getInstance()->retriveClientById($userId);
+
+    if (!$field || !$client) {
+        (new VError())->show("Dati prenotazione non validi.");
         return;
     }
 
-    // 7. If confirmed, delete and show confirmation
-    if (isset($_POST['confirm'])) {
-        FPersistentManager::getInstance()->deleteObj($reservation);
-        $view = new VReservation();
-        $view->showCancelConfirmation();
-        return;
-    }
+    $dateObj = new DateTime($pending['date']);
+    $timeObj = new DateTime($pending['time']);
 
-    // 8. Otherwise, show cancellation form
+    $payment = new EOnlinePayment();
+    $reservation = new EReservation($dateObj, $timeObj, $field, $client, $payment);
+    FPersistentManager::getInstance()->saveReservation($reservation);
+
+    unset($_SESSION['pending_reservation']);
+
     $view = new VReservation();
-    $view->showCancelReservation($reservation);
- }
+    $view->showConfirmation($reservation);
+}
+
+
+
+
+  public static function cancelReservation() {
+    CUser::isLogged();
+
+     $reservationId = $_POST['id'] ?? null;
+    if (!$reservation) {
+        (new VError())->show("Prenotazione non trovata.");
+        return;
+    }
+
+    // Rimuovi l'associazione con l'utente
+    $reservation->setClient(null);
+
+    // Cancella la reservation
+    FPersistentManager::getInstance()->deleteObj($reservation);
+
+    (new VReservation())->showCancelConfirmation();
+}
+
+
+public static function myReservation() {
+    CUser::isLogged();
+   
+
+    $clientId = $_SESSION['user'] ;
+    
+    
+    // Recupera tutte le reservation dell'utente
+    $reservations = FPersistentManager::getInstance()->retriveReservationsByClientId($clientId);
+  
+    $view = new VReservation();
+    $view->showMyReservations($reservations);
+}
+
+
+public static function allReservations() {
+    //CUser::isEmployee();
+
+    // Recupera tutte le prenotazioni
+    $reservations = FPersistentManager::getInstance()->retriveAllReservations();
+
+    $view = new VReservation();
+    $view->showAllReservations($reservations);
+}
+
+public static function reservationDetails() {
+    //CUser::isEmployee();
+
+    $reservationId = $_GET['id'] ?? null;
+    if (!$reservationId) {
+        (new VError())->show("ID prenotazione non specificato.");
+        return;
+    }
+
+    $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
+    if (!$reservation) {
+        (new VError())->show("Prenotazione non trovata.");
+        return;
+    }
+
+    $view = new VReservation();
+    $view->showReservationDetails($reservation);
+}
 }
