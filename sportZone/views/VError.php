@@ -18,7 +18,7 @@ class VError{
     public function showSuccess(
         string $message, 
         string $buttName = "Continue", 
-        string $buttAction = ""
+        string $buttAction = "history.back()"
     ) {
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign("success_message", $message);
