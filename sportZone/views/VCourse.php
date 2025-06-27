@@ -50,7 +50,7 @@ class VCourse
 
     }
     //********************************************************* */
-    public function showCourses($courses, $messaggio)
+    public function showCourses($courses, $userRole)
     {
         $coursesData = [];
         foreach ($courses as $course) {
@@ -58,6 +58,8 @@ class VCourse
         }
 
         $this->smarty->assign('courses', $coursesData);
+        $this->smarty->assign('userRole', $userRole);
+
         $this->smarty->display('course/showCourses.tpl');
     }
 

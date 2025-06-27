@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-06-21 20:09:40
+/* Smarty version 5.5.1, created on 2025-06-27 11:23:54
   from 'file:user/login.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_6856f564114390_75837544',
+  'unifunc' => 'content_685e632a0a4ea2_11697788',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '8a74841104cbe43772b764792e11dffe78f893f8' => 
     array (
       0 => 'user/login.tpl',
-      1 => 1750442549,
+      1 => 1751015929,
       2 => 'file',
     ),
   ),
@@ -20,23 +20,35 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6856f564114390_75837544 (\Smarty\Template $_smarty_tpl) {
+function content_685e632a0a4ea2_11697788 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazione-web\\sportZone\\views\\Smarty\\templates\\user';
-?><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Login Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      background-color: #f5f5f5;
-    }
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
+
+<?php $_smarty_tpl->assign('page_title', "Login", false, NULL);?>
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2044469961685e632a086c18_27707675', "styles");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1456703021685e632a095525_70082511', "content");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "sportZone/views/Smarty/templates/layouts/bare_base.tpl", $_smarty_current_dir);
+}
+/* {block "styles"} */
+class Block_2044469961685e632a086c18_27707675 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazione-web\\sportZone\\views\\Smarty\\templates\\user';
+?>
+
+   <style>
 
     .login-container {
       max-width: 300px;
       margin: auto;
+      margin-top: 20px;
       background: white;
       padding: 2rem;
       border-radius: 8px;
@@ -93,12 +105,24 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazione-web\\sportZone\\views\
       text-decoration: underline;
     }
   </style>
-</head>
-<body>
-  <div class="login-container">
+<?php
+}
+}
+/* {/block "styles"} */
+/* {block "content"} */
+class Block_1456703021685e632a095525_70082511 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazione-web\\sportZone\\views\\Smarty\\templates\\user';
+?>
+
+    <div class="login-container">
     <h2><?php echo (($tmp = $_smarty_tpl->getValue('login_title') ?? null)===null||$tmp==='' ? "Login" ?? null : $tmp);?>
 </h2>
     <form action="/user/checkLogin" method="POST">
+      <input type="hidden" name="redirectUrl" id="redirectUrl" value=<?php echo $_smarty_tpl->getValue('redirectUrl');?>
+>
+
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
 
@@ -112,7 +136,8 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazione-web\\sportZone\\views\
       Don't have an account? <a href="/user/register">Register here</a>
     </div>
   </div>
-</body>
-</html>
-<?php }
+<?php
+}
+}
+/* {/block "content"} */
 }

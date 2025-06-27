@@ -36,18 +36,18 @@ class CFrontController{
         // Parse the request URI
         
         //$this->createDummyFields();
+        //$this->createDummyCourses();
         /*
         $instructor = (new EInstructor())
-        ->setName('Mario')
-        ->setSurname('Rossi')
-        ->setEmail('ciro@gay')
-        ->setBirthDate(new DateTime('1990-01-01'))
-        ->setSex(UserSex::MALE)
-        ->setUsername('mario.rossi')
-        ->setPassword('password123'); // Assuming you have a setPassword method
-        
-        FPersistentManager::getInstance()->uploadObj($instructor);
-        $this->createDummyCourses($instructor);
+            ->setName('Mario')
+            ->setSurname('Rossi')
+            ->setEmail('ciro')
+            ->setBirthDate(new DateTime('1990-01-01'))
+            ->setSex(UserSex::MALE)
+            ->setUsername('mario.rossi')
+            ->setPassword('password123'); // Assuming you have a setPassword method
+
+        //FPersistentManager::getInstance()->uploadObj($instructor);
         */
 
         ob_start();
@@ -137,9 +137,9 @@ class CFrontController{
         return $map;
     }
 
-    
+    /**
     //creo campi fittizi
-    public static function createDummyFields(){
+    /*public static function createDummyFields(){
         $fields = [];
 
         $field1 = new EField();
@@ -187,7 +187,7 @@ class CFrontController{
         
     }
 
-    public function createDummyCourses($instructor){
+    public function createDummyCourses(){
         $field = new EField();
         $field->setSport('Padel')
         ->setName('ahhhh')
@@ -210,7 +210,6 @@ class CFrontController{
         $course1->setEnrollmentCost(100.0); // <-- usa il nome corretto del setter
         $course1->setMaxParticipantsCount(20);
         $course1->setField($field);
-        $course1->setInstructor($instructor);
         $courses[] = $course1;
 
         $course2 = new ECourse();
@@ -223,11 +222,10 @@ class CFrontController{
         $course2->setEnrollmentCost(120.0); // <-- usa il nome corretto del setter
         $course2->setMaxParticipantsCount(18);
         $course2->setField($field);
-        $course2->setInstructor($instructor);
         $courses[] = $course2;
         foreach ($courses as $course) {
             FPersistentManager::getInstance()->uploadObj($course);
         }
     }
-    
+    */
 }

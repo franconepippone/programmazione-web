@@ -158,7 +158,7 @@ class CCourse {
 
     //********************************************************* */
     // metodo per visualizzare i dettagli di un corso
-    public static function courseDetails($course_id) {
+    public static function courseDetailsInstructor($course_id) {
        
         $course = FPersistentManager::retriveCourseOnId($course_id);
         $modifyPermission = false;
@@ -187,14 +187,21 @@ class CCourse {
         }
         
         $user = CUser::getCurrentUser();
+        $userRole='Client';
+
         if(Cuser::isInstructor()){
             $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
+            
+            $userRole='Instructor';
+            
         }
         else if(Cuser::isClient()){
             $myenrollmens= FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($user->getId());
             foreach ($myenrollmens as $enrollment) {
                 $mycourses[] = $enrollment->getCourse();
             }
+            
+            
         }
         else{
             (new VError())->show("Devi essere un istruttore o un cliente per accedere a questa pagina.");
@@ -204,7 +211,7 @@ class CCourse {
         
         // Mostra la vista di gestione corsi istruttore
         $view = new VCourse();
-        $view->showCourses($mycourses, 'I miei corsi');
+        $view->showCourses($mycourses, $userRole);
     }
 
    
@@ -271,7 +278,7 @@ class CCourse {
             $course->setTitle($attributes['title']);
             $course->setDescription($attributes['description']);
             $course->setStartDate($attributes['startDate']);
-            $course->setEndDate(($attributes['startDate'])->modify('+2 months'));
+            $course->setEndDate($attributes['endDate']);
             $course->setTimeSlot($attributes['timeSlot']);
             $course->setDaysOfWeek($attributes['daysOfWeek']);
             $course->setEnrollmentCost(floatval($attributes['cost']));
@@ -281,8 +288,12 @@ class CCourse {
 
             // Salva le modifiche
             $pm->saveCourse($course);
-            $view = new VCourse;
-            $view->confirmCourseModifies();
+
+            $message='corso modificato con successo';
+            $butt_name ="Vai ai miei corsi";
+            $butt_action="window.location.href='/course/myCourses'";
+            $view = new VError;
+            $view->showSuccess($message, $butt_name,$butt_action);
 
     }
 

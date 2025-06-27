@@ -9,8 +9,12 @@ class VError{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function show(string $message) {
+    public function show(string $message,
+        string $buttName = "indietro", 
+        string $buttAction = "history.back()") {
         USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->assign("butt_name", $buttName);
+        $this->smarty->assign("butt_action", $buttAction);
         $this->smarty->assign("error_message", $message);
         $this->smarty->display("status/error.tpl");
     }

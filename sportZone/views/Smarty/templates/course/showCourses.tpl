@@ -21,7 +21,7 @@
                             Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
                         </div>
                     </div>
-                    <a class="details-btn" href="/course/courseDetails/{$course.id}">Dettagli</a>
+                    <a class="details-btn" href="/course/courseDetails{$userRole}/{$course.id}">Dettagli</a>
                 </div>
             {/foreach}
         {else}
