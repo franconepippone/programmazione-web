@@ -1,62 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <title>Crea Campo Sportivo</title>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"
-  />
+{extends file=$layout}
+{assign var="page_title" value="Register new"}
+
+{block name="styles"}
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #eef0f4;
-    }
-
-    label {
-      font-weight: bold;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      max-width: 400px;
-      padding: 8px;
-      margin-top: 4px;
-      margin-bottom: 15px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 1em;
-    }
-
-    #map {
-      width: 100%;
-      max-width: 600px;
-      height: 400px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 12px 24px;
-      font-size: 1.1em;
-      background-color: #007bff;
-      border: none;
-      border-radius: 6px;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
     form {
-      max-width: 600px;      /* larghezza massima del form */
-      margin: 0 auto;        /* centro orizzontalmente */
+      max-width: 600px;
+      margin: 0 auto;
       background: #fff;
       padding: 20px;
       border-radius: 10px;
@@ -64,18 +13,18 @@
     }
 
     label {
-      display: block;        /* ogni label a capo */
+      display: block;
       margin-bottom: 6px;
       font-weight: 600;
     }
 
     input, select, textarea {
-      width: 100%;           /* prendono tutta la larghezza disponibile */
+      width: 100%;
       padding: 8px 12px;
       margin-bottom: 20px;
       border-radius: 6px;
       border: 1px solid #ccc;
-      box-sizing: border-box; /* include padding e bordo nella larghezza */
+      box-sizing: border-box;
       font-size: 1em;
     }
 
@@ -97,9 +46,26 @@
     button:hover {
       background-color: #0056b3;
     }
+
+    .map-wrapper {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #map {
+      width: 100%;
+      height: 400px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
   </style>
-</head>
-<body>
+{/block}
+
+{block name="content"}
   <h1>Crea Campo Sportivo</h1>
 
   <form
@@ -144,9 +110,10 @@
     <label for="fieldImages">Carica foto del campo:</label>
     <input type="file" id="images" name="images[]" accept="image/*" multiple />
 
-
     <label>Seleziona la posizione sulla mappa:</label>
-    <div id="map"></div>
+    <div class="map-wrapper">
+      <div id="map"></div>
+    </div>
 
     <input type="hidden" id="latitude" name="latitude" required />
     <input type="hidden" id="longitude" name="longitude" required />
@@ -183,5 +150,4 @@
     });
   </script>
   {/literal}
-</body>
-</html>
+{/block}

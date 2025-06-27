@@ -51,7 +51,7 @@
         <div class="simple-success-box">
             <h1>Successo</h1>
             <p>{$success_message|escape}</p>
-            <button type="button" onclick="history.back()">Continua</button>
+            <button type="button" onclick={$butt_action}>{$butt_name}</button>
         </div>
     </div>
 {/block}

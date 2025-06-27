@@ -40,7 +40,7 @@ class ECourse
     // ======= RELAZIONI =======
     
     #[ORM\ManyToOne(targetEntity: EInstructor::class, inversedBy: "courses")]
-    private ?EInstructor $instructor = null;
+    private EInstructor $instructor;
 
     #[ORM\ManyToMany(targetEntity: EEmployee::class, mappedBy: "courses")]
     private Collection $employees;
@@ -188,16 +188,25 @@ class ECourse
             'title' => $course->getTitle(),
             'description' => $course->getDescription(),
             'timeSlot' => $course->getTimeSlot(),
-            'daysOfWeek' => CCourse::daysToString($course->getDaysOfWeek()),
+            'daysOfWeek' => $course->getDaysOfWeek(),//ECourse::daysToString($course->getDaysOfWeek()),
             'startDate' => $course->getStartDate(),
             'endDate' => $course->getEndDate(),
             'cost' => $course->getEnrollmentCost(),
             'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
             'field' => $course->getField() ? $course->getField()->getName() : null,// Assuming getField() returns an EField object
             'sport' => $course->getField() ? $course->getField()->getSport() : null, // Assuming getField() returns an EField object
-            'instructor' => $course->getInstructor() ? EInstructor::instructorToArray($course->getInstructor()) : null, // Assuming getInstructor() returns an EUser object
-            
+            'instructor' => $course->getInstructor() ? $course->getInstructor()->getName()   : null, // Assuming getInstructor() returns an EUser object
+            'instructor_id'=>$course->getInstructor() ? $course->getInstructor()->getId() : null
 
         ];
+    }
+
+    public static function daysToString(array $daysOfWeek) {
+        $days = '';
+        foreach ($daysOfWeek as $day) {
+            // Converti l'oggetto DayOfWeek in una stringa
+            $days .= $day . ', ';
+        }
+        return rtrim($days, ', '); // Rimuove l'ultima virgola e spazio
     }
 }

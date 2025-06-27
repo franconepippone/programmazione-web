@@ -8,7 +8,8 @@ require_once __DIR__ . "/../../config/config.php";
  */
 class UImage
 {   
-    public static function getImageFullPath(string $filename): string {
+    public static function getImageFullPath(?string $filename): string {
+        if ($filename == null) return '';
         // Get the base path of the project (e.g. /programmazioneweb or /)
         $basePath = dirname($_SERVER['SCRIPT_NAME']);
         // Ensure no trailing slash, then append /images/ and the filename

@@ -1,90 +1,98 @@
-    body {
-        background: linear-gradient(120deg, #f1f5f9, #e2e8f0);
-        font-family: "Segoe UI", sans-serif;
-    }
+body {
+    background: linear-gradient(120deg, #f1f5f9, #e2e8f0);
+    font-family: "Segoe UI", sans-serif;
+}
 
-    .form-wrapper {
-        max-width: 720px;
-        margin: 3rem auto;
-        background: #ffffff;
-        padding: 3rem 2.5rem;
-        border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    }
+.form-wrapper {
+    max-width: 720px;
+    margin: 3rem auto;
+    background: #ffffff;
+    padding: 3rem 2.5rem;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
 
-    .form-wrapper h2 {
-        text-align: center;
-        font-size: 2rem;
-        color: #2c3e50;
-        margin-bottom: 2rem;
-    }
+.form-wrapper h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+}
 
-    .form-group {
-        margin-bottom: 1.8rem;
-    }
+.form-group {
+    margin-bottom: 1.8rem;
+}
 
-    label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #34495e;
-    }
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #34495e;
+}
 
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    input[type="number"],
-    input[type="email"],
-    input[type="password"],
-    select {
-        width: 100%;
-        padding: 0.65rem 0.9rem;
-        font-size: 1rem;
-        border: 1px solid #ced4da;
-        border-radius: 10px;
-        background-color: #f8f9fa;
-        transition: all 0.3s ease;
-    }
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
 
-    input:focus,
-    select:focus {
-        border-color: #4dabf7;
-        background-color: #ffffff;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
-    }
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #4dabf7;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+}
 
-    .checkbox-group {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.75rem;
-        padding-top: 0.5rem;
-    }
+textarea {
+min-height: 90px;
+resize: vertical;
+}
 
-    .checkbox-group label {
-        font-weight: 500;
-        font-size: 0.95rem;
-        color: #495057;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
 
-    .submit-button {
-        display: block;
-        width: 100%;
-        padding: 0.9rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #fff;
-        background: linear-gradient(135deg, #4dabf7, #228be6);
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(77, 171, 247, 0.4);
-        transition: background 0.3s ease;
-    }
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+}
 
-    .submit-button:hover {
-        background: linear-gradient(135deg, #228be6, #1c7ed6);
-    }
+.checkbox-group label {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #4dabf7, #228be6);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(77, 171, 247, 0.4);
+    transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+    background: linear-gradient(135deg, #228be6, #1c7ed6);
+}

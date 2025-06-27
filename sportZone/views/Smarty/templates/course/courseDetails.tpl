@@ -50,7 +50,15 @@
             </div>
             <div class="details-row">
                 <span class="details-label" name="daysOfWeek">Giorni:</span>
-                <span class="details-value">{$course.daysOfWeek|default:'N/D'}</span>
+                <span class="details-value">
+                    {if $course.daysOfWeek|@count > 0}
+                        {foreach from=$course.daysOfWeek item=day name=giorni}
+                            {$day}{if !$smarty.foreach.giorni.last}, {/if}
+                        {/foreach}
+                    {else}
+                        N/D
+                    {/if}
+                </span>
             </div>
             <div class="details-row">
                 <span class="details-label" name="cost">Costo:</span>
@@ -78,7 +86,7 @@
         <div class="details-actions" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="javascript:history.back()" class="action-btn back-btn">⬅ Torna indietro</a>
             {if $modifyPermission}
-                <a href="/course/manageForm/{$course.id|default:'N/D'}" class="action-btn">Modifica corso</a>
+                <a href="/course/modifyForm/{$course.id|default:'N/D'}" class="action-btn">Modifica corso</a>
             {else}
                 <a href="/enrollment/enrollmentConfirmation/{$course.id|default:'N/D'}" class="action-btn">Iscriviti al corso</a>
             {/if}

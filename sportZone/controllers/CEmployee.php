@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CEmployee{
+
   
   public static function cancelReservation() {
      //  Check if user is logged in and is employee
