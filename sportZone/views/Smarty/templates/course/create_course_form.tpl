@@ -109,14 +109,6 @@
             <input type="date" name="end_date" id="end_date" value="{$end_date|default:''}">
         </div>
         <div class="form-group">
-            <label for="start_time">Orario inizio</label>
-            <input type="time" name="start_time" id="start_time" value="{$start_time|default:''}">
-        </div>
-        <div class="form-group">
-            <label for="end_time">Orario fine</label>
-            <input type="time" name="end_time" id="end_time" value="{$end_time|default:''}">
-        </div>
-        <div class="form-group">
             <label for="cost">Costo iscrizione</label>
             <input type="text" name="cost" id="cost" value="{$cost|default:''}">
         </div>

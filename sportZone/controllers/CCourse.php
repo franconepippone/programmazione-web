@@ -9,8 +9,6 @@ class CCourse {
         'description'      => 'validateDescription',
         'start_date'       => 'validateStartDate',
         'end_date'         => 'validateEndDate',
-        'start_time'       => 'validateTime',
-        'end_time'         => 'validateTime',
         'cost'             => 'validatePrice',
         'max_participants' => 'validateMaxParticipants',
         'days'             => 'validateDays',
@@ -48,10 +46,6 @@ class CCourse {
                 throw new ValidationException("La data di fine deve essere successiva a quella di inizio.");
             }
 
-        // Validazione incrociata orari
-            if ($validated['start_time'] >= $validated['end_time']) {
-                throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
-            }
 
         // Recupera oggetti istruttore e campo
             $instructor = $pm->retriveInstructorById($validated['instructor']);
@@ -63,19 +57,18 @@ class CCourse {
             $validated['instructor'] = $instructor;
             $validated['field'] = $field;
 
-           
             $validated['start_date'] = $validated['start_date']->format('Y-m-d');
             $validated['end_date'] = $validated['end_date']->format('Y-m-d');
-            $validated['start_time'] = $validated['start_time']->format('H:i');
-            $validated['end_time'] = $validated['end_time']->format('H:i');
-            
-            $view->showCourseSummary($validated);
+
+            $datas = self::getDatesForWeekdays($validated['days'], new DateTime($validated['start_date']), new DateTime($validated['end_date']));
+            $available_hours = $pm->retriveCommonAvaiableHours($field->getId(), $datas);
+            $view->showCourseSummary($validated, $available_hours);
 
              
         } catch (ValidationException $e) {
             $msg = $e->getMessage();
             if (isset($e->details['params'])) {
-                $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+              //  $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
             }
             (new VError())->show($msg);
         }
@@ -89,6 +82,11 @@ class CCourse {
         $pm = FPersistentManager::getInstance();
 
         $data = $_POST;
+
+        if (self::Dateslot($data['start_date'], $data['end_date']) === false) {
+            (new VError())->show("La data di inizio deve essere prima della data di fine.");
+            return;
+        }
 
         $instructor = $pm->retriveInstructorById($data['instructor']);
         $field = $pm->retriveFieldById($data['field']);
@@ -108,6 +106,10 @@ class CCourse {
         $pm->saveCourse($course);
 
         $view->confirmCourse($course);
+
+        for ($hour = $data['start_time']; $hour <= $data['end_time']; $hour++) {
+            // Logica per gestire le ore disponibili, se necessario
+        }
     }
 
 
@@ -307,6 +309,53 @@ class CCourse {
     
     
     
+
+
+
+
+
+
+    public static function getDatesForWeekdays(array $weekdaysItalian, DateTime $startDate, DateTime $endDate): array {
+        $mapDays = [
+            'Lunedì'    => 'Monday',
+            'Martedì'   => 'Tuesday',
+            'Mercoledì' => 'Wednesday',
+            'Giovedì'   => 'Thursday',
+            'Venerdì'   => 'Friday',
+            'Sabato'    => 'Saturday',
+            'Domenica'  => 'Sunday',
+        ];
+
+        $allDates = [];
+
+        foreach ($weekdaysItalian as $weekdayItalian) {
+            if (!isset($mapDays[$weekdayItalian])) {
+                // Giorno non valido, salta o gestisci errore
+                continue;
+            }
+
+            $weekdayEnglish = $mapDays[$weekdayItalian];
+
+            // Trova la prima data di questo giorno
+            $current = clone $startDate;
+            $current->modify('next ' . $weekdayEnglish);
+
+            // Se startDate è già quel giorno, includilo
+            if ($startDate->format('l') === (new DateTime($weekdayEnglish))->format('l')) {
+                $current = clone $startDate;
+            }
+
+            // Aggiungi tutte le date per questo giorno
+            while ($current <= $endDate) {
+                $allDates[] = $current->format('Y-m-d');
+                $current->modify('+1 week');
+            }
+        }
+
+        sort($allDates);
+
+        return $allDates;
+    }
 
 
 }

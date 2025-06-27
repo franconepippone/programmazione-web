@@ -301,6 +301,27 @@ class FPersistentManager{
         $result = FCourse::getCoursesByInstructorId($instructor_id);
         return $result;
     }
+
+    public function retriveCommonAvaiableHours(int $fieldId, array $dates): array {
+        if (empty($dates)) {
+            return [];
+        }
+
+        // Inizializza con gli orari disponibili del primo giorno
+        $firstDate = $dates[0];
+        $commonHours = $this->retriveAvaiableHoursForFieldAndDate($fieldId, $firstDate);
+
+        // Per ogni data successiva, fai l'intersezione con gli orari precedenti
+        for ($i = 1; $i < count($dates); $i++) {
+            $dateString = $dates[$i];
+            $dayHours = $this->retriveAvaiableHoursForFieldAndDate($fieldId, $dateString);
+            $commonHours = array_intersect($commonHours, $dayHours);
+        }
+
+        // Ordina gli orari risultanti e restituiscili
+        sort($commonHours);
+        return array_values($commonHours);
+    }
  
      //------------------------------------ENROLLMENT-------------------------------
     public static function saveEnrollment($enrollment){
