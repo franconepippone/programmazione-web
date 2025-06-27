@@ -2,6 +2,78 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CEmployee{
+
+    private static function assertRole(): string {
+        $role = CUser::getUserRole();
+        if ($role != EEmployee::class) {
+            $verr = new VError();
+            $verr->show("You have no access to this page.");
+            exit;
+        }
+        return $role;
+    }
+
+    public static function profile(){
+        CUser::isLogged();
+        $role = self::assertRole();
+
+        $view = new VDashboard();
+
+        $user = CUser::getLoggedUser();
+        $view->showDashboardProfile($user, $role);
+    
+    }
+
+    public static function manageCourses(){
+        CUser::isLogged();
+        $role = self::assertRole();
+        
+        $view = new VDashboard();
+
+        $user = CUser::getLoggedUser();
+        $view->showManageCourses($user, $role);
+    }
+
+    public static function manageFields(){
+        CUser::isLogged();
+        $role = self::assertRole();
+        
+        $view = new VDashboard();
+
+        $user = CUser::getLoggedUser();
+        $view->showManageFields($user, $role);
+    }
+
+    public static function manageReservations(){
+        CUser::isLogged();
+        $role = self::assertRole();
+        
+        $view = new VDashboard();
+
+        $user = CUser::getLoggedUser();
+        $view->showManageReservations($user, $role);
+    }
+
+    public static function manageUsers(){
+        CUser::isLogged();
+        $role = self::assertRole();
+        
+        $view = new VDashboard();
+
+        $user = CUser::getLoggedUser();
+        $view->showManageUsers($user, $role);
+    }
+
+    public static function settings(){
+        CUser::isLogged();
+        $role = self::assertRole();
+        $view = new VDashboard();
+
+        $user = CUser::getLoggedUser();
+        $view->showDashboardSettings($user, $role);
+    
+    }
+
   
   public static function cancelReservation() {
      //  Check if user is logged in and is employee

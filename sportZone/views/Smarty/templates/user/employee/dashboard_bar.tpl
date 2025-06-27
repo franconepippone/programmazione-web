@@ -2,7 +2,7 @@
 
 {block name="styles"}
   {block name="dashboard_tabs_styles"}{/block}
-   <style>
+  <style>
     .dashboard {
       max-width: 960px;
       margin: 0 auto;
@@ -66,10 +66,13 @@
 {block name="content"}
   <section class="dashboard">
     <div class="dashboard-tabs">
-        <a href="/user/profile" class="tab{if $active_tab == 'profile'} active{/if}">Profile</a>
-        <a href="/user/myCourses" class="tab{if $active_tab == 'courses'} active{/if}">My Courses</a>
-        <a href="/user/myReservations" class="tab{if $active_tab == 'reservations'} active{/if}">My Reservations</a>
-        <a href="/user/settings" class="tab{if $active_tab == 'settings'} active{/if}">Settings</a>
+        <a href="/employee/profile" class="tab{if $active_tab == 'profile'} active{/if}">Profile</a>
+        <a href="/employee/settings" class="tab{if $active_tab == 'settings'} active{/if}">Settings</a>
+        <br>management
+        <a href="/employee/manageCourses" class="tab{if $active_tab == 'manageCourses'} active{/if}">Manage Courses</a>
+        <a href="/employee/manageFields" class="tab{if $active_tab == 'manageFields'} active{/if}">Manage Fields</a>
+        <a href="/employee/manageReservations" class="tab{if $active_tab == 'manageReservations'} active{/if}">Manage Reservations</a>
+        <a href="/employee/manageUsers" class="tab{if $active_tab == 'manageUsers'} active{/if}">Manage Users</a>
     </div>
       {block name="dashboard_content"}
       <!-- Contenuto specifico della tab qui -->

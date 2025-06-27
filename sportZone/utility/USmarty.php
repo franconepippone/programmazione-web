@@ -15,6 +15,8 @@ class USmarty{
         return $smarty;
     }
 
+    // chooses which base layout to use based on a few factors,
+    // and assigns base template variables
     public static function configureBaseLayout($smarty) {
         $logged = CUser::isLoggedBool();
         $smarty->assign("layout", !$logged ? 

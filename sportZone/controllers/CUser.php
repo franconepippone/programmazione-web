@@ -208,51 +208,6 @@ class CUser{
         }
     }
 
-    
-    public static function profile(){
-        CUser::isLogged();
-        $role = CUser::getUserRole();
-        $view = new VUser();
-
-        $user = self::getLoggedUser();
-        $view->showDashboardProfile($user, $role);
-    
-    }
-
-
-    public static function myCourses(){
-        CUser::isLogged();
-        $role = CUser::getUserRole();
-        
-        $view = new VUser();
-
-        $user = self::getLoggedUser();
-        $view->showDashboardMyCourses($user, $role);
-    
-    }
-
-
-    public static function myReservations(){
-        CUser::isLogged();
-        $role = CUser::getUserRole();
-        
-        $view = new VUser();
-        
-        $user = self::getLoggedUser();
-        $view->showDashboarMyReservations($user, $role);
-    
-    }
-
-    public static function settings(){
-        CUser::isLogged();
-        $role = CUser::getUserRole();
-        $view = new VUser();
-
-        $user = self::getLoggedUser();
-        $view->showDashboardSettings($user, $role);
-    
-    }
-
     public static function home() {
         $logged = CUser::isLoggedBool();
 
@@ -370,5 +325,44 @@ class CUser{
     {
         return self::getUserRole() === EClient::class;
     }
+
+    // ---------------- REDIRECT METHODS -----------------------------
+
+    public static function profile(){
+        CUser::isLogged();
+        switch (CUser::getUserRole()) {
+            case EClient::class: header("Location: /client/profile"); break;
+            case EInstructor::class: header("Location: /instructor/profile"); break;
+            case EEmployee::class: header("Location: /employee/profile"); break;
+        }
+    }
+
+    public static function myCourses(){
+        CUser::isLogged();
+        switch (CUser::getUserRole()) {
+            case EClient::class: header("Location: /client/myCourses"); break;
+            case EInstructor::class: header("Location: /instructor/myCourses"); break;
+            case EEmployee::class: header("Location: /mployee/myCourses"); break;
+        }
+    }
+
+    public static function myReservations(){
+        CUser::isLogged();
+        switch (CUser::getUserRole()) {
+            case EClient::class: header("Location: /client/myReservations"); break;
+            case EInstructor::class: header("Location: /instructor/myReservations"); break;
+            case EEmployee::class: header("Location: /employee/myReservations"); break;
+        }
+    }
+
+    public static function settings(){
+        CUser::isLogged();
+        switch (CUser::getUserRole()) {
+            case EClient::class: header("Location: client/settings"); break;
+            case EInstructor::class: header("Location: instructor/settings"); break;
+            case EEmployee::class: header("Location: employee/settings"); break;
+        }
+    }
+
 
 }
