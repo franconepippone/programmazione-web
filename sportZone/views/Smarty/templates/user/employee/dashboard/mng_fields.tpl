@@ -1,5 +1,5 @@
 {extends file="../dashboard_bar.tpl"}
-{assign var="active_tab" value="courses"}
+{assign var="active_tab" value="manageFields"}
 
 {block name="dashboard_content"}
     <h2>Manage Fields.</h2>

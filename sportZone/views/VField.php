@@ -83,7 +83,7 @@ class VField{
 
     public function showCreateFieldForm() {
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->display("field/create_field.tpl");
+        $this->smarty->display("field/create_field_form.tpl");
     }
 
 }

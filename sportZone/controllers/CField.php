@@ -84,6 +84,7 @@ class CField {
     public static function finalizeFieldCreation() {
         CUser::isLogged();
 
+        // TODO FIELD VALIDATION
         $field = (new EField())
         ->setName(UHTTPMethods::post('name'))
         ->setTerrainType(UHTTPMethods::post('terrainType'))
@@ -109,6 +110,8 @@ class CField {
         }
 
         FPersistentManager::getInstance()->uploadObj($field);
-        echo "uploaded";
+        
+        $view = new VError();
+        $view->showSuccess("Field was succesfully created", buttAction: "window.location.href='/dashboard/manageCourses'");
     }
 }

@@ -15,9 +15,15 @@ class VError{
         $this->smarty->display("status/error.tpl");
     }
 
-    public function showSuccess(string $message) {
+    public function showSuccess(
+        string $message, 
+        string $buttName = "Continue", 
+        string $buttAction = ""
+    ) {
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign("success_message", $message);
+        $this->smarty->assign("butt_name", $buttName);
+        $this->smarty->assign("butt_action", $buttAction);
         $this->smarty->display("status/success.tpl");      
     }
 }
