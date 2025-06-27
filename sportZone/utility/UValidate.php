@@ -764,7 +764,7 @@ class UValidate {
         }
         return $id;
     //************************************************************************ */
-   
+    }
     public static function validateTimeSlot(string $timeSlot): string {
         // Accetta formato "HH:MM-HH:MM"
         if (!preg_match('/^\d{2}:\d{2}-\d{2}:\d{2}$/', $timeSlot)) {

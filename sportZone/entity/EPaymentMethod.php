@@ -15,10 +15,7 @@ abstract class EPaymentMethod
 
     #[ORM\OneToOne(mappedBy: "paymentMethod", targetEntity: EReservation::class)]
     protected ?EReservation $reservation = null;
-
-    #[ORM\OneToOne(mappedBy: "paymentMethod", targetEntity: EEnrollment::class)]
-    protected ?EEnrollment $enrollment = null;
-
+    
     #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "paymentMethods")]
     protected ?EClient $client = null;
 
