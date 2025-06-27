@@ -57,6 +57,7 @@ class VCourse
             $coursesData []= ECourse::courseToArray($course);
         }
 
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('courses', $coursesData);
         $this->smarty->assign('userRole', $userRole);
 

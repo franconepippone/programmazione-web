@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <title>Prenotazione Campo (Test)</title>
-  <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/styleform.css" />
-</head>
-<body>
+{extends file=$layout}
 
-  <div class="container">
+{block name="styles"}
+  
+{/block}
+
+
+{block name="content"}
+    <div class="container">
 
     <h2>Prenotazione Campo</h2>
     <form method="POST" action="/reservation/reservationSummary">
@@ -31,6 +30,4 @@
     <button type="button" onclick="window.history.back()">Torna indietro</button>
 </form>
   </div>
-
-</body>
-</html>
+{/block}

@@ -109,7 +109,7 @@
             <nav>
                 <a href="/user/home">Home</a>
                 <a href="/field/searchForm">Prenota un campo</a>
-                <a href="/course/searchForm">Iscriviti a un corso</a>
+                <a href="/course/showCourses">Iscriviti a un corso</a>
             </nav>
         </div>
 

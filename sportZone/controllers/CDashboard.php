@@ -113,22 +113,25 @@ class CDashboard{
     // --------------- EMPLOYEE ONLY -----------------
 
     public static function manageCourses(){
-       
+        $user = CUser::getLoggedUser();
         $role = self::assertRole(EEmployee::class);
         
         $view = new VDashboard();
-
-        $user = CUser::getLoggedUser();
         $view->showManageCourses($user, $role);
     }
 
     public static function manageFields(){
-        
+        $user = CUser::getLoggedUser();
         $role = self::assertRole(EEmployee::class);
         
-        $view = new VDashboard();
+        $rulesSearch = 
 
-        $user = CUser::getLoggedUser();
+        try {
+            $searchInputs = UValidate::validateInputArray($_GET, )
+        }
+
+
+        $view = new VDashboard();
         $view->showManageFields($user, $role);
     }
 
