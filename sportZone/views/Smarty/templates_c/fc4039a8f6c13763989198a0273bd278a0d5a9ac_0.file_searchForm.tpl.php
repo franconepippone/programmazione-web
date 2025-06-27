@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-06-24 15:03:05
+/* Smarty version 5.5.1, created on 2025-06-26 21:52:18
   from 'file:course/searchForm.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_685aa209487ef0_28249481',
+  'unifunc' => 'content_685da4f28619d5_55136196',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'fc4039a8f6c13763989198a0273bd278a0d5a9ac' => 
     array (
       0 => 'course/searchForm.tpl',
-      1 => 1750770181,
+      1 => 1750967536,
       2 => 'file',
     ),
   ),
@@ -20,59 +20,47 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_685aa209487ef0_28249481 (\Smarty\Template $_smarty_tpl) {
+function content_685da4f28619d5_55136196 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\programmazione-web\\sportZone\\views\\Smarty\\templates\\course';
 ?><!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Ricerca Corsi Sportivi</title>
+    <title>Ricerca Corsi</title>
     <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/form.css">
 </head>
 <body>
-    <div class="form-wrapper" id="search-course-form-wrapper">
-        <h2>Ricerca Corsi Sportivi</h2>
-        <form method="post" action="/course/showCourses" id="search-course-form">
+    <div class="form-wrapper">
+        <h2>Ricerca Corsi</h2>
+        <form method="get" action="/course/showCourses">
             <div class="form-group">
-                <label for="title">Titolo:</label>
-                <input type="text" id="title" name="title" class="input-text" placeholder="Titolo corso">
+                <label for="title">Titolo</label>
+                <input type="text" id="title" name="title" placeholder="Titolo corso">
             </div>
-
             <div class="form-group">
-                <label for="startDate">Data di inizio:</label>
-                <input type="date" id="startDate" name="startDate" class="input-date">
+                <label for="startDate">Data inizio</label>
+                <input type="date" id="startDate" name="startDate">
             </div>
-
             <div class="form-group">
-                <label for="endDate">Data di fine:</label>
-                <input type="date" id="endDate" name="endDate" class="input-date">
-            </div>
+                <label>Giorni della settimana</label>
+                <?php $_smarty_tpl->assign('weekdays', array("Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"), false, NULL);?>
+                <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('weekdays'), 'day');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('day')->value) {
+$foreach0DoElse = false;
+?>
+                    <label style="margin-right:1em;">
+                        <input type="checkbox" name="daysOfWeek[]" value="<?php echo $_smarty_tpl->getValue('day');?>
+">
+                        <?php echo $_smarty_tpl->getValue('day');?>
 
-            <div class="form-group">
-                <label for="description">Descrizione:</label>
-                <input type="text" id="description" name="description" class="input-text" placeholder="Descrizione">
+                    </label>
+                <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             </div>
-
-            <div class="form-group">
-                <label for="timeSlot">Fascia oraria (es. 09:00-11:00):</label>
-                <input type="text" id="timeSlot" name="timeSlot" class="input-text" pattern="^\d<?php echo 2;?>
-:\d<?php echo 2;?>
--\d<?php echo 2;?>
-:\d<?php echo 2;?>
-$" placeholder="HH:MM-HH:MM">
-            </div>
-
-            <div class="form-group">
-                <label for="cost">Costo massimo (€):</label>
-                <input type="number" id="cost" name="cost" class="input-number" min="0" step="0.01" placeholder="Es. 100.00">
-            </div>
-
-            <div class="form-group">
-                <label for="MaxParticipantsCount">Numero massimo partecipanti:</label>
-                <input type="number" id="MaxParticipantsCount" name="MaxParticipantsCount" class="input-number" min="1" placeholder="Es. 20">
-            </div>
-
-            <button type="submit" class="submit-button" id="search-course-submit">Cerca</button>
+            <button type="submit" class="submit-button">Cerca</button>
         </form>
     </div>
 </body>

@@ -75,6 +75,29 @@ class CEnrollment
         $view->showMyEnrollments($enrollments);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     // Permette di annullare l'iscrizione a un corso
     public static function deleteEnrollment($enrollment_id)
     {

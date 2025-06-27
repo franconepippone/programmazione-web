@@ -31,5 +31,8 @@ class FField{
     public static function isAvailableOnDate(int $id, \DateTimeInterface $date, float $hours) {
         
     }
+    public static function getFieldByAttribute($field,$value){
+        return FEntityManager::getInstance()->retriveObjFromField(EField::class,$field,$value);
+    }
    
 }

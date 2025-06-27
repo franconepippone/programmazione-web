@@ -255,6 +255,10 @@ class UValidate {
             }
         }
     }
+    public static function validateFieldName(string $name): string {
+    // Accetta lettere, numeri, spazi e trattini, lunghezza 2-100 caratteri
+    return self::validateString($name, 2, 100, '/^[a-zA-Z0-9\s\-]+$/');
+}
 
     // validate fulls name (name + space + surname)
     public static function validateFullName(string $fullName): string {
@@ -587,8 +591,8 @@ class UValidate {
      */
     public static function validateMaxParticipants(string|int $num): int {
         $val = intval($num);
-        if ($val < 1 || $val > 1000) {
-            throw new ValidationException("Il numero di partecipanti deve essere compreso tra 1 e 1000.");
+        if (!is_numeric($num)|| $val < 1 || $val > 1000) {
+            throw new ValidationException("Number of participants must be a number between 1 and 1000.");
         }
         return $val;
     }
@@ -644,7 +648,7 @@ class UValidate {
      */
     public static function validateInstructorId($id) {
         $id = intval($id);
-        if ($id <= 0) {
+        if ((!is_numeric($id)||!is_integer($id)||$id <= 0 )) {
             throw new ValidationException("ID istruttore non valido.");
         }
         $pm = FPersistentManager::getInstance();
@@ -674,6 +678,31 @@ class UValidate {
         $field = $pm->retriveFieldById($id);
         if (!$field) {
             throw new ValidationException("Campo non trovato.");
+        }
+        return $id;
+    }
+
+    //************************************************************************ */
+   
+    public static function validateTimeSlot(string $timeSlot): string {
+        // Accetta formato "HH:MM-HH:MM"
+        if (!preg_match('/^\d{2}:\d{2}-\d{2}:\d{2}$/', $timeSlot)) {
+            throw new ValidationException("Formato fascia oraria non valido. Usa HH:MM-HH:MM.");
+        }
+        // Controllo opzionale: orario di inizio < orario di fine
+        [$start, $end] = explode('-', $timeSlot);
+        $startTime = self::validateTime($start);
+        $endTime = self::validateTime($end);
+        if ($startTime >= $endTime) {
+            throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
+        }
+        return $timeSlot;
+    }
+
+    public static function validateId($id) {
+        $id = intval($id);
+        if ((!is_numeric($id)||!is_integer($id)||$id <= 0 )) {
+            throw new ValidationException("ID non valido.");
         }
         return $id;
     }

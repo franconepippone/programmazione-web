@@ -29,11 +29,13 @@ class CCourse {
     $fields = $pm->retriveAllFields();
 
     $view->showCreateCourseForm($instructors, $fields, $data);
-    }
+}
+    //********************************************************* */
     
+        
 
     public static function courseSummary() {
-       // CUser::isEmployee();
+   // CUser::isEmployee();
 
         $view = new VCourse();
         $pm = FPersistentManager::getInstance();
@@ -109,143 +111,192 @@ class CCourse {
     }
 
 
-   
-    //********************************************************* */
+
+    //************************************************************************** */
     //here starts Kevin's code, please do not modify it
     
+
+
+    private static $rulesCourseKevin = [
+        'title'                => 'validateTitle',
+        'description'          => 'validateDescription',
+        'startDate'            => 'validateStartDate',
+        'endDate'              => 'validateDate', // oppure 'validateEndDate' se vuoi controllare rispetto a startDate
+        'timeSlot'             => 'validateTimeSlot', // oppure crea un metodo specifico se vuoi validare il formato
+        'daysOfWeek'           => 'validateDays',   // assicurati che arrivi come array
+        'cost'                 => 'validatePrice',
+        'MaxParticipantsCount' => 'validateMaxParticipants',
+        'instructor'           => 'validateName',
+        'field'                => 'validateFieldName'
+    ];
+
+
     //form per cercare i corsi, anche con filtri
-    public static function searchForm() {
+    /*public static function searchForm() {
         
         
         //fine creazione corsi fittizi
 
         $view = new VCourse();
         $view->showSearchForm();
-    }
+    }*/
 
-    public static function showCoursesOfInstructor() {  
-        CUser::isLogged();
-        $userID = USession::getSessionElement('user');
-
-        try {
-            if(CUser::isInstructor()) {
-                $courses = FPersistentManager::getInstance()->retriveCoursesOnInstructorId($userID);
-                $view = new VCourse();
-                $view->showSearchResults($courses, 'I tuoi corsi');
-            }
-        } catch (Exception $e) {
-            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
-        }
-        
-    }
-
+    
     public static function showCourses() {  
         
            
         try {       
-            if(!empty($_GET)){
-                $filteredParams = UValidate::validateInputArray($_GET, self::$attributi,false);
-                $courses = FPersistentManager::getInstance()->retriveCoursesOnAttributes($filteredParams);
-            }
-            else{
-                $courses = FPersistentManager::getInstance()->retriveCourses();
-            }
-               
+                $courses = FPersistentManager::getInstance()->retriveCourses();               
         } catch (Exception $e) {
             (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
         }        
 
         $view = new VCourse();
-        $view->showSearchResults($courses, 'I tuoi corsi');
+        $view->showCourses($courses, 'I tuoi corsi');
         
     }
+
     //********************************************************* */
     // metodo per visualizzare i dettagli di un corso
-    public static function courseDetail($course_id) {
+    public static function courseDetails($course_id) {
+       
         $course = FPersistentManager::retriveCourseOnId($course_id);
         $modifyPermission = false;
-        if(USession::isSetSessionElement('user') === true) {
-            $userID = USession::getSessionElement('user');
-            
-            $user= FPersistentManager::retriveUserOnId($userID);
-            if(CUser::isClient()) {
-                $modifyPermission = true;
+        ;
+        if(CUser::isLoggedBool()) {
+            $role = CUser::getUserRole();
+
+            if(!CUser::isClient()) {
+                $modifyPermission = true;    
             } 
+
+            
+
         }
         
-        
-         
         $view = new VCourse();
         $view->showDetails( $course , $modifyPermission);
     }
 
     //********************************************************* */
-    // metodo per visualizzare il form di iscrizione ad un corso
-    public static function enrollmentDetails($course_id) {
-        CUser::isLogged();
-        //prendo l id dell utente dalla sessione
-        $userID = USession::getSessionElement('user');
-        $user= FPersistentManager::retriveUserOnId($userID);
-        $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        
-        
-        $view = new VCourse();
-        $view->showEnrollmentDetails($course,$user);
-    }
-
-    //*********************************************************************************** */
-    
-    public static function enrollForm($course_id) {
-        
-        $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        $view = new VCourse();
-        $view->showEnrollForm($course);
-
-    }
-    
-    
-    
-    public static function manageForm($course_id) {
-
-        $view = new VCourse();
-        $view->showManageForm($course_id);
-    }
-
-    public static function createForm() {
-        $view = new VCourse();
-        $view->showCreateForm();
-    }
-    public static function daysToString(array $daysOfWeek) {
-        $days = '';
-        foreach ($daysOfWeek as $day) {
-            // Converti l'oggetto DayOfWeek in una stringa
-            $days .= $day . ', ';
+   
+    public static function MyCourses(){
+        if (!CUser::isLoggedBool()) {
+            (new VError())->show("Devi essere loggato per accedere a questa pagina.");
+            return;
         }
-        return rtrim($days, ', '); // Rimuove l'ultima virgola e spazio
+        
+        $user = CUser::getCurrentUser();
+        if(Cuser::isInstructor()){
+            $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
+        }
+        else if(Cuser::isClient()){
+            $myenrollmens= FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($user->getId());
+            foreach ($myenrollmens as $enrollment) {
+                $mycourses[] = $enrollment->getCourse();
+            }
+        }
+        else{
+            (new VError())->show("Devi essere un istruttore o un cliente per accedere a questa pagina.");
+            return;
+        }
+
+        
+        // Mostra la vista di gestione corsi istruttore
+        $view = new VCourse();
+        $view->showCourses($mycourses, 'I miei corsi');
+    }
+
+   
+
+   public static function modifyForm($course_id) {
+        $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
+        $user=CUser::getCurrentUser();
+        $modifyPermission=true;
+        if($course->getInstructor()->getId() !== $user->getId()){
+            (new VError())->show("non possiedi i permessi per modificare questo corso");
+            return;
+        }
+        $view = new VCourse();
+        $view->showModifyCourseForm($course,$modifyPermission);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static function finalizeModifyCourse($course_id) {
+        $pm = FPersistentManager::getInstance();
+
+        try {
+            $attributes = UValidate::validateInputArray($_POST, self::$rulesCourseKevin, true);
+            
+            self::dateSlot($attributes['startDate'], $attributes['endDate']);
+            //echo var_dump($attributes);
+            //echo var_dump($_POST);
+            // Validazione custom per orari (start < end)
+        } catch (ValidationException $e) {
+            $msg = $e->getMessage();
+            $view = new VError();
+            $view->show($msg);
+            return;
+        }
+
+
+            // Recupera oggetti istruttore , campo e corso
+        try{    
+            $course = $pm->retriveCourseOnId($course_id);
+            $instructor = CUser::getCurrentUser();
+            $field = $pm->retriveFieldByAttribute('name',$attributes['field']);
+            if (!$instructor || !$field || !$course) {
+                $view = new VError();
+                $view->show("errore durante il recupero dei dati: istruttore, campo o idcorso non valido.");
+                return;  
+            }
+        } catch (Exception $e) {
+            $view = new VError();
+            $view->show("Si è verificato un errore imprevisto. Riprova più tardi.");
+            return;
+        }
+        //echo "corso in aggiornamento";
+            // Aggiorna il corso
+            $course->setTitle($attributes['title']);
+            $course->setDescription($attributes['description']);
+            $course->setStartDate($attributes['startDate']);
+            $course->setEndDate(($attributes['startDate'])->modify('+2 months'));
+            $course->setTimeSlot($attributes['timeSlot']);
+            $course->setDaysOfWeek($attributes['daysOfWeek']);
+            $course->setEnrollmentCost(floatval($attributes['cost']));
+            $course->setMaxParticipantsCount(intval($attributes['MaxParticipantsCount']));
+            $course->setInstructor($instructor);
+            $course->setField($field);
+
+            // Salva le modifiche
+            $pm->saveCourse($course);
+            $view = new VCourse;
+            $view->confirmCourseModifies();
+
+    }
+
+    private static function dateSlot($start, $end) {
+        // Controlla che l'orario di inizio sia prima di quello di fine
+        if ($start >= $end) {
+            throw new ValidationException("La data di inizio deve essere prima della data di fine.");
+        }
+        return true;
     }
     // metodo per serializzare un corso in un array
     
     
-    public static function manageMyCourses()
-    {
-        if (!CUser::isLogged()) {
-            (new VError())->show("Devi essere loggato per accedere a questa pagina.");
-            return;
-        }
-        if (CUser::isInstructor()) {
-            (new VError())->show("Devi essere un istruttore per accedere a queste funzionalità.");
-            return;
-        }
-
-        
-        $userID = USession::getSessionElement('user');
-        $courses = FPersistentManager::getInstance()->retriveCoursesByInstructor($userID);
-        
-
-        // Mostra la vista di gestione corsi istruttore
-        $view = new Vcourse();
-        $view->showCourses($courses, $userID, 'I tuoi corsi');
-    }
+    
 
 
 }

@@ -91,6 +91,10 @@ class FPersistentManager{
      public function retriveAllFields() {
         return FField::getAllFields();
      }
+
+     public static function retriveFieldByAttribute($field, $value){
+        return FField::getFieldByAttribute($field,$value);
+     }
       
      //-------------------------------------CLIENT--------------------------------------
 
@@ -219,7 +223,8 @@ class FPersistentManager{
         $result = FCourse::getCoursesByInstructorId($instructor_id);
         return $result;
     }
-    //------------------------------------ENROLLMENT-------------------------------
+ 
+     //------------------------------------ENROLLMENT-------------------------------
     public static function saveEnrollment($enrollment){
         return FEnrollment::saveEnrollment($enrollment);
     }
@@ -243,5 +248,6 @@ class FPersistentManager{
         $result = FEnrollment::getEnrollmentsByAttributes($fields);
         return $result;
     }
+
 
 }

@@ -139,7 +139,7 @@ class CFrontController{
 
     /**
     //creo campi fittizi
-    public static function createDummyFields(){
+    /*public static function createDummyFields(){
         $fields = [];
 
         $field1 = new EField();
@@ -227,5 +227,5 @@ class CFrontController{
             FPersistentManager::getInstance()->uploadObj($course);
         }
     }
-**/
+    */
 }
