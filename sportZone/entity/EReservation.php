@@ -20,9 +20,10 @@ class EReservation
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private EField $field;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "reservations")]
+    #[ORM\ManyToOne(targetEntity: EUser::class, inversedBy: "reservations")]
     #[ORM\JoinColumn(nullable: false)]
-    private EClient $client;
+    private EUser $user;
+
 
     #[ORM\OneToOne(targetEntity: EPaymentMethod::class, cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,13 +33,13 @@ class EReservation
         \DateTimeInterface $date,
         \DateTimeInterface $time,
         EField $field,
-        EClient $client,
-        EPaymentMethod $paymentMethod
+        EUser $user,
+        EPaymentMethod $paymentMethod 
     ) {
         $this->date = $date;
         $this->time = $time;
         $this->field = $field;
-        $this->client = $client;
+        $this->user = $user;
         $this->paymentMethod = $paymentMethod;
     }
 

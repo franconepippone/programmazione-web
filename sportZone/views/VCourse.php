@@ -20,18 +20,19 @@ class VCourse
         $this->smarty->display('course/create_course_form.tpl');
     }
 
-    public function showCourseSummary($data,$available_hours) {
+    public function showCourseSummary($data,$possiblehours) {
         $this->smarty->assign('title', $data['title']);
         $this->smarty->assign('description', $data['description']);
         $this->smarty->assign('start_date', $data['start_date']);
         $this->smarty->assign('end_date', $data['end_date']);
+        $this->smarty->assign('duration', $data['duration']);
         $this->smarty->assign('days', $data['days']);
         $this->smarty->assign('days_string', implode(', ', $data['days']));
         $this->smarty->assign('cost', $data['cost']);
         $this->smarty->assign('max_participants', $data['max_participants']);
         $this->smarty->assign('instructor', EInstructor::instructorToArray($data['instructor']));
         $this->smarty->assign('field', EField::fieldToArray($data['field']));
-        $this->smarty->assign('available_hours', $available_hours);
+        $this->smarty->assign('possiblehours', $possiblehours);
         $this->smarty->display('course/course_summary.tpl');
     }
 

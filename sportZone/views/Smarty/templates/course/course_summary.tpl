@@ -30,19 +30,16 @@
     <input type="hidden" name="instructor" value="{$instructor.id}">
     <input type="hidden" name="field" value="{$field.id}">
 
-    <label for="start_time"><b>Orario inizio:</b></label>
-    <select name="start_time" id="start_time" required>
-        {foreach from=$available_hours item=hour}
-            <option value="{$hour}">{$hour|truncate:5:""}</option>
-        {/foreach}
-    </select>
-    
-    <label for="end_time"><b>Orario fine:</b></label>
-    <select name="end_time" id="end_time" required>
-        {foreach from=$available_hours item=hour}
-            <option value="{$hour}">{$hour|truncate:5:""}</option>
-        {/foreach}
-    </select>
+    <li><b>Durata:</b> {$duration} ora{if $duration > 1}s{/if}</li>
+
+<input type="hidden" name="duration" value="{$duration}">
+
+<label for="start_time"><b>Orario inizio:</b></label>
+<select name="start_time" id="start_time" required>
+    {foreach from=$possiblehours item=hour}
+        <option value="{$hour}">{$hour|truncate:5:""}</option>
+    {/foreach}
+</select>
 
     <div style="margin-top:20px;">
         <button type="submit" class="submit-button">Conferma</button>
