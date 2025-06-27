@@ -1,41 +1,44 @@
 <?php
 
-
 require_once __DIR__ . "/../../vendor/autoload.php";
+require_once __DIR__ . "/../../config/config.php";
 
 /**
  * Helper class to create / validate images from the $_FILES superglobal
  */
 class UImage
-{
-
-    public static function getImageDataUri(EImage $imageObj): string {
-        if ($imageObj !== null) {
-            $base64 = $imageObj->getEncodedData();
-            $type = $imageObj->getType(); // e.g. "image/png"
-            $imageDataUri = "data:" . htmlspecialchars($type) . ";base64," . $base64;
-        } else {
-            $imageDataUri = ''; // or a placeholder image URI
-        }
-        return $imageDataUri;
+{   
+    public static function getImageFullPath(string $filename): string {
+        // Get the base path of the project (e.g. /programmazioneweb or /)
+        $basePath = dirname($_SERVER['SCRIPT_NAME']);
+        // Ensure no trailing slash, then append /images/ and the filename
+        return rtrim($basePath, '/') . '/images/' . ltrim($filename, '/');
     }
 
-
-    /**
-    * Create image object
-    * @param $file entry on the $_FILES array referring to the file
-    * @return mixed eihter the EImage object, or false in case of an error
-    */
-    public static function createImageFromInputFile(Array $file){
+    public static function storeImageGetFilename(array $file): ?string {
+        // Validate the image first
         $check = self::validateImage($file);
-        if($check[0]){
-        
-            //create new Image Obj ad perist it
-            $image = new EImage($file['name'], $file['size'], $file['type'], file_get_contents($file['tmp_name']));
-            return $image;
-        }else{
-            // failed to create image
-            return false;
+        if (!$check[0]) {
+            return null;
+        }
+
+        // Ensure destination directory exists
+        $fullDir = rtrim(IMAGE_FOLDER_PATH, '/') . '/';
+        if (!is_dir($fullDir)) {
+            mkdir($fullDir, 0777, true);
+        }
+
+        // Generate a random filename with extension
+        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $randomName = bin2hex(random_bytes(16)) . ($ext ? '.' . $ext : '');
+
+        $targetPath = $fullDir . $randomName;
+
+        // Move the uploaded file
+        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            return $randomName;
+        } else {
+            return null;
         }
     }
 

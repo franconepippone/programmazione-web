@@ -3,8 +3,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-require_once("EImage.php");
-
 #[ORM\Entity]
 #[ORM\Table(name: "fields")]
 class EField
@@ -38,19 +36,18 @@ class EField
     #[ORM\Column(type: "float")]
     private float $hourlyCost;
 
+    #[ORM\Column(type: "json")]
+    private array $images;
+
     #[ORM\OneToMany(mappedBy: "field", targetEntity: ECourse::class, cascade: ["persist", "remove"])]
     private Collection $courses;
 
     #[ORM\OneToMany(mappedBy: "field", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
     private Collection $reservations;
-
-    #[ORM\OneToMany(targetEntity: EImage::class, mappedBy: "field", cascade: ["persist", "remove"])]
-    private Collection $images;
-
     public function __construct() {
         $this->courses = new ArrayCollection();
         $this->reservations = new ArrayCollection();
-        $this->images = new ArrayCollection();
+        $this->images = [];
     }
 
     // getters/setters...
@@ -148,24 +145,31 @@ class EField
         return $this;
     }
 
-    public function addImage(EImage $image): self {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setField($this);
+    public function addImage(string $path): self {
+        if (!in_array($path, $this->images, true)) {
+            $this->images[] = $path;
         }
         return $this;
     }
 
-    public function removeImage(EImage $image): self {
-        if ($this->reservations->removeElement($image)) {
-            if ($image->getField() === $this) {
-                $image->setField(null);
-            }
+    public function removeImage(string $path): self {
+        if (($key = array_search($path, $this->images, true)) !== false) {
+            unset($this->images[$key]);
+            // Reindex array to keep it sequential
+            $this->images = array_values($this->images);
         }
         return $this;
     }
 
-    public function getImages(): Collection {
+    /**
+     * Remove all image paths.
+     */
+    public function removeAllImages(): self {
+        $this->images = [];
+        return $this;
+    }
+
+    public function getImages(): array {
         return $this->images;
     }
 

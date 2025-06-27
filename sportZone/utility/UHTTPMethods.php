@@ -12,6 +12,16 @@ class UHTTPMethods{
     public static function postIsSet($param){
         return isset($_POST[$param]);
     }
+    public static function fileIsSet(...$keys) {
+        $data = $_FILES;
+        foreach ($keys as $key) {
+            if (!isset($data[$key])) {
+                return null;
+            }
+            $data = $data[$key];
+        }
+        return $data;
+    }
 
     /**
      * can access to $_GET superglobal

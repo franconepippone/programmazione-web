@@ -4,6 +4,13 @@
 
 {block name="dashboard_tabs_styles"}
     <style>
+        .profile-form img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 16px;
+            background: #e5e7eb;
+        }
         .profile-form {
             text-align: left;
         }
@@ -49,6 +56,28 @@
         .btn-save:hover {
             background-color: #2563eb;
         }
+        .hidden-file {
+            display: none;
+        }
+
+        .btn-upload {
+            display: inline-block;        /* FIX: Prevent full-width */
+            background-color: #3b82f6;
+            color: #ffffff !important;    /* FIX: Force white text */
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease-in-out;
+            width: auto;                  /* FIX: Just to be sure */
+        }
+
+        .btn-upload:hover {
+            background-color: #2563eb;
+        }
     </style>
 {/block}
 
@@ -57,7 +86,19 @@
     <h2>My Profile</h2>
     <p>Update your personal information below.</p>
 
-    <form action="/user/modifyUserRequest" method="post" class="profile-form">
+    <form action="/user/modifyUserRequest" method="post" class="profile-form" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="profile_picture">Profile Picture</label>
+            <div style="margin-top: 1rem;">
+                {if $user.profilePicture}
+                    <img src="{$user.profilePicture}" alt="Profile Picture" style="width: 200px; height: 200px; object-fit: cover; border-radius: 16px;">
+                {else}
+                    <img src="https://static.vecteezy.com/system/resources/previews/036/594/092/large_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg" alt="Profile Picture" style="width: 200px; height: 200px; object-fit: cover; border-radius: 16px; background: #e5e7eb;">
+                {/if}
+            </div>
+                <input type="file" id="profile_picture" name="profilePicture" accept="image/*">
+
+        </div>
         <div class="form-group">
             <label for="first_name">First Name</label>
             <input type="text" id="first_name" name="name" value="{$user.name|escape}" required>

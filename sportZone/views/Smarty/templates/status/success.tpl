@@ -1,60 +1,57 @@
 {extends file=$layout}
-{assign var="page_title" value=$status|default:"info"}
+{assign var="page_title" value="Successo"}
 
-{block name="style"}
+{block name="styles"}
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fff3f3;
-            color: #b71c1c;
-            margin: 0;
-            padding: 0;
+        .centered-success-wrapper {
+            min-height: 60vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            background-color: #f9fafb;
         }
-        .error-container {
-            color: #b71c1c;
-            background-color: #fce4e4;
-            background-color: #fff3f3;
-            border: 1px solid #f5c6cb;
-            padding: 30px 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(183, 28, 28, 0.2);
+        .simple-success-box {
+            background: #ffffff;
+            color: #1f2937; /* gray-800 */
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
             max-width: 400px;
+            width: 100%;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* Soft shadow */
         }
-        h1 {
-            margin-top: 0;
-            font-size: 2.2rem;
-            margin-bottom: 20px;
+        .simple-success-box h1 {
+            margin: 0 0 1rem 0;
+            font-size: 2rem;
+            color: #111827; /* gray-900 */
         }
-        p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+        .simple-success-box p {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            color: #4b5563; /* gray-600 */
         }
-        button {
-            background-color: #b71c1c;
-            color: white;
+        .simple-success-box button {
+            background: #3b82f6; /* blue-500 */
+            color: #ffffff;
             border: none;
-            padding: 12px 25px;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-size: 1rem;
-            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s ease-in-out;
         }
-        button:hover {
-            background-color: #8a1414;
+        .simple-success-box button:hover {
+            background: #2563eb; /* blue-600 */
         }
     </style>
 {/block}
 
 {block name="content"}
-    
-        <div class="error-container">
-        <h1>Successo!</h1>
-        <p>{$success_message|escape}</p>
-        <button type="button" onclick="history.back()">Torna indietro</button>
+    <div class="centered-success-wrapper">
+        <div class="simple-success-box">
+            <h1>Successo</h1>
+            <p>{$success_message|escape}</p>
+            <button type="button" onclick="history.back()">Continua</button>
+        </div>
     </div>
 {/block}

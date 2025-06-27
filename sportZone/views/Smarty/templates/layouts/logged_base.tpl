@@ -167,11 +167,9 @@
             <div class="navbar-right">
                 <nav>
                     <a href="/user/home">Home</a>
-                    <a href="/user/settings">Dashboard</a>
                     <a href="/field/searchForm">Prenota un campo</a>
                     <a href="index.php">Iscriviti a un corso</a>
-                    <a href="about.php">About Us</a>
-                    <a href="contact.php">Contact</a>
+                    <a href="/user/settings">Dashboard personale</a>
                 </nav>
                 <div class="profile-dropdown">
                     <button class="profile-btn" title="Account">
@@ -186,7 +184,7 @@
         </div>
 
         <!-- Page content -->
-        <main class="container content-area">
+        <main class="content-area">
             {block name="content"}{/block}
         </main>
 

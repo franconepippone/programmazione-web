@@ -281,18 +281,27 @@ class CUser{
         if (isset($inputs['birthday'])) $user->setBirthDate($inputs['birthday']);
         if (isset($inputs["gender"])) $user->setSex(UserSex::from($inputs["gender"]));
         // TODO Non aggiorna il gender
+
+        if (UHTTPMethods::files("profilePicture", "name") != null) {
+            $imgName = UImage::storeImageGetFilename(UHTTPMethods::files("profilePicture"));
+            $user->setProfilePicture($imgName);
+        }
+
+        if (isset($inputs["profilePicture"])) $user->setSex($inputs["profilePicture"]);
         
         $view = new VError();
         
         // TODO da un messaggio di errroe anche con lo stesso username
         if (isset($inputs['username'])) {
             if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
-                $view->show("Username già preso da qualcun'altro.");
-                exit;
+                if ($user->getUsername() !== $inputs['username']) {
+                    $view->show("Username già preso da qualcun'altro.");
+                    exit;
+                }
             }
-            $user->setUsername($inputs['username']);
         }
         
+
         $ok = FPersistentManager::getInstance()->uploadObj($user);
         if (!$ok) {
             $view->show("Errore di caricamento sul database");

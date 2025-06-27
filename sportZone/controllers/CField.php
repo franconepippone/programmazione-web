@@ -101,9 +101,9 @@ class CField {
         // if entry 'fieldImage' is present in $_FILES
         if ($normImagesInfo != null) {
             foreach($normImagesInfo as $imgInfo) {
-                $img = UImage::createImageFromInputFile($imgInfo);
-                if ($img != null) {
-                    $field->addImage($img);
+                $imgFilename = UImage::storeImageGetFilename($imgInfo);
+                if ($imgFilename != null) {
+                    $field->addImage($imgFilename);
                 }
             }
         }

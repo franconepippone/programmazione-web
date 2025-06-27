@@ -36,6 +36,9 @@ abstract class EUser
     #[ORM\Column(type: "string", nullable: false)]
     protected string $password;
 
+    #[ORM\Column(type: "string", nullable: true)]
+    protected ?string $profilePicture;
+
     // Getters e Setters possono essere aggiunti qui
 
     public function getId(): int {
@@ -110,6 +113,15 @@ abstract class EUser
         return $this->getName() .' '. $this->getSurname();
     }
 
+    public function getProfilePicture(): ?string {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePictureName): self {
+        $this->profilePicture = $profilePictureName;
+        return $this;
+    }
+
     public static function usertoArray($user) {
         return [
             'id' => $user->getId(),
@@ -118,7 +130,8 @@ abstract class EUser
             'sex'=> 'male',
             'email' => $user->getEmail(),
             'username' => $user->getUsername(),
-            'birthDate' => $user->getBirthDate()->format('Y-m-d')
+            'birthDate' => $user->getBirthDate()->format('Y-m-d'),
+            'profilePicture' => UImage::getImageFullPath($user->getProfilePicture())
         ];
     }
 }

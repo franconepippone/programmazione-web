@@ -4,10 +4,11 @@
 {block name="styles"}
   <style>
     .main {
-      max-width: 80vw;
-      width: 100vw;
-      margin: 0;
-      padding: 0;
+      max-width: 1300px;   /* Increase this value as needed */
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 2rem 2rem 2rem; /* More horizontal padding for large screens */
+      box-sizing: border-box;
     }
 
     h1 {
