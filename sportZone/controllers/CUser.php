@@ -326,43 +326,4 @@ class CUser{
         return self::getUserRole() === EClient::class;
     }
 
-    // ---------------- REDIRECT METHODS -----------------------------
-
-    public static function profile(){
-        CUser::isLogged();
-        switch (CUser::getUserRole()) {
-            case EClient::class: header("Location: /client/profile"); break;
-            case EInstructor::class: header("Location: /instructor/profile"); break;
-            case EEmployee::class: header("Location: /employee/profile"); break;
-        }
-    }
-
-    public static function myCourses(){
-        CUser::isLogged();
-        switch (CUser::getUserRole()) {
-            case EClient::class: header("Location: /client/myCourses"); break;
-            case EInstructor::class: header("Location: /instructor/myCourses"); break;
-            case EEmployee::class: header("Location: /mployee/myCourses"); break;
-        }
-    }
-
-    public static function myReservations(){
-        CUser::isLogged();
-        switch (CUser::getUserRole()) {
-            case EClient::class: header("Location: /client/myReservations"); break;
-            case EInstructor::class: header("Location: /instructor/myReservations"); break;
-            case EEmployee::class: header("Location: /employee/myReservations"); break;
-        }
-    }
-
-    public static function settings(){
-        CUser::isLogged();
-        switch (CUser::getUserRole()) {
-            case EClient::class: header("Location: client/settings"); break;
-            case EInstructor::class: header("Location: instructor/settings"); break;
-            case EEmployee::class: header("Location: employee/settings"); break;
-        }
-    }
-
-
 }
