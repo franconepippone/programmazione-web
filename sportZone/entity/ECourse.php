@@ -40,7 +40,7 @@ class ECourse
     // ======= RELAZIONI =======
     
     #[ORM\ManyToOne(targetEntity: EInstructor::class, inversedBy: "courses")]
-    private ?EInstructor $instructor = null;
+    private EInstructor $instructor;
 
     #[ORM\ManyToMany(targetEntity: EEmployee::class, mappedBy: "courses")]
     private Collection $employees;

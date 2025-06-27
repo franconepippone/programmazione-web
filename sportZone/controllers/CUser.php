@@ -67,20 +67,7 @@ class CUser{
         }
         return true;
     }
-    public static function isLoggedBool(){
-        $logged = false;
-
-        if(UCookie::isSet('PHPSESSID')){
-            if(session_status() == PHP_SESSION_NONE){
-                USession::getInstance();
-            }
-        }
-        if(USession::isSetSessionElement('user')){
-            $logged = true;
-        }
-        return $logged;
-    }
-
+ 
     // Registers a new user by displaying the registration form.
     public static function register(){
         $view = new VUser();

@@ -369,11 +369,12 @@ class UValidate {
      * @return int The validated ID as an integer.
      * @throws ValidationException If the ID is not a positive integer.
      */
-    public static function validateId($id): int {
-        if (!is_numeric($id) || intval($id) != $id || intval($id) <= 0) {
-            throw new ValidationException("Invalid ID: must be a positive integer.");
+    public static function validateId($id) {
+        $id = intval($id);
+        if ((!is_numeric($id)||!is_integer($id)||$id <= 0 )) {
+            throw new ValidationException("ID non valido.");
         }
-        return intval($id);
+        return $id;
     }
 
     /**
@@ -699,11 +700,5 @@ class UValidate {
         return $timeSlot;
     }
 
-    public static function validateId($id) {
-        $id = intval($id);
-        if ((!is_numeric($id)||!is_integer($id)||$id <= 0 )) {
-            throw new ValidationException("ID non valido.");
-        }
-        return $id;
-    }
 }
+   
