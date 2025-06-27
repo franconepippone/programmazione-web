@@ -20,9 +20,9 @@ class EReservation
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private EField $field;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "reservations")]
+    #[ORM\ManyToOne(targetEntity: EUser::class, inversedBy: "reservations")]
     #[ORM\JoinColumn(nullable: false)]
-    private EClient $client;
+    private EUser $user;
 
     #[ORM\OneToOne(targetEntity: EPaymentMethod::class, cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,13 +32,13 @@ class EReservation
         \DateTimeInterface $date,
         \DateTimeInterface $time,
         EField $field,
-        EClient $client,
+        EUser $user,
         EPaymentMethod $paymentMethod
     ) {
         $this->date = $date;
         $this->time = $time;
         $this->field = $field;
-        $this->client = $client;
+        $this->user = $user;
         $this->paymentMethod = $paymentMethod;
     }
 
@@ -72,12 +72,12 @@ class EReservation
         $this->field = $field;
     }
 
-    public function getClient(): EClient {
-        return $this->client;
+    public function getUser(): EUser {
+        return $this->user;
     }
 
-    public function setClient(?EClient $client): void {
-        $this->client = $client;
+    public function setUser(?EUser $user): void {
+        $this->user = $user;
     }
 
     public function getPaymentMethod(): EPaymentMethod {
@@ -89,11 +89,11 @@ class EReservation
     }
 
     public static function reservationToArray(EReservation $reservation) {
-        $client = $reservation->getClient();
+        $user = $reservation->getUser();
         $field = $reservation->getField();
 
         return [
-            'fullname' => $client ? $client->getName() . ' ' . $client->getSurname() : null,
+            'fullname' => $user ? $user->getName() . ' ' . $user->getSurname() : null,
             'id' => $reservation->getId(),
             'date' => $reservation->getDate() instanceof DateTimeInterface ? $reservation->getDate()->format('Y-m-d') : $reservation->getDate(),
             'time' => $reservation->getTime() instanceof DateTimeInterface ? $reservation->getTime()->format('H:i') : $reservation->getTime(),

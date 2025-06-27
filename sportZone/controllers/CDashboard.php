@@ -147,7 +147,7 @@ class CDashboard{
         $user = CUser::getLoggedUser();
         
         $reservations = FPersistentManager::getInstance()->retriveAllReservations();
-        ;
+        
         $view->showManageReservations($reservations, $role);
     }
 }

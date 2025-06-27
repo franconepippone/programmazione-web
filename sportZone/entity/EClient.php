@@ -15,15 +15,11 @@ class EClient extends EUser
     #[ORM\OneToMany(mappedBy: "clients", targetEntity: EEnrollment::class, cascade: ["persist", "remove"])]
     private Collection $enrollments;
 
-    #[ORM\OneToMany(mappedBy: "client", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
-    private Collection $reservations;
-
     #[ORM\OneToMany(mappedBy: "client", targetEntity: EPaymentMethod::class, cascade: ["persist", "remove"])]
     private Collection $paymentMethods;
 
     public function __construct() {
         $this->enrollments = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
     }
 
     public function getPaymentMethods(): Collection {
@@ -65,25 +61,7 @@ class EClient extends EUser
         return $this;
     }
 
-    // PRENOTAZIONI
-    public function getReservations(): Collection {
-        return $this->reservations;
-    }
-
-    public function addReservation(EReservation $reservation): self {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->setClient($this);
-        }
-        return $this;
-    }
-
-    public function removeReservation(EReservation $reservation): self {
-        if ($this->reservations->removeElement($reservation)) {
-            $reservation->setClient(null);
-        }
-        return $this;
-    }
+    
     
     public static function clientToArray(EClient $client): array {
         return [
