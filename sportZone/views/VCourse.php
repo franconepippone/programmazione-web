@@ -57,13 +57,17 @@ class VCourse
             $coursesData []= ECourse::courseToArray($course);
         }
 
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('courses', $coursesData);
         $this->smarty->assign('userRole', $userRole);
 
         $this->smarty->display('course/showCourses.tpl');
     }
 
-    public function showDetails($course,$modifyPermission = false )
+    
+    // Metodo per visualizzare il form di iscrizione a un corso
+
+    public function showCourseDetails($course)
     {
         // Controlla se il corso è stato trovato
         if ($course === null) {
@@ -75,15 +79,13 @@ class VCourse
         $courseData [] = ECourse::courseToArray($course);
 
         $this->smarty->assign('courses', $courseData);
-        $this->smarty->assign('modifyPermission', $modifyPermission);
         
+  
         $this->smarty->display('course/courseDetails.tpl');
+
+        //$this->smarty->display('course/courseDetailsClient.tpl');
     
     }
-    //********************************************************* */
-    // Metodo per visualizzare il form di iscrizione a un corso
-
-
 
 
 

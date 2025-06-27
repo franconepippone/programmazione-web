@@ -184,8 +184,8 @@ class FPersistentManager{
         return FReservation::getReservationById($id);
     }
 
-    public static function retriveReservationsByClientId(int $clientId) {
-    $result = FReservation::getReservationsByClientId($clientId);
+    public static function retriveReservationsByUserId(int $userId) {
+    $result = FReservation::getReservationsByUserId($userId);
     return $result;
   }
 
@@ -229,8 +229,8 @@ class FPersistentManager{
     /**
      * Retrieve a reservation by client ID and check if it is active (today or future)
      */
-    public static function retriveActiveReservationByClientId(int $clientId) {
-        $reservations = FReservation::getReservationsByClientId($clientId);
+    public static function retriveActiveReservationByUserId(int $userId) {
+        $reservations = FReservation::getReservationsByUserId($userId);
         if (!is_array($reservations)) {
             $reservations = $reservations ? [$reservations] : [];
         }

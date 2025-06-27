@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Dettagli Corso</title>
+{extends file="../dashboard_bar.tpl"}
+{block name="dashboard_tabs_styles"}
     <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/details.css">
-    <!-- Per stili specifici di entità, aggiungi un altro CSS, es: -->
-    <!-- <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css"> -->
-</head>
-<body>
+{/block}
+
+{block name="dashboard_content"}
     <div class="details-container">
         <h2 class="details-title">Dettagli Corso</h2>
         {foreach from=$courses item=course}
@@ -83,18 +79,32 @@
                 <span class="details-value">{$course.instructor|default:'N/D'}</span>
             </div>
         </div>
+        <span class="details-label" name="MaxParticipantsCount">Iscritti al corso:</span>
+        {if $enrollments|@count > 0}
+            <div class="details-list">
+                {foreach from=$enrollments item=client}
+                    <div class="details-row">
+                        <span class="details-label">Nome:</span>
+                        <span class="details-value">{$client.name|escape} {$client.surname|escape}</span>
+                    </div>
+                {/foreach}
+            </div>
+        {else}
+            <p>Ancora nessun iscritto</p>
+        {/if}
+
+
         <div class="details-actions" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="javascript:history.back()" class="action-btn back-btn">⬅ Torna indietro</a>
-            {if $modifyPermission}
+            
                 <a href="/course/modifyForm/{$course.id|default:'N/D'}" class="action-btn">Modifica corso</a>
-            {else}
-                <a href="/enrollment/enrollmentConfirmation/{$course.id|default:'N/D'}" class="action-btn">Iscriviti al corso</a>
-            {/if}
+            
+                
+           
         </div>
         {/foreach}
     </div>
-</body>
-</html>
+{/block}
 {*
 Nota: Per i campi che richiedono formattazione (come date o valuta), viene usato un controllo {if} per evitare errori e mostrare il valore di default ("N/D") se il dato non è disponibile.
 Per i campi semplici, il filtro |default:'N/D' è sufficiente.

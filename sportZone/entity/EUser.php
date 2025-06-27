@@ -1,5 +1,7 @@
 <?php
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Enum\UserSex;
 
 #[ORM\Entity]
@@ -10,6 +12,14 @@ use App\Enum\UserSex;
 
 abstract class EUser
 {
+
+
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
+    private Collection $reservations;
+
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue("AUTO")]
     #[ORM\Column(type: "integer")]
@@ -119,6 +129,25 @@ abstract class EUser
 
     public function setProfilePicture(?string $profilePictureName): self {
         $this->profilePicture = $profilePictureName;
+        return $this;
+    }
+
+    public function getReservations(): Collection {
+        return $this->reservations;
+    }
+
+    public function addReservation(EReservation $reservation): self {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeReservation(EReservation $reservation): self {
+        if ($this->reservations->removeElement($reservation)) {
+            $reservation->setClient(null);
+        }
         return $this;
     }
 
