@@ -38,6 +38,9 @@ class CFrontController{
         //$this->createDummyFields();
         //$this->createDummyCourses();
         /*
+        $this->createDummyFields();
+        $this->createDummyCourses();
+        
         $instructor = (new EInstructor())
             ->setName('Mario')
             ->setSurname('Rossi')

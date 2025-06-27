@@ -48,12 +48,12 @@ class EReservation
         return $this->id;
     }
 
-    public function getData(): \DateTimeInterface {
+    public function getDate(): \DateTimeInterface {
         return $this->date;
     }
 
-    public function setData(\DateTimeInterface $data): void {
-        $this->date = $data;
+    public function setDate(\DateTimeInterface $date): void {
+        $this->date = $date;
     }
 
      public function getTime(): \DateTimeInterface {
@@ -89,17 +89,18 @@ class EReservation
     }
 
     public static function reservationToArray(EReservation $reservation) {
-        
+        $client = $reservation->getClient();
+        $field = $reservation->getField();
+
         return [
-            'client_name' => $reservation->getClient() ? $reservation->getClient() -> getName() : null,
-            'client_surname' => $reservation->getClient() ? $reservation->getClient() -> getSurname() : null,
+            'fullname' => $client ? $client->getName() . ' ' . $client->getSurname() : null,
             'id' => $reservation->getId(),
-            'date' => $reservation->getDate(),
-            'time' => $reservation->getTime(),
-            'field' => $reservation->getField() ? $reservation->getField()->getName() : null,
-            'sport' => $reservation->getField() ? $reservation->getField()->getSport() : null,
-            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getType() : null   
-            
+            'date' => $reservation->getDate() instanceof DateTimeInterface ? $reservation->getDate()->format('Y-m-d') : $reservation->getDate(),
+            'time' => $reservation->getTime() instanceof DateTimeInterface ? $reservation->getTime()->format('H:i') : $reservation->getTime(),
+            'field' => $field ? $field->getName() : null,
+            'sport' => $field ? $field->getSport() : null,
+            'cost' => $field ? $field->getCost() : null,
+            'paymentMethod' => $reservation->getPaymentMethod() ? $reservation->getPaymentMethod()->getType() : null
         ];
     }
 }

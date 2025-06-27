@@ -683,8 +683,88 @@ class UValidate {
         return $id;
     }
 
+  
+    // -------------------------- reservation validation methods --------------------------
+
+
+    /**
+    * Valida l'ID della reservation.
+    *
+     * Deve essere un intero positivo corrispondente a una reservation esistente nel database.
+     */
+     public static function validateReservationId($id) {
+    $id = intval($id);
+    if ($id <= 0) {
+        throw new ValidationException("ID prenotazione non valido.");
+    }
+    $pm = FPersistentManager::getInstance();
+    $reservation = $pm->retriveObj(EReservation::class, $id);
+    if (!$reservation) {
+        throw new ValidationException("Prenotazione non trovata.");
+    }
+    return $id;
+    }
+
+    /**
+     * Valida la data della reservation (deve essere una data valida e non nel passato).
+     */
+    public static function validateReservationDate(string $dateString): string {
+        $date = self::validateDate($dateString);
+        $today = new DateTime('today');
+        $maxDate = (clone $today)->modify('+7 days');
+        if ($date < $today) {
+            throw new ValidationException("La data della prenotazione non può essere nel passato.");
+        }
+        if ($date > $maxDate) {
+            throw new ValidationException("Puoi prenotare solo entro i prossimi 7 giorni.");
+        }
+        return $date->format('Y-m-d'); // restituisce una stringa
+    }
+
+    /**
+     * Valida l'orario della reservation (deve essere un orario valido).
+     */
+    public static function validateReservationTime(string $timeString): string {
+        $time = self::validateTime($timeString);
+        return $time->format('H:i'); // restituisce una stringa
+    }
+
+    /**
+     * Verifica se il client ha già una reservation attiva (oggi o futura).
+     * Lancia una ValidationException se ne trova una.
+     */
+    public static function validateNoActiveReservation($clientId) {
+        $today = new DateTime('today');
+        $reservations = FReservation::getReservationsByClientId($clientId);
+        if (!$reservations) {
+            return true;
+        }
+        foreach ($reservations as $res) {
+            if ($res->getDate() >= $today) {
+                throw new ValidationException("Hai già una prenotazione attiva. Puoi prenotare di nuovo solo dopo che la precedente è scaduta.");
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Valida l'ID del client.
+     *
+     * Deve essere un intero positivo corrispondente a un client esistente nel database.
+     */
+    public static function validateClientId($id) {
+        $id = intval($id);
+        if ($id <= 0) {
+            throw new ValidationException("ID cliente non valido.");
+        }
+        $pm = FPersistentManager::getInstance();
+        $client = $pm->retriveClientById($id);
+        if (!$client) {
+            throw new ValidationException("Cliente non trovato.");
+        }
+        return $id;
     //************************************************************************ */
-   
+    }
     public static function validateTimeSlot(string $timeSlot): string {
         // Accetta formato "HH:MM-HH:MM"
         if (!preg_match('/^\d{2}:\d{2}-\d{2}:\d{2}$/', $timeSlot)) {

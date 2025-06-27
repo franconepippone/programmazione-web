@@ -182,6 +182,7 @@ class CUser{
         ->setBirthDate(
             new DateTime($formInputs['birthday']->format('Y-m-d'))
         );
+
         
         // register was succesfull
         $check = FPersistentManager::getInstance()->uploadObj($newClient);

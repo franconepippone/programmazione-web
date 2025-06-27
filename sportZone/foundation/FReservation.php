@@ -18,24 +18,6 @@ class FReservation {
 
 
     /**
-    * Returns all the reservations of a sports field for a specific date.
-    *
-    * @param int $fieldId The ID of the sports field.
-    * @param string $date The date in YYYY-MM-DD format.
-    * @return array<EReservation> An array of reservations for the given field and date, or empty if none exist.
-    *
-    * Used to check existing reservations during the creation process
-    * (e.g., to display occupied time slots and prevent double bookings).
-    */
-    public static function getByFieldAndDate($fieldId, $date) {
-        $field = FField::getById($fieldId);
-        return FEntityManager::getRepository(EReservation::class)->findBy([
-            'field' => $field,
-            'date' => $date
-        ]);
-    }
-
-    /**
      * Retrieve Reservation by ID
      *
      * @param int $id
@@ -46,51 +28,29 @@ class FReservation {
     }
 
     /**
-     * Retrieve Reservation by a specific field and value
+     * Retrieve Reservations by field and date
      *
-     * @param string $field
-     * @param mixed $value
-     * @return EReservation|null
+     * @param int $field_id
+     * @param string $date
+     * @return array EReservation
      */
-    public static function getReservationByField(string $field, $value): ?EReservation {
-        return FEntityManager::getInstance()->retriveObjFromField(EReservation::class, $field, $value);
+    public static function getReservationByFieldId(int $field_id) {
+        $result = FEntityManager::getInstance()->objectList(EReservation::class, 'field', $field_id);
+        return $result;
     }
+  
 
     /**
-     * Get available reservation hours for a given field and date
+     * Retrieve Reservations by date
      *
-     * This method calculates the list of free hourly slots between
-     * the opening and closing hours (8 to 21) by excluding the hours
-     * already booked in existing reservations for the specified field and date.
-     *
-     * @param int $fieldId The ID of the sports field
-     * @param string $date The date for which to check availability (format: 'YYYY-MM-DD')
-     * @return int[] Array of available hours in 24-hour format (e.g., [8, 9, 10, ...])
+     * @param string $date
+     * @return array EReservation
      */
+    public static function getReservationsByDate(string $date) {
+        $date = new DateTime($date);
+        return FEntityManager::getInstance()->objectList(EReservation::class, 'date', $date);
+   }    
 
-    public static function getAvailableHours(int $fieldId, string $date): array {
-       $openingHour = 8;
-       $closingHour = 21;
-       $allHours = range($openingHour, $closingHour - 1); // Orari disponibili (es. 8-20)
-
-    // Recupera tutte le prenotazioni per quel campo in quella data
-       $reservations = FEntityManager::getInstance()->retriveObjListFromFields(EReservation::class, [
-           'field' => $fieldId,
-           'date'  => new \DateTime($date)
-       ]);
-
-    // Rimuove gli orari già prenotati
-       if ($reservations) {
-           foreach ($reservations as $reservation) {
-               $reservedHour = (int) $reservation->getTime();
-               if (($key = array_search($reservedHour, $allHours)) !== false) {
-                   unset($allHours[$key]);
-               }
-           }
-       }
-
-       return array_values($allHours); // Reset delle chiavi numeriche
-   }
 
     /**
      * Save or update a Reservation entity
@@ -109,7 +69,7 @@ class FReservation {
      * @return void
      */
     public static function deleteReservation(EReservation $reservation): void {
-        FEntityManager::getInstance()->delete($reservation);
+        FEntityManager::getInstance()->deleteObj($reservation);
     }
 
     /**
@@ -163,4 +123,10 @@ class FReservation {
     }
 
 
+ 
+
+    public static function getReservationsByClientId(int $clientId) {
+        $result = FEntityManager::getInstance()->objectList(EReservation::class, 'client', $clientId);
+        return $result;
+    }
 }

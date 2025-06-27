@@ -59,6 +59,18 @@ class FPersistentManager{
         return $result;
     }
 
+    /**
+     * return a User finding it not on the id but on it's email
+     */
+    public static function retriveUserOnEmail($email)
+    {
+        $result = FUser::getUserByEmail($email);
+        return $result;
+    }
+
+    /**
+     * return a User finding it on the id
+     */
     public static function retriveUserOnId(int $id) {
         $result = FUser::getUserById($id);
         return $result;
@@ -73,10 +85,14 @@ class FPersistentManager{
         return FField::getFieldById($id);
     }
 
+    /**
+     * Retrieve a Field by attribute
+     */
     public static function retrieveAllMatchingFields(array $filters = []) {
         $result = FEntityManager::getInstance()->selectAll(EField::class);
         return $result;
     }
+    
 
      public function existsFieldBySport($sport) {
      $fields = FField::getAllFields();
@@ -87,7 +103,10 @@ class FPersistentManager{
      }
      return false;
      }
-
+     
+    /**
+    * Retrieve all fields
+    */
      public function retriveAllFields() {
         return FField::getAllFields();
      }
@@ -130,8 +149,8 @@ class FPersistentManager{
     /**
      * Retrieve reservations by field and date
      */
-    public static function getReservationsByFieldAndDate($field, $date){
-        return FReservation::getByFieldAndDate($field, $date);
+    public static function retriveReservationByFieldId($fieldId){
+        return FReservation::getReservationByFieldId($fieldId);
     }
 
     /**
@@ -142,15 +161,15 @@ class FPersistentManager{
     }
 
     /**
-     * Get available hours for a field on a specific date.
-     * Returns the list of free hours by checking existing reservations.
+     * Delete a Reservation object
      */
-    public function getAvailableHours(int $fieldId, string $date): array {
-        return FReservation::getAvailableHours($fieldId, $date);
-    }
+    public static function removeReservation(EReservation $reservation){
+        return FReservation::deleteReservation($reservation);
+    }    
 
     /**
-     * fillter by name, date and sport
+     * filter by name, date and sport
+     *
      * Returns the list of reservations.
      */
     public function retriveFilteredReservations($name = null, $date = null, $sport = null) {
@@ -163,6 +182,65 @@ class FPersistentManager{
    
     public function retriveReservationById($id) {
         return FReservation::getReservationById($id);
+    }
+
+    public static function retriveReservationsByClientId(int $clientId) {
+    $result = FReservation::getReservationsByClientId($clientId);
+    return $result;
+  }
+
+/**
+ * Retrieve available hours for a specific field and date
+ */
+    public function retriveAvaiableHoursForFieldAndDate(int $fieldId, string $date): array {
+
+        // Recupera tutte le reservation per quel campo
+        $allReservations = FReservation::getReservationByFieldId($fieldId);
+
+        // Filtra solo quelle con la data richiesta
+        $filteredReservations = [];
+        $dateObj = new DateTime($date);
+        $dateString = $dateObj->format('Y-m-d');
+        foreach ($allReservations as $reservation) {
+            if ($reservation->getDate()->format('Y-m-d') === $dateString) {
+                $filteredReservations[] = $reservation;
+            }
+        }
+
+        // Estrai gli orari occupati (formato H:i:s)
+        $occupiedHours = [];
+        foreach ($filteredReservations as $reservation) {
+            $occupiedHours[] = $reservation->getTime()->format('H:i:s');
+        }
+
+        // Costruisci tutti gli orari possibili tra le 8 e le 21 (formato H:i:s)
+        $allHours = [];
+        for ($hour = 8; $hour < 21; $hour++) {
+            $allHours[] = sprintf('%02d:00:00', $hour); // "08:00:00"
+        }
+
+        // Rimuovi gli orari occupati
+        $availableHours = array_diff($allHours, $occupiedHours);
+
+        // Restituisci gli orari liberi ordinati
+        return array_values($availableHours);
+    }
+
+    /**
+     * Retrieve a reservation by client ID and check if it is active (today or future)
+     */
+    public static function retriveActiveReservationByClientId(int $clientId) {
+        $reservations = FReservation::getReservationsByClientId($clientId);
+        if (!is_array($reservations)) {
+            $reservations = $reservations ? [$reservations] : [];
+        }
+        $today = new DateTime('today');
+        foreach ($reservations as $res) {
+            if ($res->getDate() instanceof DateTimeInterface && $res->getDate() >= $today) {
+                return $res;
+            }
+        }
+        return null;
     }
   
     //-----------------------------------INSTRUCTOR-------------------------------
@@ -248,6 +326,5 @@ class FPersistentManager{
         $result = FEnrollment::getEnrollmentsByAttributes($fields);
         return $result;
     }
-
 
 }
