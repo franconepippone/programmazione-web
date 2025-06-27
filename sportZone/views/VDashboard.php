@@ -18,11 +18,19 @@ class VDashboard{
         }
     }
 
-    public function showDashboardMyCourses(EUser $user, string $role) {
-        $userArray = EUser::usertoArray($user);
+    public function showDashboardMyCourses(array $courses, string $role) {
+        //$userArray = EUser::usertoArray($user);
+
+        $coursesData = [];
+        foreach ($courses as $course) {
+            $coursesData []= ECourse::courseToArray($course);
+        }
+
+        $this->smarty->assign('courses', $coursesData);
+        $this->smarty->assign('userRole', $role);
 
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('user', $userArray);
+        //$this->smarty->assign('user', $userArray);
         $this->smarty->display($this->getBasePath($role) . 'courses.tpl');
     }
 

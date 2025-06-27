@@ -69,7 +69,7 @@ class CDashboard{
 
     // ----------------- CLIENT & INSTRUCTOR ONLY -----------------------
     
-    public static function myCourses(){
+    public static function _myCourses(){
         CUser::isLogged();
         $role = self::assertRole(EClient::class, EInstructor::class);
         
@@ -77,6 +77,32 @@ class CDashboard{
         $user = CUser::getLoggedUser();
         $view->showDashboardMyCourses($user, $role);
         
+    }
+
+    public static function myCourses() {
+        CUser::isLogged();
+        $role = self::assertRole(EClient::class, EInstructor::class);
+        $user = CUser::getCurrentUser();
+
+        if(Cuser::isInstructor()){
+            $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
+            
+        }
+        else if(Cuser::isClient()){
+            $myenrollmens= FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($user->getId());
+            foreach ($myenrollmens as $enrollment) {
+                $mycourses[] = $enrollment->getCourse();
+            }
+            
+            
+        }
+        else{
+            (new VError())->show("Devi essere un istruttore o un cliente per accedere a questa pagina.");
+            return;
+        }
+
+        $view = new VDashboard();
+        $view->showDashboardMyCourses($mycourses, $role);
     }
 
 

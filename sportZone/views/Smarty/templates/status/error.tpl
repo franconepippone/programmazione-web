@@ -48,7 +48,7 @@
         <div class="simple-error-box">
             <h1>Errore</h1>
             <p>{$error_message|escape}</p>
-            <button type="button" onclick="history.back()">Torna indietro</button>
+            <button type="button" onclick={$butt_action}>{$butt_name}</button>
         </div>
     </div>
 {/block}

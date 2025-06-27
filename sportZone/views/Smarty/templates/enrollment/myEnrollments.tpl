@@ -29,7 +29,7 @@
                             {/if}
                         </div>
                     </div>
-                    <a class="details-btn" href="/course/courseDetail/{$enrollment.course['id']}">Dettagli corso</a>
+                    <a class="details-btn" href="/course/courseDetails/{$enrollment.course['id']}">Dettagli corso</a>
                 </div>
             {/foreach}
         {else}

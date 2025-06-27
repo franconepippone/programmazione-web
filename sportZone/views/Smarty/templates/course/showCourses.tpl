@@ -8,6 +8,11 @@
     <!-- <link rel="stylesheet" href="/sportZone/views/Smarty/css/course.css"> -->
 </head>
 <body>
+
+</body>
+</html>
+
+{block name="content"}
     <div class="results-list">
         <h2>Risultati della Ricerca</h2>
         {if $courses|@count > 0}
@@ -21,12 +26,11 @@
                             Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
                         </div>
                     </div>
-                    <a class="details-btn" href="/course/courseDetails/{$course.id}">Dettagli</a>
+                    <a class="details-btn" href="/course/courseDetails{$userRole}/{$course.id}">Dettagli</a>
                 </div>
             {/foreach}
         {else}
             <p>Nessun risultato trovato con i filtri selezionati.</p>
         {/if}
     </div>
-</body>
-</html>
+{/block}
