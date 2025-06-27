@@ -175,7 +175,7 @@ private static $rulesCourse = [
 
     //********************************************************* */
    
-    public static function MyCourses(){
+    public static function myCourses(){
         if (!CUser::isLoggedBool()) {
             (new VError())->show("Devi essere loggato per accedere a questa pagina.");
             return;
