@@ -11,7 +11,7 @@ class CEnrollment
         $user= FPersistentManager::retriveUserOnId($userID);
         $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
         
-        
+        self::isEnrolled($course,$user);
         $view = new VEnrollment();
         $view->showEnrollmentConfirmation($user,$course);
     }
@@ -42,14 +42,10 @@ class CEnrollment
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
 
         
-        
+        self::isEnrolled($course,$user);
 
         // Verifica se già iscritto
-        $verifyFields = ['client' => $user->getId(), 'course'=> $course->getId()];
-        if (FPersistentManager::getInstance()->retriveEnrollmentOnAttributes($verifyFields)) {
-            (new VError())->show("Sei già iscritto a questo corso.");
-            return;
-        }
+        
 
         // Crea iscrizione
         $enrollment = new EEnrollment();
@@ -65,16 +61,17 @@ class CEnrollment
     }
 
     // Mostra tutti i corsi a cui l'utente è iscritto
-    public static function showMyEnrollments()
+    public static function isEnrolled($course,$user)
     {
-        CUser::isLogged();
-        $userID = USession::getSessionElement('user');
-        $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($userID);
+        $verifyFields = ['client' => $user->getId(), 'course'=> $course->getId()];
+        if (FPersistentManager::getInstance()->retriveEnrollmentOnAttributes($verifyFields)) {
+        
+            (new VError())->show("Sei già iscritto a questo corso.");
 
-        $view = new VEnrollment();
-        $view->showMyEnrollments($enrollments);
+            return;
+        }
+        
     }
-
 
 
 
@@ -120,7 +117,7 @@ class CEnrollment
     public static function showEnrollmentsOfCourse($course_id)
     {
         CUser::isLogged();
-        $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsByCourse($course_id);
+        $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsOnCourseId($course_id);
 
         $view = new VEnrollment();
         $view->showEnrollmentsOfCourse($enrollments, $course_id);

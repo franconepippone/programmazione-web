@@ -63,7 +63,7 @@ class VCourse
         $this->smarty->display('course/showCourses.tpl');
     }
 
-    public function showDetails($course,$modifyPermission = false )
+    public function showDetailsClient($course)
     {
         // Controlla se il corso è stato trovato
         if ($course === null) {
@@ -75,18 +75,30 @@ class VCourse
         $courseData [] = ECourse::courseToArray($course);
 
         $this->smarty->assign('courses', $courseData);
-        $this->smarty->assign('modifyPermission', $modifyPermission);
-       
-        $this->smarty->assign("butt_name", 'modifica');
-        $this->smarty->assign("butt_action", );
+        
 
-        $this->smarty->display('course/courseDetails.tpl');
+        $this->smarty->display('course/courseDetailsClient.tpl');
     
     }
     //********************************************************* */
-    public function showDetailsInstrcutor( $courseData , $enrollmentsData)
+    public function showDetailsInstrcutor( $course , $enrollments)
     {
-        echo var_dump($enrollmentsData);
+       // echo var_dump($enrollmentsData);
+       if ($course === null) {
+            (new VError())->show("Corso non trovato.");
+            return;
+        }
+        $courseData = [];
+        $enrollmentsData = [];
+        $courseData [] = ECourse::courseToArray($course);
+
+        if (sizeof($enrollments)>0){
+            foreach($enrollments as $enrolled){
+                $client = $enrolled->getClient();
+                $enrollmentsData []= EUser::usertoArray($client);
+                
+            }
+        }
         $this->smarty->assign('courses', $courseData);
         $this->smarty->assign('enrollments', $enrollmentsData);
         $this->smarty->display('course/courseDetailsInstructor.tpl');

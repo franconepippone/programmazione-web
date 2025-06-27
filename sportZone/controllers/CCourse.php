@@ -161,20 +161,32 @@ class CCourse {
     public static function courseDetailsInstructor($course_id) {
         $user = CUser::getLoggedUser();
         
-        $enrollmentsData = [];
-        $course = FPersistentManager::retriveCourseOnId($course_id);
-        $courseData= ECourse::courseToArray($course);
-        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($course_id);
-        foreach($enrollments as $enrolled){
-            $enrollmentsData = EEnrollment::enrollmentToArray($enrolled);
-        }
         
+        $course = FPersistentManager::retriveCourseOnId($course_id);
+        
+        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($course_id);
+        //echo $enrollments[0]->getDate();
+       
     
         
         $view = new VCourse();
-        $view->showDetailsInstrcutor( $course , $enrollmentsData);
+        $view->showDetailsInstrcutor( $course , $enrollments);
     }
 
+    public static function courseDetailsClient($course_id) {
+        $user = CUser::getLoggedUser();
+        
+        
+        $course = FPersistentManager::retriveCourseOnId($course_id);
+        
+        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($course_id);
+        //echo $enrollments[0]->getDate();
+       
+    
+        
+        $view = new VCourse();
+        $view->showDetailsClient( $course , $enrollments);
+    }
     //********************************************************* */
 
     
@@ -183,7 +195,7 @@ class CCourse {
 
    public static function modifyForm($course_id) {
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        $user=CUser::getCurrentUser();
+        $user=CUser::getLoggedUser();
         $modifyPermission=true;
         if($course->getInstructor()->getId() !== $user->getId()){
             (new VError())->show("non possiedi i permessi per modificare questo corso");
@@ -226,7 +238,7 @@ class CCourse {
             // Recupera oggetti istruttore , campo e corso
         try{    
             $course = $pm->retriveCourseOnId($course_id);
-            $instructor = CUser::getCurrentUser();
+            $instructor = CUser::getLoggedUser();
             $field = $pm->retriveFieldByAttribute('name',$attributes['field']);
             if (!$instructor || !$field || !$course) {
                 $view = new VError();
@@ -256,7 +268,7 @@ class CCourse {
 
             $message='corso modificato con successo';
             $butt_name ="Vai ai miei corsi";
-            $butt_action="window.location.href='/course/myCourses'";
+            $butt_action="window.location.href='/dashboard/myCourses'";
             $view = new VError;
             $view->showSuccess($message, $butt_name,$butt_action);
 

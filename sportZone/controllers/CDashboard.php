@@ -48,6 +48,17 @@ class CDashboard{
         $view->showDashboarMyReservations($user, $role);
     
     }
+    public static function myEnrollments()
+    {
+        
+        $role = self::assertRole(EClient::class);
+        $user = CUser::getLoggedUser();
+        $userId = $user->getId();
+        $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($userId);
+
+        $view = new VDashboard();
+        $view->showMyEnrollments($enrollments, $user, $role);
+    }
 
     // ----------------- CLIENT & INSTRUCTOR ONLY -----------------------
 

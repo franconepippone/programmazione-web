@@ -18,7 +18,7 @@ class VDashboard{
         }
     }
 
-
+   // -------------- INSTRUCTOR ONLY ----------------------------
     public function showMyCourses($mycourses , $user , $role) {
         //$userArray = EUser::usertoArray($user);
 
@@ -35,6 +35,19 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'myCourses.tpl');
     }
 
+    // -------------- CLIENT ONLY ---------------------------
+    public function showMyEnrollments($enrollments, $user, $role)
+    {
+        $enrollmentsData = [];
+        foreach ($enrollments as $enrollment) {
+            $enrollmentsData[] = EEnrollment::enrollmentToArray($enrollment);
+        }
+        $this->smarty->assign('enrollments', $enrollmentsData);
+        
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->display($this->getBasePath($role) . 'myEnrollments.tpl');
+        
+    }
 
 
 

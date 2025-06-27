@@ -68,7 +68,7 @@
   <section class="dashboard">
     <div class="dashboard-tabs">
         <a href="/dashboard/profile" class="tab{if $active_tab == 'profile'} active{/if}">Profile</a>
-        <a href="/dashboard/myCourses" class="tab{if $active_tab == 'courses'} active{/if}">My Courses</a>
+        <a href="/dashboard/myEnrollments" class="tab{if $active_tab == 'courses'} active{/if}">My Courses</a>
         <a href="/dashboard/myReservations" class="tab{if $active_tab == 'reservations'} active{/if}">My Reservations</a>
         <a href="/dashboard/settings" class="tab{if $active_tab == 'settings'} active{/if}">Settings</a>
     </div>

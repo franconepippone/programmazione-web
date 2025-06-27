@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Dettagli Corso</title>
     <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/details.css">
+    <!-- Per stili specifici di entità, aggiungi un altro CSS, es: -->
+    <!-- <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css"> -->
 </head>
 <body>
     <div class="details-container">
@@ -81,30 +83,34 @@
                 <span class="details-value">{$course.instructor|default:'N/D'}</span>
             </div>
         </div>
-        {/foreach}
+        <span class="details-label" name="MaxParticipantsCount">Iscritti al corso:</span>
+        {if $enrollments|@count > 0}
+            <div class="details-list">
+                {foreach from=$enrollments item=client}
+                    <div class="details-row">
+                        <span class="details-label">Nome:</span>
+                        <span class="details-value">{$client.name|escape} {$client.surname|escape}</span>
+                    </div>
+                {/foreach}
+            </div>
+        {else}
+            <p>Ancora nessun iscritto</p>
+        {/if}
 
-        <div class="details-list" style="margin-top:2em;">
-            <h3>Iscritti al corso</h3>
-            {if $enrollments|@count > 0}
-                <ul>
-                    {foreach from=$enrollments item=enrollment}
-                        <li>
-                            {if isset($enrollment.name) || isset($enrollment.surname)}
-                                {if isset($enrollment.name)}{$enrollment.name|escape}{/if}
-                                {if isset($enrollment.surname)} {$enrollment.surname|escape}{/if}
-                            {else}
-                                {$enrollment|escape}
-                            {/if}
-                        </li>
-                    {/foreach}
-                </ul>
-            {else}
-                <p>Nessun iscritto al momento.</p>
-            {/if}
-        </div>
+
         <div class="details-actions" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="javascript:history.back()" class="action-btn back-btn">⬅ Torna indietro</a>
+            
+                <a href="/course/modifyForm/{$course.id|default:'N/D'}" class="action-btn">Modifica corso</a>
+            
+                
+           
         </div>
+        {/foreach}
     </div>
 </body>
 </html>
+{*
+Nota: Per i campi che richiedono formattazione (come date o valuta), viene usato un controllo {if} per evitare errori e mostrare il valore di default ("N/D") se il dato non è disponibile.
+Per i campi semplici, il filtro |default:'N/D' è sufficiente.
+*}
