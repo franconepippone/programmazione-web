@@ -76,11 +76,22 @@ class VCourse
 
         $this->smarty->assign('courses', $courseData);
         $this->smarty->assign('modifyPermission', $modifyPermission);
-        
+       
+        $this->smarty->assign("butt_name", 'modifica');
+        $this->smarty->assign("butt_action", );
+
         $this->smarty->display('course/courseDetails.tpl');
     
     }
     //********************************************************* */
+    public function showDetailsInstrcutor( $courseData , $enrollmentsData)
+    {
+        echo var_dump($enrollmentsData);
+        $this->smarty->assign('courses', $courseData);
+        $this->smarty->assign('enrollments', $enrollmentsData);
+        $this->smarty->display('course/courseDetailsInstructor.tpl');
+        
+    }
     // Metodo per visualizzare il form di iscrizione a un corso
 
 

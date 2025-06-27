@@ -159,59 +159,25 @@ class CCourse {
     //********************************************************* */
     // metodo per visualizzare i dettagli di un corso
     public static function courseDetailsInstructor($course_id) {
-       
+        $user = CUser::getLoggedUser();
+        
+        $enrollmentsData = [];
         $course = FPersistentManager::retriveCourseOnId($course_id);
-        $modifyPermission = false;
-        if(CUser::isLoggedBool()) {
-            $role = CUser::getUserRole();
-
-            if(!CUser::isClient()) {
-                $modifyPermission = true;    
-            } 
-
-            
-
+        $courseData= ECourse::courseToArray($course);
+        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($course_id);
+        foreach($enrollments as $enrolled){
+            $enrollmentsData = EEnrollment::enrollmentToArray($enrolled);
         }
         
+    
+        
         $view = new VCourse();
-        $view->showDetails( $course , $modifyPermission);
+        $view->showDetailsInstrcutor( $course , $enrollmentsData);
     }
 
     //********************************************************* */
 
-    public static function myCourses(){
-        if (!CUser::isLoggedBool()) {
-            (new VError())->show("Devi essere loggato per accedere a questa pagina.");
-            return;
-        }
-        
-        $user = CUser::getCurrentUser();
-        $userRole='Client';
-
-        if(Cuser::isInstructor()){
-            $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
-            
-            $userRole='Instructor';
-            
-        }
-        else if(Cuser::isClient()){
-            $myenrollmens= FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($user->getId());
-            foreach ($myenrollmens as $enrollment) {
-                $mycourses[] = $enrollment->getCourse();
-            }
-            
-            
-        }
-        else{
-            (new VError())->show("Devi essere un istruttore o un cliente per accedere a questa pagina.");
-            return;
-        }
-
-        
-        // Mostra la vista di gestione corsi istruttore
-        $view = new VCourse();
-        $view->showCourses($mycourses, $userRole);
-    }
+    
 
    
 

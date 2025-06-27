@@ -95,15 +95,7 @@ class CUser{
         $view = new VUser();
         $view->showLoginForm($redirectUrl);
     }
-
-    public static function getCurrentUser(){
-        if(!CUser::isLoggedBool()){
-            return null;
-        }
-        USession::getInstance();
-        $userID = USession::getSessionElement('user');
-        return FPersistentManager::getInstance()->retriveUserOnId($userID);
-    }
+   
     /**
      * check if exist the Username inserted, and for this username check the password. If is everything correct the session is created and
      * the User is redirected in the homepage or requested resource
@@ -285,6 +277,7 @@ class CUser{
         }
         return null;
     }
+   
 
     /**
      * Retrieves the current user's role from the session.

@@ -40,7 +40,7 @@ class CDashboard{
     // ---------------- CLIENT ONLY --------------------------- 
 
     public static function myReservations(){
-        CUser::isLogged();
+        
         $role = self::assertRole(EClient::class);
         
         $view = new VDashboard();
@@ -50,41 +50,17 @@ class CDashboard{
     }
 
     // ----------------- CLIENT & INSTRUCTOR ONLY -----------------------
-    
-    public static function _myCourses(){
-        CUser::isLogged();
-        $role = self::assertRole(EClient::class, EInstructor::class);
+
+    public static function myCourses(){
         
-        $view = new VDashboard();
         $user = CUser::getLoggedUser();
-        $view->showDashboardMyCourses($user, $role);
+        $role = self::assertRole(EInstructor::class);
         
-    }
+        $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
 
-    public static function myCourses() {
-        CUser::isLogged();
-        $role = self::assertRole(EClient::class, EInstructor::class);
-        $user = CUser::getCurrentUser();
-
-        if(Cuser::isInstructor()){
-            $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
-            
-        }
-        else if(Cuser::isClient()){
-            $myenrollmens= FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($user->getId());
-            foreach ($myenrollmens as $enrollment) {
-                $mycourses[] = $enrollment->getCourse();
-            }
-            
-            
-        }
-        else{
-            (new VError())->show("Devi essere un istruttore o un cliente per accedere a questa pagina.");
-            return;
-        }
-
+        // Mostra la vista di gestione corsi istruttore
         $view = new VDashboard();
-        $view->showDashboardMyCourses($mycourses, $role);
+        $view->showMyCourses($mycourses, $user, $role,);
     }
 
 
@@ -93,7 +69,7 @@ class CDashboard{
     // --------------- EMPLOYEE ONLY -----------------
 
     public static function manageCourses(){
-        CUser::isLogged();
+       
         $role = self::assertRole(EEmployee::class);
         
         $view = new VDashboard();
@@ -103,7 +79,7 @@ class CDashboard{
     }
 
     public static function manageFields(){
-        CUser::isLogged();
+        
         $role = self::assertRole(EEmployee::class);
         
         $view = new VDashboard();
@@ -113,7 +89,7 @@ class CDashboard{
     }
 
     public static function manageReservations(){
-        CUser::isLogged();
+        
         $role = self::assertRole(EEmployee::class);
         
         $view = new VDashboard();
@@ -123,7 +99,7 @@ class CDashboard{
     }
 
     public static function manageUsers(){
-        CUser::isLogged();
+     
         $role = self::assertRole(EEmployee::class);
         
         $view = new VDashboard();
