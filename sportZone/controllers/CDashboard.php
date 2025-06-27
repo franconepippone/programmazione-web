@@ -60,7 +60,24 @@ class CDashboard{
         $view->showMyEnrollments($enrollments, $user, $role);
     }
 
-    // ----------------- CLIENT & INSTRUCTOR ONLY -----------------------
+     public static function courseDetailsClient($course_id) {
+        $user = CUser::getLoggedUser();
+        
+        
+        $role = self::assertRole(EClient::class);
+        $course = FPersistentManager::retriveCourseOnId($course_id);
+        
+       
+        //echo $enrollments[0]->getDate();
+       
+    
+        
+        $view = new VDashboard();
+        $view->showDetailsClient( $course ,$user , $role);
+    }
+    
+
+    // ----------------- INSTRUCTOR ONLY -----------------------
 
     public static function myCourses(){
         
@@ -75,7 +92,23 @@ class CDashboard{
     }
 
 
+    public static function courseDetailsInstructor($course_id) {
+        $user = CUser::getLoggedUser();
+       
+        $role = self::assertRole(EInstructor::class);
+        
+        $course = FPersistentManager::retriveCourseOnId($course_id);
+        
+        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($course_id);
+        //echo $enrollments[0]->getDate();
+       
+    
+        
+        $view = new VDashboard();
+        $view->showDetailsInstrcutor( $course , $enrollments,  $user, $role);
+    }
 
+   
 
     // --------------- EMPLOYEE ONLY -----------------
 

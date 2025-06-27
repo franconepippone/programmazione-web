@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    
     <meta charset="UTF-8">
     <title>Risultati Ricerca</title>
     <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css">
@@ -26,7 +27,7 @@
                             Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
                         </div>
                     </div>
-                    <a class="details-btn" href="/course/courseDetails{$userRole}/{$course.id}">Dettagli</a>
+                    <a class="details-btn" href="/course/courseDetails/{$course.id}">Dettagli</a>
                 </div>
             {/foreach}
         {else}

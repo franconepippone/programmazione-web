@@ -19,7 +19,7 @@
                             Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
                         </div>
                     </div>
-                    <a class="details-btn" href="/course/courseDetailsInstructor/{$course.id}">Modifica</a>
+                    <a class="details-btn" href="/dashboard/courseDetailsInstructor/{$course.id}">Modifica</a>
                 </div>
             {/foreach}
         {else}

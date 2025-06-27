@@ -156,37 +156,27 @@ class CCourse {
         
     }
 
-    //********************************************************* */
-    // metodo per visualizzare i dettagli di un corso
-    public static function courseDetailsInstructor($course_id) {
-        $user = CUser::getLoggedUser();
+    public static function courseDetails($course_id) {
+    
+        try {       
+            $course = FPersistentManager::retriveCourseOnId($course_id);              
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
+        } 
         
         
-        $course = FPersistentManager::retriveCourseOnId($course_id);
-        
-        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($course_id);
+       
         //echo $enrollments[0]->getDate();
        
     
         
         $view = new VCourse();
-        $view->showDetailsInstrcutor( $course , $enrollments);
+        $view->showCourseDetails( $course );
     }
 
-    public static function courseDetailsClient($course_id) {
-        $user = CUser::getLoggedUser();
-        
-        
-        $course = FPersistentManager::retriveCourseOnId($course_id);
-        
-        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($course_id);
-        //echo $enrollments[0]->getDate();
-       
+    //********************************************************* */
+    // metodo per visualizzare i dettagli di un corso
     
-        
-        $view = new VCourse();
-        $view->showDetailsClient( $course , $enrollments);
-    }
     //********************************************************* */
 
     

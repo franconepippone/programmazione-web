@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Dettagli Corso</title>
+{extends file="../dashboard_bar.tpl"}
+{block name="dashboard_tabs_styles"}
     <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/details.css">
-    <!-- Per stili specifici di entità, aggiungi un altro CSS, es: -->
-    <!-- <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css"> -->
-</head>
-<body>
+{/block}
+
+{block name="dashboard_content"}
     <div class="details-container">
         <h2 class="details-title">Dettagli Corso</h2>
         {foreach from=$courses item=course}
@@ -108,8 +104,7 @@
         </div>
         {/foreach}
     </div>
-</body>
-</html>
+{/block}
 {*
 Nota: Per i campi che richiedono formattazione (come date o valuta), viene usato un controllo {if} per evitare errori e mostrare il valore di default ("N/D") se il dato non è disponibile.
 Per i campi semplici, il filtro |default:'N/D' è sufficiente.
