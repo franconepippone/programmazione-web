@@ -66,4 +66,28 @@ class VReservation{
     public function showNoActiveReservation() {
         $this->smarty->display('reservation/no_active_reservation.tpl');
     }
+
+    public function showModifyForm($reservation) {
+        $reservationArray = EReservation::reservationToArray($reservation);
+        $this->smarty->assign('reservation', $reservationArray);
+        $this->smarty->display('reservation/modify_reservation.tpl');
+    }
+
+    public function showModifyConfirmation() {
+        $this->smarty->display('reservation/modify_confirmation.tpl');
+    }
+
+    public function showModifyDateForm($reservation) {
+        $reservationArray = EReservation::reservationToArray($reservation);
+        $this->smarty->assign('reservation', $reservationArray);
+        $this->smarty->display('reservation/modify_date.tpl');
+    }
+
+    public function showModifyTimeForm($reservation, $newDate, $avaiableHours) {
+        $reservationArray = EReservation::reservationToArray($reservation);
+        $this->smarty->assign('reservation', $reservationArray);
+        $this->smarty->assign('date', $newDate);
+        $this->smarty->assign('avaiableHours', $avaiableHours);
+        $this->smarty->display('reservation/modify_time.tpl');
+    }
 }

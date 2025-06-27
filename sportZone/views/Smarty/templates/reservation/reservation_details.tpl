@@ -15,4 +15,7 @@
     <div style="text-align:center; margin-top:20px;">
         <a href="/reservation/allReservations" style="padding:8px 16px; border-radius:5px; border:1px solid #888; background:#eee; text-decoration:none; color:#222;">Torna alla lista</a>
     </div>
+    <div style="text-align:center; margin-top:10px;">
+        <a href="/reservation/modifyReservation?id={$reservation.id}" style="padding:8px 16px; border-radius:5px; border:1px solid #888; background:#cce; text-decoration:none; color:#222;">Modifica</a>
+    </div>
 </div>

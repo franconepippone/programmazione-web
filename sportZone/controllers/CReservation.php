@@ -205,11 +205,25 @@ class CReservation{
         $view->showAllReservations($reservations);
     }
 
+    
 
 
+    public static function modifyReservation() {
+    $reservationId = $_GET['id'] ?? null;
+    if (!$reservationId) {
+        (new VError())->show("ID prenotazione non specificato.");
+        return;
+    }
+
+    $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
+   
 
 
+    $view = new VReservation();
+    $view->showModifyForm($reservation);
+}
 
+ 
 
 
     public static function reservationDetails() {
@@ -260,4 +274,64 @@ class CReservation{
         $view->showCancelConfirmation();
     }
 
+    public static function confirmModifyReservation() {
+    $reservationId = $_POST['id'] ?? null;
+    $date = $_POST['date'] ??  null;
+    $time = $_POST['time'] ?? null;
+
+    if (!$reservationId || !$date || !$time) {
+        (new VError())->show("Dati mancanti per la modifica.");
+        return;
+    }
+
+    $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
+
+    $reservation->setDate(new DateTime($date));
+    $reservation->setTime(new DateTime($time));
+
+    FPersistentManager::getInstance()->saveReservation($reservation);
+
+
+
+    $view = new VReservation();
+    $view->showModifyConfirmation();
+}
+
+    public static function modifyReservationDate() {
+    $reservationId = $_POST['id'] ?? null;
+    if (!$reservationId) {
+        (new VError())->show("ID prenotazione non specificato.");
+        return;
+    }
+
+    $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
+
+    $view = new VReservation();
+    $view->showModifyDateForm($reservation);
+}
+
+
+
+
+
+   public static function modifyReservationTime() {
+    $reservationId = $_POST['id'] ?? ($_POST['id'] ?? null);
+    $newDate = $_POST['date'] ?? null;
+
+    $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
+  
+
+    try {
+        $newDate = UValidate::validateReservationDate($newDate);
+    } catch (ValidationException $e) {
+        (new VError())->show($e->getMessage());
+        return;
+    }
+
+    $fieldId = $reservation->getField()->getId();
+    $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $newDate);
+
+    $view = new VReservation();
+    $view->showModifyTimeForm($reservation, $newDate, $avaiableHours);
+}
 }
