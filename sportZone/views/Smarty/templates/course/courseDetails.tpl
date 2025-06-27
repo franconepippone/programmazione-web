@@ -85,11 +85,9 @@
         </div>
         <div class="details-actions" style="display: flex; justify-content: space-between; align-items: center;">
             <a href="javascript:history.back()" class="action-btn back-btn">⬅ Torna indietro</a>
-            {if $modifyPermission}
-                <a href="/course/modifyForm/{$course.id|default:'N/D'}" class="action-btn">Modifica corso</a>
-            {else}
-                <a href="/enrollment/enrollmentConfirmation/{$course.id|default:'N/D'}" class="action-btn">Iscriviti al corso</a>
-            {/if}
+            
+            
+            
         </div>
         {/foreach}
     </div>

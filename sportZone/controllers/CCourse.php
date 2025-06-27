@@ -156,68 +156,36 @@ class CCourse {
         
     }
 
+    public static function courseDetails($course_id) {
+    
+        try {       
+            $course = FPersistentManager::retriveCourseOnId($course_id);              
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
+        } 
+        
+        
+       
+        //echo $enrollments[0]->getDate();
+       
+    
+        
+        $view = new VCourse();
+        $view->showCourseDetails( $course );
+    }
+
     //********************************************************* */
     // metodo per visualizzare i dettagli di un corso
-    public static function courseDetailsInstructor($course_id) {
-       
-        $course = FPersistentManager::retriveCourseOnId($course_id);
-        $modifyPermission = false;
-        if(CUser::isLoggedBool()) {
-            $role = CUser::getUserRole();
-
-            if(!CUser::isClient()) {
-                $modifyPermission = true;    
-            } 
-
-            
-
-        }
-        
-        $view = new VCourse();
-        $view->showDetails( $course , $modifyPermission);
-    }
-
+    
     //********************************************************* */
 
-    public static function myCourses(){
-        if (!CUser::isLoggedBool()) {
-            (new VError())->show("Devi essere loggato per accedere a questa pagina.");
-            return;
-        }
-        
-        $user = CUser::getCurrentUser();
-        $userRole='Client';
-
-        if(Cuser::isInstructor()){
-            $mycourses= FPersistentManager::getInstance()->retriveCoursesOnInstructorId($user->getId());
-            
-            $userRole='Instructor';
-            
-        }
-        else if(Cuser::isClient()){
-            $myenrollmens= FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($user->getId());
-            foreach ($myenrollmens as $enrollment) {
-                $mycourses[] = $enrollment->getCourse();
-            }
-            
-            
-        }
-        else{
-            (new VError())->show("Devi essere un istruttore o un cliente per accedere a questa pagina.");
-            return;
-        }
-
-        
-        // Mostra la vista di gestione corsi istruttore
-        $view = new VCourse();
-        $view->showCourses($mycourses, $userRole);
-    }
+    
 
    
 
    public static function modifyForm($course_id) {
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        $user=CUser::getCurrentUser();
+        $user=CUser::getLoggedUser();
         $modifyPermission=true;
         if($course->getInstructor()->getId() !== $user->getId()){
             (new VError())->show("non possiedi i permessi per modificare questo corso");
@@ -260,7 +228,7 @@ class CCourse {
             // Recupera oggetti istruttore , campo e corso
         try{    
             $course = $pm->retriveCourseOnId($course_id);
-            $instructor = CUser::getCurrentUser();
+            $instructor = CUser::getLoggedUser();
             $field = $pm->retriveFieldByAttribute('name',$attributes['field']);
             if (!$instructor || !$field || !$course) {
                 $view = new VError();
@@ -290,7 +258,7 @@ class CCourse {
 
             $message='corso modificato con successo';
             $butt_name ="Vai ai miei corsi";
-            $butt_action="window.location.href='/course/myCourses'";
+            $butt_action="window.location.href='/dashboard/myCourses'";
             $view = new VError;
             $view->showSuccess($message, $butt_name,$butt_action);
 

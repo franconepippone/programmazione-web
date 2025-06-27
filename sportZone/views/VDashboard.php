@@ -18,23 +18,7 @@ class VDashboard{
         }
     }
 
-    public function showDashboardMyCourses(array $courses, string $role) {
-        //$userArray = EUser::usertoArray($user);
-
-        $coursesData = [];
-        foreach ($courses as $course) {
-            $coursesData []= ECourse::courseToArray($course);
-        }
-
-        $this->smarty->assign('courses', $coursesData);
-        $this->smarty->assign('userRole', $role);
-
-        USmarty::configureBaseLayout($this->smarty);
-        //$this->smarty->assign('user', $userArray);
-        $this->smarty->display($this->getBasePath($role) . 'courses.tpl');
-    }
-
-    public function showDashboardProfile(EUser $user, string $role) {
+     public function showDashboardProfile(EUser $user, string $role) {
         $userArray = EUser::usertoArray($user);
 
         USmarty::configureBaseLayout($this->smarty);
@@ -58,6 +42,92 @@ class VDashboard{
         $this->smarty->assign('user', $userArray);
         $this->smarty->display($this->getBasePath($role) . 'settings.tpl');
     }
+
+
+
+
+   // -------------- INSTRUCTOR ONLY ----------------------------
+    public function showMyCourses($mycourses , $user , $role) {
+        //$userArray = EUser::usertoArray($user);
+
+        $coursesData = [];
+        foreach ($mycourses as $course) {
+            $coursesData []= ECourse::courseToArray($course);
+        }
+
+        $this->smarty->assign('courses', $coursesData);
+        
+
+        USmarty::configureBaseLayout($this->smarty);
+  
+        $this->smarty->display($this->getBasePath($role) . 'myCourses.tpl');
+    }
+
+
+    public function showDetailsInstrcutor( $course , $enrollments ,$user , $role)
+    {
+       // echo var_dump($enrollmentsData);
+       if ($course === null) {
+            (new VError())->show("Corso non trovato.");
+            return;
+        }
+        $courseData = [];
+        $enrollmentsData = [];
+        $courseData [] = ECourse::courseToArray($course);
+
+        if (sizeof($enrollments)>0){
+            foreach($enrollments as $enrolled){
+                $client = $enrolled->getClient();
+                $enrollmentsData []= EUser::usertoArray($client);
+                
+            }
+        }
+        $this->smarty->assign('courses', $courseData);
+        $this->smarty->assign('enrollments', $enrollmentsData);
+        USmarty::configureBaseLayout($this->smarty);
+  
+        $this->smarty->display($this->getBasePath($role) . 'courseDetailsInstructor.tpl');
+        //$this->smarty->display('course/courseDetailsInstructor.tpl');
+        
+    }
+    // -------------- CLIENT ONLY ---------------------------
+    public function showMyEnrollments($enrollments, $user, $role)
+    {
+        $enrollmentsData = [];
+        foreach ($enrollments as $enrollment) {
+            $enrollmentsData[] = EEnrollment::enrollmentToArray($enrollment);
+        }
+        $this->smarty->assign('enrollments', $enrollmentsData);
+        
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->display($this->getBasePath($role) . 'myEnrollments.tpl');
+        
+    }
+
+    public function showDetailsClient($course, $user , $role)
+    {
+        // Controlla se il corso è stato trovato
+        if ($course === null) {
+            (new VError())->show("Corso non trovato.");
+            return;
+        }
+        $courseData = [];
+    
+        $courseData [] = ECourse::courseToArray($course);
+
+        $this->smarty->assign('courses', $courseData);
+        USmarty::configureBaseLayout($this->smarty);
+  
+        $this->smarty->display($this->getBasePath($role) . 'courseDetailsClient.tpl');
+
+        //$this->smarty->display('course/courseDetailsClient.tpl');
+    
+    }
+    //********************************************************* */
+    
+
+
+   
 
     // -------------- EMPLOYEE ONLY -----------------
 
