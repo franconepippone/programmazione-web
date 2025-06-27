@@ -164,20 +164,7 @@ class CReservation{
 
 
 
-    public static function myReservation() {
-        
-        CUser::isLogged();
-        $clientId = $_SESSION['user'];
-        $active = FPersistentManager::getInstance()->retriveActiveReservationByClientId($clientId);
-        $view = new VReservation();
-        if ($active !== null) {
-            $view->showMyReservationDetail($active);
-        } else {
-            $view->showNoActiveReservation();
-        }
-    }
-
-
+   
 
 
 
@@ -321,7 +308,7 @@ class CReservation{
 
 
 
-    
+
 
     
      public static function confirmModifyReservation() {

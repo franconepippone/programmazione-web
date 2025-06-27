@@ -61,11 +61,8 @@ class VReservation{
         $this->smarty->assign('reservation', $reservationArray);
         $this->smarty->display('reservation/reservation_details.tpl');
     }
-
-
-    public function showNoActiveReservation() {
-        $this->smarty->display('reservation/no_active_reservation.tpl');
-    }
+    
+  
 
     public function showModifyForm($reservation) {
         $reservationArray = EReservation::reservationToArray($reservation);

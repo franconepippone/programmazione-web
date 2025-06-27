@@ -39,7 +39,7 @@ class CDashboard{
 
     // ---------------- CLIENT ONLY --------------------------- 
 
-    public static function myReservations(){
+    public static function myReservatsions(){
         CUser::isLogged();
         $role = self::assertRole(EClient::class);
         
@@ -48,6 +48,24 @@ class CDashboard{
         $view->showDashboarMyReservations($user, $role);
     
     }
+
+     public static function myReservations() {
+        
+        CUser::isLogged();
+        $role = self::assertRole(EClient::class);
+
+        //$clientId = CUser::getCurrentUser()->getId();
+        $clientId = $_SESSION['user'];
+        $reservation = FPersistentManager::getInstance()->retriveActiveReservationByClientId($clientId);
+        $active = $reservation !== null;
+
+        $view = new VDashboard();
+
+        $view->showMyReservationDetails($reservation, $active, CUser::getUserRole());
+
+    }
+
+
 
     // ----------------- CLIENT & INSTRUCTOR ONLY -----------------------
     

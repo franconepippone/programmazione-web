@@ -85,4 +85,17 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
     }
 
+    // -------------- CLIENT ONLY -----------------
+      public function showMyReservationDetails($reservation, $active, $role) {
+        
+        $reservationArray = EReservation::reservationToArray($reservation);
+        $this->smarty->assign('reservation', $reservationArray);
+        $this->smarty->assign('active', $active);
+
+
+        USmarty::configureBaseLayout($this->smarty);
+        //$this->smarty->assign('user', $userArray);
+        $this->smarty->display($this->getBasePath($role) . 'reservations.tpl');
+    }
+
 }
