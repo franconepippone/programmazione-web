@@ -27,7 +27,7 @@ class VReservation{
         $this->smarty->display("reservation/reservation_summary.tpl");
     }
 
-    public function showConfirmation() {
+    public function showConfirmation() {///aggiungere oggetto reservation quando viene collegato al metodo di pagamento
         $this->smarty->display("reservation/confirmation.tpl");
     }
 
@@ -46,15 +46,6 @@ class VReservation{
         $this->smarty->display('reservation/cancel_info.tpl');
     }
 
-
-    public function showAllReservations(array $reservations) {
-        $reservationsArray = [];
-        foreach ($reservations as $reservation) {
-            $reservationsArray[] = EReservation::reservationToArray($reservation);
-        }
-        $this->smarty->assign('reservations', $reservationsArray);
-        $this->smarty->display('reservation/all_reservations.tpl');
-    }
 
     public function showReservationDetails($reservation) {
         $reservationArray = EReservation::reservationToArray($reservation);

@@ -179,25 +179,9 @@ class CReservation{
 
 
 
-    public static function allReservations() {
-        
-        //CUser::isEmployee();
-        
-        $reservations = FPersistentManager::getInstance()->retriveAllReservations();
-
-        $view = new VReservation();
-        $view->showAllReservations($reservations);
-    }
-
-    
-
-
- 
-
-
     public static function reservationDetails() {
         
-        //CUser::isEmployee();
+        CUser::isEmployee();
 
         $reservationId = $_GET['id'] ?? null;
         if (!$reservationId) {
@@ -222,7 +206,7 @@ class CReservation{
 
     public static function cancelReservation() {
 
-       // CUser::isEmployee();
+        CUser::isEmployee();
 
         $reservationId = $_GET['id'] ?? null;
 
@@ -236,13 +220,29 @@ class CReservation{
             (new VError())->show("Prenotazione non trovata.");
              return;
        }
-;
+
+
+        $view = new VReservation();
+        $view->showCancelReservation($reservation);
+    }
+    
+
+    public static function finalizeCancelReservation() {
+        CUser::isEmployee();
+
+        $reservationId = $_POST['id'] ?? null;
+        if (!$reservationId) {
+            (new VError())->show("ID prenotazione non specificato.");
+            return;
+        }
+
+        $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
+
         FPersistentManager::getInstance()->removeReservation($reservation);
 
         $view = new VReservation();
         $view->showCancelConfirmation();
     }
-
 
 
 

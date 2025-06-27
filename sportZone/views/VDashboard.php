@@ -77,20 +77,25 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_fields.tpl');
     }
 
-    public function showManageReservations(EUser $user, string $role) {
-        $userArray = EUser::usertoArray($user);
-
-        USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('user', $userArray);
-        $this->smarty->display($this->getBasePath($role) . 'mng_reservations.tpl');
-    }
-
     public function showManageUsers(EUser $user, string $role) {
         $userArray = EUser::usertoArray($user);
 
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userArray);
         $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
+    }
+
+    public function showManageReservations(array $reservations, string $role) {
+        $reservationsArray = [];
+        foreach ($reservations as $reservation) {
+            $reservationsArray[] = EReservation::reservationToArray($reservation);
+        }
+        $this->smarty->assign('reservations', $reservationsArray);
+
+
+        USmarty::configureBaseLayout($this->smarty);
+        //$this->smarty->assign('user', $userArray);
+        $this->smarty->display($this->getBasePath($role) . 'mng_reservations.tpl');
     }
 
     // -------------- CLIENT ONLY -----------------
