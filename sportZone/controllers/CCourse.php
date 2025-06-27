@@ -162,7 +162,6 @@ class CCourse {
        
         $course = FPersistentManager::retriveCourseOnId($course_id);
         $modifyPermission = false;
-        ;
         if(CUser::isLoggedBool()) {
             $role = CUser::getUserRole();
 

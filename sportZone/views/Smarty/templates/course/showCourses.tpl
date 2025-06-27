@@ -8,6 +8,11 @@
     <!-- <link rel="stylesheet" href="/sportZone/views/Smarty/css/course.css"> -->
 </head>
 <body>
+
+</body>
+</html>
+
+{block name="content"}
     <div class="results-list">
         <h2>Risultati della Ricerca</h2>
         {if $courses|@count > 0}
@@ -28,5 +33,4 @@
             <p>Nessun risultato trovato con i filtri selezionati.</p>
         {/if}
     </div>
-</body>
-</html>
+{/block}
