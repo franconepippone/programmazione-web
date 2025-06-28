@@ -54,7 +54,7 @@ class CFrontController{
         FPersistentManager::getInstance()->uploadObj($instructor);
         $this->createDummyFields($instructor);
         $this->createDummyCourses($instructor);*/
-        
+        //CHelper::createUsers();
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";

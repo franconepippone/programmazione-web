@@ -19,7 +19,7 @@
         <a href="/dashboard/manageReservations" class="nav-link{if $active_tab == 'manageReservations'} active{/if}">Gestisci Prenotazioni</a>
       </li>
       <li class="nav-item">
-        <a href="/dashboard/manageEmployees" class="nav-link{if $active_tab == 'manageEmployees'} active{/if}">Gestisci Impiegati</a>
+        <a href="/dashboard/manageUsers" class="nav-link{if $active_tab == 'manageEmployees'} active{/if}">Gestisci Impiegati</a>
       </li>
       </li>
     </ul>

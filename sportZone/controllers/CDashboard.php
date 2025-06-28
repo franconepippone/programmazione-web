@@ -167,15 +167,7 @@ class CDashboard{
     }
 
 
-    public static function manageUsers(){
-        CUser::isLogged();
-        $role = self::assertRole(EEmployee::class, EAdmin::class);
-        
-        $view = new VDashboard();
-
-        $user = CUser::getLoggedUser();
-        $view->showManageUsers($user, $role);
-    }
+    
     
     public static function manageReservations() {
         CUser::isLogged();
@@ -192,15 +184,18 @@ class CDashboard{
         $view->showFilteredReservations($filtered, $name, $date,$sport, $role);
     }
 
-    public static function manageEmployees() {
+    public static function manageUsers() {
         CUser::isLogged();
         $role = self::assertRole(EAdmin::class);
         $user = CUser::getLoggedUser();
         
+        
+        $userList = FPersistentManager::getInstance()->retrieveAllUsers();
+        //print_r ($userList);
         $view = new VDashboard();
-        $view->showManageEmployees($user, $role);
-    }
+        $view->showManageUsers($userList, $user, $role);
 
+    }
     
     
 }

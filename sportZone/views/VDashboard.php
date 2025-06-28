@@ -155,13 +155,13 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_fields.tpl');
     }
 
-    public function showManageUsers(EUser $user, string $role) {
+    /*public function showManageUsers(EUser $user, string $role) {
         $userArray = EUser::usertoArray($user);
 
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userArray);
         $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
-    }
+    }*/
 
 
 
@@ -204,9 +204,12 @@ class VDashboard{
 
     // ------------------ ADMIN ONLY ---------------------
 
-    public function showManageEmployees(EUser $user, string $role) {
+    public function showManageUsers($userList,EUser $user, string $role) {
+ 
+        $this->smarty->assign('users', $userList);
+        //print_r($userList);
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->display($this->getBasePath($role) . 'mng_employees.tpl');
+        $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
     }
 
 }

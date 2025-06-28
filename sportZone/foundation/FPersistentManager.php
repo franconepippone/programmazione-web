@@ -34,6 +34,10 @@ class FPersistentManager{
 
     //-------------------------------------USER---------------------------------------
     
+    public static function retrieveAllUsers(){
+        $result = FUser::getAllUsers();
+        return $result;
+    }
     /**
      * verify if a user with this email exists in the database
      */

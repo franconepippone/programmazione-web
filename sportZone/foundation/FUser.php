@@ -27,4 +27,10 @@ class FUser{
         $result = FEntityManager::getInstance()->retriveObj(EUser::class, $id);
         return $result;
     }
+
+    public static function getAllUsers() {
+    FEntityManager::getInstance();
+        return FEntityManager::getAllUsers();
+    
+    }
 }
