@@ -6,38 +6,44 @@
 {/block}
 
 {block name="dashboard_content"}
-    <div class="form-wrapper">
-        <h2>Tutte le prenotazioni</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Campo</th>
-                    <th>Data</th>
-                    <th>Orario</th>
-                    <th>Utente</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $reservations as $res}
-                    <tr>
-                        <td>{$res.field}</td>
-                        <td>{$res.date}</td>
-                        <td>{$res.time}</td>
-                        <td>{$res.fullname}</td>
-                        <td>
-                            <button type="button" class="submit-button" 
-                                onclick="window.location.href='/reservation/reservationDetails?id={$res.id}'">
-                                View details
-                            </button>
-                        </td>
-                    </tr>
-                {/foreach}
-            </tbody>
-        </table>
+        <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem;">
+            <button type="button" class="submit-button" onclick="window.location.href='/'">
+                Torna alla Home
+            </button>
 
-        <div style="text-align:center; margin-top: 20px;">
-            <button type="button" class="submit-button" onclick="window.location.href='/'">Torna alla Home</button>
+            <button class="submit-button" type="button" onclick="window.location.href='/dashboard/filteredList';">
+                Filtra le prenotazioni
+            </button>
         </div>
+        <table style="margin: 0 auto; margin-top: 3rem;; width: 100%; max-width: 900px;">
+    <thead>
+        <tr>
+            <th>Campo</th>
+            <th>Data</th>
+            <th>Orario</th>
+            <th>Utente</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $reservations as $res}
+            <tr>
+                <td>{$res.field}</td>
+                <td>{$res.date}</td>
+                <td>{$res.time}</td>
+                <td>{$res.fullname}</td>
+                <td>
+                    <button type="button" class="submit-button" 
+                        onclick="window.location.href='/reservation/reservationDetails?id={$res.id}'">
+                        View details
+                    </button>
+                </td>
+            </tr>
+        {/foreach}
+    </tbody>
+</table>
+
+
+        
     </div>
 {/block}

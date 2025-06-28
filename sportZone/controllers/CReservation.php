@@ -270,7 +270,11 @@ class CReservation{
     public static function modifyReservationDate() {
         $reservationId = $_POST['id'] ?? null;
         if (!$reservationId) {
-            (new VError())->show("ID prenotazione non specificato.");
+            (new VError())->show(
+    "ID prenotazione non specificato.",
+    "Torna indietro",
+    "location.href='/reservation/mngReservations'"
+);
             return;
         }
 
@@ -295,7 +299,10 @@ class CReservation{
         try {
             $newDate = UValidate::validateReservationDate($newDate);
         } catch (ValidationException $e) {
-            (new VError())->show($e->getMessage());
+            (new VError())->show($e->getMessage(),
+                                 "Torna indietro",
+                                 "location.href='/reservation/modifyReservation?id={$reservationId}'"
+                                );
             return;
         }
 

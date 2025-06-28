@@ -79,44 +79,51 @@ class FReservation {
      * @return array EReservation
      */
 
-    public static function filterReservations($name = null, $date = null, $sport = null) {
-        $entityManager = FEntityManager::getInstance();
-        $reservations = $entityManager->selectAll(EReservation::class);
-        $filtered = [];
+public static function filterReservations($name = null, $date = null, $sport = null) {
+    $entityManager = FEntityManager::getInstance();
+    $reservations = $entityManager->selectAll(EReservation::class);
+    $filtered = [];
 
-        foreach ($reservations as $res) {
-            $ok = true;
+    foreach ($reservations as $res) {
+        $ok = true;
 
-            // Filtra per nome e cognome cliente (parziale)
-            if ($name !== null) {
-                $client = $res->getUser();
-
-                if ($user !== null) {
-                    $fullName = strtolower($user->getName() . " " . $user->getSurname());
-                    $ok = $ok && strpos($fullName, strtolower($name)) !== false;
-                } else {
+        // Filtro per nome utente
+        if ($name !== null && trim($name) !== '') {
+            $user = $res->getUser(); // è un EUser o EClient
+            if ($user !== null) {
+                $fullName = strtolower($user->getName() . ' ' . $user->getSurname());
+                if (strpos($fullName, strtolower($name)) === false) {
                     $ok = false;
                 }
-            }
-
-            // Filtra per data
-            if ($date !== null) {
-                $ok = $ok && $res->getDate() == $date;
-            }
-
-            // Filtra per sport del campo
-            if ($sport !== null) {
-                $field = $res->getField();
-                $ok = $ok && $field !== null && strtolower($field->getSport()) == strtolower($sport);
-            }
-
-            if ($ok) {
-                $filtered[] = $res;
+            } else {
+                $ok = false;
             }
         }
 
-        return $filtered;
+        // Filtro per data
+        if ($date !== null && trim($date) !== '') {
+            $resDate = $res->getDate()->format('Y-m-d');
+            if ($resDate !== $date) {
+                $ok = false;
+            }
+        }
+
+        // Filtro per sport del campo
+        if ($sport !== null && trim($sport) !== '') {
+            $field = $res->getField();
+            if ($field === null || strtolower($field->getSport()) !== strtolower($sport)) {
+                $ok = false;
+            }
+        }
+
+        if ($ok) {
+            $filtered[] = $res;
+        }
     }
+
+    return $filtered;
+
+}
     
     public static function getAllReservations() {
         return FEntityManager::getInstance()->selectAll(EReservation::class);
