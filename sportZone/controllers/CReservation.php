@@ -99,7 +99,7 @@ class CReservation{
         $data = $_POST;
     
         $field = FPersistentManager::getInstance()->retriveFieldById($data['field_id']);
-        $client = FPersistentManager::getInstance()->retriveClientById($userId);
+        $client = FPersistentManager::getInstance()->retriveUserById($userId);
         
         $fullName = $client->getName() . ' ' . $client->getSurname();
 
