@@ -10,9 +10,9 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <style>
-      body {
+    {*
+      <style>
+        body {
         font-family: 'Inter', sans-serif;
         background-color: #f9fafb;
         color: #1f2937;
@@ -20,30 +20,31 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-      }
-      .navbar-custom {
+        }
+        .navbar-custom {
         background-color: #1f2937;
-      }
-      .navbar-custom .navbar-brand,
-      .navbar-custom .nav-link,
-      .navbar-custom .dropdown-menu a {
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link,
+        .navbar-custom .dropdown-menu a {
         color: #d1d5db;
-      }
-      .navbar-custom .nav-link:hover,
-      .navbar-custom .nav-link.active,
-      .navbar-custom .dropdown-menu a:hover {
+        }
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active,
+        .navbar-custom .dropdown-menu a:hover {
         color: #ffffff;
         background-color: transparent;
-      }
-      footer {
+        }
+        footer {
         background-color: #1f2937;
         color: #9ca3af;
         font-size: 0.875rem;
         font-family: 'Inter', sans-serif;
         padding: 1.5rem 2rem;
         text-align: center;
-      }
-    </style>
+        }
+      </style>
+    *}
 
     {block name="styles"}{/block}
 </head>
@@ -84,7 +85,7 @@
   </nav>
 
   <!-- Page content -->
-  <main class="flex-grow-1 container my-4">
+  <main class="flex-grow-1 pb-5 d-flex flex-column" style="background: #fff;">
     {block name="content"}{/block}
   </main>
 

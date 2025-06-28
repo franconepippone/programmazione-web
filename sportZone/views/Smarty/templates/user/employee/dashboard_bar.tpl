@@ -1,12 +1,13 @@
 {extends file=$layout}
 
+
 {block name="styles"}
-  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
   {block name="dashboard_tabs_styles"}{/block}
 {/block}
 
+
 {block name="content"}
-  <section class="container my-4">
+  <section>
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item">
         <a href="/dashboard/profile" class="nav-link{if $active_tab == 'profile'} active{/if}">Profile</a>
@@ -25,7 +26,7 @@
       </li>
     </ul>
 
-    <div class="dashboard-content">
+    <div class="dashboard-content p-4">
       {block name="dashboard_content"}{/block}
     </div>
   </section>

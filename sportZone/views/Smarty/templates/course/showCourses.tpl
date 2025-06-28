@@ -1,7 +1,7 @@
 {extends file=$layout}
 
 {block name="styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css">
+
 {/block}
 
 {block name="content"}

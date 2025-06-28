@@ -1,58 +1,65 @@
 {extends file=$layout}
 {assign var="page_title" value="Crea Campo"}
 {block name="styles"}
-  <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/form.css">
 {/block}
 {block name="content"}
-  <div class="form-wrapper">
-    <h2>Crea Campo Sportivo</h2>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+          <div class="card-body">
+            <h2 class="card-title mb-4 text-center">Crea Campo Sportivo</h2>
+            <form action="/field/finalizeFieldCreation" method="post" enctype="multipart/form-data">
+              
+              <div class="mb-3">
+                <label for="name" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+              </div>
 
-    <form action="/field/finalizeFieldCreation" method="post" enctype="multipart/form-data">
-      
-      <div class="form-group">
-        <label for="name">Nome</label>
-        <input type="text" id="name" name="name" required>
+              <div class="mb-3">
+                <label for="sport" class="form-label">Sport</label>
+                <input type="text" class="form-control" id="sport" name="sport" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="terrainType" class="form-label">Tipo di terreno</label>
+                <input type="text" class="form-control" id="terrainType" name="terrainType" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="isIndoor" class="form-label">È al coperto?</label>
+                <select class="form-select" id="isIndoor" name="isIndoor" required>
+                  <option value="1">Sì</option>
+                  <option value="0">No</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="hourlyCost" class="form-label">Costo orario (€)</label>
+                <input type="number" class="form-control" id="hourlyCost" name="hourlyCost" step="0.01" min="0" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label">Descrizione</label>
+                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="images" class="form-label">Carica foto del campo</label>
+                <input class="form-control" type="file" id="images" name="images[]" accept="image/*" multiple>
+              </div>
+
+              <input type="hidden" id="latitude" name="latitude" value="0" required>
+              <input type="hidden" id="longitude" name="longitude" value="0" required>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Crea campo</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-
-      <div class="form-group">
-        <label for="sport">Sport</label>
-        <input type="text" id="sport" name="sport" required>
-      </div>
-
-      <div class="form-group">
-        <label for="terrainType">Tipo di terreno</label>
-        <input type="text" id="terrainType" name="terrainType" required>
-      </div>
-
-      <div class="form-group">
-        <label for="isIndoor">È al coperto?</label>
-        <select id="isIndoor" name="isIndoor" required>
-          <option value="1">Sì</option>
-          <option value="0">No</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="hourlyCost">Costo orario (€)</label>
-        <input type="number" id="hourlyCost" name="hourlyCost" step="0.01" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label for="description">Descrizione</label>
-        <textarea id="description" name="description" rows="4" required></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="images">Carica foto del campo</label>
-        <input type="file" id="images" name="images[]" accept="image/*" multiple>
-      </div>
-
-
-      <input type="hidden" id="latitude" name="latitude" value="0" required>
-      <input type="hidden" id="longitude" name="longitude" value="0" required>
-
-      <button type="submit" class="submit-button">Crea campo</button>
-    </form>
+    </div>
   </div>
 
   

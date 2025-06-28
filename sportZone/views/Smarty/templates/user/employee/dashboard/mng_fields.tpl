@@ -1,36 +1,37 @@
 {extends file="../dashboard_bar.tpl"}
+
 {block name="dashboard_tabs_styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/details.css">
 {/block}
 
 {block name="dashboard_content"}
-  <h1 class="results-header">Search fields</h1>
+  <div class="container my-4">
 
-<form class="search-form" method="GET" action="/dashboard/manageFields">
-    <label>
-        Name:
-        <input type="text" name="name" value="{$title}" placeholder="football-1">
-    </label>
-    <label>
-        Sport:
-        <select name="sport">
-            <option value="">-- All sports --</option>
-            <option value="football" {if $search.sport == 'football'}selected{/if}>Calcio</option>
-            <option value="tennis" {if $search.sport == 'tennis'}selected{/if}>Tennis</option>
-            <option value="basket" {if $search.sport == 'basket'}selected{/if}>Basket</option>
-            <option value="padel" {if $search.sport == 'padel'}selected{/if}>Padel</option>
-            <!-- Altri sport possono essere aggiunti qui -->
-        </select>
-    </label>
-    <button type="submit">Search</button>or
-    <a href="/field/createFieldForm" class="add-field-btn" style="text-decoration:none;">
-        <button type="button" style="margin-left:10px;">Create field</button>
-    </a>
-</form>
-  <div class="results-container">
-    {foreach $fields as $field}
-        {assign var="fieldUrl" value="/field/modifyField/{$field.id}"}
-        {include file="field/field_card.tpl" field=$field}
-    {/foreach}
+    <h1 class="mb-4">Search Fields</h1>
+
+    <form class="row g-3 align-items-end mb-4" method="GET" action="/dashboard/manageFields">
+      <div class="col-md-4">
+        <label for="fieldName" class="form-label">Name</label>
+        <input type="text" class="form-control" id="fieldName" name="name" value="{$title}" placeholder="football-1">
+      </div>
+
+      <div class="col-md-4">
+        {include file="field/sport_selection.tpl"}
+      </div>
+
+      <div class="col-md-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="/field/createFieldForm" class="btn btn-outline-primary">Create Field</a>
+      </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {foreach $fields as $field}
+        <div class="col">
+          {assign var="fieldUrl" value="/field/modifyField/{$field.id}"}
+          {include file="field/field_card.tpl" field=$field}
+        </div>
+      {/foreach}
+    </div>
+
   </div>
 {/block}

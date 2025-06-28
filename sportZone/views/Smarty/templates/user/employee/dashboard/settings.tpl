@@ -1,61 +1,55 @@
 {extends file="../dashboard_bar.tpl"}
-{assign var="active_tab" value="profile"}
-{assign var="page_title" value="Dashboard - My Profile"}
+{assign var="active_tab" value="settings"}
+{assign var="page_title" value="Dashboard - Settings"}
 
 {block name="dashboard_tabs_styles"}
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
-{/block}
+    {/block}
 
 {block name="dashboard_content"}
-<div class="container my-4" style="max-width: 600px;">
-    <h2>My Profile (Employee)</h2>
-    <p>Update your personal information below.</p>
+    <div class="container py-4">
+        <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+            <div class="card-body">
+                <h2 class="card-title">Settings</h2>
+                <p class="mb-4">Change your password, update email preferences, and more.</p>
 
-    <form action="/user/modifyUserRequest" method="post" enctype="multipart/form-data" class="profile-form">
-        <div class="mb-3">
-            <label for="profile_picture" class="form-label">Profile Picture</label>
-            <div style="margin-top: 1rem;">
-                {if $user.profilePicture}
-                    <img src="{$user.profilePicture}" alt="Profile Picture" class="img-thumbnail rounded" style="width: 200px; height: 200px; object-fit: cover;">
-                {else}
-                    <img src="https://static.vecteezy.com/system/resources/previews/036/594/092/large_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg" alt="Profile Picture" class="img-thumbnail rounded" style="width: 200px; height: 200px; object-fit: cover; background: #e5e7eb;">
-                {/if}
+                <form action="/user/modifyUserRequest" method="post" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            class="form-control" 
+                            value="{$user.username|escape}" 
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-control" 
+                            value="{$user.email|escape}" 
+                            required readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-control">
+                        <div class="form-text">Leave blank to keep current password</div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
             </div>
-            <input type="file" id="profile_picture" name="profilePicture" accept="image/*" class="form-control mt-2">
         </div>
-
-        <div class="mb-3">
-            <label for="first_name" class="form-label">First Name</label>
-            <input type="text" id="first_name" name="name" value="{$user.name|escape}" required class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="last_name" class="form-label">Last Name</label>
-            <input type="text" id="last_name" name="surname" value="{$user.surname|escape}" required class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="birthday" class="form-label">Birthday</label>
-            <input type="date" id="birthday" name="birthday" value="{$user.birthDate|escape}" required class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="gender" class="form-label">Gender</label>
-            <select id="gender" name="gender" class="form-select">
-                <option value="male" {if $user.sex == 'male'}selected{/if}>Male</option>
-                <option value="female" {if $user.sex == 'female'}selected{/if}>Female</option>
-                <option value="other" {if $user.sex == 'other'}selected{/if}>Other</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="cvv" class="form-label">CVV</label>
-            <textarea id="cvv" name="cvv" rows="3" placeholder="Enter your CVV or additional info here" class="form-control">{$user.cvv|default:''|escape}</textarea>
-        </div>
-
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-    </form>
-</div>
+    </div>
 {/block}
