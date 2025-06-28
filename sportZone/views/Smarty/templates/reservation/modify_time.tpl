@@ -1,27 +1,32 @@
 {block name="dashboard_tabs_styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/form.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
 {/block}
 
 {block name="dashboard_content"}
-    <div class="form-wrapper" style="max-width: 480px;">
-        <h2>Modifica Orario Prenotazione</h2>
-        <form method="post" action="/reservation/confirmModifyReservation">
-            <input type="hidden" name="id" value="{$reservation.id}">
-            <input type="hidden" name="date" value="{$date}">
+    <div class="container py-4 d-flex justify-content-center">
+        <div class="card shadow-sm" style="max-width: 480px; width: 100%;">
+            <div class="card-body">
+                <h2 class="card-title mb-4 text-center">Modifica Orario Prenotazione</h2>
 
-            <div class="form-group">
-                <label for="time">Nuovo orario:</label>
-                <select id="time" name="time" required>
-                    {foreach $avaiableHours as $hour}
-                        <option value="{$hour}">{$hour|regex_replace:"/^0?(\d+):.*$/":"$1:00"}</option>
-                    {/foreach}
-                </select>
-            </div>
+                <form method="post" action="/reservation/confirmModifyReservation" novalidate>
+                    <input type="hidden" name="id" value="{$reservation.id}">
+                    <input type="hidden" name="date" value="{$date}">
 
-            <div class="form-group" style="display:flex; justify-content:center; gap:1rem; margin-top:1.5rem;">
-                <button type="submit" class="submit-button">Conferma modifica</button>
-                <button type="button" class="submit-button" onclick="window.history.back()">Annulla</button>
+                    <div class="mb-4">
+                        <label for="time" class="form-label">Nuovo orario:</label>
+                        <select id="time" name="time" required class="form-select">
+                            {foreach $avaiableHours as $hour}
+                                <option value="{$hour}">{$hour|regex_replace:"/^0?(\d+):.*$/":"$1:00"}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-primary">Conferma modifica</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Annulla</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 {/block}

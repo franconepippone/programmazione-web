@@ -1,22 +1,27 @@
-{block name="styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/form.css">
+{block name="styles"} 
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
 {/block}
 
 {block name="content"}
-    <div class="form-wrapper" style="max-width: 480px;">
-        <h2>Modifica Data Prenotazione</h2>
+    <div class="container py-4 d-flex justify-content-center">
+        <div class="card shadow-sm" style="max-width: 480px; width: 100%;">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Modifica Data Prenotazione</h2>
 
-        <form method="post" action="/reservation/modifyReservationTime">
-            <input type="hidden" name="id" value="{$reservation.id}">
+                <form method="post" action="/reservation/modifyReservationTime" novalidate>
+                    <input type="hidden" name="id" value="{$reservation.id}">
 
-            <div class="form-group">
-                <label for="date">Nuova data:</label>
-                <input type="date" id="date" name="date" value="{$reservation.date|date_format:'%Y-%m-%d'}" required>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Nuova data:</label>
+                        <input type="date" id="date" name="date" 
+                               value="{$reservation.date|date_format:'%Y-%m-%d'}" 
+                               required 
+                               class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Prosegui alla scelta orario</button>
+                </form>
             </div>
-
-            <div class="form-group">
-                <button type="submit" class="submit-button">Prosegui alla scelta orario</button>
-            </div>
-        </form>
+        </div>
     </div>
 {/block}
