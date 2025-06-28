@@ -2,8 +2,6 @@
 {assign var="active_tab" value="manageReservations"}
 {assign var="page_title" value="Dashboard - reservations"}
 
-{block name="dashboard_tabs_styles"}
-{/block}
 
 {block name="dashboard_content"}
 <div class="container py-4">

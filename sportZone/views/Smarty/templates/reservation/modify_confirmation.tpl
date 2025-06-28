@@ -1,7 +1,4 @@
-{block name="styles"} 
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
-{/block}
-
+{extends file=$layout}
 {block name="content"}
     <div class="container py-5">
         <div class="card shadow-sm mx-auto text-center" style="max-width: 600px;">

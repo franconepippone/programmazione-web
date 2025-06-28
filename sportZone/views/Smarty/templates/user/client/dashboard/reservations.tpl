@@ -1,9 +1,6 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="reservations"}
 
-{block name="dashboard_tabs_styles"}
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
-{/block}
 
 {block name="dashboard_content"}
     <div class="container py-4">
