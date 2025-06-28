@@ -65,14 +65,10 @@ class CField {
             exit;
         }
         
-
-        $query = http_build_query([
-            "fieldId" => $fieldId,
-            "date" => $inputs["date"]->format('Y-m-d'), // Convert DateTime to string in 'Y-m-d' format
-        ]);
+        $date = isset($inputs['date']) ? $inputs["date"]->format('Y-m-d') : null;
 
         $view = new VField();
-        $view->showDetailsPage($fld, $query);
+        $view->showDetailsPage($fld, $date);
     }
 
 

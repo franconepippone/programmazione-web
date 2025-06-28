@@ -6,7 +6,7 @@
 
 {block name="content"}
   <div class="container my-4">
-    <h1 class="field-results-header mb-4">Select a Sports Field</h1>
+    <h1 class="field-results-header mb-4">Seleziona un campo sportivo</h1>
 
     <form method="GET" action="/field/showResults" class="row g-3 align-items-end mb-4">
       <div class="col-md-4">

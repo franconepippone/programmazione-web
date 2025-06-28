@@ -1,5 +1,9 @@
 {extends file=$layout}
-{assign var="page_title" value="Dashboard - Settings"}
+{assign var="page_title" value="Cancel reservation"}
+
+{block name="styles"} 
+{/block}
+
 {block name="content"}
     <div class="container py-5">
         <div class="card shadow-sm mx-auto" style="max-width: 600px;">

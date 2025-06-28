@@ -40,7 +40,8 @@ class CFrontController{
         
         $this->createDummyFields();
         $this->createDummyCourses();
-        
+        */
+        /*
         $instructor = (new EInstructor())
             ->setName('Mario')
             ->setSurname('Rossi')
@@ -51,8 +52,8 @@ class CFrontController{
             ->setPassword('password123'); // Assuming you have a setPassword method
 
         FPersistentManager::getInstance()->uploadObj($instructor);
-        */
-
+        
+*/
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
