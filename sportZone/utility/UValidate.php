@@ -735,7 +735,7 @@ class UValidate {
      */
     public static function validateNoActiveReservation($clientId) {
         $today = new DateTime('today');
-        $reservations = FReservation::getReservationsByClientId($clientId);
+        $reservations = FReservation::getReservationsByUserId($clientId);
         if (!$reservations) {
             return true;
         }

@@ -127,7 +127,7 @@
         <li><strong>Metodo di Pagamento:</strong> {$reservation.paymentMethod|capitalize|default:'-'}</li>
       </ul>
 
-      <form method="post" action="/reservation/cancelReservation">
+      <form method="post" action="/reservation/finalizeCancelReservation">
         <input type="hidden" name="id" value="{$reservation.id|default:0}">
         <button type="submit" name="confirm">Conferma cancellazione</button>
       </form>

@@ -89,10 +89,10 @@ class FReservation {
 
             // Filtra per nome e cognome cliente (parziale)
             if ($name !== null) {
-                $client = $res->getClient();
+                $client = $res->getUser();
 
-                if ($client !== null) {
-                    $fullName = strtolower($client->getName() . " " . $client->getSurname());
+                if ($user !== null) {
+                    $fullName = strtolower($user->getName() . " " . $user->getSurname());
                     $ok = $ok && strpos($fullName, strtolower($name)) !== false;
                 } else {
                     $ok = false;
@@ -125,8 +125,8 @@ class FReservation {
 
  
 
-    public static function getReservationsByClientId(int $clientId) {
-        $result = FEntityManager::getInstance()->objectList(EReservation::class, 'client', $clientId);
+    public static function getReservationsByUserId(int $userId) {
+        $result = FEntityManager::getInstance()->objectList(EReservation::class, 'user', $userId);
         return $result;
     }
 }
