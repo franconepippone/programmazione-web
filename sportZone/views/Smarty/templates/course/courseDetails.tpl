@@ -10,10 +10,6 @@
     {foreach from=$courses item=course}
       <div class="mb-4 p-3 border rounded">
         <div class="row mb-2">
-          <div class="col-4 fw-semibold">ID:</div>
-          <div class="col-8">{$course.id|default:'N/D'}</div>
-        </div>
-        <div class="row mb-2">
           <div class="col-4 fw-semibold">Titolo:</div>
           <div class="col-8">{$course.title|default:'N/D'|escape}</div>
         </div>

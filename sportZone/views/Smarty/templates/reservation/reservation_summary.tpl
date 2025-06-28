@@ -15,7 +15,7 @@
                     <li class="list-group-item"><strong>Costo orario:</strong> €{$fieldData.hourlyCost|number_format:2}</li>
                 </ul>
 
-                <form method="post" action="/payment/pay" class="mb-3">
+                <form method="post" action="/reservation/startPaymentReservation" class="mb-3">
                     <input type="hidden" name="field_id" value="{$fieldData.id}">
                     <input type="hidden" name="date" value="{$date}">
                     <input type="hidden" name="time" value="{$time}">
