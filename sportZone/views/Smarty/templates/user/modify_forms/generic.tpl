@@ -43,7 +43,7 @@
 
             {elseif $modifiedUserClass == 'EEmployee'}
                 {include file="user/modify_forms/profile/prfl_employee.tpl"}
-                {include file="user/modify_forms/settings/stgs_employee.tpl"}
+                {include file="user/modify_forms/settings/stgs_client.tpl"} {*this is so the email field is unlocked*}
 
             {elseif $modifiedUserClass == 'EAdmin'}
                 {*THIS SHOULD NEVER HAPPEN*}

@@ -261,15 +261,7 @@ class CUser {
      * self::attemptModifyFromInputArray($_POST, 'email', $user, 'setEmail');
      * self::attemptModifyFromInputArray($_POST, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
      */
-    private static function attemptModifyFromInputArray(array $inputs, string $key, EUser $user, string $setMethod, callable $transform = null): bool {
-        try {
-            $inputs = UValidate::validateInputArray($inputs, self::$rulesModifyUser, false);
-        } catch (ValidationException $e) {
-            // if validation fails, show the error message
-            (new VError())->show($e->getMessage());
-            exit;
-        }
-        
+    private static function attemptModifyFromInputArray(array $inputs, string $key, EUser $user, string $setMethod, callable $transform = null): bool {      
         if (isset($inputs[$key]) && method_exists($user, $setMethod)) {
             $value = $transform ? $transform($inputs[$key]) : $inputs[$key];
             $user->$setMethod($value);
@@ -278,7 +270,16 @@ class CUser {
         return false;
     }
 
+    // tenta la modifica di un qualsiasi utente
     private static function modifyUserFromImputs(array $inputs, EUser $user) {
+        try {
+            $inputs = UValidate::validateInputArray($inputs, self::$rulesModifyUser, false);
+        } catch (ValidationException $e) {
+            // if validation fails, show the error message
+            (new VError())->show($e->getMessage());
+            exit;
+        }
+
         self::attemptModifyFromInputArray($inputs, 'name', $user, 'setName');
         self::attemptModifyFromInputArray($inputs, 'surname', $user, 'setSurname');
         self::attemptModifyFromInputArray($inputs, 'password', $user, 'setPassword');
@@ -286,6 +287,12 @@ class CUser {
         self::attemptModifyFromInputArray($inputs, 'cvv', $user, 'setCv');
         // Special case: convert string to enum
         self::attemptModifyFromInputArray($inputs, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
+        
+        // caso per immagine di profilo
+        if (UHTTPMethods::files("profilePicture", "name") != null) {
+            $imgName = UImage::storeImageGetFilename(UHTTPMethods::files("profilePicture"));
+            $user->setProfilePicture($imgName);
+        }
         
         // check per unicità di email
         if (isset($inputs['email'])) {
@@ -310,55 +317,8 @@ class CUser {
             }
             $user->setUsername($inputs['username']);
         }
-    }
 
-    public static function modifyAnyUser($id) {
-        CUser::isLogged();
-        CUser::assertRole(EAdmin::class);
-
-
-
-    }
-
-    public static function modifyUserRequest() {
-        CUser::isLogged();
-        $user = CUser::getLoggedUser();
-
-        // TODO this should work also for instructors and employees
-        try {
-            $inputs = UValidate::validateInputArray($_POST, self::$rulesModifyUser, false);
-        } catch (ValidationException $e) {
-            // if validation fails, show the error message
-            (new VError())->show($e->getMessage());
-            exit;
-        }
-
-        if (isset($inputs['name'])) $user->setName($inputs['name']);
-        if (isset($inputs['surname'])) $user->setSurname($inputs['surname']);
-        if (isset($inputs['email'])) $user->setEmail($inputs['email']);
-        if (isset($inputs['password'])) $user->setPassword($inputs['password']);
-        if (isset($inputs['birthday'])) $user->setBirthDate($inputs['birthday']);
-        if (isset($inputs["gender"])) $user->setSex(UserSex::from($inputs["gender"]));
-        
-        if (UHTTPMethods::files("profilePicture", "name") != null) {
-            $imgName = UImage::storeImageGetFilename(UHTTPMethods::files("profilePicture"));
-            $user->setProfilePicture($imgName);
-        }
-
-        if (isset($inputs["profilePicture"])) $user->setSex($inputs["profilePicture"]);
-        
         $view = new VError();
-        
-        if (isset($inputs['username'])) {
-            if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
-                if ($user->getUsername() !== $inputs['username']) {
-                    $view->show("Username già preso da qualcun'altro.");
-                    exit;
-                }
-            }
-            $user->setUsername($inputs['username']);
-        }
-        
 
         $ok = FPersistentManager::getInstance()->uploadObj($user);
         if (!$ok) {
@@ -367,6 +327,29 @@ class CUser {
         }
  
         $view->showSuccess("Dati modificati con successo.");
+        exit;
+    }
+
+    public static function finalizeModifyAnyUser($id) {
+        CUser::isLogged();
+        CUser::assertRole(EAdmin::class);
+        
+        $user = FPersistentManager::getInstance()->retriveUserById($id);
+        if ($user == null) {
+            (new VError())->show('Invalid user ID');
+            exit;
+        }
+
+        // modifies selected user
+        self::modifyUserFromImputs($_POST, $user);
+        exit;
+    }
+
+    public static function modifyUserRequest() {
+        CUser::isLogged();
+        $user = CUser::getLoggedUser();
+
+        self::modifyUserFromImputs($_POST, $user);
         exit;
     }
     
