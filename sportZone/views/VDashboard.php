@@ -162,18 +162,7 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
     }
 
-    public function showManageReservations(array $reservations, string $role) {
-        $reservationsArray = [];
-        foreach ($reservations as $reservation) {
-            $reservationsArray[] = EReservation::reservationToArray($reservation);
-        }
-        $this->smarty->assign('reservations', $reservationsArray);
 
-
-        USmarty::configureBaseLayout($this->smarty);
-        //$this->smarty->assign('user', $userArray);
-        $this->smarty->display($this->getBasePath($role) . 'mng_reservations.tpl');
-    }
 
     public function showFilteredReservations($reservations, $name, $date, $sport, $role) {
         
@@ -192,16 +181,23 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'showFiltered.tpl');
     }
 
+
+    
+
     // -------------- CLIENT ONLY -----------------
       public function showMyReservationDetails($reservation, $active, $role) {
+
+        if ($reservation !== null) {
+            $reservation = EReservation::reservationToArray($reservation);
+        } else {
+            $reservationArray = [];
+        }
         
-        $reservationArray = EReservation::reservationToArray($reservation);
         $this->smarty->assign('reservation', $reservationArray);
         $this->smarty->assign('active', $active);
 
 
         USmarty::configureBaseLayout($this->smarty);
-        //$this->smarty->assign('user', $userArray);
         $this->smarty->display($this->getBasePath($role) . 'reservations.tpl');
     }
 

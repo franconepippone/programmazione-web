@@ -1,4 +1,6 @@
 <?php 
+
+use Smarty\Compile\Tag\Capture;
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CReservation{
@@ -69,7 +71,7 @@ class CReservation{
             return;
             }
             // Get available hours for this field and date through FReservation
-            $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $date);
+            $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $date);
 
             $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
             if (!$field) {
@@ -111,20 +113,30 @@ class CReservation{
             'cost' => $field->getCost()
             ];
         
-
         $view = new VReservation();
         $view->showReservationSummary($fullName, $data['date'], $data['time'], $field);
     }
 
 
+    public static function startPaymentReservation() {
+        CUser::isLogged();
 
-
-
+        // TODO CHECK IF THERE IS PENDING RESERVATION
+        $cost = $_SESSION['pending_reservation']['cost'];
+        CPayment::startPayment((string)$cost, '/reservation/finalizeReservation');
+    }
 
 
     public static function finalizeReservation() { 
         CUser::isLogged();
         $userId = $_SESSION['user'] ?? null;
+
+        $outcome = CPayment::getPaymentOutcome();
+        if (!isset($outcome)) {
+            (new VError())->show("Errore con il pagamento.");
+            return;
+        }
+
 
 
         if (!isset($_SESSION['pending_reservation'])) {
@@ -133,8 +145,6 @@ class CReservation{
         }
 
         $pending = $_SESSION['pending_reservation'];
-        $paymentMethod = $_POST['paymentMethod'] ?? 'onsite';
-
 
         $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
         $client = FPersistentManager::getInstance()->retriveUserById($userId);
@@ -143,7 +153,18 @@ class CReservation{
         $dateObj = new DateTime($pending['date']);
         $timeObj = new DateTime($pending['time']);
 
-        if ($paymentMethod === 'online') {
+        switch ($outcome['type']) {
+            case CPayment::METHOD_ONLINE:
+                $payment = new EOnlinePayment();
+                break;
+            case CPayment::METHOD_ONSITE:
+                $payment = new EOnSitePayment();
+                break;
+            default:
+                (new VError())->show("Metodo di pagamento invalido");
+                exit;
+        }
+        if ($outcome['type'] === CPayment::METHOD_ONLINE) {
             $payment = new EOnlinePayment();
         } else {
             $payment = new EOnSitePayment();
@@ -320,7 +341,7 @@ class CReservation{
     }
 
         $fieldId = $reservation->getField()->getId();
-        $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $newDate);
+        $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $newDate);
 
         $view = new VReservation();
         $view->showModifyTimeForm($reservation, $newDate, $avaiableHours);

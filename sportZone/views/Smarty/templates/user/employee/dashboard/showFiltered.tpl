@@ -1,15 +1,14 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="manageReservations"}
 
-{block name="dashboard_tabs_styles"}
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
-{/block}
+{extends file=$layout}
+{assign var="page_title" value="Dashboard - Settings"}
 
 {block name="dashboard_content"}
     <div class="container py-4" style="max-width: 900px;">
         <h2 class="mb-4">Prenotazioni filtrate</h2>
 
-        <form method="get" action="/dashboard/filteredList" class="row g-3 mb-4">
+        <form method="get" action="/dashboard/manageReservations" class="row g-3 mb-4">
             <div class="col-md-4">
                 <label for="name" class="form-label">Nome utente:</label>
                 <input type="text" id="name" name="name" value="{$name|default:''}" class="form-control">

@@ -1,5 +1,5 @@
 {extends file=$layout}
-
+{assign var="page_title" value="Dashboard - Settings"}
 {block name="content"}
 <div class="container py-4">
     <div class="card shadow-sm mx-auto" style="max-width: 600px;">
@@ -9,8 +9,9 @@
             <form method="POST" action="/reservation/reservationSummary">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Campo:</label>
-                    <div>{$fieldData.sport} - {$fieldData.terrainType}</div>
+                    <div>{$fieldData.name} - {$fieldData.sport}</div>
                 </div>
+                
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Data:</label>

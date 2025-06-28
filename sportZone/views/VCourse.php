@@ -11,7 +11,8 @@ class VCourse
         $this->smarty = USmarty::getInstance();
     }
     //********************************************************* */
-   public function showCreateCourseForm($instructors, $fields, $data = []) {
+    public function showCreateCourseForm($instructors, $fields, $data = []) {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('instructors', array_map(fn($i) => EInstructor::instructorToArray($i), $instructors));
         $this->smarty->assign('fields', array_map(fn($f) => EField::fieldToArray($f), $fields));
         foreach (['title','description','start_date','cost','max_participants','days','instructor','field'] as $k) {
@@ -21,6 +22,7 @@ class VCourse
     }
 
     public function showCourseSummary($data,$possiblehours) {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('title', $data['title']);
         $this->smarty->assign('description', $data['description']);
         $this->smarty->assign('start_date', $data['start_date']);
@@ -37,6 +39,7 @@ class VCourse
     }
 
     public function confirmCourse(ECourse $course) {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('data', ECourse::courseToArray($course));
         $this->smarty->display('course/confirm_course.tpl');
     }
@@ -109,15 +112,7 @@ class VCourse
     }
 
     
-    //********************************************************* */
-    public function showModifyCourseForm($course,$modifyPermission)
-    {
-        $courseData = ECourse::courseToArray($course);
-        ///print_r($courseData);
-        $this->smarty->assign('course', $courseData);
-        $this->smarty->display('course/modifyForm.tpl');
-    }
-
+ 
 
     public function showCreateResult($result = null)
     {
@@ -125,9 +120,7 @@ class VCourse
         $this->smarty->display('course/createResult.tpl');
     }
 
-    public function confirmCourseModifies(){
-        $this->smarty->display('course/confirmCourseModifies.tpl');
-    }
+    
 }   
 
 // End of VCourse.php

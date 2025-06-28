@@ -19,19 +19,19 @@
     [
         "name" => "Beginner Football Training",
         "start_date" => "2025-07-10",
-        "image" => "https://www.gannett-cdn.com/-mm-/11209fb2def8be382b823d16ad1cec8e92fddfbf/c=0-210-5184-3126/local/-/media/AsburyPark/2014/12/07/B9315404032Z.1_20141207054645_000_GQQ9ALD42.1-0.jpg?width=3200&height=1680&fit=crop",
+        "image" => "https://th.bing.com/th/id/R.c141f053756ce848378899536757e431?rik=w2lOqmpD1%2bPW6A&pid=ImgRaw&r=0",
         "link" => "#"
     ],
     [
         "name" => "Padel for Intermediates",
         "start_date" => "2025-07-15",
-        "image" => "https://www.gannett-cdn.com/-mm-/11209fb2def8be382b823d16ad1cec8e92fddfbf/c=0-210-5184-3126/local/-/media/AsburyPark/2014/12/07/B9315404032Z.1_20141207054645_000_GQQ9ALD42.1-0.jpg?width=3200&height=1680&fit=crop",
+        "image" => "https://parksports.co.uk/media/images/Sports/Padel/_1200xAUTO_crop_center-center_none/Adult-Padel-Courses.jpg",
         "link" => "#"
     ],
     [
         "name" => "Tennis Techniques 101",
         "start_date" => "2025-08-01",
-        "image" => "https://www.gannett-cdn.com/-mm-/11209fb2def8be382b823d16ad1cec8e92fddfbf/c=0-210-5184-3126/local/-/media/AsburyPark/2014/12/07/B9315404032Z.1_20141207054645_000_GQQ9ALD42.1-0.jpg?width=3200&height=1680&fit=crop",
+        "image" => "https://th.bing.com/th/id/R.1002a334fd591923db090e1e9d25635a?rik=Uo6VPnC2q2sQbg&riu=http%3a%2f%2fwww.tennisiconuk.com%2fwp-content%2fuploads%2f2016%2f05%2fevents_1.jpg&ehk=vmAyP11OyTriQrS6UX%2bDjBolwM62j6C3vVcmk65Fn8M%3d&risl=&pid=ImgRaw&r=0",
         "link" => "#"
     ],
     [
@@ -42,25 +42,25 @@
     ]
 ]}
 {assign var="instructors" value=[
-    ["name" => "Carlos Linares", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
+    ["name" => "Carlos Linares", "image" => "https://as1.ftcdn.net/v2/jpg/05/40/94/56/1000_F_540945602_Z4vikFTHWKuX7B0ncuAZf22Fh4yrdYNF.jpg"],
     ["name" => "Ana Torres", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Luis Navarro", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Elena Sánchez", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Miguel Ortega", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Lucía Rivas", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Daniel Vélez", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Paula Ruiz", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Santiago Vidal", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"],
-    ["name" => "Clara Mendoza", "image" => "https://i1.rgstatic.net/ii/profile.image/792008453005319-1565840938681_Q512/Carlos-Linares-Koloffon.jpg"]
+    ["name" => "Luis Navarro", "image" => "https://i.pinimg.com/originals/f8/66/8e/f8668e5328cfb4938903406948383cf6.png"],
+    ["name" => "Elena Sánchez", "image" => "https://media.istockphoto.com/id/1253034963/photo/smart-businessman-smiling-at-camera-wearing-round-glasses-isolated-on-gray-background.jpg?s=612x612&w=0&k=20&c=i3KBjpmwOq6mtTGbvmKTm6ZEm3RsAh3FUWoL4d6y4nA="],
+    ["name" => "Miguel Ortega", "image" => "https://media.istockphoto.com/id/856797530/es/foto/retrato-de-una-mujer-hermosa-en-el-gimnasio.jpg?s=612x612&w=0&k=20&c=PKkXypaXFdO72AGyU7gbXMYIXUrDKeI-9REDOV592Gs="],
+    ["name" => "Lucía Rivas", "image" => "https://tse4.mm.bing.net/th/id/OIP.d0UCkZZuenLP4zQ61mbnjwHaHa?r=0&rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3"],
+    ["name" => "Daniel Vélez", "image" => "https://tse1.explicit.bing.net/th/id/OIP.Kuzs4QPin3bQFop1kbnq6AHaHa?r=0&rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3"],
+    ["name" => "Paula Ruiz", "image" => "https://loopyball.com/wp-content/uploads/2018/04/chefin-1.jpg"],
+    ["name" => "Santiago Vidal", "image" => "https://i.pinimg.com/originals/fd/e3/b8/fde3b8a7a48aa75a15758b27e30212d1.png"],
+    ["name" => "Clara Mendoza", "image" => "https://c8.alamy.com/comp/H3E85X/portrait-of-happy-man-standing-with-a-tennis-racket-H3E85X.jpg"]
 ]}
 
 {assign var="fields" value=[
-    ["name" => "Football", "image" => "https://th.bing.com/th/id/R.47a753a2aebdff63eb16a87b73084962?rik=AZy90cAwum4Atg&pid=ImgRaw&r=0"],
-    ["name" => "Padel", "image" => "https://th.bing.com/th/id/R.47a753a2aebdff63eb16a87b73084962?rik=AZy90cAwum4Atg&pid=ImgRaw&r=0"],
-    ["name" => "Tennis", "image" => "https://th.bing.com/th/id/R.47a753a2aebdff63eb16a87b73084962?rik=AZy90cAwum4Atg&pid=ImgRaw&r=0"],
-    ["name" => "Swimming", "image" => "https://th.bing.com/th/id/R.47a753a2aebdff63eb16a87b73084962?rik=AZy90cAwum4Atg&pid=ImgRaw&r=0"],
-    ["name" => "Basketball", "image" => "https://th.bing.com/th/id/R.47a753a2aebdff63eb16a87b73084962?rik=AZy90cAwum4Atg&pid=ImgRaw&r=0"],
-    ["name" => "Gym", "image" => "https://th.bing.com/th/id/R.47a753a2aebdff63eb16a87b73084962?rik=AZy90cAwum4Atg&pid=ImgRaw&r=0"]
+    ["name" => "Football", "image" => "https://th.bing.com/th/id/R.38b5f9e531f99f1da1602a4193eca444?rik=P4GzSvYthANwkg&pid=ImgRaw&r=0"],
+    ["name" => "Padel", "image" => "https://hellopadelacademy.com/wp-content/uploads/2021/05/RACKET_CLUB_1914_LOW_sRGB-1024x682.jpg"],
+    ["name" => "Tennis", "image" => "https://web-assets.playfinder.com/wp-content/uploads/2017/12/27164007/Grass-Court-synthetic-tennis_2.jpg"],
+    ["name" => "Swimming", "image" => "https://www.britishswimming.org/media/images/14.width-600.jpg"],
+    ["name" => "Basketball", "image" => "https://d2gg9evh47fn9z.cloudfront.net/1600px_COLOURBOX23298301.jpg"],
+    ["name" => "Gym", "image" => "https://st2.depositphotos.com/1017228/7108/i/950/depositphotos_71080145-stock-photo-gym-interior-with-equipment.jpg"]
 ]}
 
 {block name="content"}

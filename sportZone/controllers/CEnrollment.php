@@ -60,10 +60,9 @@ class CEnrollment
         $message='Iscrizione avvenuta con successo';
         $butt_name ="le mie iscrizioni ";
         $butt_action="window.location.href='/dashboard/myEnrollments'";
-            $view = new VError;
-            $view->showSuccess($message, $butt_name,$butt_action);
-        $view = new VEnrollment();
-        $view->showEnrollmentFinalization($enrollment);
+        $view = new VError();
+        $view->showSuccess($message, $butt_name,$butt_action);
+        exit;
     }
 
     // Mostra tutti i corsi a cui l'utente è iscritto
@@ -73,8 +72,7 @@ class CEnrollment
         if (FPersistentManager::getInstance()->retriveEnrollmentOnAttributes($verifyFields)) {
         
             (new VError())->show("Sei già iscritto a questo corso.");
-
-            return;
+            exit;
         }
         
     }

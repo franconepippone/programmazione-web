@@ -1,5 +1,5 @@
 {extends file=$layout}
-
+{assign var="page_title" value="Dashboard - Settings"}
 {block name="content"}
     <div class="container py-4">
         <div class="card shadow-sm mx-auto" style="max-width: 600px;">
@@ -10,12 +10,12 @@
                     <li class="list-group-item"><strong>Utente:</strong> {$fullName}</li>
                     <li class="list-group-item"><strong>Data:</strong> {$date}</li>
                     <li class="list-group-item"><strong>Orario:</strong> {$time|truncate:5:"":true}</li>
-                    <li class="list-group-item"><strong>Campo:</strong> {$fieldData.sport} - {$fieldData.terrainType}</li>
+                    <li class="list-group-item"><strong>Campo:</strong> {$fieldData.name} - {$fieldData.sport}</li>
                     <li class="list-group-item"><strong>Coperto:</strong> {if $fieldData.isIndoor}Sì{else}No{/if}</li>
                     <li class="list-group-item"><strong>Costo orario:</strong> €{$fieldData.hourlyCost|number_format:2}</li>
                 </ul>
 
-                <form method="post" action="/paymentMethod/payForm" class="mb-3">
+                <form method="post" action="/reservation/startPaymentReservation" class="mb-3">
                     <input type="hidden" name="field_id" value="{$fieldData.id}">
                     <input type="hidden" name="date" value="{$date}">
                     <input type="hidden" name="time" value="{$time}">
