@@ -1,5 +1,7 @@
 <?php
 
+use App\Enum\EnumSport;
+
 require_once __DIR__ . "/../../vendor/autoload.php";
 require_once "FField.php";
 
@@ -117,6 +119,11 @@ class FPersistentManager{
     public static function removeField(EField $field){
         return FField::deleteField($field);
     }    
+
+    public static function retrieveFieldsBySport(?string $sport) {
+        return FField::getFieldsBySport($sport);
+    }
+
      //-------------------------------------CLIENT--------------------------------------
 
     /**

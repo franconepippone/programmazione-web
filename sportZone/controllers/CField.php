@@ -82,7 +82,6 @@ class CField {
         CUser::isLogged();
         CUser::assertRole(EEmployee::class);
 
-
         $view = new VField();
         $view->showCreateFieldForm();
     }
@@ -99,7 +98,6 @@ class CField {
             $view->show("Invalid field id");
             exit;
         }
-
 
         $images = UImage::getImageFullPaths($fld->getImages());
 

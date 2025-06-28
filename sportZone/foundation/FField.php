@@ -1,5 +1,7 @@
 <?php
 
+use App\Enum\EnumSport;
+
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class FField{
@@ -37,6 +39,12 @@ class FField{
 
     public static function deleteField(EField $field) {
         FEntityManager::getInstance()->deleteObj($field);
+    }
+
+    public static function getFieldsBySport(?string $sport) {
+        return FEntityManager::getInstance()->retriveAllMatching(EField::class, [
+            'sport' => $sport
+        ]);
     }
    
 }

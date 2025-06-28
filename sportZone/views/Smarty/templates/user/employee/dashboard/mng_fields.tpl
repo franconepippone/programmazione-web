@@ -134,13 +134,13 @@
 
 <form class="search-form" method="GET" action="/dashboard/manageFields">
     <label>
-        Nome:
-        <input type="text" name="name" value="{$title}" placeholder="calcetto-1">
+        Name:
+        <input type="text" name="name" value="{$title}" placeholder="football-1">
     </label>
     <label>
         Sport:
         <select name="sport">
-            <option value="">-- Tutti gli sport --</option>
+            <option value="">-- All sports --</option>
             <option value="football" {if $search.sport == 'football'}selected{/if}>Calcio</option>
             <option value="tennis" {if $search.sport == 'tennis'}selected{/if}>Tennis</option>
             <option value="basket" {if $search.sport == 'basket'}selected{/if}>Basket</option>

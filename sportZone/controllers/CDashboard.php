@@ -1,5 +1,7 @@
 <?php
 
+use App\Enum\EnumSport;
+
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
@@ -34,8 +36,7 @@ class CDashboard{
 
     
 
-     public static function myReservations() {
-        
+    public static function myReservations() {
         CUser::isLogged();
         $role = self::assertRole(EClient::class);
 
@@ -145,7 +146,7 @@ class CDashboard{
             exit;
         }
 
-        $searchParams = ['sport' => ''];
+        $searchParams = ['sport' => null];
         if (isset($getInputs['sport'])) {
             $searchParams['sport'] = $getInputs['sport'];
         }
@@ -153,7 +154,7 @@ class CDashboard{
         // filtraggio campi
 
         $pm = FPersistentManager::getInstance();
-        $fields = $pm->retrieveAllMatchingFields();
+        $fields = $pm->retrieveFieldsBySport($searchParams['sport']);
 
     
         $view = new VDashboard();
