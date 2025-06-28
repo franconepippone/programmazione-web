@@ -80,11 +80,8 @@ class CField {
 
     public static function createFieldForm() {
         CUser::isLogged();
-        if (!CUser::isEmployee()) {
-            // TODO
-            echo "devi essere un impiegato (rimpiazza con errore)";
-            exit;
-        }
+        CUser::assertRole(EEmployee::class);
+
 
         $view = new VField();
         $view->showCreateFieldForm();
@@ -92,11 +89,8 @@ class CField {
 
     public static function modifyField($field_id) {
         CUser::isLogged();
-        if (!CUser::isEmployee()) {
-            $view = new VError();
-            $view->show("You cannot access this page");
-            exit;
-        }
+        CUser::assertRole(EEmployee::class);
+
         $pm = FPersistentManager::getInstance();
         $fld = $pm->retriveFieldById($field_id);
 
@@ -161,12 +155,7 @@ class CField {
 
     public static function finalizeFieldModify($fieldId) {
         CUser::isLogged();
-        if (!CUser::isEmployee()) {
-            // TODO
-            $view = new VError();
-            $view->show("You cannot access this page.");
-            exit;
-        }
+        CUser::assertRole(EEmployee::class);
 
         $pm = FPersistentManager::getInstance();
         $field = $pm->retriveFieldById($fieldId);
@@ -179,6 +168,7 @@ class CField {
 
     public static function finalizeFieldCreation() {
         CUser::isLogged();
+        CUser::assertRole(EEmployee::class);
 
         // TODO FIELD VALIDATION
         $field = new EField();
@@ -191,12 +181,7 @@ class CField {
 
     public static function delete($fieldId) {
         CUser::isLogged();
-        if (!CUser::isEmployee()) {
-            // TODO
-            $view = new VError();
-            $view->show("You cannot access this page.");
-            exit;
-        }
+        CUser::assertRole(EEmployee::class);
         
         $pm = FPersistentManager::getInstance();
         $fld = $pm->retriveFieldById($fieldId);

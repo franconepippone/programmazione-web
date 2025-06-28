@@ -4,15 +4,8 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CDashboard{
-
     private static function assertRole(...$allowedRoles): string {
-        $role = CUser::getUserRole();
-        if (!in_array($role, $allowedRoles, true)) {
-            $verr = new VError();
-            $verr->show("You have no access to this page.");
-            exit;
-        }
-        return $role;
+        return CUser::assertRole(...$allowedRoles);
     }
 
     // ----------------- COMMON --------------------

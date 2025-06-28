@@ -48,8 +48,8 @@
       </div>
 
 
-      <input type="hidden" id="latitude" name="latitude" required>
-      <input type="hidden" id="longitude" name="longitude" required>
+      <input type="hidden" id="latitude" name="latitude" value="0" required>
+      <input type="hidden" id="longitude" name="longitude" value="0" required>
 
       <button type="submit" class="submit-button">Crea campo</button>
     </form>
