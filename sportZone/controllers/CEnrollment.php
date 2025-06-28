@@ -99,25 +99,48 @@ class CEnrollment
 
 
 
-
     
-    // Permette di annullare l'iscrizione a un corso
+    
+    // eliminazione iscrizione (non implementato nella dashboard ep)
     public static function deleteEnrollment($enrollment_id)
     {
         CUser::isLogged();
-        $userID = USession::getSessionElement('user');
-        $enrollment = FPersistentManager::getInstance()->retriveEnrollmentOnId($enrollment_id);
 
-        if (!$enrollment || $enrollment->getUser()->getId() != $userID) {
-            (new VError())->show("Iscrizione non trovata o non autorizzato.");
-            return;
+        CUser::assertRole(EEmployee::class);
+
+        $user= CUser::getLoggedUser();
+        
+        $enrollments = FPersistentManager::retriveEnrollmentsOnCourseId($user->getId());
+        
+        if (sizeof($enrollments)==0){
+            $view = new VError(); 
+            $message='Nessuna iscrizione trovata';
+            $butt_name ="Indietro ";
+            $butt_action="window.location.href='/dashboard/showEnrollments'";
+            $view->show($message, $butt_name,$butt_action);
         }
-
-        FPersistentManager::getInstance()->deleteEnrollment($enrollment_id);
-
-        $view = new VEnrollment();
-        $view->showDeleteConfirmation();
+        else{
+            FPersistentManager::getInstance()->removeEnrollment($enrollment_id);
+            $message='Iscrizione trovata';
+            $butt_name ="avanti ";
+            $butt_action="window.location.href='/enrollment/EnrollmentDetails'";
+            $view = new VError(); 
+            $view->showSuccess($message, $butt_name,$butt_action);
+        }
     }
+
+    public static function EnrollmentDetails()
+    {
+        
+        $role = self::assertRole(EClient::class);
+        $user = CUser::getLoggedUser();
+        $userId = $user->getId();
+        $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($userId);
+
+        $view = new VDashboard();
+        $view->showMyEnrollments($enrollments, $user, $role);
+    }
+    
 
     // Mostra tutti gli iscritti a un corso (per istruttore/admin)
     public static function showEnrollmentsOfCourse($course_id)
@@ -128,4 +151,8 @@ class CEnrollment
         $view = new VEnrollment();
         $view->showEnrollmentsOfCourse($enrollments, $course_id);
     }
+
+    
+
+    
 }
