@@ -496,6 +496,24 @@ class UValidate {
         return $input;
     }
         
+      /**
+     * Validates that the given date is not in the past.
+     *
+     * @param string $dateString The date string in 'Y-m-d' format.
+     * @return string The validated date as a string.
+     * @throws ValidationException If the date is invalid or in the past.
+     */
+    public static function validateNotInPast(string $dateString): string {
+        $inputDate = self::validateDate($dateString);
+        $today = new DateTime();
+        $today->setTime(0, 0, 0); // Azzeriamo l'orario per confrontare solo le date
+
+        if ($inputDate < $today) {
+            throw new ValidationException("La data non può essere nel passato.");
+        }
+        return $inputDate->format('Y-m-d');
+    }
+
     /**
      * Validates and filters an input array based on allowed attributes and custom validation methods.
      *
@@ -642,6 +660,7 @@ class UValidate {
         return $endDate;
     }
 
+
     /**
      * Validates the instructor ID.
      *
@@ -692,18 +711,19 @@ class UValidate {
     *
      * Deve essere un intero positivo corrispondente a una reservation esistente nel database.
      */
-     public static function validateReservationId($id) {
-    $id = intval($id);
-    if ($id <= 0) {
-        throw new ValidationException("ID prenotazione non valido.");
+    public static function validateReservationId($id) {
+        $id = intval($id);
+        if ($id <= 0) {
+            throw new ValidationException("ID prenotazione non valido.");
+        }
+        $pm = FPersistentManager::getInstance();
+        $reservation = $pm->retriveReservationById($id);
+        if (!$reservation) {
+            throw new ValidationException("Prenotazione non trovata.");
+        }
+        return $id;
     }
-    $pm = FPersistentManager::getInstance();
-    $reservation = $pm->retriveObj(EReservation::class, $id);
-    if (!$reservation) {
-        throw new ValidationException("Prenotazione non trovata.");
-    }
-    return $id;
-    }
+
 
     /**
      * Valida la data della reservation (deve essere una data valida e non nel passato).
@@ -736,6 +756,10 @@ class UValidate {
     public static function validateNoActiveReservation($clientId) {
         $today = new DateTime('today');
         $reservations = FReservation::getReservationsByUserId($clientId);
+        $user = FPersistentManager::getInstance()->retriveUserById($clientId);
+        if ($user->getType() != 'client') {
+            return true;
+        }
         if (!$reservations) {
             return true;
         }

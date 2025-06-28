@@ -249,14 +249,15 @@ class CUser {
         
         $view = new VError();
         
-        // TODO da un messaggio di errroe anche con lo stesso username
         if (isset($inputs['username'])) {
+            echo "SISIS";
             if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
                 if ($user->getUsername() !== $inputs['username']) {
                     $view->show("Username già preso da qualcun'altro.");
                     exit;
                 }
             }
+            $user->setUsername($inputs['username']);
         }
         
 
@@ -302,15 +303,13 @@ class CUser {
     #[PathUrl(PathUrl::HIDDEN)]
     public static function getUserRole(): ?string
     {
-        if (self::isLogged()) {
+        if (self::isLoggedBool()) {
             if (USession::isSetSessionElement('role')) {
                 return USession::getSessionElement('role');
-            } else {
-                // if role is not set, then something is creally wrong with how the user managed to create a session,
-                // therefore we logout just in case
-                self::logout();
-            }
-        };
+            } 
+        }
+
+        return null;
     }
 
     #[PathUrl(PathUrl::HIDDEN)]

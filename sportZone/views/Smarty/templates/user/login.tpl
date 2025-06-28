@@ -1,88 +1,31 @@
-{extends file="sportZone/views/Smarty/templates/layouts/bare_base.tpl"}
+{extends file=$layout}
 {assign var="page_title" value="Login"}
 
-{block name="styles"}
-   <style>
-
-    .login-container {
-      max-width: 300px;
-      margin: auto;
-      margin-top: 20px;
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .login-container h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .login-container label {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    .login-container input[type="text"],
-    .login-container input[type="password"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .login-container button {
-      width: 100%;
-      padding: 0.5rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .login-container button:hover {
-      background-color: #0056b3;
-    }
-
-    .register-link {
-      display: block;
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .register-link a {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    .register-link a:hover {
-      text-decoration: underline;
-    }
-  </style>
-{/block}
+{block name="styles"}{/block}
 
 {block name="content"}
-    <div class="login-container">
-    <h2>{$login_title|default:"Login"}</h2>
-    <form action="/user/checkLogin" method="POST">
-      <input type="hidden" name="redirectUrl" id="redirectUrl" value={$redirectUrl}>
+  <div class="container mt-5 d-flex justify-content-center">
+    <div class="card p-4 shadow" style="max-width: 320px; width: 100%;">
+      <h2 class="card-title text-center mb-4">{$login_title|default:"Login"}</h2>
+      <form action="/user/checkLogin" method="POST">
+        <input type="hidden" name="redirectUrl" id="redirectUrl" value={$redirectUrl}>
 
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username:</label>
+          <input type="text" id="username" name="username" class="form-control" required>
+        </div>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" id="password" name="password" class="form-control" required>
+        </div>
 
-      <button type="submit">Log In</button>
-    </form>
+        <button type="submit" class="btn btn-primary w-100">Log In</button>
+      </form>
 
-    <div class="register-link">
-      Don't have an account? <a href="/user/register">Register here</a>
+      <div class="mt-3 text-center small">
+        Don't have an account? <a href="/user/register" class="link-primary">Register here</a>
+      </div>
     </div>
   </div>
 {/block}

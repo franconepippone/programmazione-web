@@ -29,14 +29,17 @@ class VReservation{
         $this->smarty->display("reservation/reservation_summary.tpl");
     }
 
-    public function showConfirmation() {///aggiungere oggetto reservation quando viene collegato al metodo di pagamento
+    public function showConfirmation() {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display("reservation/confirmation.tpl");
     }
 
-    public function showCancelReservation($reservation) {
+    public function showCancelReservation($reservation,$field) {
         $reservationData = EReservation::reservationToArray($reservation);
+        $fieldData = EField::fieldToArray($field);
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign("reservation", $reservationData);
+        $this->smarty->assign("field", $fieldData);
         $this->smarty->display("reservation/cancel_reservation.tpl");
     }
 

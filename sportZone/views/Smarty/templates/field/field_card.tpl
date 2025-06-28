@@ -8,13 +8,13 @@
     <h5 class="card-title">{$field.name}</h5>
     <p class="card-text mb-2">
       <strong>Sport:</strong> {$field.sport}<br>
-      <strong>Time:</strong> 8:00 - 21:00<br>
-      {if isset($field.terrainType)}<strong>Terrain:</strong> {$field.terrainType}<br>{/if}
-      {if ($field.isIndoor)}<strong>Indoor</strong><br>{/if}
+      <strong>Orario apertura:</strong> 8:00 - 21:00<br>
+      {if isset($field.terrainType)}<strong>Superficie:</strong> {$field.terrainType}<br>{/if}
+      {if ($field.isIndoor)}<strong>&#10003; al chiuso</strong><br>{/if}
       {if isset($field.illuminazione)}<strong>Illuminazione:</strong> {$field.illuminazione}<br>{/if}
     </p>
     <div class="card-footer bg-transparent border-0 p-0 mt-auto">
-      <span class="fw-bold text-primary">Cost: &euro;{$field.hourlyCost}/h</span>
+      <span class="fw-bold text-primary">Costo: &euro;{$field.hourlyCost}/h</span>
     </div>
   </div>
 </a>

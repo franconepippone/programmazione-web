@@ -1,110 +1,58 @@
-{extends file="sportZone/views/Smarty/templates/layouts/bare_base.tpl"}
+{extends file=$layout}
 {assign var="page_title" value="Register"}
 
 {block name="styles"}
-    <style>
-    .login-container {
-      max-width: 300px;
-      margin: auto;
-      background: white;
-      padding: 2rem;
-      margin-top: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .login-container h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .login-container label {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    .login-container input[type="text"],
-    .login-container input[type="password"],
-    .login-container input[type="email"],
-    .login-container input[type="date"],
-    .login-container select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-
-    .login-container button {
-      width: 100%;
-      padding: 0.5rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .login-container button:hover {
-      background-color: #0056b3;
-    }
-
-    .register-link {
-      display: block;
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .register-link a {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    .register-link a:hover {
-      text-decoration: underline;
-    }
-  </style>
 {/block}
 
-
 {block name="content"}
-  <div class="login-container">
-    <h2>Register</h2>
-    <form action="/user/finalizeRegister" method="POST">
-      <label for="name">First name:</label>
-      <input type="text" id="name" name="name" required>
+  <div class="container mt-5 d-flex justify-content-center">
+    <div class="card p-4 shadow" style="max-width: 350px; width: 100%;">
+      <h2 class="text-center mb-4">Register</h2>
+      <form action="/user/finalizeRegister" method="POST" novalidate>
+        <div class="mb-3">
+          <label for="name" class="form-label">First name:</label>
+          <input type="text" id="name" name="name" class="form-control" required>
+        </div>
 
-      <label for="surname">Last name:</label>
-      <input type="text" id="surname" name="surname" required>
+        <div class="mb-3">
+          <label for="surname" class="form-label">Last name:</label>
+          <input type="text" id="surname" name="surname" class="form-control" required>
+        </div>
 
-      <label for="birthday">Birthday:</label>
-      <input type="date" id="birthday" name="birthday" required>
+        <div class="mb-3">
+          <label for="birthday" class="form-label">Birthday:</label>
+          <input type="date" id="birthday" name="birthday" class="form-control" required>
+        </div>
 
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username:</label>
+          <input type="text" id="username" name="username" class="form-control" required>
+        </div>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" id="email" name="email" class="form-control" required>
+        </div>
 
-<!--
-      <label for="birth">Birth Date:</label>
-      <input type="date" id="birth" name="birth" required>
+        <!--
+        <div class="mb-3">
+          <label for="sex" class="form-label">Sex:</label>
+          <select id="sex" name="sex" class="form-select" required>
+            <option value="">-- Select --</option>
+            <option value="male">MALE</option>
+            <option value="female">FEMALE</option>
+            <option value="other">OTHER</option>
+          </select>
+        </div>
+        -->
 
-      <label for="sex">Sex:</label>
-      <select id="sex" name="sex" required>
-        <option value="">-- Select --</option>
-        <option value="male">MALE</option>
-        <option value="female">FEMALE</option>
-        <option value="other">OTHER</option>
-      </select>
- -->
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" id="password" name="password" class="form-control" required>
+        </div>
 
-      <button type="submit">Register Now</button>
-    </form>
+        <button type="submit" class="btn btn-primary w-100">Register Now</button>
+      </form>
+    </div>
   </div>
 {/block}

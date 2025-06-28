@@ -34,11 +34,15 @@ class CFrontController{
 
     public function run($requestUri){
         // Parse the request URI
+        /*
+        $this->createDummyFields();
+        $this->createDummyCourses();
         
-        
-        
-        
-        /*$instructor = (new EInstructor())
+        $this->createDummyFields();
+        $this->createDummyCourses();
+        */
+        /*
+        $instructor = (new EInstructor())
             ->setName('Mario')
             ->setSurname('Rossi')
             ->setEmail('ciro')
@@ -237,3 +241,5 @@ class CFrontController{
     }
     
 }
+    
+
