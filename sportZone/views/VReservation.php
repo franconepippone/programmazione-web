@@ -29,7 +29,8 @@ class VReservation{
         $this->smarty->display("reservation/reservation_summary.tpl");
     }
 
-    public function showConfirmation() {///aggiungere oggetto reservation quando viene collegato al metodo di pagamento
+    public function showConfirmation() {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display("reservation/confirmation.tpl");
     }
 

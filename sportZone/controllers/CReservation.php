@@ -126,7 +126,7 @@ class CReservation{
         CUser::isLogged();
         $userId = $_SESSION['user'] ?? null;
 
-    
+
         if (!isset($_SESSION['pending_reservation'])) {
             (new VError())->show("Nessuna prenotazione in sospeso.");
             return;
