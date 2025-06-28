@@ -142,8 +142,7 @@ class CFrontController{
         return $map;
     }
 
-    
-    //creo campi fittizi
+
     
     public static function createDummyFields(){
         $fields = [];
@@ -192,7 +191,7 @@ class CFrontController{
         }
         
     }
-
+/*
     public function createDummyCourses($instructor){
         $field = new EField();
         $field->setSport('Padel')
@@ -236,10 +235,9 @@ class CFrontController{
         foreach ($courses as $course) {
             FPersistentManager::getInstance()->uploadObj($course);
         }
-        //$instructor->addCourse($course1);
-        //$instructor->addCourse($course2);
+
     }
-    
+*/   
 }
     
 

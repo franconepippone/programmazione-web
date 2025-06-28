@@ -4,13 +4,14 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CEnrollment
 {
+
+
+
+    //Enrollment confirmation page
     public static function enrollmentConfirmation($course_id) {
         CUser::isLogged();
         $user= CUser::getLoggedUser();
         CUser::assertRole(EClient::class);
-        //prendo l id dell utente dalla sessione
-        
-        
         $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
         
         self::isEnrolled($course,$user);
@@ -18,7 +19,10 @@ class CEnrollment
         $view->showEnrollmentConfirmation($user,$course);
     }
 
-    // Mostra il form di iscrizione a un corso
+
+
+
+    // Shows the form to enroll in a course
     public static function enrollForm($course_id)
     {
         CUser::isLogged();
@@ -34,7 +38,7 @@ class CEnrollment
 
 
 
-    // Finalizza l'iscrizione a un corso
+    // Finalize enrollment in a course
     public static function finalizeEnrollment($course_id)
     {
         CUser::isLogged();
@@ -44,12 +48,8 @@ class CEnrollment
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
 
         
-        self::isEnrolled($course,$user);//se iscritto non lo fa procedere
-
-        // Verifica se già iscritto
-        
-
-        // Crea iscrizione
+        self::isEnrolled($course,$user);
+       
         $enrollment = new EEnrollment();
         $enrollment->setClient($user);
         $enrollment->setCourse($course);
@@ -65,7 +65,11 @@ class CEnrollment
         exit;
     }
 
-    // Mostra tutti i corsi a cui l'utente è iscritto
+
+
+
+
+    // Verifies if the user is already enrolled in the course
     public static function isEnrolled($course,$user)
     {
         $verifyFields = ['client' => $user->getId(), 'course'=> $course->getId()];
@@ -78,28 +82,7 @@ class CEnrollment
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    // eliminazione iscrizione (non implementato nella dashboard ep)
+    // Deletes an enrollment
     public static function deleteEnrollment($enrollment_id)
     {
         CUser::isLogged();
@@ -118,7 +101,8 @@ class CEnrollment
             $view->show($message, $butt_name,$butt_action);
         }
         else{
-            FPersistentManager::getInstance()->removeEnrollment($enrollment_id);
+            $enrollment=FPersistentManager::getInstance()->retriveEnrollmentOnId($enrollment_id);
+            FPersistentManager::getInstance()->removeEnrollment($enrollment);
             $message='Iscrizione trovata';
             $butt_name ="avanti ";
             $butt_action="window.location.href='/enrollment/EnrollmentDetails'";
@@ -127,10 +111,13 @@ class CEnrollment
         }
     }
 
+
+
+
+    // Shows the details of a specific enrollment
     public static function EnrollmentDetails()
-    {
-        
-        $role = self::assertRole(EClient::class);
+    {   
+        $role = CUser::assertRole(EClient::class);
         $user = CUser::getLoggedUser();
         $userId = $user->getId();
         $enrollments = FPersistentManager::getInstance()->retriveEnrollmentsOnUserId($userId);
@@ -140,7 +127,9 @@ class CEnrollment
     }
     
 
-    // Mostra tutti gli iscritti a un corso (per istruttore/admin)
+
+
+    // Shows all users enrolled in a course 
     public static function showEnrollmentsOfCourse($course_id)
     {
         CUser::isLogged();
@@ -149,8 +138,6 @@ class CEnrollment
         $view = new VEnrollment();
         $view->showEnrollmentsOfCourse($enrollments, $course_id);
     }
-
-    
 
     
 }

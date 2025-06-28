@@ -12,16 +12,19 @@ class CField {
         "date" => 'validateDate'
     ];
 
+    //Shows the search form for fields
     public static function searchForm() {
         $view = new VField();
         $view->showSearchForm();
     }
 
+
+    //Shows the search results for fields
     public static function showResults() {
         try {
             $getInputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
-            echo "INPUT VALIDATION FAILED: " . $e->getMessage();
+            (New VError())->show("INPUT VALIDATION FAILED: " . $e->getMessage());
             exit;
         }
 
@@ -37,8 +40,7 @@ class CField {
         
         $pm = FPersistentManager::getInstance();
         $fields = $pm->retrieveAllMatchingFields();
-        // TODO filtraggio dei campi (usa metodo di alice)
-
+    
         $queryParams = [];
         if (isset($searchParams['date'])) $queryParams['date'] = $searchParams['date'];
         $query = http_build_query($queryParams);
@@ -46,7 +48,9 @@ class CField {
         $view = new VField();
         $view->showSearchResults($fields, $query, $searchParams);
     }
-
+    
+    
+    // Shows the details of a specific field
     public static function details($fieldId) {
         $pm = FPersistentManager::getInstance();
         $fld = $pm->retriveFieldById($fieldId);
@@ -59,7 +63,6 @@ class CField {
         try {
             $inputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
-            // TODO mostra messaggio errore
             $verr = new VError();
             $verr->show($e->getMessage());
             exit;
@@ -72,8 +75,7 @@ class CField {
     }
 
 
-    // ------------------- EMPLOYEE -----------------------------
-
+    // Shows the form to create a new field
     public static function createFieldForm() {
         CUser::isLogged();
         CUser::assertRole(EEmployee::class);
@@ -81,7 +83,9 @@ class CField {
         $view = new VField();
         $view->showCreateFieldForm();
     }
+    
 
+    // Shows the form to modify a field
     public static function modifyField($field_id) {
         CUser::isLogged();
         CUser::assertRole(EEmployee::class);
@@ -146,7 +150,9 @@ class CField {
             }
         }
     }
+    
 
+    // Finalizes the modification of a field
     public static function finalizeFieldModify($fieldId) {
         CUser::isLogged();
         CUser::assertRole(EEmployee::class);
@@ -159,7 +165,10 @@ class CField {
         $view = new VError();
         $view->showSuccess("Field was succesfully modified.", buttAction: "window.location.href='/dashboard/manageFields'");
     }
+    
 
+
+    // Finalizes the creation of a field
     public static function finalizeFieldCreation() {
         CUser::isLogged();
         CUser::assertRole(EEmployee::class);
@@ -172,7 +181,9 @@ class CField {
         $view = new VError();
         $view->showSuccess("Field was succesfully created", buttAction: "window.location.href='/dashboard/manageFields'");
     }
+    
 
+    // Deletes a field
     public static function delete($fieldId) {
         CUser::isLogged();
         CUser::assertRole(EEmployee::class);

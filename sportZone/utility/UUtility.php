@@ -56,14 +56,7 @@ class UUtility {
     }
 
 
-    public static function dateSlot($start, $end) {
-        // Controlla che l'orario di inizio sia prima di quello di fine
-        if ($start >= $end) {
-            throw new ValidationException("La data di inizio deve essere prima della data di fine.");
-        }
-        return true;
-    }
-    // metodo per serializzare un corso in un array
+    
     
 
 

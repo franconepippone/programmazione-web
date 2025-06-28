@@ -2,15 +2,12 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class FEnrollment {
-    //********************************
-    //verify methods
+
     public static function attributeExists($field, $value) {
         $result = FEntityManager::getInstance()->verifyAttributeExists(EEnrollment::class, $field, $value);
         return $result;
     }
-    
-    //********************************
-    //retrieve methods
+
     public static function getEnrollmentById(int $id) {
         $result = FEntityManager::getInstance()->retriveObj(EEnrollment::class, $id);
         return $result;
@@ -34,8 +31,7 @@ class FEnrollment {
         $result = FEntityManager::getInstance()->retriveObjListFromFields(EEnrollment::class, $fields);
         return $result;
     }
-    //********************************
-    //save and delete methods
+
     public static function saveEnrollment(EEnrollment $enrollment) {
         $result = FEntityManager::getInstance()->saveObject($enrollment);
         return $result;

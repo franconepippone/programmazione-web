@@ -3,8 +3,7 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class FInstructor {
-    //********************************
-    //verify methods
+
     public static function attributeExists($field, $value) {
         $result = FEntityManager::getInstance()->verifyAttributeExists(EInstructor::class, $field, $value);
         return $result;
@@ -35,8 +34,6 @@ class FInstructor {
         $result = FEntityManager::getInstance()->retriveObjListFromFields(EInstructor::class, $fields);
         return $result;
     }
-    //********************************
-    //save and delete methods
     public static function saveInstructor(EInstructor $instructor) {
         $result = FEntityManager::getInstance()->saveObject($instructor);
         return $result;

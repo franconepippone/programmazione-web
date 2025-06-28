@@ -2,14 +2,11 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class FCourse{
-    //********************************
-    //verify methods
+
     public static function attributeExists($field, $value) {
         $result = FEntityManager::getInstance()->verifyAttributeExists(ECourse::class, $field, $value);
         return $result;
     }
-    //********************************
-    //retrieve methods
 
     public static function getCourses() {
         $courses = FEntityManager::getInstance()-> selectAll(ECourse::class);
@@ -39,8 +36,6 @@ class FCourse{
         return $result;
     }
     
-    //********************************
-    //save and delete methods   //da implementare o no?
     public static function saveCourse(ECourse $course): void {
         FEntityManager::getInstance()->saveObject($course);
     }

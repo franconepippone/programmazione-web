@@ -804,5 +804,12 @@ class UValidate {
         return $timeSlot;
     }
 
+    public static function dateSlot($start, $end) {
+        if ($start >= $end) {
+            throw new ValidationException("La data di inizio deve essere prima della data di fine.");
+        }
+        return true;
+    }
+
 }
    

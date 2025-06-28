@@ -7,9 +7,6 @@ require_once "FField.php";
 
 class FPersistentManager{
 
-    /**
-     * Singleton Class (NON HA SENSO???? che senso ha avere un singleton con metodi statici?? forse è solo simmetria con eentitymanager?) -americo 
-     */
 
      private static $instance;
 
@@ -24,9 +21,7 @@ class FPersistentManager{
         return self::$instance;
     }
 
-    /**
-     * upload any Object in the database
-     */
+   
     public static function uploadObj($obj){
         $result = FEntityManager::getInstance()->saveObject($obj);
         return $result;
@@ -34,42 +29,32 @@ class FPersistentManager{
 
     //-------------------------------------USER---------------------------------------
     
-    /**
-     * verify if a user with this email exists in the database
-     */
+  
     public static function verifyUserEmail($email){
         $result = FUser::attributeExists('email', $email);
 
         return $result;
     }
 
-    /**
-     * verify if a user with this username exists in the database
-     */
+   
     public static function verifyUserUsername($username){
         $result = FUser::attributeExists('username', $username);
 
         return $result;
     }
-    /**
-     * return a User finding it not on the id but on it's email
-     */
+ 
     public static function retriveUserById($userId){
         return FUser::getUserById($userId);
     }
 
-    /**
-     * return a User findig it not on the id but on it's username
-     */
+  
     public static function retriveUserOnUsername($username)
     {
         $result = FUser::getUserByUsername($username);
         return $result;
     }
 
-    /**
-     * return a User finding it on the id
-     */
+   
     public static function retriveUserOnId(int $id) {
         $result = FUser::getUserById($id);
         return $result;
@@ -77,16 +62,12 @@ class FPersistentManager{
 
      //-------------------------------------FIELD---------------------------------------
 
-    /**
-     * Retrieve a Field by ID
-     */
+   
     public static function retriveFieldById($id){
         return FField::getFieldById($id);
     }
 
-    /**
-     * Retrieve a Field by attribute
-     */
+ 
     public static function retrieveAllMatchingFields(array $filters = []) {
         $result = FEntityManager::getInstance()->selectAll(EField::class);
         return $result;
@@ -103,9 +84,6 @@ class FPersistentManager{
      return false;
      }
      
-    /**
-    * Retrieve all fields
-    */
      public function retriveAllFields() {
         return FField::getAllFields();
      }
@@ -141,14 +119,7 @@ class FPersistentManager{
     return false;
     }
 
-    //-----------------------------------PAYMENT METHOD-------------------------------
 
-    /**
-     * Retrieve a Payment Method by ID
-     */
-    /*public static function retrivePaymentMethodById($id){
-        return FPaymentMethod::getPaymentMethodById($id);
-    }*/
 
     //-------------------------------------RESERVATION--------------------------------
 
@@ -195,9 +166,6 @@ class FPersistentManager{
     return $result;
   }
 
-/**
- * Retrieve available hours for a specific field and date
- */
     
   
     //-----------------------------------INSTRUCTOR-------------------------------
@@ -268,18 +236,15 @@ class FPersistentManager{
             return [];
         }
 
-        // Inizializza con gli orari disponibili del primo giorno
         $firstDate = $dates[0];
         $commonHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $firstDate);
 
-        // Per ogni data successiva, fai l'intersezione con gli orari precedenti
         for ($i = 1; $i < count($dates); $i++) {
             $dateString = $dates[$i];
             $dayHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $dateString);
             $commonHours = array_intersect($commonHours, $dayHours);
         }
 
-        // Ordina gli orari risultanti e restituiscili
         sort($commonHours);
         return array_values($commonHours);
     }
@@ -309,4 +274,7 @@ class FPersistentManager{
         return $result;
     }
 
+    public static function removeEnrollment(EEnrollment $enrollment) {
+        return FEnrollment::deleteEnrollment($enrollment);
+    }
 }

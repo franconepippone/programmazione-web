@@ -18,10 +18,13 @@ class CCourse {
 
    
     //********************************************************* */
-    
+
+
+     //Shows the form to create a new course
     public static function createCourseForm($data = []) {
     
         CUser::isEmployee();
+
         $view = new VCourse();
   
         $pm = FPersistentManager::getInstance();
@@ -30,9 +33,10 @@ class CCourse {
         $fields = $pm->retriveAllFields();
 
         $view->showCreateCourseForm($instructors, $fields, $data); 
-  }
+    }
 
-
+    // Function to handle the course creation summary
+    // It validates the input data, retrieves necessary objects, and shows the course summary
     public static function courseSummary() {
        
         CUser::isEmployee();
@@ -43,20 +47,11 @@ class CCourse {
 
         try {
             $validated = UValidate::validateInputArray($post, self::$rulesCourse, true);
+            UValidate::dateSlot(new DateTime($validated['start_date']), new DateTime($validated['end_date']));
 
-        // Validazione incrociata date
-            if ($validated['end_date'] <= $validated['start_date']) {
-                throw new ValidationException("La data di fine deve essere successiva a quella di inizio.");
-            }
-
-
-        // Recupera oggetti istruttore e campo
             $instructor = $pm->retriveInstructorById($validated['instructor']);
             $field = $pm->retriveFieldById($validated['field']);
-            if (!$instructor || !$field) {
-                throw new ValidationException("Istruttore o campo selezionato non valido.");
-            }
-
+       
             $validated['instructor'] = $instructor;
             $validated['field'] = $field;
 
@@ -71,16 +66,20 @@ class CCourse {
 
         } catch (ValidationException $e) {
             $msg = $e->getMessage();
-            if (isset($e->details['params'])) {
-              //  $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+            if (count($e->details) > 0) {
+                $msg .= "<br>Dettagli di validazione: " . implode(", ", $e->details);
             }
             (new VError())->show($msg);
         }
          
     }
 
+
+    // Function to finalize the course creation
+    // It retrieves the data from the POST request, creates a new course object, saves it
     public static function finalizeCourse() {
-        //CUser::isEmployee();
+        
+        CUser::isEmployee();
 
         $view = new VCourse();
         $pm = FPersistentManager::getInstance();
@@ -90,8 +89,6 @@ class CCourse {
         $duration = intval($data['duration']);
         $startTime = DateTime::createFromFormat('H:i:s', $startTimeStr);
         $endTime = (clone $startTime)->modify("+{$duration} hours");
-
-
 
         $instructor = $pm->retriveInstructorById($data['instructor']);
         $field = $pm->retriveFieldById($data['field']);
@@ -120,36 +117,8 @@ class CCourse {
     }
 
 
-    //************************************************************************** */
-    //here starts Kevin's code, please do not modify it
-    
-
-
-    private static $rulesCourseKevin = [
-        'title'                => 'validateTitle',
-        'description'          => 'validateDescription',
-        'startDate'            => 'validateStartDate',
-        'endDate'              => 'validateDate', // oppure 'validateEndDate' se vuoi controllare rispetto a startDate
-        'timeSlot'             => 'validateTimeSlot', // oppure crea un metodo specifico se vuoi validare il formato
-        'daysOfWeek'           => 'validateDays',   // assicurati che arrivi come array
-        'cost'                 => 'validatePrice',
-        'MaxParticipantsCount' => 'validateMaxParticipants',
-        'instructor'           => 'validateName',
-        'field'                => 'validateFieldName'
-    ];
-
-
-    //form per cercare i corsi, anche con filtri
-    /*public static function searchForm() {
-        
-        
-        //fine creazione corsi fittizi
-
-        $view = new VCourse();
-        $view->showSearchForm();
-    }*/
-
-    
+    // Function to show the list of courses
+    // It retrieves the courses from the persistent manager and displays them using the view
     public static function showCourses() {  
         $role = CUser::getUserRole();
            
@@ -164,6 +133,10 @@ class CCourse {
         
     }
 
+
+
+    // Function to show the details of a specific course
+    // It retrieves the course by its ID and displays its details using the view
     public static function courseDetails($course_id) {
     
         try {       
@@ -171,21 +144,19 @@ class CCourse {
         } catch (Exception $e) {
             (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
         } 
-        
-        
-       
-        //echo $enrollments[0]->getDate();
-       
-    
-        
+ 
         $view = new VCourse();
         $view->showCourseDetails( $course );
     }
 
+
+
+
+    // Function to delete a course
+    // It checks if the course exists, removes it from the persistent manager, and deletes its
     public static function deleteCourse($course_id) {
         CUser::isEmployee();
         try {
-            // Controlla se il corso esiste
             $course = FPersistentManager::retriveCourseOnId($course_id);
             if ($course === null) {
                 throw new Exception("Corso non trovato.");
@@ -209,18 +180,6 @@ class CCourse {
        
         
     }
-
-    
-
-   
-
-   
-
-
-
-
-
-
 
     
 

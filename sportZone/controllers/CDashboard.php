@@ -6,11 +6,13 @@ use App\Enum\EnumSport;
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CDashboard{
+    //It is used to assert the role of the user
     private static function assertRole(...$allowedRoles): string {
         return CUser::assertRole(...$allowedRoles);
     }
 
     // ----------------- COMMON --------------------
+    
 
     public static function profile(){
         CUser::isLogged();
@@ -76,12 +78,7 @@ class CDashboard{
         
         $role = self::assertRole(EClient::class);
         $course = FPersistentManager::retriveCourseOnId($course_id);
-        
-       
-        //echo $enrollments[0]->getDate();
-       
     
-        
         $view = new VDashboard();
         $view->showDetailsClient( $course ,$user , $role);
     }
@@ -149,8 +146,6 @@ class CDashboard{
         if (isset($getInputs['sport'])) {
             $searchParams['sport'] = $getInputs['sport'];
         }
-
-        // filtraggio campi
 
         $pm = FPersistentManager::getInstance();
         $fields = $pm->retrieveFieldsBySport($searchParams['sport']);

@@ -17,7 +17,7 @@ class CReservation{
 
 
 
-
+    // Shows the reservation form for a specific field and date
 
     public static function test() {
         
@@ -45,7 +45,7 @@ class CReservation{
 
 
 
-
+    // Shows the reservation form for a specific field and date
     public static function reservationForm(){
     
         CUser::isLogged();
@@ -70,7 +70,7 @@ class CReservation{
             $error->show("Data non specificata.");
             return;
             }
-            // Get available hours for this field and date through FReservation
+            
             $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $date);
 
             $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
@@ -92,7 +92,7 @@ class CReservation{
 
 
 
-
+   // Shows the reservation summary
     public static function reservationSummary() {
         
         CUser::isLogged();
@@ -117,16 +117,15 @@ class CReservation{
         $view->showReservationSummary($fullName, $data['date'], $data['time'], $field);
     }
 
-
+    // Starts the payment process for the reservation
     public static function startPaymentReservation() {
         CUser::isLogged();
 
-        // TODO CHECK IF THERE IS PENDING RESERVATION
         $cost = $_SESSION['pending_reservation']['cost'];
         CPayment::startPayment((string)$cost, '/reservation/finalizeReservation');
     }
 
-
+    // Finalizes the reservation after payment
     public static function finalizeReservation() { 
         CUser::isLogged();
         $userId = $_SESSION['user'] ?? null;
@@ -182,14 +181,7 @@ class CReservation{
 
 
 
-
-
-
-   
-
-
-
-
+    // Shows the cancellation information page
       public static function cancelInfo() {
         $view = new VReservation();
         $view->showCancelInfo();
@@ -199,7 +191,7 @@ class CReservation{
 
 
 
-
+    // Shows the details of a specific reservation
     public static function reservationDetails() {
         
         CUser::isEmployee();
@@ -224,7 +216,7 @@ class CReservation{
 
 
     
-
+    // Shows the form to cancel a reservation  
     public static function cancelReservation() {
 
         CUser::isEmployee();
@@ -247,8 +239,9 @@ class CReservation{
         $view = new VReservation();
         $view->showCancelReservation($reservation,$field);
     }
-    
 
+    
+    // Finalizes the cancellation of a reservation
     public static function finalizeCancelReservation() {
         CUser::isEmployee();
 
@@ -269,7 +262,7 @@ class CReservation{
 
 
 
-    
+    // Shows the form to modify a reservation
     public static function modifyReservation() {
         $reservationId = $_GET['id'] ?? null;
         if (!$reservationId) {
@@ -286,9 +279,7 @@ class CReservation{
 
 
 
-
-
-
+    // Shows the form to modify the date of a reservation
     public static function modifyReservationDate() {
         $reservationId = $_POST['id'] ?? null;
         if (!$reservationId) {
@@ -296,7 +287,7 @@ class CReservation{
     "ID prenotazione non specificato.",
     "Torna indietro",
     "location.href='/reservation/mngReservations'"
-);
+            );
             return;
         }
 
@@ -310,7 +301,7 @@ class CReservation{
 
 
 
-
+    // Handles the modification of the reservation time
     public static function modifyReservationTime() {
         $reservationId = $_POST['id'] ?? ($_POST['id'] ?? null);
         $newDate = $_POST['date'] ?? null;
@@ -351,8 +342,8 @@ class CReservation{
 
 
 
-    
-     public static function confirmModifyReservation() {
+    // Confirms the modification of a reservation
+    public static function confirmModifyReservation() {
         $reservationId = $_POST['id'] ?? null;
         $date = $_POST['date'] ??  null;
         $time = $_POST['time'] ?? null;
