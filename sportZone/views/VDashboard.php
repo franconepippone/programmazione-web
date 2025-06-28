@@ -182,26 +182,22 @@ class VDashboard{
     }
 
 
-    public function showCreateCourseForm($instructors, $fields, $data = [], $role) {
-        USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('instructors', array_map(fn($i) => EInstructor::instructorToArray($i), $instructors));
-        $this->smarty->assign('fields', array_map(fn($f) => EField::fieldToArray($f), $fields));
-        foreach (['title','description','start_date','cost','max_participants','days','instructor','field'] as $k) {
-            $this->smarty->assign($k, $data[$k] ?? '');
-        }
-        $this->smarty->display($this->getBasePath($role) .'create_course_form.tpl');
-    }
+    
 
     // -------------- CLIENT ONLY -----------------
       public function showMyReservationDetails($reservation, $active, $role) {
+
+        if ($reservation !== null) {
+            $reservation = EReservation::reservationToArray($reservation);
+        } else {
+            $reservationArray = [];
+        }
         
-        $reservationArray = EReservation::reservationToArray($reservation);
         $this->smarty->assign('reservation', $reservationArray);
         $this->smarty->assign('active', $active);
 
 
         USmarty::configureBaseLayout($this->smarty);
-        //$this->smarty->assign('user', $userArray);
         $this->smarty->display($this->getBasePath($role) . 'reservations.tpl');
     }
 

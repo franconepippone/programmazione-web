@@ -198,56 +198,7 @@ class FPersistentManager{
 /**
  * Retrieve available hours for a specific field and date
  */
-    public function retriveAvaiableHoursForFieldAndDate(int $fieldId, string $date): array {
-
-        // Recupera tutte le reservation per quel campo
-        $allReservations = FReservation::getReservationByFieldId($fieldId);
-
-        // Filtra solo quelle con la data richiesta
-        $filteredReservations = [];
-        $dateObj = new DateTime($date);
-        $dateString = $dateObj->format('Y-m-d');
-        foreach ($allReservations as $reservation) {
-            if ($reservation->getDate()->format('Y-m-d') === $dateString) {
-                $filteredReservations[] = $reservation;
-            }
-        }
-
-        // Estrai gli orari occupati (formato H:i:s)
-        $occupiedHours = [];
-        foreach ($filteredReservations as $reservation) {
-            $occupiedHours[] = $reservation->getTime()->format('H:i:s');
-        }
-
-        // Costruisci tutti gli orari possibili tra le 8 e le 21 (formato H:i:s)
-        $allHours = [];
-        for ($hour = 8; $hour < 21; $hour++) {
-            $allHours[] = sprintf('%02d:00:00', $hour); // "08:00:00"
-        }
-
-        // Rimuovi gli orari occupati
-        $availableHours = array_diff($allHours, $occupiedHours);
-
-        // Restituisci gli orari liberi ordinati
-        return array_values($availableHours);
-    }
-
-    /**
-     * Retrieve a reservation by client ID and check if it is active (today or future)
-     */
-    public static function retriveActiveReservationByUserId(int $userId) {
-        $reservations = FReservation::getReservationsByUserId($userId);
-        if (!is_array($reservations)) {
-            $reservations = $reservations ? [$reservations] : [];
-        }
-        $today = new DateTime('today');
-        foreach ($reservations as $res) {
-            if ($res->getDate() instanceof DateTimeInterface && $res->getDate() >= $today) {
-                return $res;
-            }
-        }
-        return null;
-    }
+    
   
     //-----------------------------------INSTRUCTOR-------------------------------
 
@@ -283,6 +234,10 @@ class FPersistentManager{
         return FCourse::saveCourse($course);
     }
 
+    public static function removeCourse($course){
+        return FCourse::deleteCourse($course);
+    }
+
     public static function retriveCourses() {
         $result = FCourse::getCourses();
         return $result;
@@ -315,12 +270,12 @@ class FPersistentManager{
 
         // Inizializza con gli orari disponibili del primo giorno
         $firstDate = $dates[0];
-        $commonHours = $this->retriveAvaiableHoursForFieldAndDate($fieldId, $firstDate);
+        $commonHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $firstDate);
 
         // Per ogni data successiva, fai l'intersezione con gli orari precedenti
         for ($i = 1; $i < count($dates); $i++) {
             $dateString = $dates[$i];
-            $dayHours = $this->retriveAvaiableHoursForFieldAndDate($fieldId, $dateString);
+            $dayHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $dateString);
             $commonHours = array_intersect($commonHours, $dayHours);
         }
 

@@ -755,7 +755,7 @@ class UValidate {
      */
     public static function validateNoActiveReservation($clientId) {
         $today = new DateTime('today');
-        $reservations = FReservation::getReservationsByUserId($clientId);
+        $reservations = FPersistentManager::getInstance()->retriveReservationsByUserId($clientId);
         $user = FPersistentManager::getInstance()->retriveUserById($clientId);
         if ($user->getType() != 'client') {
             return true;

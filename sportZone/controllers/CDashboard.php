@@ -40,9 +40,8 @@ class CDashboard{
         CUser::isLogged();
         $role = self::assertRole(EClient::class);
 
-        //$clientId = CUser::getCurrentUser()->getId();
         $clientId = $_SESSION['user'];
-        $reservation = FPersistentManager::getInstance()->retriveActiveReservationByUserId($clientId);
+        $reservation = UUtility::retriveActiveReservationByUserId($clientId);
         $active = $reservation !== null;
 
         $view = new VDashboard();
@@ -187,18 +186,6 @@ class CDashboard{
         $view->showFilteredReservations($filtered, $name, $date,$sport, $role);
     }
 
-    public static function createCourse($data = []) {
     
-        $role = self::assertRole(EEmployee::class);
-        $view = new VDashboard();
-        $user = CUser::getLoggedUser();
-        $pm = FPersistentManager::getInstance();
-
-        $instructors = $pm->retriveAllInstructors();
-        $fields = $pm->retriveAllFields();
-
-        $view->showCreateCourseForm($instructors, $fields, $data, $role);
-}
-
     
 }

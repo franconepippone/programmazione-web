@@ -2,7 +2,58 @@
 class UUtility {
 
     
+    public static function retriveAvaiableHoursForFieldAndDate(int $fieldId, string $date): array {
 
+        // Recupera tutte le reservation per quel campo
+        $allReservations = FReservation::getReservationByFieldId($fieldId);
+
+        // Filtra solo quelle con la data richiesta
+        $filteredReservations = [];
+        $dateObj = new DateTime($date);
+        $dateString = $dateObj->format('Y-m-d');
+        foreach ($allReservations as $reservation) {
+            if ($reservation->getDate()->format('Y-m-d') === $dateString) {
+                $filteredReservations[] = $reservation;
+            }
+        }
+
+        // Estrai gli orari occupati (formato H:i:s)
+        $occupiedHours = [];
+        foreach ($filteredReservations as $reservation) {
+            $occupiedHours[] = $reservation->getTime()->format('H:i:s');
+        }
+
+        // Costruisci tutti gli orari possibili tra le 8 e le 21 (formato H:i:s)
+        $allHours = [];
+        for ($hour = 8; $hour < 21; $hour++) {
+            $allHours[] = sprintf('%02d:00:00', $hour); // "08:00:00"
+        }
+
+        // Rimuovi gli orari occupati
+        $availableHours = array_diff($allHours, $occupiedHours);
+
+        // Restituisci gli orari liberi ordinati
+        return array_values($availableHours);
+    }
+
+    /**
+     * Retrieve a reservation by client ID and check if it is active (today or future)
+     */
+    
+  
+    public static function retriveActiveReservationByUserId(int $userId) {
+        $reservations = FReservation::getReservationsByUserId($userId);
+        if (!is_array($reservations)) {
+            $reservations = $reservations ? [$reservations] : [];
+        }
+        $today = new DateTime('today');
+        foreach ($reservations as $res) {
+            if ($res->getDate() instanceof DateTimeInterface && $res->getDate() >= $today) {
+                return $res;
+            }
+        }
+        return null;
+    }
 
 
     public static function dateSlot($start, $end) {
@@ -88,7 +139,7 @@ class UUtility {
 
         foreach ($dates as $dateStr) {
             $date = new DateTime($dateStr);
-            $slots = $pm->retriveAvaiableHoursForFieldAndDate($field->getId(), $date->format('Y-m-d'));
+            $slots = self::retriveAvaiableHoursForFieldAndDate($field->getId(), $date->format('Y-m-d'));
             sort($slots);
             $dailySlots[] = $slots;
         }
@@ -140,6 +191,48 @@ class UUtility {
                 $pm::saveReservation($reservation);
             }
         }
+    }
+
+
+
+    public static function getReservationsOfCourse(ECourse $course): array {
+        // Estrai orari dal timeSlot (es. "08:00-10:00")
+        list($startTimeStr, $endTimeStr) = explode('-', $course->getTimeSlot());
+        $startTime = DateTime::createFromFormat('H:i', $startTimeStr);
+        $endTime = DateTime::createFromFormat('H:i', $endTimeStr);
+
+       // Date in cui il corso si svolge
+        $dates = self::getDatesForWeekdays($course->getDaysOfWeek(), $course->getStartDate(), $course->getEndDate());
+
+       // Tutte le ore intermedie (es. 08:00, 09:00)
+        $hourSlots = self::getHourlySlots($startTime, $endTime);
+
+       // Combinazioni date + ore
+        $expectedSlots = [];
+        foreach ($dates as $date) {
+            foreach ($hourSlots as $time) {
+                $expectedSlots[] = ['date' => $date, 'time' => $time];
+            }
+        }
+
+        // Recupera prenotazioni dell'istruttore
+        $reservations = FPersistentManager::getInstance()->retriveReservationsByUserId($course->getInstructor()->getId());
+
+        // Filtra quelle legate al corso
+        $matched = [];
+        foreach ($reservations as $reservation) {
+            $resDate = $reservation->getDate()->format('Y-m-d');
+            $resTime = $reservation->getTime()->format('H:i');
+
+            foreach ($expectedSlots as $slot) {
+                if ($slot['date'] === $resDate && $slot['time'] === $resTime) {
+                    $matched[] = $reservation;
+                    break;
+                }
+            }
+        }
+
+        return $matched;
     }
 
 }

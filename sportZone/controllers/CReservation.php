@@ -69,7 +69,7 @@ class CReservation{
             return;
             }
             // Get available hours for this field and date through FReservation
-            $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $date);
+            $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $date);
 
             $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
             if (!$field) {
@@ -320,7 +320,7 @@ class CReservation{
     }
 
         $fieldId = $reservation->getField()->getId();
-        $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $newDate);
+        $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($fieldId, $newDate);
 
         $view = new VReservation();
         $view->showModifyTimeForm($reservation, $newDate, $avaiableHours);

@@ -182,96 +182,40 @@ class CCourse {
         $view->showCourseDetails( $course );
     }
 
-    //********************************************************* */
-    // metodo per visualizzare i dettagli di un corso
-    
-    //********************************************************* */
+    public static function deleteCourse($course_id) {
+        CUser::isEmployee();
+        try {
+            // Controlla se il corso esiste
+            $course = FPersistentManager::retriveCourseOnId($course_id);
+            if ($course === null) {
+                throw new Exception("Corso non trovato.");
+            }
+            $course = FPersistentManager::retriveCourseOnId($course_id);
+            if ($course === null) {
+                throw new Exception("Corso non trovato.");
+            }
+            FPersistentManager::getInstance()->removeCourse($course);
+       
+            $reservations=UUtility::getReservationsOfCourse($course);
+            foreach ($reservations as $reservation) {
+                FPersistentManager::getInstance()->removeReservation($reservation);
+            }
+            (new VError())->showSuccess("Corso eliminato con successo.");
+        
+        } catch (Exception $e) {
+            (new VError())->show('Impossibile eliminare correttamente il corso.');
+            return;
+        }
+       
+        
+    }
 
     
 
    
 
-   public static function modifyForm($course_id) {
-        $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        $user=CUser::getLoggedUser();
-        $modifyPermission=true;
-        if($course->getInstructor()->getId() !== $user->getId()){
-            (new VError())->show("non possiedi i permessi per modificare questo corso");
-            return;
-        }
-        $view = new VCourse();
-        $view->showModifyCourseForm($course,$modifyPermission);
-    }
+   
 
-
-
-
-
-
-
-
-
-    public static function finalizeModifyCourse($course_id) {
-        $pm = FPersistentManager::getInstance();
-
-        try {
-            $attributes = UValidate::validateInputArray($_POST, self::$rulesCourseKevin, true);
-            
-            UUtility::dateSlot($attributes['startDate'], $attributes['endDate']);
-            //echo var_dump($attributes);
-            //echo var_dump($_POST);
-            // Validazione custom per orari (start < end)
-        } catch (ValidationException $e) {
-            $msg = $e->getMessage();
-            $view = new VError();
-            $view->show($msg);
-            return;
-        }
-
-
-            // Recupera oggetti istruttore , campo e corso
-        try{    
-            $course = $pm->retriveCourseOnId($course_id);
-            $instructor = CUser::getLoggedUser();
-            $field = $pm->retriveFieldByAttribute('name',$attributes['field']);
-            if (!$instructor || !$field || !$course) {
-                $view = new VError();
-                $view->show("errore durante il recupero dei dati: istruttore, campo o idcorso non valido.");
-                return;  
-            }
-        } catch (Exception $e) {
-            $view = new VError();
-            $view->show("Si è verificato un errore imprevisto. Riprova più tardi.");
-            return;
-        }
-        //echo "corso in aggiornamento";
-            // Aggiorna il corso
-            $course->setTitle($attributes['title']);
-            $course->setDescription($attributes['description']);
-            $course->setStartDate($attributes['startDate']);
-            $course->setEndDate($attributes['endDate']);
-            $course->setTimeSlot($attributes['timeSlot']);
-            $course->setDaysOfWeek($attributes['daysOfWeek']);
-            $course->setEnrollmentCost(floatval($attributes['cost']));
-            $course->setMaxParticipantsCount(intval($attributes['MaxParticipantsCount']));
-            $course->setInstructor($instructor);
-            $course->setField($field);
-
-            // Salva le modifiche
-            $pm->saveCourse($course);
-
-            $message='corso modificato con successo';
-            $butt_name ="Vai ai miei corsi";
-            $butt_action="window.location.href='/dashboard/myCourses'";
-            $view = new VError;
-            $view->showSuccess($message, $butt_name,$butt_action);
-
-    }
-
-
-
-////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -280,7 +224,6 @@ class CCourse {
 
     
 
-    
 
 
 }

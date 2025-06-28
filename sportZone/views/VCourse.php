@@ -112,15 +112,7 @@ class VCourse
     }
 
     
-    //********************************************************* */
-    public function showModifyCourseForm($course,$modifyPermission)
-    {
-        $courseData = ECourse::courseToArray($course);
-        ///print_r($courseData);
-        $this->smarty->assign('course', $courseData);
-        $this->smarty->display('course/modifyForm.tpl');
-    }
-
+ 
 
     public function showCreateResult($result = null)
     {
@@ -128,9 +120,7 @@ class VCourse
         $this->smarty->display('course/createResult.tpl');
     }
 
-    public function confirmCourseModifies(){
-        $this->smarty->display('course/confirmCourseModifies.tpl');
-    }
+    
 }   
 
 // End of VCourse.php
