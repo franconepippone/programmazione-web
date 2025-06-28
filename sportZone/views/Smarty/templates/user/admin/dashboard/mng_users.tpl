@@ -1,6 +1,6 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="manageUsers"}
-{assign var="page_title" value="Dashboard - manage courses"}
+{assign var="page_title" value="Dashboard - Corsi"}
 
 
 {block name="dashboard_content"}
