@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-body, input, select, button, label, div {
+input, select, button, label, div {
   font-family: 'Inter', sans-serif;
   color: #2c3e50;
   line-height: 1.5;

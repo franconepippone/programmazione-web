@@ -1,9 +1,7 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="manageReservations"}
+{assign var="page_title" value="Dashboard - reservations"}
 
-{block name="dashboard_tabs_styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/form.css">
-{/block}
 
 {block name="dashboard_content"}
     <div class="form-wrapper">

@@ -1,25 +1,28 @@
-
+/* Contenitore principale centrato */
 .dashboard {
     max-width: 960px;
     margin: 0 auto;
     padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh; /* assicura stabilità verticale */
 }
+
+/* Barra delle tab */
 .dashboard-tabs {
     display: flex;
     justify-content: flex-start;
     width: 100vw;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
     position: relative;
-    border-bottom: 2px solid #1f2937;
+    left: 50%;
+    margin-left: -50vw;
     background: #1f2937;
-    gap: 0;
+    border-bottom: 2px solid #1f2937;
     z-index: 2;
-    margin-top: 0;
     padding: 0.5rem 0;
 }
+
+/* Singola tab */
 .dashboard-tabs .tab {
     flex: 0 0 auto;
     text-align: center;
@@ -28,19 +31,20 @@
     text-decoration: none;
     color: #d1d5db;
     font-weight: 600;
-    border: none;
-    border-radius: 0.375rem 0.375rem 0 0;
     background: #374151;
+    border-radius: 0.375rem 0.375rem 0 0;
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     cursor: pointer;
     position: relative;
     top: 2px;
 }
+
 .dashboard-tabs .tab:hover {
     background: #2563eb;
     color: #fff;
 }
+
 .dashboard-tabs .tab.active {
     background: #fff;
     color: #1f2937;
@@ -48,11 +52,23 @@
     border-bottom: 2px solid #fff;
     z-index: 3;
 }
+
+/* Contenuto della dashboard */
 .dashboard-content {
+    flex-grow: 1;
     background: #fff;
     padding: 1.5rem;
     border-radius: 0.5rem;
     box-shadow: 0 1px 6px rgb(0 0 0 / 0.1);
-    min-height: 300px;
+    min-height: 600px; /* Altezza minima per evitare shifting */
+    transition: min-height 0.3s ease;
+    overflow-y: auto;
+}
+
+/* Uniforma margini interni */
+.dashboard-content > *:first-child {
     margin-top: 0;
+}
+.dashboard-content > *:last-child {
+    margin-bottom: 0;
 }

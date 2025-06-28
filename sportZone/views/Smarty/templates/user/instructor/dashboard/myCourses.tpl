@@ -1,29 +1,36 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="courses"}
 
-{block name="dashboard_tabs_styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css">
-{/block}
+
 
 {block name="dashboard_content"}
-    <div class="results-list">
-        <h2>Risultati della Ricerca</h2>
+    <div class="container my-4">
+        <h2 class="mb-4">Risultati della Ricerca</h2>
         {if $courses|@count > 0}
-            {foreach from=$courses item=course}
-                <div class="result-card">
-                    <!-- id nascosto -->
-                    <input type="hidden" name="id" value="{$course.id}">
-                    <div class="result-info">
-                        <div class="result-title" name="title">{$course.title|escape}</div>
-                        <div class="result-date" name="startDate">
-                            Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {foreach from=$courses item=course}
+                    <div class="col">
+                        <div class="card h-100">
+                            <input type="hidden" name="id" value="{$course.id}">
+                            <div class="card-body">
+                                <h5 class="card-title" name="title">{$course.title|escape}</h5>
+                                <p class="card-text" name="startDate">
+                                    Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <a href="/dashboard/courseDetailsInstructor/{$course.id}" class="btn btn-primary">
+                                    Modifica
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <a class="details-btn" href="/dashboard/courseDetailsInstructor/{$course.id}">Modifica</a>
-                </div>
-            {/foreach}
+                {/foreach}
+            </div>
         {else}
-            <p>Nessun risultato trovato con i filtri selezionati.</p>
+            <div class="alert alert-warning" role="alert">
+                Nessun risultato trovato con i filtri selezionati.
+            </div>
         {/if}
     </div>
 {/block}

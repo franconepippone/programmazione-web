@@ -3,81 +3,56 @@
 {assign var="page_title" value="Dashboard - Settings"}
 
 {block name="dashboard_tabs_styles"}
-    <style>
-        .profile-form {
-            max-width: 600px;
-            background: #ffffff;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
+        <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
 
-        .profile-form .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-form label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .profile-form input,
-        .profile-form select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            background-color: #f9fafb;
-            color: #1f2937;
-        }
-
-        .profile-form small {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .btn-save {
-            background-color: #3b82f6;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .btn-save:hover {
-            background-color: #2563eb;
-        }
-    </style>
-{/block}
+    
+    {/block}
 
 {block name="dashboard_content"}
-    
-    <h2>Settings</h2>
-    <p>Change your password, update email preferences, and more.</p>
+    <div class="container py-4">
+        <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+            <div class="card-body">
+                <h2 class="card-title">Settings</h2>
+                <p class="mb-4">Change your password, update email preferences, and more.</p>
 
-    <form action="/user/modifyUserRequest" method="post" class="profile-form">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="{$user.username|escape}" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="{$user.email|escape}" required>
-        </div>
-        <div class="form-group">
-            <label for="password">New Password</label>
-            <input type="password" id="password" name="password">
-            <small>Leave blank to keep current password</small>
-        </div>
+                <form action="/user/modifyUserRequest" method="post" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            class="form-control" 
+                            value="{$user.username|escape}" 
+                            required>
+                    </div>
 
-        <div class="form-group">
-            <button type="submit" class="btn-save">Save Changes</button>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-control" 
+                            value="{$user.email|escape}" 
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-control">
+                        <div class="form-text">Leave blank to keep current password</div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </form>
+    </div>
 {/block}

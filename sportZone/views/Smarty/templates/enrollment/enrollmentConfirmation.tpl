@@ -1,43 +1,39 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Modulo di iscrizione - Riepilogo</title>
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/details.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="details-container">
-        <h2 class="details-title">Modulo di iscrizione</h2>
+    <div class="container py-4">
+        <h2 class="mb-4">Modulo di iscrizione</h2>
         <p>Corso: <strong>{$course.title|escape}</strong></p>
-        <div class="details-list">
-            <div class="details-row">
-                <span class="details-label" name="name">Nome:</span>
-                <span class="details-value">{$user.name|escape}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label" name="surname">Cognome:</span>
-                <span class="details-value">{$user.surname|escape}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label" name="birthDate">Data di nascita:</span>
-                <span class="details-value">{$user.birthDate|date_format:"%d/%m/%Y"}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label" name="sex">Sesso:</span>
-                <span class="details-value">{$user.sex|escape}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label" name="email">Email:</span>
-                <span class="details-value">{$user.email|escape}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label" name="username">Username:</span>
-                <span class="details-value">{$user.username|escape}</span>
-            </div>
-        </div>
-        <div class="details-actions">
-            <a href="/enrollment/enrollForm/{$course.id}" class="action-btn back-btn">Modifica dati</a>
-            <a href="/enrollment/finalizeEnrollment/{$course.id}" class="action-btn">Conferma iscrizione</a>
+
+        <dl class="row mb-4">
+            <dt class="col-sm-3">Nome:</dt>
+            <dd class="col-sm-9">{$user.name|escape}</dd>
+
+            <dt class="col-sm-3">Cognome:</dt>
+            <dd class="col-sm-9">{$user.surname|escape}</dd>
+
+            <dt class="col-sm-3">Data di nascita:</dt>
+            <dd class="col-sm-9">{$user.birthDate|date_format:"%d/%m/%Y"}</dd>
+
+            <dt class="col-sm-3">Sesso:</dt>
+            <dd class="col-sm-9">{$user.sex|escape}</dd>
+
+            <dt class="col-sm-3">Email:</dt>
+            <dd class="col-sm-9">{$user.email|escape}</dd>
+
+            <dt class="col-sm-3">Username:</dt>
+            <dd class="col-sm-9">{$user.username|escape}</dd>
+        </dl>
+
+        <div class="d-flex gap-3">
+            <a href="/enrollment/enrollForm/{$course.id}" class="btn btn-secondary">Modifica dati</a>
+            <a href="/enrollment/finalizeEnrollment/{$course.id}" class="btn btn-primary">Conferma iscrizione</a>
         </div>
     </div>
 </body>
+</html>

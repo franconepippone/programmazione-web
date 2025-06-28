@@ -5,22 +5,27 @@
 {/block}
 
 {block name="content"}
-    <div class="results-list">
-        <h2>Risultati della Ricerca</h2>
+    <div class="results-list container py-4">
+        <h2 class="mb-4">Risultati della Ricerca</h2>
         {if $courses|@count > 0}
-            {foreach from=$courses item=course}
-                <div class="result-card">
-                    <!-- id nascosto -->
-                    <input type="hidden" name="id" value="{$course.id}">
-                    <div class="result-info">
-                        <div class="result-title" name="title">{$course.title|escape}</div>
-                        <div class="result-date" name="startDate">
-                            Inizio: {$course.startDate|date_format:"%d/%m/%Y"}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {foreach from=$courses item=course}
+                    <div class="col">
+                        <div class="card h-100">
+                            <input type="hidden" name="id" value="{$course.id}">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title" name="title">{$course.title|escape}</h5>
+                                <p class="card-text mb-3" name="startDate">
+                                    <strong>Inizio:</strong> {$course.startDate|date_format:"%d/%m/%Y"}
+                                </p>
+                                <a href="/course/courseDetails/{$course.id}" class="btn btn-primary mt-auto align-self-start">
+                                    Dettagli
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <a class="details-btn" href="/course/courseDetails/{$course.id}">Dettagli</a>
-                </div>
-            {/foreach}
+                {/foreach}
+            </div>
         {else}
             <p>Nessun risultato trovato con i filtri selezionati.</p>
         {/if}

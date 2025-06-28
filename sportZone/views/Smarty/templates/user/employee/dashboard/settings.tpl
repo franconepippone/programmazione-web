@@ -1,83 +1,61 @@
 {extends file="../dashboard_bar.tpl"}
-{assign var="active_tab" value="settings"}
-{assign var="page_title" value="Dashboard - Settings"}
+{assign var="active_tab" value="profile"}
+{assign var="page_title" value="Dashboard - My Profile"}
 
 {block name="dashboard_tabs_styles"}
-    <style>
-        .profile-form {
-            max-width: 600px;
-            background: #ffffff;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .profile-form .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-form label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .profile-form input,
-        .profile-form select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            background-color: #f9fafb;
-            color: #1f2937;
-        }
-
-        .profile-form small {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .btn-save {
-            background-color: #3b82f6;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .btn-save:hover {
-            background-color: #2563eb;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
 {/block}
 
 {block name="dashboard_content"}
-    
-    <h2>Settings</h2>
-    <p>Change your password, update email preferences, and more.</p>
+<div class="container my-4" style="max-width: 600px;">
+    <h2>My Profile (Employee)</h2>
+    <p>Update your personal information below.</p>
 
-    <form action="/user/modifyUserRequest" method="post" class="profile-form">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="{$user.username|escape}" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="{$user.email|escape}" readonly style="background-color: #f3f4f6; color: #6b7280; cursor: not-allowed;">
-        </div>
-        <div class="form-group">
-            <label for="password">New Password</label>
-            <input type="password" id="password" name="password">
-            <small>Leave blank to keep current password</small>
+    <form action="/user/modifyUserRequest" method="post" enctype="multipart/form-data" class="profile-form">
+        <div class="mb-3">
+            <label for="profile_picture" class="form-label">Profile Picture</label>
+            <div style="margin-top: 1rem;">
+                {if $user.profilePicture}
+                    <img src="{$user.profilePicture}" alt="Profile Picture" class="img-thumbnail rounded" style="width: 200px; height: 200px; object-fit: cover;">
+                {else}
+                    <img src="https://static.vecteezy.com/system/resources/previews/036/594/092/large_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg" alt="Profile Picture" class="img-thumbnail rounded" style="width: 200px; height: 200px; object-fit: cover; background: #e5e7eb;">
+                {/if}
+            </div>
+            <input type="file" id="profile_picture" name="profilePicture" accept="image/*" class="form-control mt-2">
         </div>
 
-        <div class="form-group">
-            <button type="submit" class="btn-save">Save Changes</button>
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" id="first_name" name="name" value="{$user.name|escape}" required class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" id="last_name" name="surname" value="{$user.surname|escape}" required class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="birthday" class="form-label">Birthday</label>
+            <input type="date" id="birthday" name="birthday" value="{$user.birthDate|escape}" required class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" name="gender" class="form-select">
+                <option value="male" {if $user.sex == 'male'}selected{/if}>Male</option>
+                <option value="female" {if $user.sex == 'female'}selected{/if}>Female</option>
+                <option value="other" {if $user.sex == 'other'}selected{/if}>Other</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="cvv" class="form-label">CVV</label>
+            <textarea id="cvv" name="cvv" rows="3" placeholder="Enter your CVV or additional info here" class="form-control">{$user.cvv|default:''|escape}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
     </form>
+</div>
 {/block}

@@ -1,81 +1,19 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Dettaglio Prenotazione</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
-      padding: 2rem;
-      margin: 0;
-    }
-    h1 {
-      text-align: center;
-      color: #0d47a1;
-      margin-bottom: 2rem;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 2rem;
-    }
-    .field-label {
-      font-weight: 600;
-      color: #1976d2;
-      margin-top: 1rem;
-    }
-    .field-value {
-      margin-left: 0.5rem;
-    }
-    .buttons {
-      margin-top: 2rem;
-      display: flex;
-      justify-content: space-between;
-    }
-    button, .back-link {
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      font-size: 1rem;
-      text-decoration: none;
-      text-align: center;
-      user-select: none;
-    }
-    button {
-      background-color: #d32f2f;
-      color: white;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #9a2424;
-    }
-    .back-link {
-      background-color: #1976d2;
-      color: white;
-      line-height: 1.8;
-      display: inline-block;
-      transition: background-color 0.3s ease;
-    }
-    .back-link:hover {
-      background-color: #115293;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet" />
 </head>
-<body>
+<body class="bg-gradient" style="background: linear-gradient(to bottom right, #e3f2fd, #ffffff); padding: 2rem; margin: 0;">
 
-  <h1>Dettaglio Prenotazione</h1>
-  
-  <div class="container">
-    <div>
-      <span class="field-label">ID:</span>
-      <span class="field-value">
+  <h1 class="text-center text-primary mb-4">Dettaglio Prenotazione</h1>
+
+  <div class="container bg-white rounded shadow-sm p-4" style="max-width: 600px;">
+
+    <div class="mb-3">
+      <span class="fw-semibold text-primary">ID:</span>
+      <span class="ms-2">
         {if $reservation neq null}
           {$reservation->getId()}
         {else}
@@ -84,9 +22,9 @@
       </span>
     </div>
 
-    <div>
-      <span class="field-label">Data:</span>
-      <span class="field-value">
+    <div class="mb-3">
+      <span class="fw-semibold text-primary">Data:</span>
+      <span class="ms-2">
         {if $reservation neq null}
           {$reservation->getDate()|date_format:"%Y-%m-%d"}
         {else}
@@ -95,9 +33,9 @@
       </span>
     </div>
 
-    <div>
-      <span class="field-label">Orario:</span>
-      <span class="field-value">
+    <div class="mb-3">
+      <span class="fw-semibold text-primary">Orario:</span>
+      <span class="ms-2">
         {if $reservation neq null}
           {$reservation->getTime()}
         {else}
@@ -106,9 +44,9 @@
       </span>
     </div>
 
-    <div>
-      <span class="field-label">Campo:</span>
-      <span class="field-value">
+    <div class="mb-3">
+      <span class="fw-semibold text-primary">Campo:</span>
+      <span class="ms-2">
         {if $reservation neq null && $reservation->getField() neq null}
           {$reservation->getField()->getSport()}
         {else}
@@ -117,9 +55,9 @@
       </span>
     </div>
 
-    <div>
-      <span class="field-label">Cliente:</span>
-      <span class="field-value">
+    <div class="mb-3">
+      <span class="fw-semibold text-primary">Cliente:</span>
+      <span class="ms-2">
         {if $reservation neq null && $reservation->getClient() neq null}
           {$reservation->getClient()->getName()} {$reservation->getClient()->getSurname()}
         {else}
@@ -128,13 +66,13 @@
       </span>
     </div>
 
-    <div class="buttons">
-      <form method="post" action="/employee/cancelReservation" onsubmit="return confirm('Sei sicuro di voler cancellare questa prenotazione?');">
-        <input type="hidden" name="id" value="{if $reservation neq null}{$reservation->getId()}{/if}">
-        <button type="submit">Cancella Prenotazione</button>
+    <div class="d-flex justify-content-between mt-4">
+      <form method="post" action="/employee/cancelReservation" onsubmit="return confirm('Sei sicuro di voler cancellare questa prenotazione?');" class="m-0">
+        <input type="hidden" name="id" value="{if $reservation neq null}{$reservation->getId()}{/if}" />
+        <button type="submit" class="btn btn-danger fw-semibold px-4">Cancella Prenotazione</button>
       </form>
 
-      <a href="/employee/showReservations" class="back-link">Torna all'elenco</a>
+      <a href="/employee/showReservations" class="btn btn-primary fw-semibold px-4 align-self-center">Torna all'elenco</a>
     </div>
   </div>
 

@@ -1,0 +1,169 @@
+/* Importa font Inter da Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  color: #2c3e50;
+  line-height: 1.5;
+}
+
+body {
+  background: linear-gradient(135deg, #e9eff5, #cbd8e7);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+}
+
+.form {
+  background-color: #fff;
+  max-width: 720px;
+  width: 100%;
+  padding: 3rem 2.5rem;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.form:hover {
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.form__title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: #34495e;
+  margin-bottom: 2rem;
+  letter-spacing: 0.04em;
+  user-select: none;
+}
+
+.form__group {
+  margin-bottom: 1.8rem;
+}
+
+.form__label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+
+.form__input,
+.form__select,
+.form__textarea {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+  color: #2c3e50;
+  box-sizing: border-box;
+}
+
+.form__input:focus,
+.form__select:focus,
+.form__textarea:focus {
+  border-color: #2980b9;
+  background-color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(41, 128, 185, 0.5);
+}
+
+.form__textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form__checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.form__checkbox-label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.form__button {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  margin: 2rem auto 0;
+  padding: 0.9rem 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #4dabf7, #228be6);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(41, 128, 185, 0.5);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.form__button:hover,
+.form__button:focus {
+  background: linear-gradient(135deg, #228be6, #1c7ed6);
+  box-shadow: 0 10px 24px rgba(31, 93, 138, 0.7);
+  transform: translateY(-3px);
+  outline: none;
+}
+
+/* File input specific */
+.form__input[type="file"] {
+  padding: 6px;
+  font-size: 0.95em;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    padding: 2rem 1.2rem;
+  }
+
+  .form {
+    padding: 2rem 1.8rem;
+  }
+
+  .form__title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form__label {
+    font-size: 1.05rem;
+  }
+
+  .form__input,
+  .form__select,
+  .form__textarea {
+    font-size: 1.1rem;
+  }
+
+  .form__button {
+    max-width: 100%;
+    font-size: 1.15rem;
+    margin-top: 1.5rem;
+  }
+}

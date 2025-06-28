@@ -1,41 +1,44 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="courses"}
- 
-{block name="dashboard_tabs_styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css">
-{/block}
+
+{block name="dashboard_tabs_styles"}{/block}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    {/block}
+
 {block name="dashboard_content"}
-    <div class="results-list">
-        <h2>Le mie iscrizioni</h2>
+    <div class="results-list container py-4">
+        <h2 class="mb-4">Le mie iscrizioni</h2>
         {if $enrollments|@count > 0}
-            {foreach from=$enrollments item=enrollment}
-                <div class="result-card">
-                    <input type="hidden" name="id" value="{$enrollment.id}">
-                    <div class="result-info">
-                        <div class="result-title" name="title">
-                            {$enrollment.course['title']|escape}
-                        </div>
-                        <div class="result-date" name="enrollmentDate">
-                            Iscritto il: {$enrollment.enrollmentDate|date_format:"%d/%m/%Y"}
-                        </div>
-                        <div class="result-description" name="description">
-                            {$enrollment.course['description']|escape}
-                        </div>
-                        <div class="result-client" name="client">
-                            Utente: 
-                            {if $enrollment.client && $enrollment.client[0]}
-                                {$enrollment.client[0]['name']|escape} {$enrollment.client[0]['surname']|escape}
-                            {/if}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {foreach from=$enrollments item=enrollment}
+                    <div class="col">
+                        <div class="card h-100">
+                            <input type="hidden" name="id" value="{$enrollment.id}">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title" name="title">{$enrollment.course['title']|escape}</h5>
+                                <p class="card-text mb-2" name="enrollmentDate">
+                                    <strong>Iscritto il:</strong> {$enrollment.enrollmentDate|date_format:"%d/%m/%Y"}
+                                </p>
+                                <p class="card-text mb-3" name="description">
+                                    {$enrollment.course['description']|escape}
+                                </p>
+                                <p class="card-text mt-auto" name="client">
+                                    <strong>Utente:</strong> 
+                                    {if $enrollment.client && $enrollment.client[0]}
+                                        {$enrollment.client[0]['name']|escape} {$enrollment.client[0]['surname']|escape}
+                                    {/if}
+                                </p>
+                                <a href="/dashboard/courseDetailsClient/{$enrollment.course['id']}" class="btn btn-primary mt-3 align-self-start">
+                                    Dettagli corso
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <a class="details-btn" href="/dashboard/courseDetailsClient/{$enrollment.course['id']}">Dettagli corso</a>
-                </div>
-            {/foreach}
+                {/foreach}
+            </div>
         {else}
             <p>Non hai ancora effettuato iscrizioni a corsi.</p>
         {/if}
     </div>
 {/block}
-
-   
-

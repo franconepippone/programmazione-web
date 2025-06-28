@@ -1,40 +1,19 @@
-<style>
-    .confirmation-wrapper {
-        max-width: 600px;
-        margin: 4rem auto;
-        padding: 2rem;
-        background-color: #e6ffed;
-        border: 2px solid #38b000;
-        border-radius: 12px;
-        text-align: center;
-        font-family: "Segoe UI", sans-serif;
-        color: #2a8700;
-        box-shadow: 0 0 15px rgba(56, 176, 0, 0.3);
-    }
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Corso Creato</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-success bg-opacity-25">
 
-    h2 {
-        margin-bottom: 1.5rem;
-    }
+  <div class="container my-5">
+    <div class="mx-auto p-4 border border-success rounded-3 text-center bg-light text-success shadow" style="max-width: 600px; font-family: 'Segoe UI', sans-serif;">
+      <h2 class="mb-4">✅ Corso creato con successo!</h2>
+      <p>Il nuovo corso è stato aggiunto al database correttamente.</p>
+      <a href="/employee/createCourseForm" class="btn btn-primary mt-4">🔄 Torna al modulo di creazione corso</a>
+    </div>
+  </div>
 
-    .btn-back {
-        margin-top: 2rem;
-        display: inline-block;
-        padding: 0.75rem 1.5rem;
-        background-color: #4dabf7;
-        color: white;
-        text-decoration: none;
-        font-weight: 600;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-back:hover {
-        background-color: #228be6;
-    }
-</style>
-
-<div class="confirmation-wrapper">
-    <h2>✅ Corso creato con successo!</h2>
-    <p>Il nuovo corso è stato aggiunto al database correttamente.</p>
-    <a href="/employee/createCourseForm" class="btn-back">🔄 Torna al modulo di creazione corso</a>
-</div>
+</body>
+</html>
