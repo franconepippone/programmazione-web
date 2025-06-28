@@ -1,38 +1,45 @@
-{block name="style"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/form.css">
+{block name="styles"} 
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
 {/block}
 
 {block name="content"}
-    <div class="form-wrapper" style="max-width: 480px;">
-        <h2>Modifica Prenotazione</h2>
+    <div class="container py-4 d-flex justify-content-center">
+        <div class="card shadow-sm" style="max-width: 480px; width: 100%;">
+            <div class="card-body">
+                <h2 class="card-title mb-4 text-center">Modifica Prenotazione</h2>
 
-        <div style="display:flex; gap:1rem; justify-content:center; margin-bottom: 2rem;">
-            <form method="post" action="/reservation/modifyReservationDate" style="margin:0;">
-                <input type="hidden" name="id" value="{$reservation.id}">
-                <button type="submit" class="submit-button">Modifica Data</button>
-            </form>
-            <form method="post" action="/reservation/modifyReservationTime" style="margin:0;">
-                <input type="hidden" name="id" value="{$reservation.id}">
-                <input type="hidden" name="date" value="{$reservation.date|date_format:'%Y-%m-%d'}">
-                <button type="submit" class="submit-button">Modifica Ora</button>
-            </form>
+                <div class="d-flex justify-content-center gap-3 mb-4">
+                    <form method="post" action="/reservation/modifyReservationDate" class="m-0">
+                        <input type="hidden" name="id" value="{$reservation.id}">
+                        <button type="submit" class="btn btn-outline-primary">Modifica Data</button>
+                    </form>
+
+                    <form method="post" action="/reservation/modifyReservationTime" class="m-0">
+                        <input type="hidden" name="id" value="{$reservation.id}">
+                        <input type="hidden" name="date" value="{$reservation.date|date_format:'%Y-%m-%d'}">
+                        <button type="submit" class="btn btn-outline-primary">Modifica Ora</button>
+                    </form>
+                </div>
+
+                <form method="post" action="/reservation/confirmModifyReservation" novalidate>
+                    <input type="hidden" name="id" value="{$reservation.id}">
+
+                    <div class="mb-3">
+                        <label class="form-label">Data:</label>
+                        <input type="date" name="date" value="{$reservation.date|date_format:'%Y-%m-%d'}" required readonly class="form-control-plaintext">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Ora:</label>
+                        <input type="time" name="time" value="{$reservation.time|date_format:'%H:%M'}" required readonly class="form-control-plaintext">
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-primary">Conferma modifica</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/reservation/reservationDetails?id={$reservation.id}'">Annulla</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <form method="post" action="/reservation/confirmModifyReservation">
-            <input type="hidden" name="id" value="{$reservation.id}">
-            <div class="form-group">
-                <label>Data:</label>
-                <input type="date" name="date" value="{$reservation.date|date_format:'%Y-%m-%d'}" required readonly>
-            </div>
-            <div class="form-group">
-                <label>Ora:</label>
-                <input type="time" name="time" value="{$reservation.time|date_format:'%H:%M'}" required readonly>
-            </div>
-
-            <div class="button-container" style="margin-top: 3rem; display: flex; gap: 2rem; justify-content: center;">
-                <button type="submit" class="submit-button">Conferma modifica</button>
-                <button type="button" class="submit-button" onclick="window.history.back()">Annulla</button>
-            </div>
-        </form>
     </div>
 {/block}

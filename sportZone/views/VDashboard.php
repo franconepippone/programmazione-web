@@ -175,6 +175,23 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_reservations.tpl');
     }
 
+    public function showFilteredReservations($reservations, $name, $date, $sport, $role) {
+        
+        $reservationsArray = [];
+        foreach ($reservations as $reservation) {
+            $reservationsArray[] = EReservation::reservationToArray($reservation);
+        }
+        $this->smarty->assign('reservations', $reservationsArray);
+
+        $this->smarty->assign('name', $name ?? '');
+        $this->smarty->assign('date', $date ?? '');
+        $this->smarty->assign('sport', $sport ?? '');
+        
+        USmarty::configureBaseLayout($this->smarty);
+       
+        $this->smarty->display($this->getBasePath($role) . 'showFiltered.tpl');
+    }
+
     // -------------- CLIENT ONLY -----------------
       public function showMyReservationDetails($reservation, $active, $role) {
         

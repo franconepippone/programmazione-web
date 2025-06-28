@@ -34,7 +34,7 @@ class CFrontController{
 
     public function run($requestUri){
         // Parse the request URI
-    /*    
+        /*
         $this->createDummyFields();
         $this->createDummyCourses();
         
@@ -51,8 +51,8 @@ class CFrontController{
             ->setPassword('password123'); // Assuming you have a setPassword method
 
         FPersistentManager::getInstance()->uploadObj($instructor);
-        
-*/
+        */
+
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
@@ -138,11 +138,9 @@ class CFrontController{
             }
         }
         return $map;
-    }
-
-    
+    } 
+    /* 
     //creo campi fittizi
-    /*
     public static function createDummyFields(){
         $fields = [];
 
@@ -230,6 +228,7 @@ class CFrontController{
         foreach ($courses as $course) {
             FPersistentManager::getInstance()->uploadObj($course);
         }
+        **/
     }
-    */
-}
+    
+

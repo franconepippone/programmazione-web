@@ -51,6 +51,12 @@ class FPersistentManager{
 
         return $result;
     }
+    /**
+     * return a User finding it not on the id but on it's email
+     */
+    public static function retriveUserById($userId){
+        return FUser::getUserById($userId);
+    }
 
     /**
      * return a User findig it not on the id but on it's username
@@ -58,15 +64,6 @@ class FPersistentManager{
     public static function retriveUserOnUsername($username)
     {
         $result = FUser::getUserByUsername($username);
-        return $result;
-    }
-
-    /**
-     * return a User finding it not on the id but on it's email
-     */
-    public static function retriveUserOnEmail($email)
-    {
-        $result = FUser::getUserByEmail($email);
         return $result;
     }
 
@@ -309,6 +306,27 @@ class FPersistentManager{
     public static function retriveCoursesOnInstructorId(int $instructor_id) {
         $result = FCourse::getCoursesByInstructorId($instructor_id);
         return $result;
+    }
+
+    public function retriveCommonAvaiableHours(int $fieldId, array $dates): array {
+        if (empty($dates)) {
+            return [];
+        }
+
+        // Inizializza con gli orari disponibili del primo giorno
+        $firstDate = $dates[0];
+        $commonHours = $this->retriveAvaiableHoursForFieldAndDate($fieldId, $firstDate);
+
+        // Per ogni data successiva, fai l'intersezione con gli orari precedenti
+        for ($i = 1; $i < count($dates); $i++) {
+            $dateString = $dates[$i];
+            $dayHours = $this->retriveAvaiableHoursForFieldAndDate($fieldId, $dateString);
+            $commonHours = array_intersect($commonHours, $dayHours);
+        }
+
+        // Ordina gli orari risultanti e restituiscili
+        sort($commonHours);
+        return array_values($commonHours);
     }
  
      //------------------------------------ENROLLMENT-------------------------------

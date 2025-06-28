@@ -73,10 +73,10 @@ class CReservation{
 
             $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
             if (!$field) {
-            $error = new VError();
-            $error->show("Campo non trovato.");
-            return;
-            }
+                $error = new VError();
+                $error->show("Campo non trovato.");
+                return;
+                }
             $view->showReservationForm($field,$date,$avaiableHours);
         
         } catch (ValidationException $e) {
@@ -99,7 +99,7 @@ class CReservation{
         $data = $_POST;
     
         $field = FPersistentManager::getInstance()->retriveFieldById($data['field_id']);
-        $client = FPersistentManager::getInstance()->retriveClientById($userId);
+        $client = FPersistentManager::getInstance()->retriveUserById($userId);
         
         $fullName = $client->getName() . ' ' . $client->getSurname();
 
@@ -137,7 +137,7 @@ class CReservation{
 
 
         $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
-        $client = FPersistentManager::getInstance()->retriveClientById($userId);
+        $client = FPersistentManager::getInstance()->retriveUserById($userId);
 
 
         $dateObj = new DateTime($pending['date']);
@@ -219,11 +219,12 @@ class CReservation{
         if (!$reservation) {
             (new VError())->show("Prenotazione non trovata.");
              return;
-       }
+        }
 
-
+        $field = $reservation->getField();
+        
         $view = new VReservation();
-        $view->showCancelReservation($reservation);
+        $view->showCancelReservation($reservation,$field);
     }
     
 
@@ -270,7 +271,11 @@ class CReservation{
     public static function modifyReservationDate() {
         $reservationId = $_POST['id'] ?? null;
         if (!$reservationId) {
-            (new VError())->show("ID prenotazione non specificato.");
+            (new VError())->show(
+    "ID prenotazione non specificato.",
+    "Torna indietro",
+    "location.href='/reservation/mngReservations'"
+);
             return;
         }
 
@@ -290,14 +295,29 @@ class CReservation{
         $newDate = $_POST['date'] ?? null;
 
         $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
-  
 
-        try {
-            $newDate = UValidate::validateReservationDate($newDate);
-        } catch (ValidationException $e) {
-            (new VError())->show($e->getMessage());
-            return;
-        }
+        $user = $reservation->getUser();
+        if ($user->getType()=='client'){
+            try {
+                $newDate = UValidate::validateReservationDate($newDate);
+            } catch (ValidationException $e) {
+                (new VError())->show($e->getMessage(),
+                                      "Torna indietro",
+                                     "location.href='/reservation/modifyReservation?id={$reservationId}'"
+                                    );
+                return;
+            }
+        } else {
+            try {
+                $newDate = UValidate::validateNotInPast($newDate);
+            } catch (ValidationException $e) {
+                (new VError())->show($e->getMessage(),
+                                      "Torna indietro",
+                                     "location.href='/reservation/modifyReservation?id={$reservationId}'"
+                                    );
+                return;
+            }
+    }
 
         $fieldId = $reservation->getField()->getId();
         $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $newDate);
@@ -317,7 +337,9 @@ class CReservation{
         $time = $_POST['time'] ?? null;
 
         if (!$reservationId || !$date || !$time) {
-            (new VError())->show("Dati mancanti per la modifica.");
+            (new VError())->show("Dati mancanti per la modifica.",
+                                 "Torna indietro",
+                                 "location.href='/dasbhboard/manageReservations'");
             return;
         }
 

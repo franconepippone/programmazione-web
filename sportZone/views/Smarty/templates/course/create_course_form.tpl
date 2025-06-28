@@ -109,14 +109,6 @@
             <input type="date" name="end_date" id="end_date" value="{$end_date|default:''}">
         </div>
         <div class="form-group">
-            <label for="start_time">Orario inizio</label>
-            <input type="time" name="start_time" id="start_time" value="{$start_time|default:''}">
-        </div>
-        <div class="form-group">
-            <label for="end_time">Orario fine</label>
-            <input type="time" name="end_time" id="end_time" value="{$end_time|default:''}">
-        </div>
-        <div class="form-group">
             <label for="cost">Costo iscrizione</label>
             <input type="text" name="cost" id="cost" value="{$cost|default:''}">
         </div>
@@ -158,6 +150,15 @@
                 {/foreach}
             </select>
         </div>
+        <div class="form-group">
+    <label for="duration">Durata del corso (ore)</label>
+    <select name="duration" id="duration" required>
+        <option value="">Seleziona durata...</option>
+        <option value="1" {if $duration|default:'' == '1'}selected{/if}>1 ora</option>
+        <option value="2" {if $duration|default:'' == '2'}selected{/if}>2 ore</option>
+        <option value="3" {if $duration|default:'' == '3'}selected{/if}>3 ore</option>
+    </select>
+</div>
         <button class="submit-button" type="submit">Continua</button>
     </form>
 </div>

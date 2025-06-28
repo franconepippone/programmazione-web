@@ -9,8 +9,6 @@ class CCourse {
         'description'      => 'validateDescription',
         'start_date'       => 'validateStartDate',
         'end_date'         => 'validateEndDate',
-        'start_time'       => 'validateTime',
-        'end_time'         => 'validateTime',
         'cost'             => 'validatePrice',
         'max_participants' => 'validateMaxParticipants',
         'days'             => 'validateDays',
@@ -39,19 +37,16 @@ class CCourse {
 
         $view = new VCourse();
         $pm = FPersistentManager::getInstance();
+        $post=$_POST;
 
         try {
-            $validated = UValidate::validateInputArray($_POST, self::$rulesCourse, true);
+            $validated = UValidate::validateInputArray($post, self::$rulesCourse, true);
 
         // Validazione incrociata date
             if ($validated['end_date'] <= $validated['start_date']) {
                 throw new ValidationException("La data di fine deve essere successiva a quella di inizio.");
             }
 
-        // Validazione incrociata orari
-            if ($validated['start_time'] >= $validated['end_time']) {
-                throw new ValidationException("L'orario di inizio deve precedere quello di fine.");
-            }
 
         // Recupera oggetti istruttore e campo
             $instructor = $pm->retriveInstructorById($validated['instructor']);
@@ -63,19 +58,19 @@ class CCourse {
             $validated['instructor'] = $instructor;
             $validated['field'] = $field;
 
-           
             $validated['start_date'] = $validated['start_date']->format('Y-m-d');
             $validated['end_date'] = $validated['end_date']->format('Y-m-d');
-            $validated['start_time'] = $validated['start_time']->format('H:i');
-            $validated['end_time'] = $validated['end_time']->format('H:i');
-            
-            $view->showCourseSummary($validated);
 
-             
+            $datas = self::getDatesForWeekdays($validated['days'], new DateTime($validated['start_date']), new DateTime($validated['end_date']));
+            $possiblehours= self::getCommonAvailableStartTimesForDuration($field, $datas, $post['duration']); 
+
+            $validated['duration'] = $post['duration'];
+            $view->showCourseSummary($validated, $possiblehours);
+
         } catch (ValidationException $e) {
             $msg = $e->getMessage();
             if (isset($e->details['params'])) {
-                $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+              //  $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
             }
             (new VError())->show($msg);
         }
@@ -87,8 +82,14 @@ class CCourse {
 
         $view = new VCourse();
         $pm = FPersistentManager::getInstance();
-
         $data = $_POST;
+
+        $startTimeStr = $data['start_time'];    
+        $duration = intval($data['duration']);
+        $startTime = DateTime::createFromFormat('H:i:s', $startTimeStr);
+        $endTime = (clone $startTime)->modify("+{$duration} hours");
+
+
 
         $instructor = $pm->retriveInstructorById($data['instructor']);
         $field = $pm->retriveFieldById($data['field']);
@@ -98,7 +99,7 @@ class CCourse {
         $course->setDescription($data['description']);
         $course->setStartDate(new DateTime($data['start_date']));
         $course->setEndDate(new DateTime($data['end_date']));
-        $course->setTimeSlot($data['start_time'] . '-' . $data['end_time']);
+        $course->setTimeSlot($startTime->format('H:i') . '-' . $endTime->format('H:i'));
         $course->setDaysOfWeek($data['days']);
         $course->setEnrollmentCost(floatval($data['cost']));
         $course->setMaxParticipantsCount(intval($data['max_participants']));
@@ -107,9 +108,14 @@ class CCourse {
 
         $pm->saveCourse($course);
 
-        $view->confirmCourse($course);
-    }
+        
+        $datas= self::getDatesForWeekdays($data['days'], new DateTime($data['start_date']), new DateTime($data['end_date']));
 
+        self::generateAndSaveCourseReservations($datas, $data['start_time'], $duration, $field,$instructor);
+        $view->confirmCourse($course);
+        
+        
+    }
 
 
     //************************************************************************** */
@@ -203,10 +209,6 @@ class CCourse {
 
 
 
-
-
-
-
     public static function finalizeModifyCourse($course_id) {
         $pm = FPersistentManager::getInstance();
 
@@ -264,6 +266,25 @@ class CCourse {
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
     private static function dateSlot($start, $end) {
         // Controlla che l'orario di inizio sia prima di quello di fine
         if ($start >= $end) {
@@ -273,7 +294,136 @@ class CCourse {
     }
     // metodo per serializzare un corso in un array
     
+
+
+
+
+
+    public static function getDatesForWeekdays(array $weekdaysItalian, DateTime $startDate, DateTime $endDate): array {
+        $mapDays = [
+            'Lunedì'    => 'Monday',
+            'Martedì'   => 'Tuesday',
+            'Mercoledì' => 'Wednesday',
+            'Giovedì'   => 'Thursday',
+            'Venerdì'   => 'Friday',
+            'Sabato'    => 'Saturday',
+            'Domenica'  => 'Sunday',
+        ];
+
+        $allDates = [];
+
+        foreach ($weekdaysItalian as $weekdayItalian) {
+            if (!isset($mapDays[$weekdayItalian])) {
+                // Giorno non valido, salta o gestisci errore
+                continue;
+            }
+
+            $weekdayEnglish = $mapDays[$weekdayItalian];
+
+            // Trova la prima data di questo giorno
+            $current = clone $startDate;
+            $current->modify('next ' . $weekdayEnglish);
+
+            // Se startDate è già quel giorno, includilo
+            if ($startDate->format('l') === (new DateTime($weekdayEnglish))->format('l')) {
+                $current = clone $startDate;
+            }
+
+            // Aggiungi tutte le date per questo giorno
+            while ($current <= $endDate) {
+                $allDates[] = $current->format('Y-m-d');
+                $current->modify('+1 week');
+            }
+        }
+
+        sort($allDates);
+
+        return $allDates;
+    }
+
+
+
+
+    private static function getHourlySlots(DateTime $start_time, DateTime $end_time): array {
+        $end_limit = clone $end_time;
+
+        $interval = new DateInterval('PT1H');
+        $period = new DatePeriod($start_time, $interval, $end_limit);
+
+        $slots = [];
+        foreach ($period as $hour) {
+            $slots[] = $hour->format('H:i');
+        }
+
+        return $slots;
+    }
+
+
+
+
+
+    public static function getCommonAvailableStartTimesForDuration(EField $field,array $dates,int $duration): array {
+        $pm = FPersistentManager::getInstance();
+        $dailySlots = [];
+
+        foreach ($dates as $dateStr) {
+            $date = new DateTime($dateStr);
+            $slots = $pm->retriveAvaiableHoursForFieldAndDate($field->getId(), $date->format('Y-m-d'));
+            sort($slots);
+            $dailySlots[] = $slots;
+        }
+
+        $possibleStartsByDay = [];
+
+        foreach ($dailySlots as $slots) {
+            $startTimes = [];
+            for ($i = 0; $i <= count($slots) - $duration; $i++) {
+                $ok = true;
+                $start = DateTime::createFromFormat('H:i:s', $slots[$i]);
+
+                for ($j = 1; $j < $duration; $j++) {
+                    $expected = (clone $start)->modify("+{$j} hours")->format('H:i:s');
+                    if (!in_array($expected, $slots)) {
+                        $ok = false;
+                        break;
+                    }
+                }
+
+                if ($ok) {
+                    $startTimes[] = $slots[$i];
+                }
+            }
+            $possibleStartsByDay[] = $startTimes;
+        }
+
+        $common = $possibleStartsByDay[0];
+        for ($i = 1; $i < count($possibleStartsByDay); $i++) {
+            $common = array_intersect($common, $possibleStartsByDay[$i]);
+        }
+
+        sort($common);
+        return array_values($common);
+    }  
+
+
     
+    public static function generateAndSaveCourseReservations(array $dates, string $startTimeStr, int $duration, EField $field, EUser $instructor): void {
+        $pm = FPersistentManager::getInstance();
+
+        foreach ($dates as $dateStr) {
+            $date = new DateTime($dateStr);
+            $start = DateTime::createFromFormat('Y-m-d H:i:s', $dateStr . ' ' . $startTimeStr);
+
+            for ($i = 0; $i < $duration; $i++) {
+                $slotTime = (clone $start)->modify("+{$i} hours");
+                $reservation = new EReservation($date, $slotTime, $field, $instructor, new EOnSitePayment());
+                $pm::saveReservation($reservation);
+            }
+        }
+    }
+
+
+
     
 
 

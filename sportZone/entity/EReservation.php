@@ -33,7 +33,7 @@ class EReservation
         \DateTimeInterface $time,
         EField $field,
         EUser $user,
-        EPaymentMethod $paymentMethod
+        EPaymentMethod $paymentMethod 
     ) {
         $this->date = $date;
         $this->time = $time;

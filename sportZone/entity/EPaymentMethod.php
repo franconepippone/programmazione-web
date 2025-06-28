@@ -32,14 +32,7 @@ abstract class EPaymentMethod
         return $this;
     }
 
-    public function getEnrollment(): ?EEnrollment {
-        return $this->enrollment;
-    }
-
-    public function setEnrollment(?EEnrollment $enrollment): self {
-        $this->enrollment = $enrollment;
-        return $this;
-    }
+    
 
     public function getClient(): ?EClient {
         return $this->client;
@@ -56,10 +49,10 @@ abstract class EPaymentMethod
     }
 
     public function getType(): string {
-    return match (get_class($this)) {
-        EOnlinePayment::class => 'online',
-        EOnSitePayment::class => 'onsite',
-        default => 'unknown',
-    };
-}
+        return match (get_class($this)) {
+            EOnlinePayment::class => 'online',
+            EOnSitePayment::class => 'onsite',
+            default => 'unknown',
+            };
+    }
 }
