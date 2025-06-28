@@ -130,44 +130,33 @@
 {/block}
 
 {block name="dashboard_content"}
-  <h1 class="results-header">Cerca un Campo Sportivo</h1>
+  <h1 class="results-header">Search fields</h1>
 
-  <form class="search-form" method="GET" action="/dashboard/manageFields">
+<form class="search-form" method="GET" action="/dashboard/manageFields">
     <label>
-      Nome:
-      <input type="text" name="name" value="{$title}" placeholder="calcetto-1">
+        Nome:
+        <input type="text" name="name" value="{$title}" placeholder="calcetto-1">
     </label>
     <label>
-      Sport:
-      <select name="sport">
-        <option value="">-- Tutti gli sport --</option>
-        <option value="football" {if $search.sport == 'football'}selected{/if}>Calcio</option>
-        <option value="tennis" {if $search.sport == 'tennis'}selected{/if}>Tennis</option>
-        <option value="basket" {if $search.sport == 'basket'}selected{/if}>Basket</option>
-        <option value="padel" {if $search.sport == 'padel'}selected{/if}>Padel</option>
-        <!-- Altri sport possono essere aggiunti qui -->
-      </select>
+        Sport:
+        <select name="sport">
+            <option value="">-- Tutti gli sport --</option>
+            <option value="football" {if $search.sport == 'football'}selected{/if}>Calcio</option>
+            <option value="tennis" {if $search.sport == 'tennis'}selected{/if}>Tennis</option>
+            <option value="basket" {if $search.sport == 'basket'}selected{/if}>Basket</option>
+            <option value="padel" {if $search.sport == 'padel'}selected{/if}>Padel</option>
+            <!-- Altri sport possono essere aggiunti qui -->
+        </select>
     </label>
-    <button type="submit">Cerca</button>
-  </form>
-
+    <button type="submit">Search</button>or
+    <a href="/field/createFieldForm" class="add-field-btn" style="text-decoration:none;">
+        <button type="button" style="margin-left:10px;">Create field</button>
+    </a>
+</form>
   <div class="results-container">
     {foreach $fields as $field}
-      <a class="card" href="/field/details/{$field.id}?{$queryString}">
-        <img src="{$field.image}" alt="{$field.alt}">
-        <div class="card-body">
-          <div>
-            <div class="card-title">{$field.title}</div>
-            <div class="card-details">
-              Sport: {$field.sport}<br>
-              Orario: {$field.orario}<br>
-              {if isset($field.superficie)}Superficie: {$field.superficie}<br>{/if}
-              {if isset($field.illuminazione)}Illuminazione: {$field.illuminazione}<br>{/if}
-            </div>
-          </div>
-          <div class="price">{$field.price}</div>
-        </div>
-      </a>
+        {assign var="fieldUrl" value="/field/modifyField/{$field.id}"}
+        {include file="field/field_card.tpl" field=$field}
     {/foreach}
   </div>
 {/block}

@@ -187,7 +187,7 @@
         <main class="content-area">
             {block name="content"}{/block}
         </main>
-
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 0;">
         <!-- Footer -->
         {include file='layouts/footer.tpl'}
 

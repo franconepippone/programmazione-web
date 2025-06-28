@@ -124,15 +124,30 @@ class CDashboard{
         $user = CUser::getLoggedUser();
         $role = self::assertRole(EEmployee::class);
         
-        $rulesSearch = 
+        $rulesSearch = [
+            "sport" => "validateSport"
+        ];
 
         try {
-            $searchInputs = UValidate::validateInputArray($_GET, )
+            $getInputs = UValidate::validateInputArray($_GET, $rulesSearch, false);
+        } catch (ValidationException $e) {
+            echo "INPUT VALIDATION FAILED: " . $e->getMessage();
+            exit;
         }
 
+        $searchParams = ['sport' => ''];
+        if (isset($getInputs['sport'])) {
+            $searchParams['sport'] = $getInputs['sport'];
+        }
 
+        // filtraggio campi
+
+        $pm = FPersistentManager::getInstance();
+        $fields = $pm->retrieveAllMatchingFields();
+
+    
         $view = new VDashboard();
-        $view->showManageFields($user, $role);
+        $view->showManageFields($user, $role, $fields, $searchParams);
     }
 
     public static function manageReservations(){

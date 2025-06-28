@@ -114,7 +114,9 @@ class FPersistentManager{
      public static function retriveFieldByAttribute($field, $value){
         return FField::getFieldByAttribute($field,$value);
      }
-      
+    public static function removeField(EField $field){
+        return FField::deleteField($field);
+    }    
      //-------------------------------------CLIENT--------------------------------------
 
     /**

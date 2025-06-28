@@ -150,11 +150,11 @@
 
 {block name="content"}
   <div class="main">
-    <h1>{$campo.titolo}</h1>
+    <h1>{$field.name}</h1>
 
     <div class="gallery-slider">
       <div class="slides" id="slides">
-        {foreach $campo.immagini as $img}
+        {foreach $field.images as $img}
           <div class="slide">
             <img src="{$img}" alt="Immagine del campo">
           </div>
@@ -166,13 +166,13 @@
       <div class="details">
         <h2>Informazioni Generali</h2>
         <div class="info">
-          <strong>Sport:</strong> {$campo.sport}<br>
-          <strong>Orario:</strong> {$campo.orario}<br>
-          {if isset($campo.superficie)}<strong>Superficie:</strong> {$campo.superficie}<br>{/if}
-          {if isset($campo.illuminazione)}<strong>Illuminazione:</strong> {$campo.illuminazione}<br>{/if}
-          <strong>Prezzo:</strong> {$campo.prezzo}<br><br>
+          <strong>Sport:</strong> {$field.sport}<br>
+          <strong>Orario:</strong> 8:00 - 21:00<br>
+          {if isset($field.terrainType)}<strong>Superficie:</strong> {$field.terrainType}<br>{/if}
+          {if isset($field.illuminazione)}<strong>Illuminazione:</strong> {$field.illuminazione}<br>{/if}
+          <strong>Prezzo:</strong> {$field.hourlyCost}<br><br>
           <strong>Descrizione:</strong><br>
-          {$campo.descrizione}
+          {$field.description}
         </div>
       </div>
       <div class="map-container">
@@ -183,7 +183,7 @@
           loading="lazy"
           allowfullscreen
           referrerpolicy="no-referrer-when-downgrade"
-          src="https://maps.google.com/maps?q={$campo.latitude},{$campo.longitude}&hl=it&z=15&output=embed">
+          src="https://maps.google.com/maps?q={$field.latitude},{$field.longitude}&hl=it&z=15&output=embed">
         </iframe>
       </div>
     </div>

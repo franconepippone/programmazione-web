@@ -148,24 +148,12 @@
     </label>
     <button type="submit">Cerca</button>
   </form>
-
+  
+  
   <div class="results-container">
     {foreach $fields as $field}
-      <a class="card" href="/field/details/{$field.id}?{$queryString}">
-        <img src="{$field.image}" alt="{$field.alt}">
-        <div class="card-body">
-          <div>
-            <div class="card-title">{$field.title}</div>
-            <div class="card-details">
-              Sport: {$field.sport}<br>
-              Orario: {$field.orario}<br>
-              {if isset($field.superficie)}Superficie: {$field.superficie}<br>{/if}
-              {if isset($field.illuminazione)}Illuminazione: {$field.illuminazione}<br>{/if}
-            </div>
-          </div>
-          <div class="price">{$field.price}</div>
-        </div>
-      </a>
+      {assign var="fieldUrl" value="/field/details/{$field.id}?{$queryString}"}
+      {include file="field/field_card.tpl" field=$field}
     {/foreach}
   </div>
 {/block}

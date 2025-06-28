@@ -14,37 +14,15 @@ class VField{
         $this->smarty->display("field/search_form.tpl");
     }
 
-    public function showSearchResults($fields, $searchParams) {
+
+    public function showSearchResults($fields, $query, $searchParams) {
         $fieldsInfo = [];
         foreach ($fields as $fld) {
-            
-            $imagesNames = $fld->getImages();
-            if (sizeof($imagesNames) > 0) {
-                $imageSrc = UImage::getImageFullPath($imagesNames[0]);
-            } else {
-                $imageSrc = "https://th.bing.com/th/id/OIP.xQLogGqy75CRaZGYTlgdXAHaLG?r=0&rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3";
-            }
-           
-            $info = [
-                'id'        => $fld->getId(),
-                'title'     => $fld->getName(),
-                'sport'     => $fld->getSport(),
-                'orario'    => '09:00 - 22:00',
-                'superficie'=> $fld->getTerrainType(),
-                'price'     => $fld->getCost(),
-                'image'     => $imageSrc,
-                'alt'       => $fld->getName()
-            ];
-
-            $fieldsInfo[] = $info;
+            $fieldsInfo[] = EField::fieldToArray($fld);
         }
 
-        // vengono passati in get alla pagina details, in modo che details possa reinidirizzare alla prenotazione corretta
-        $queryParams = [];
-        if (isset($searchParams['date'])) $queryParams['date'] = $searchParams['date'];
-
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('queryString', http_build_query($queryParams));
+        $this->smarty->assign('queryString', $query);
         $this->smarty->assign('search', $searchParams);
         $this->smarty->assign('fields', $fieldsInfo);
         $this->smarty->display("field/search_results_list.tpl");
@@ -52,31 +30,13 @@ class VField{
 
     public function showDetailsPage($field, $query) {
 
-        $images = [];
-        foreach ($field->getImages() as $imgName) {
-            $imagePath = UImage::getImageFullPath($imgName);
-            $images[] = $imagePath;
-        }
-
-        $campo = [
-            'id' => $field->getId(),
-            'titolo' => $field->getName(),
-            'sport' => $field->getSport(),
-            'orario' => '09:00 - 22:00',
-            'superficie' => $field->getTerrainType(),
-            'illuminazione' => 'Sì',
-            'prezzo' => ((string)$field->getCost()).'€/ora',
-            'descrizione' => $field->getDescription(),
-            'immagini' => $images,
-            'latitude' => $field->getLatitude(),
-            'longitude' => $field->getLongitude()
-        ];
+        $fieldArray = EField::fieldToArray($field);
 
           // Passa i dati a Smarty
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('campo', $campo);
+        $this->smarty->assign('field', $fieldArray);
         $this->smarty->assign('queryString', $query);
-        $this->smarty->display("field/details.tpl");
+        $this->smarty->display("field/field_details.tpl");
     }
 
     // ------------------- ADMIN -----------------------------
@@ -85,5 +45,16 @@ class VField{
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display("field/create_field_form.tpl");
     }
+
+    public function showModifyFieldForm($field, $images) {
+
+        $fieldArray = EField::fieldToArray($field);
+        
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->assign('images', $images);
+        $this->smarty->assign('field', $fieldArray);
+        $this->smarty->display("field/modify_field_form.tpl");
+    }
+
 
 }

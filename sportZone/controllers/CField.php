@@ -37,16 +37,19 @@ class CField {
         
         $pm = FPersistentManager::getInstance();
         $fields = $pm->retrieveAllMatchingFields();
-        // TODO filtraggio dei campi (usa metodo di alice) 
+        // TODO filtraggio dei campi (usa metodo di alice)
 
+        $queryParams = [];
+        if (isset($searchParams['date'])) $queryParams['date'] = $searchParams['date'];
+        $query = http_build_query($queryParams);
 
         $view = new VField();
-        $view->showSearchResults($fields, $searchParams);
+        $view->showSearchResults($fields, $query, $searchParams);
     }
 
-    public static function details($field_id) {
+    public static function details($fieldId) {
         $pm = FPersistentManager::getInstance();
-        $fld = $pm->retriveFieldById($field_id);
+        $fld = $pm->retriveFieldById($fieldId);
 
         if ($fld == null) {
             echo "Invalid field id";
@@ -61,9 +64,10 @@ class CField {
             $verr->show($e->getMessage());
             exit;
         }
+        
 
         $query = http_build_query([
-            "fieldId" => $field_id,
+            "fieldId" => $fieldId,
             "date" => $inputs["date"]->format('Y-m-d'), // Convert DateTime to string in 'Y-m-d' format
         ]);
 
@@ -72,28 +76,73 @@ class CField {
     }
 
 
-    // ------------------- ADMIN -----------------------------
+    // ------------------- EMPLOYEE -----------------------------
 
     public static function createFieldForm() {
         CUser::isLogged();
+        if (!CUser::isEmployee()) {
+            // TODO
+            echo "devi essere un impiegato (rimpiazza con errore)";
+            exit;
+        }
 
         $view = new VField();
         $view->showCreateFieldForm();
     }
 
-    public static function finalizeFieldCreation() {
+    public static function modifyField($field_id) {
         CUser::isLogged();
+        if (!CUser::isEmployee()) {
+            $view = new VError();
+            $view->show("You cannot access this page");
+            exit;
+        }
+        $pm = FPersistentManager::getInstance();
+        $fld = $pm->retriveFieldById($field_id);
 
-        // TODO FIELD VALIDATION
-        $field = (new EField())
-        ->setName(UHTTPMethods::post('name'))
-        ->setTerrainType(UHTTPMethods::post('terrainType'))
-        ->setCost(UHTTPMethods::post('hourlyCost'))
-        ->setIsIndoor(UHTTPMethods::post('isIndoor'))
-        ->setSport(UHTTPMethods::post(param: 'sport'))
-        ->setDescription(UHTTPMethods::post('description'))
-        ->setLatitude(UHTTPMethods::post('latitude'))
-        ->setLongitude(UHTTPMethods::post('longitude'));
+        if ($fld == null) {
+            $view = new VError();
+            $view->show("Invalid field id");
+            exit;
+        }
+
+
+        $images = UImage::getImageFullPaths($fld->getImages());
+
+        $view = new VField();
+        $view->showModifyFieldForm($fld, $images);
+    }
+
+
+    private static function internalModifyField(array $array, EField $field) {
+
+        $rulesModifyField = [
+            "name" => "validateFieldName",
+            "terrainType" => "skipValidation",
+            "hourlyCost" => "skipValidation",
+            "isIndoor" => "skipValidation",
+            "sport" => "validateSport",
+            "description" => "skipValidation",
+            "latitude" => "skipValidation",
+            "longitude" => "skipValidation"
+        ];
+
+        try {
+            $inputs = UValidate::validateInputArray($_POST, $rulesModifyField, true);
+        } catch (ValidationException $e) {
+            $view = new VError();
+            $view->show($e->getMessage());
+            exit;
+        }
+
+        $field->setName($inputs['name'])
+        ->setTerrainType($inputs['terrainType'])
+        ->setCost($inputs['hourlyCost'])
+        ->setIsIndoor($inputs['isIndoor'])
+        ->setSport($inputs['sport'])
+        ->setDescription($inputs['description'])
+        ->setLatitude($inputs['latitude'])
+        ->setLongitude($inputs['longitude']);
 
         // If an image was given, saves it for that field
         $imagesInfo = UHTTPMethods::files('images');
@@ -108,10 +157,59 @@ class CField {
                 }
             }
         }
+    }
 
+    public static function finalizeFieldModify($fieldId) {
+        CUser::isLogged();
+        if (!CUser::isEmployee()) {
+            // TODO
+            $view = new VError();
+            $view->show("You cannot access this page.");
+            exit;
+        }
+
+        $pm = FPersistentManager::getInstance();
+        $field = $pm->retriveFieldById($fieldId);
+        self::internalModifyField($_POST, $field);
         FPersistentManager::getInstance()->uploadObj($field);
         
         $view = new VError();
-        $view->showSuccess("Field was succesfully created", buttAction: "window.location.href='/dashboard/manageCourses'");
+        $view->showSuccess("Field was succesfully modified.", buttAction: "window.location.href='/dashboard/manageFields'");
+    }
+
+    public static function finalizeFieldCreation() {
+        CUser::isLogged();
+
+        // TODO FIELD VALIDATION
+        $field = new EField();
+        self::internalModifyField($_POST, $field);
+        FPersistentManager::getInstance()->uploadObj($field);
+        
+        $view = new VError();
+        $view->showSuccess("Field was succesfully created", buttAction: "window.location.href='/dashboard/manageFields'");
+    }
+
+    public static function delete($fieldId) {
+        CUser::isLogged();
+        if (!CUser::isEmployee()) {
+            // TODO
+            $view = new VError();
+            $view->show("You cannot access this page.");
+            exit;
+        }
+        
+        $pm = FPersistentManager::getInstance();
+        $fld = $pm->retriveFieldById($fieldId);
+
+        if ($fld == null) {
+            $view = new VError();
+            $view->show("Invalid field id");
+            exit;
+        }
+
+        $pm->removeField($fld);
+        
+        $view = new VError();
+        $view->showSuccess("Field was succesfully removed", buttAction: "window.location.href='/dashboard/manageFields'");
     }
 }
