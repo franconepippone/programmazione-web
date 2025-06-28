@@ -7,7 +7,7 @@ use App\Enum\UserSex;
 #[ORM\Entity]
 #[ORM\InheritanceType("SINGLE_TABLE")]
 #[ORM\DiscriminatorColumn(name: "type", type: "string")]
-#[ORM\DiscriminatorMap(value: ["client" => EClient::class, "employee" => EEmployee::class, "instructor" => EInstructor::class])]
+#[ORM\DiscriminatorMap(value: ["client" => EClient::class, "employee" => EEmployee::class, "instructor" => EInstructor::class, "admin" => EAdmin::class])]
 #[ORM\Table(name: "users")]
 
 abstract class EUser

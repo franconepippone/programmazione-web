@@ -14,7 +14,9 @@ class CDashboard{
 
     public static function profile(){
         CUser::isLogged();
-        $role = self::assertRole(EEmployee::class, EClient::class, EInstructor::class);
+        $role = self::assertRole(EEmployee::class, EClient::class, EInstructor::class, EAdmin::class);
+
+        if ($role === EAdmin::class) header("Location: /dashboard/manageFields");
 
         $view = new VDashboard();
         $user = CUser::getLoggedUser();
@@ -60,7 +62,7 @@ class CDashboard{
     }
     public static function myEnrollments()
     {
-        
+        CUser::isLogged();
         $role = self::assertRole(EClient::class);
         $user = CUser::getLoggedUser();
         $userId = $user->getId();
@@ -71,6 +73,7 @@ class CDashboard{
     }
 
      public static function courseDetailsClient($course_id) {
+        CUser::isLogged();
         $user = CUser::getLoggedUser();
         
         
@@ -90,7 +93,7 @@ class CDashboard{
     // ----------------- INSTRUCTOR ONLY -----------------------
 
     public static function myCourses(){
-        
+        CUser::isLogged();
         $user = CUser::getLoggedUser();
         $role = self::assertRole(EInstructor::class);
         
@@ -98,11 +101,12 @@ class CDashboard{
 
         // Mostra la vista di gestione corsi istruttore
         $view = new VDashboard();
-        $view->showMyCourses($mycourses, $user, $role,);
+        $view->showMyCourses($mycourses, $user, $role);
     }
 
 
     public static function courseDetailsInstructor($course_id) {
+        CUser::isLogged();
         $user = CUser::getLoggedUser();
        
         $role = self::assertRole(EInstructor::class);
@@ -123,16 +127,18 @@ class CDashboard{
     // --------------- EMPLOYEE ONLY -----------------
 
     public static function manageCourses(){
+        CUser::isLogged();
         $user = CUser::getLoggedUser();
-        $role = self::assertRole(EEmployee::class);
+        $role = self::assertRole(EEmployee::class, EAdmin::class);
         
         $view = new VDashboard();
         $view->showManageCourses($user, $role);
     }
 
     public static function manageFields(){
+        CUser::isLogged();
         $user = CUser::getLoggedUser();
-        $role = self::assertRole(EEmployee::class);
+        $role = self::assertRole(EEmployee::class, EAdmin::class);
         
         $rulesSearch = [
             "sport" => "validateSport"
@@ -162,8 +168,8 @@ class CDashboard{
 
 
     public static function manageUsers(){
-     
-        $role = self::assertRole(EEmployee::class);
+        CUser::isLogged();
+        $role = self::assertRole(EEmployee::class, EAdmin::class);
         
         $view = new VDashboard();
 
@@ -172,8 +178,8 @@ class CDashboard{
     }
     
     public static function manageReservations() {
-
-        $role = self::assertRole(EEmployee::class);
+        CUser::isLogged();
+        $role = self::assertRole(EEmployee::class, EAdmin::class);
         $view = new VDashboard();
         $user = CUser::getLoggedUser();
 
@@ -184,6 +190,15 @@ class CDashboard{
         $filtered = FPersistentManager::getInstance()->retriveFilteredReservations($name, $date, $sport);
 
         $view->showFilteredReservations($filtered, $name, $date,$sport, $role);
+    }
+
+    public static function manageEmployees() {
+        CUser::isLogged();
+        $role = self::assertRole(EAdmin::class);
+        $user = CUser::getLoggedUser();
+        
+        $view = new VDashboard();
+        $view->showManageEmployees($user, $role);
     }
 
     

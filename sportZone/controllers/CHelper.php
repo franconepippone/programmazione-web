@@ -1,9 +1,56 @@
 <?php
 
 require_once __DIR__ . "/../../vendor/autoload.php";
+use App\Enum\UserSex;
 
 class CHelper {
     
+
+    public static function createUsers() {
+        $instructor = (new EInstructor())
+        ->setName('Mario')
+        ->setSurname('Rossi')
+        ->setEmail('istruttore@sport.com')
+        ->setBirthDate(new DateTime('1990-01-01'))
+        ->setSex(UserSex::MALE)
+        ->setUsername('instructor')
+        ->setPassword('123'); // Assuming you have a setPassword method
+
+        FPersistentManager::getInstance()->uploadObj($instructor);
+
+        $client = (new EClient())
+        ->setName('giuseppe')
+        ->setSurname('Rossi')
+        ->setEmail('client@sport.com')
+        ->setBirthDate(new DateTime('1990-01-01'))
+        ->setSex(UserSex::MALE)
+        ->setUsername('client')
+        ->setPassword('123'); // Assuming you have a setPassword method
+
+        FPersistentManager::getInstance()->uploadObj($client);
+
+        $employee = (new EEmployee())
+        ->setName('arnaldo')
+        ->setSurname('Rossi')
+        ->setEmail('employee@sport.com')
+        ->setBirthDate(new DateTime('1990-01-01'))
+        ->setSex(UserSex::MALE)
+        ->setUsername('employee')
+        ->setPassword('123'); // Assuming you have a setPassword method
+
+        FPersistentManager::getInstance()->uploadObj($employee);
+
+        $admin = (new EAdmin())
+        ->setName('Filippo')
+        ->setSurname('Rossi')
+        ->setEmail('admin@sport.com')
+        ->setBirthDate(new DateTime('1990-01-01'))
+        ->setSex(UserSex::MALE)
+        ->setUsername('admin')
+        ->setPassword('123'); // Assuming you have a setPassword method
+
+        FPersistentManager::getInstance()->uploadObj($admin);
+    }
 
     public static function populateDatabase() {
 

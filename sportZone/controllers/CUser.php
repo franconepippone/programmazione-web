@@ -32,7 +32,7 @@ class CUser {
         $role = CUser::getUserRole();
         if (!in_array($role, $allowedRoles, true)) {
             $verr = new VError();
-            $verr->show("Non hai accesso a questa pagina. Devi essere un cliente");
+            $verr->show("Non hai accesso a questa pagina.");
             exit;
         }
         return $role;
@@ -115,7 +115,7 @@ class CUser {
         // if username exists
         $username_exists = FPersistentManager::getInstance()->verifyUserUsername(UHTTPMethods::post('username'));                                            
         if(!$username_exists) {
-            (new VError())->show("sorry, the username you entered does not exist.");
+            (new VError())->show(message: "L'username inserito è inesistente");
             exit;
         }
         
@@ -124,7 +124,7 @@ class CUser {
 
         // if password is correct
         if(!password_verify(UHTTPMethods::post('password'), $user->getPasswordHashed())) {
-            (new VError())->show("sorry, the password you entered is incorrect.");
+            (new VError())->show("Password incorretta");
             exit;
         }
 

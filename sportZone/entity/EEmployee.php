@@ -17,7 +17,6 @@ class EEmployee extends EUser
     private Collection $courses;
 
     public function __construct() {
-        parent::__construct();
         $this->paymentMethods = new ArrayCollection();
         $this->courses = new ArrayCollection();
     }

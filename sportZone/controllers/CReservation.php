@@ -49,6 +49,7 @@ class CReservation{
     public static function reservationForm(){
     
         CUser::isLogged();
+        CUser::assertRole(EClient::class);
         $userId = $_SESSION['user'] ;
 
         try {

@@ -1,4 +1,5 @@
 {extends file="../dashboard_bar.tpl"}
+{assign var="active_tab" value="manageFields"}
 
 {block name="dashboard_tabs_styles"}
 {/block}

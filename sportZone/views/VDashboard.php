@@ -14,6 +14,7 @@ class VDashboard{
             case EClient::class: return "user/client/dashboard/";
             case EInstructor::class: return "user/instructor/dashboard/";
             case EEmployee::class: return "user/employee/dashboard/";
+            case EAdmin::class: return "user/admin/dashboard/";
             default: return "";
         }
     }
@@ -185,7 +186,7 @@ class VDashboard{
     
 
     // -------------- CLIENT ONLY -----------------
-      public function showMyReservationDetails($reservation, $active, $role) {
+    public function showMyReservationDetails($reservation, $active, $role) {
 
         if ($reservation !== null) {
             $reservation = EReservation::reservationToArray($reservation);
@@ -199,6 +200,13 @@ class VDashboard{
 
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display($this->getBasePath($role) . 'reservations.tpl');
+    }
+
+    // ------------------ ADMIN ONLY ---------------------
+
+    public function showManageEmployees(EUser $user, string $role) {
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->display($this->getBasePath($role) . 'mng_employees.tpl');
     }
 
 }

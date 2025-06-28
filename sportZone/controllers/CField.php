@@ -25,7 +25,7 @@ class CField {
             exit;
         }
 
-        $searchParams = ['date' => '', 'sport' => ''];
+        $searchParams = ['date' => null, 'sport' => null];
         if (isset($getInputs['date'])) {
             $dataText = $getInputs['date']->format('Y-m-d');
             $searchParams['date'] = $dataText; // Convert DateTime to string in 'Y-m-d' format
@@ -34,10 +34,10 @@ class CField {
         if (isset($getInputs['sport'])) {
             $searchParams['sport'] = $getInputs['sport'];
         }
-        
+
+        // filtraggio campi
         $pm = FPersistentManager::getInstance();
-        $fields = $pm->retrieveAllMatchingFields();
-        // TODO filtraggio dei campi (usa metodo di alice)
+        $fields = $pm->retrieveFieldsBySport($searchParams['sport']);
 
         $queryParams = [];
         if (isset($searchParams['date'])) $queryParams['date'] = $searchParams['date'];
@@ -59,7 +59,6 @@ class CField {
         try {
             $inputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
-            // TODO mostra messaggio errore
             $verr = new VError();
             $verr->show($e->getMessage());
             exit;
@@ -76,7 +75,7 @@ class CField {
 
     public static function createFieldForm() {
         CUser::isLogged();
-        CUser::assertRole(EEmployee::class);
+        CUser::assertRole(EEmployee::class, EAdmin::class);
 
         $view = new VField();
         $view->showCreateFieldForm();
@@ -84,7 +83,7 @@ class CField {
 
     public static function modifyField($field_id) {
         CUser::isLogged();
-        CUser::assertRole(EEmployee::class);
+        CUser::assertRole(EEmployee::class, EAdmin::class);
 
         $pm = FPersistentManager::getInstance();
         $fld = $pm->retriveFieldById($field_id);
@@ -149,7 +148,7 @@ class CField {
 
     public static function finalizeFieldModify($fieldId) {
         CUser::isLogged();
-        CUser::assertRole(EEmployee::class);
+        CUser::assertRole(EEmployee::class, EAdmin::class);
 
         $pm = FPersistentManager::getInstance();
         $field = $pm->retriveFieldById($fieldId);
@@ -162,7 +161,7 @@ class CField {
 
     public static function finalizeFieldCreation() {
         CUser::isLogged();
-        CUser::assertRole(EEmployee::class);
+        CUser::assertRole(EEmployee::class, EAdmin::class);
 
         // TODO FIELD VALIDATION
         $field = new EField();
@@ -175,7 +174,7 @@ class CField {
 
     public static function delete($fieldId) {
         CUser::isLogged();
-        CUser::assertRole(EEmployee::class);
+        CUser::assertRole(EEmployee::class, EAdmin::class);
         
         $pm = FPersistentManager::getInstance();
         $fld = $pm->retriveFieldById($fieldId);
