@@ -1,5 +1,7 @@
+{extends file=$layout}
+{assign var="page_title" value="Cancel reservation"}
+
 {block name="styles"} 
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
 {/block}
 
 {block name="content"}

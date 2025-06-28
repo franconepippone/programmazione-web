@@ -2,10 +2,7 @@
 {assign var="active_tab" value="courses"}
 
 {block name="dashboard_tabs_styles"}{/block}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     
-    {/block}
-
 {block name="dashboard_content"}
     <div class="results-list container py-4">
         <h2 class="mb-4">Le mie iscrizioni</h2>

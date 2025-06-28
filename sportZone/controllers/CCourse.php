@@ -149,7 +149,7 @@ class CCourse {
 
     
     public static function showCourses() {  
-        
+        $role = CUser::getUserRole();
            
         try {       
                 $courses = FPersistentManager::getInstance()->retriveCourses();               
@@ -158,7 +158,7 @@ class CCourse {
         }        
 
         $view = new VCourse();
-        $view->showCourses($courses, 'I tuoi corsi');
+        $view->showCourses($courses, $role);
         
     }
 
@@ -268,20 +268,8 @@ class CCourse {
 
 
 
-
-
-
-
-
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 
@@ -421,11 +409,6 @@ class CCourse {
             }
         }
     }
-
-
-
-    
-
 
 }
 

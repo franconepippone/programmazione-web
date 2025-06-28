@@ -11,6 +11,7 @@ class VField{
 
     public function showSearchForm() {
         USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->assign('default_date', date('Y-m-d', strtotime('+7 days')));
         $this->smarty->display("field/search_form.tpl");
     }
 
@@ -28,14 +29,14 @@ class VField{
         $this->smarty->display("field/search_results_list.tpl");
     }
 
-    public function showDetailsPage($field, $query) {
+    public function showDetailsPage($field, $date) {
 
         $fieldArray = EField::fieldToArray($field);
 
           // Passa i dati a Smarty
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('field', $fieldArray);
-        $this->smarty->assign('queryString', $query);
+        $this->smarty->assign('choosenDate', $date);
         $this->smarty->display("field/field_details.tpl");
     }
 

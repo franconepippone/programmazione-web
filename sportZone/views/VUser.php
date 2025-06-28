@@ -10,11 +10,13 @@ class VUser{
     }
 
     public function showLoginForm(string $redirectUrl) {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign("redirectUrl", $redirectUrl);
         $this->smarty->display("user/login.tpl");
     }
 
     public function showRegistrationForm() {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display("user/register.tpl");
     }
 
