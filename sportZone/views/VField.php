@@ -11,7 +11,7 @@ class VField{
 
     public function showSearchForm() {
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('default_date', date('Y-m-d', strtotime('+7 days')));
+        $this->smarty->assign('default_date', date('Y-m-d', strtotime('+1 days')));
         $this->smarty->display("field/search_form.tpl");
     }
 
