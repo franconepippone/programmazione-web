@@ -39,14 +39,31 @@ class CDashboard{
 
     // ---------------- CLIENT ONLY --------------------------- 
 
-    public static function myReservations(){
-        
-        $role = self::assertRole(EClient::class);
-        
-        $view = new VDashboard();
-        $user = CUser::getLoggedUser();
-        $view->showDashboarMyReservations($user, $role);
     
+
+     public static function myReservations() {
+        
+        CUser::isLogged();
+        $role = self::assertRole(EClient::class);
+
+        //$clientId = CUser::getCurrentUser()->getId();
+        $clientId = $_SESSION['user'];
+        $reservation = FPersistentManager::getInstance()->retriveActiveReservationByUserId($clientId);
+        $active = $reservation !== null;
+
+        $view = new VDashboard();
+
+        $view->showMyReservationDetails($reservation, $active, CUser::getUserRole());
+
+    }
+
+
+
+    // ----------------- CLIENT & INSTRUCTOR ONLY -----------------------
+    
+    public static function _myCourses(){
+        CUser::isLogged();
+        $role = self::assertRole(EClient::class, EInstructor::class);
     }
     public static function myEnrollments()
     {
@@ -149,7 +166,7 @@ class CDashboard{
         $view = new VDashboard();
         $view->showManageFields($user, $role, $fields, $searchParams);
     }
-
+/*
     public static function manageReservations(){
         
         $role = self::assertRole(EEmployee::class);
@@ -159,7 +176,7 @@ class CDashboard{
         $user = CUser::getLoggedUser();
         $view->showManageReservations($user, $role);
     }
-
+*/
     public static function manageUsers(){
      
         $role = self::assertRole(EEmployee::class);
@@ -169,5 +186,15 @@ class CDashboard{
         $user = CUser::getLoggedUser();
         $view->showManageUsers($user, $role);
     }
+    
+    public static function manageReservations() {
 
+        $role = self::assertRole(EEmployee::class);
+        $view = new VDashboard();
+        $user = CUser::getLoggedUser();
+        
+        $reservations = FPersistentManager::getInstance()->retriveAllReservations();
+        
+        $view->showManageReservations($reservations, $role);
+    }
 }
