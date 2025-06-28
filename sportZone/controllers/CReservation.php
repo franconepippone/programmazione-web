@@ -219,11 +219,12 @@ class CReservation{
         if (!$reservation) {
             (new VError())->show("Prenotazione non trovata.");
              return;
-       }
+        }
 
-
+        $field = $reservation->getField();
+        
         $view = new VReservation();
-        $view->showCancelReservation($reservation);
+        $view->showCancelReservation($reservation,$field);
     }
     
 
@@ -294,17 +295,29 @@ class CReservation{
         $newDate = $_POST['date'] ?? null;
 
         $reservation = FPersistentManager::getInstance()->retriveReservationById($reservationId);
-  
 
-        try {
-            $newDate = UValidate::validateReservationDate($newDate);
-        } catch (ValidationException $e) {
-            (new VError())->show($e->getMessage(),
-                                 "Torna indietro",
-                                 "location.href='/reservation/modifyReservation?id={$reservationId}'"
-                                );
-            return;
-        }
+        $user = $reservation->getUser();
+        if ($user->getType()=='client'){
+            try {
+                $newDate = UValidate::validateReservationDate($newDate);
+            } catch (ValidationException $e) {
+                (new VError())->show($e->getMessage(),
+                                      "Torna indietro",
+                                     "location.href='/reservation/modifyReservation?id={$reservationId}'"
+                                    );
+                return;
+            }
+        } else {
+            try {
+                $newDate = UValidate::validateNotInPast($newDate);
+            } catch (ValidationException $e) {
+                (new VError())->show($e->getMessage(),
+                                      "Torna indietro",
+                                     "location.href='/reservation/modifyReservation?id={$reservationId}'"
+                                    );
+                return;
+            }
+    }
 
         $fieldId = $reservation->getField()->getId();
         $avaiableHours = FPersistentManager::getInstance()->retriveAvaiableHoursForFieldAndDate($fieldId, $newDate);
@@ -324,7 +337,9 @@ class CReservation{
         $time = $_POST['time'] ?? null;
 
         if (!$reservationId || !$date || !$time) {
-            (new VError())->show("Dati mancanti per la modifica.");
+            (new VError())->show("Dati mancanti per la modifica.",
+                                 "Torna indietro",
+                                 "location.href='/dasbhboard/manageReservations'");
             return;
         }
 

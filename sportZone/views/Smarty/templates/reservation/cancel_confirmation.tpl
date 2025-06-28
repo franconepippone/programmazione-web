@@ -8,8 +8,8 @@
             <div class="card-body">
                 <h2 class="card-title mb-4 text-danger">Prenotazione Cancellata</h2>
                 <p class="mb-4">La tua prenotazione è stata cancellata con successo.</p>
-                <a href="/reservation/reservationForm" class="btn btn-danger">
-                    ← Torna al modulo di prenotazione
+                <a href="/dashboard/manageReservations" class="btn btn-danger">
+                    ← Torna alla lista 
                 </a>
             </div>
         </div>

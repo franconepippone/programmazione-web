@@ -36,7 +36,7 @@
 
                     <div class="d-flex justify-content-center gap-3">
                         <button type="submit" class="btn btn-primary">Conferma modifica</button>
-                        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Annulla</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/reservation/reservationDetails?id={$reservation.id}'">Annulla</button>
                     </div>
                 </form>
             </div>

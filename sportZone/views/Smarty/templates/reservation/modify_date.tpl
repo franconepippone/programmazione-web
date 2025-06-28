@@ -8,9 +8,8 @@
             <div class="card-body">
                 <h2 class="card-title mb-4">Modifica Data Prenotazione</h2>
 
-                <form method="post" action="/reservation/modifyReservationTime" novalidate>
+                <form method="post" action="/reservation/modifyReservationTime" class="mb-3">
                     <input type="hidden" name="id" value="{$reservation.id}">
-
                     <div class="mb-3">
                         <label for="date" class="form-label">Nuova data:</label>
                         <input type="date" id="date" name="date" 
@@ -18,8 +17,14 @@
                                required 
                                class="form-control">
                     </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary w-100">Prosegui</button>
+                    </div>
+                </form>
 
-                    <button type="submit" class="btn btn-primary w-100">Prosegui alla scelta orario</button>
+                <form method="get" action="/reservation/modifyReservation" class="mt-2">
+                    <input type="hidden" name="id" value="{$reservation.id}">
+                    <button type="submit" class="btn btn-secondary w-100">Annulla</button>
                 </form>
             </div>
         </div>
