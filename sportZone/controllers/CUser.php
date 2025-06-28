@@ -235,7 +235,33 @@ class CUser {
 
     }
 
-    private static function attemptSetFromInputArray(array $inputs, string $key, EUser $user, string $setMethod, callable $transform = null): bool {
+
+    /**
+     * Validates input data and attempts to set a property on a user object using a specified setter method.
+     *
+     * This method performs three main tasks:
+     * 1. Validates the entire input array using predefined validation rules (`self::$rulesModifyUser`).
+     * 2. If the specified key exists and the setter method exists on the `EUser` object, it sets the value.
+     * 3. Optionally transforms the value (e.g., enum conversion) before setting it.
+     *
+     * If validation fails, an error view is displayed and script execution is halted.
+     *
+     * @param array         $inputs     The raw input array (e.g., $_POST) to validate and extract the value from.
+     * @param string        $key        The specific key to look for in the validated input array.
+     * @param EUser         $user       The user object on which to invoke the setter method.
+     * @param string        $setMethod  The name of the setter method to invoke (e.g., 'setEmail').
+     * @param callable|null $transform  Optional. A callback to transform the input value before setting it.
+     *                                   Example: fn($val) => UserSex::from($val)
+     *
+     * @return bool Returns true if the value was successfully set; false otherwise.
+     *
+     * @throws ValidationException If the input array fails validation (though caught internally).
+     *
+     * @example
+     * self::attemptModifyFromInputArray($_POST, 'email', $user, 'setEmail');
+     * self::attemptModifyFromInputArray($_POST, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
+     */
+    private static function attemptModifyFromInputArray(array $inputs, string $key, EUser $user, string $setMethod, callable $transform = null): bool {
         try {
             $inputs = UValidate::validateInputArray($inputs, self::$rulesModifyUser, false);
         } catch (ValidationException $e) {
@@ -252,16 +278,38 @@ class CUser {
         return false;
     }
 
-
     private static function modifyUserFromImputs(array $inputs, EUser $user) {
-        self::attemptSetFromInputArray($inputs, 'name', $user, 'setName');
-        self::attemptSetFromInputArray($inputs, 'surname', $user, 'setSurname');
-        self::attemptSetFromInputArray($inputs, 'email', $user, 'setEmail');
-        self::attemptSetFromInputArray($inputs, 'password', $user, 'setPassword');
-        self::attemptSetFromInputArray($inputs, 'birthday', $user, 'setBirthDate');
+        self::attemptModifyFromInputArray($inputs, 'name', $user, 'setName');
+        self::attemptModifyFromInputArray($inputs, 'surname', $user, 'setSurname');
+        self::attemptModifyFromInputArray($inputs, 'password', $user, 'setPassword');
+        self::attemptModifyFromInputArray($inputs, 'birthday', $user, 'setBirthDate');
+        self::attemptModifyFromInputArray($inputs, 'cvv', $user, 'setCv');
         // Special case: convert string to enum
-        self::attemptSetFromInputArray($inputs, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
+        self::attemptModifyFromInputArray($inputs, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
+        
+        // check per unicità di email
+        if (isset($inputs['email'])) {
+            if (FPersistentManager::getInstance()->verifyUserEmail($inputs["email"])) {
+                if ($user->getEmail() !== $inputs['email']) {
+                    $view = new VError();
+                    $view->show("Email già presa da qualcun'altro.");
+                    exit;
+                }
+            }
+            $user->setEmail($inputs['email']);
+        }
 
+        // check per unicità di username
+        if (isset($inputs['username'])) {
+            if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
+                if ($user->getUsername() !== $inputs['username']) {
+                    $view = new VError();
+                    $view->show("Username già preso da qualcun'altro.");
+                    exit;
+                }
+            }
+            $user->setUsername($inputs['username']);
+        }
     }
 
     public static function modifyAnyUser($id) {
