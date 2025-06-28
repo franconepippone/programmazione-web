@@ -18,14 +18,15 @@ class CUser {
         "birthday" => 'validateBirthDate'
     ];
 
-    private static $rulesModifyClient = [
+    private static $rulesModifyUser = [
         "name" => 'validateName',
         "surname" => 'validateName',
         "email" => 'validateEmail',
         "username" => 'validateUsername',
         "password" => 'validatePassword',
         "birthday" => 'validateBirthDate',
-        "gender" => 'validateGender'
+        "gender" => 'validateGender',
+        "cvv" => 'skipValidation'
     ];
 
     public static function assertRole(...$allowedRoles): string {
@@ -221,7 +222,7 @@ class CUser {
 
     public static function modifyUserForm($id) {
         CUser::isLogged();
-        $role = CUser::assertRole(EAdmin::class);
+        CUser::assertRole(EAdmin::class);
 
         $user = FPersistentManager::getInstance()->retriveUserById($id);
         if ($user == null) {
@@ -230,7 +231,44 @@ class CUser {
         }
 
         $view = new VUser();
-        $view->showModifyForm($user);
+        $view->showModifyForm($user, $user::class);
+
+    }
+
+    private static function attemptSetFromInputArray(array $inputs, string $key, EUser $user, string $setMethod, callable $transform = null): bool {
+        try {
+            $inputs = UValidate::validateInputArray($inputs, self::$rulesModifyUser, false);
+        } catch (ValidationException $e) {
+            // if validation fails, show the error message
+            (new VError())->show($e->getMessage());
+            exit;
+        }
+        
+        if (isset($inputs[$key]) && method_exists($user, $setMethod)) {
+            $value = $transform ? $transform($inputs[$key]) : $inputs[$key];
+            $user->$setMethod($value);
+            return true;
+        }
+        return false;
+    }
+
+
+    private static function modifyUserFromImputs(array $inputs, EUser $user) {
+        self::attemptSetFromInputArray($inputs, 'name', $user, 'setName');
+        self::attemptSetFromInputArray($inputs, 'surname', $user, 'setSurname');
+        self::attemptSetFromInputArray($inputs, 'email', $user, 'setEmail');
+        self::attemptSetFromInputArray($inputs, 'password', $user, 'setPassword');
+        self::attemptSetFromInputArray($inputs, 'birthday', $user, 'setBirthDate');
+        // Special case: convert string to enum
+        self::attemptSetFromInputArray($inputs, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
+
+    }
+
+    public static function modifyAnyUser($id) {
+        CUser::isLogged();
+        CUser::assertRole(EAdmin::class);
+
+
 
     }
 
@@ -240,7 +278,7 @@ class CUser {
 
         // TODO this should work also for instructors and employees
         try {
-            $inputs = UValidate::validateInputArray($_POST, self::$rulesModifyClient, false);
+            $inputs = UValidate::validateInputArray($_POST, self::$rulesModifyUser, false);
         } catch (ValidationException $e) {
             // if validation fails, show the error message
             (new VError())->show($e->getMessage());
