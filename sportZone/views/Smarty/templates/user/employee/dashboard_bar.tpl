@@ -22,6 +22,8 @@
           <li><a class="dropdown-item{if $active_tab == 'manageFields'} active{/if}" href="/dashboard/manageFields">Manage Fields</a></li>
           <li><a class="dropdown-item{if $active_tab == 'manageReservations'} active{/if}" href="/dashboard/manageReservations">Manage Reservations</a></li>
           <li><a class="dropdown-item{if $active_tab == 'manageUsers'} active{/if}" href="/dashboard/manageUsers">Manage Users</a></li>
+          <li><a class="dropdown-item{if $active_tab == 'createCourse'} active{/if}" href="/dashboard/createCourse">Crea un corso</a></li>
+          <li><a class="dropdown-item{if $active_tab == 'createReservation'} active{/if}" href="/dashboard/createReservation">Crea una prenotazione</a></li>
         </ul>
       </li>
     </ul>

@@ -162,18 +162,7 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
     }
 
-    public function showManageReservations(array $reservations, string $role) {
-        $reservationsArray = [];
-        foreach ($reservations as $reservation) {
-            $reservationsArray[] = EReservation::reservationToArray($reservation);
-        }
-        $this->smarty->assign('reservations', $reservationsArray);
 
-
-        USmarty::configureBaseLayout($this->smarty);
-        //$this->smarty->assign('user', $userArray);
-        $this->smarty->display($this->getBasePath($role) . 'mng_reservations.tpl');
-    }
 
     public function showFilteredReservations($reservations, $name, $date, $sport, $role) {
         
@@ -190,6 +179,17 @@ class VDashboard{
         USmarty::configureBaseLayout($this->smarty);
        
         $this->smarty->display($this->getBasePath($role) . 'showFiltered.tpl');
+    }
+
+
+    public function showCreateCourseForm($instructors, $fields, $data = [], $role) {
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->assign('instructors', array_map(fn($i) => EInstructor::instructorToArray($i), $instructors));
+        $this->smarty->assign('fields', array_map(fn($f) => EField::fieldToArray($f), $fields));
+        foreach (['title','description','start_date','cost','max_participants','days','instructor','field'] as $k) {
+            $this->smarty->assign($k, $data[$k] ?? '');
+        }
+        $this->smarty->display($this->getBasePath($role) .'create_course_form.tpl');
     }
 
     // -------------- CLIENT ONLY -----------------
