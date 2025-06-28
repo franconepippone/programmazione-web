@@ -1,8 +1,8 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="courses"}
 
-{block name="dashboard_tabs_styles"}{/block}
-    
+
+
 {block name="dashboard_content"}
     <div class="results-list container py-4">
         <h2 class="mb-4">Le mie iscrizioni</h2>

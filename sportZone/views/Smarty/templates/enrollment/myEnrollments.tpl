@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Le mie iscrizioni</title>
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/results.css">
-</head>
-<body>
+{extends file=$layout}  
+{assign var="page_title" value="Register new"}
+
+
+
+{block name="content"}
     <div class="results-list">
         <h2>Le mie iscrizioni</h2>
         {if $enrollments|@count > 0}
@@ -36,5 +34,4 @@
             <p>Non hai ancora effettuato iscrizioni a corsi.</p>
         {/if}
     </div>
-</body>
-</html>
+{/block}

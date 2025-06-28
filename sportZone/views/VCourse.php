@@ -59,7 +59,7 @@ class VCourse
         foreach ($courses as $course) {
             $coursesData []= ECourse::courseToArray($course);
         }
-
+        //print_r($coursesData);
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('courses', $coursesData);
         $this->smarty->assign('userRole', $userRole);
@@ -80,10 +80,10 @@ class VCourse
         $courseData = [];
     
         $courseData [] = ECourse::courseToArray($course);
-
+        //print_r($courseData);
         $this->smarty->assign('courses', $courseData);
         
-  
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display('course/courseDetails.tpl');
 
         //$this->smarty->display('course/courseDetailsClient.tpl');

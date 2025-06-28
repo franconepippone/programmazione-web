@@ -52,8 +52,9 @@ class CFrontController{
             ->setPassword('password123'); // Assuming you have a setPassword method
 
         FPersistentManager::getInstance()->uploadObj($instructor);
+        $this->createDummyFields($instructor);
+        $this->createDummyCourses($instructor);*/
         
-*/
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
@@ -139,9 +140,11 @@ class CFrontController{
             }
         }
         return $map;
-    } 
-    /* 
+    }
+
+    
     //creo campi fittizi
+    
     public static function createDummyFields(){
         $fields = [];
 
@@ -190,7 +193,7 @@ class CFrontController{
         
     }
 
-    public function createDummyCourses(){
+    public function createDummyCourses($instructor){
         $field = new EField();
         $field->setSport('Padel')
         ->setName('ahhhh')
@@ -210,18 +213,22 @@ class CFrontController{
         $course1->setEndDate(new \DateTime('2025-07-31'));
         $course1->setDescription('Corso per principianti che vogliono imparare le basi del calcio.');
         $course1->setTimeSlot('09:00-11:00');
+        $course1->setInstructor($instructor);
         $course1->setEnrollmentCost(100.0); // <-- usa il nome corretto del setter
         $course1->setMaxParticipantsCount(20);
         $course1->setField($field);
         $courses[] = $course1;
 
+        
+
         $course2 = new ECourse();
-        $course1->setDaysOfWeek($days);
+        $course2->setDaysOfWeek($days);
         $course2->setTitle('Corso Calcio Avanzato');
         $course2->setStartDate(new \DateTime('2025-08-01'));
         $course2->setEndDate(new \DateTime('2025-08-31'));
         $course2->setDescription('Per ragazzi che vogliono migliorare la tecnica.');
         $course2->setTimeSlot('11:30-13:30');
+        $course1->setInstructor($instructor);
         $course2->setEnrollmentCost(120.0); // <-- usa il nome corretto del setter
         $course2->setMaxParticipantsCount(18);
         $course2->setField($field);
@@ -229,7 +236,10 @@ class CFrontController{
         foreach ($courses as $course) {
             FPersistentManager::getInstance()->uploadObj($course);
         }
-        **/
+        //$instructor->addCourse($course1);
+        //$instructor->addCourse($course2);
     }
+    
+}
     
 

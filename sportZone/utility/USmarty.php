@@ -19,9 +19,12 @@ class USmarty{
     // and assigns base template variables
     public static function configureBaseLayout($smarty) {
         $logged = CUser::isLoggedBool();
-        $smarty->assign("layout", !$logged ? 
+        $smarty->assign("layout", true ? 
             'sportZone/views/Smarty/templates/layouts/guest_base.tpl' : 
             'sportZone/views/Smarty/templates/layouts/logged_base.tpl');
+
+        $smarty->assign("isLogged", $logged);
+        $smarty->assign("currentPage", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
         // this querty is used in all the buttons redirecting to login,
         $smarty->assign("loginQueryString", http_build_query([

@@ -12,29 +12,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     {block name="styles"}{/block}
-    
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    {if true}
-    <!-- Topbar for guests -->
-    <div class="bg-dark text-white d-flex justify-content-end py-2 px-4 small">
-        <a href="/user/login?{$loginQueryString}" class="text-info text-decoration-none ms-3">Login</a>
-        <a href="/user/register" class="text-info text-decoration-none ms-3">Register</a>
-    </div>
-    {/if}
+<!-- Orange Topbar -->
+{include file="layouts/components/guest_topbar.tpl"}
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-custom px-4">
-      <a class="navbar-brand fw-bold" href="#">MyWebsite</a>
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/user/home">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/field/searchForm">Prenota un campo</a></li>
-          <li class="nav-item"><a class="nav-link" href="/course/showCourses">Iscriviti a un corso</a></li>
-        </ul>
-      </div>
-    </nav>
+<!-- Dark Navbar -->
+{include file="layouts/components/navbar_top.tpl"}
 
     <!-- Page content -->
     <main class="flex-grow-1 container my-4">
