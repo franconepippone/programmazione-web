@@ -188,6 +188,6 @@ class CField {
         $pm->removeField($fld);
         
         $view = new VError();
-        $view->showSuccess("Field was succesfully removed", buttAction: "window.location.href='/dashboard/manageFields'");
+        $view->showSuccess("Campo rimosso con successo", buttAction: "window.location.href='/dashboard/manageFields'");
     }
 }

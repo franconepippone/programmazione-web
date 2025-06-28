@@ -36,7 +36,6 @@ class FEntityManager{
             $obj = self::$entityManager->find($class, $id);
             return $obj;
         }catch(Exception $e){
-            echo "ERROR: ". $e->getMessage();
             return null;
         }
     }

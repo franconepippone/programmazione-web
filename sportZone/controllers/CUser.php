@@ -18,14 +18,15 @@ class CUser {
         "birthday" => 'validateBirthDate'
     ];
 
-    private static $rulesModifyClient = [
+    private static $rulesModifyUser = [
         "name" => 'validateName',
         "surname" => 'validateName',
         "email" => 'validateEmail',
         "username" => 'validateUsername',
         "password" => 'validatePassword',
         "birthday" => 'validateBirthDate',
-        "gender" => 'validateGender'
+        "gender" => 'validateGender',
+        "cvv" => 'skipValidation'
     ];
 
     public static function assertRole(...$allowedRoles): string {
@@ -219,45 +220,105 @@ class CUser {
         $view->showHome($logged);
     }
 
-    public static function modifyUserRequest() {
+    public static function modifyUserForm($id) {
         CUser::isLogged();
-        $user = CUser::getLoggedUser();
+        CUser::assertRole(EAdmin::class);
 
-        // TODO this should work also for instructors and employees
+        $user = FPersistentManager::getInstance()->retriveUserById($id);
+        if ($user == null) {
+            (new VError())->show('Invalid user ID');
+            exit;
+        }
+
+        $view = new VUser();
+        $view->showModifyForm($user, $user::class);
+
+    }
+
+
+    /**
+     * Validates input data and attempts to set a property on a user object using a specified setter method.
+     *
+     * This method performs three main tasks:
+     * 1. Validates the entire input array using predefined validation rules (`self::$rulesModifyUser`).
+     * 2. If the specified key exists and the setter method exists on the `EUser` object, it sets the value.
+     * 3. Optionally transforms the value (e.g., enum conversion) before setting it.
+     *
+     * If validation fails, an error view is displayed and script execution is halted.
+     *
+     * @param array         $inputs     The raw input array (e.g., $_POST) to validate and extract the value from.
+     * @param string        $key        The specific key to look for in the validated input array.
+     * @param EUser         $user       The user object on which to invoke the setter method.
+     * @param string        $setMethod  The name of the setter method to invoke (e.g., 'setEmail').
+     * @param callable|null $transform  Optional. A callback to transform the input value before setting it.
+     *                                   Example: fn($val) => UserSex::from($val)
+     *
+     * @return bool Returns true if the value was successfully set; false otherwise.
+     *
+     * @throws ValidationException If the input array fails validation (though caught internally).
+     *
+     * @example
+     * self::attemptModifyFromInputArray($_POST, 'email', $user, 'setEmail');
+     * self::attemptModifyFromInputArray($_POST, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
+     */
+    private static function attemptModifyFromInputArray(array $inputs, string $key, EUser $user, string $setMethod, callable $transform = null): bool {      
+        if (isset($inputs[$key]) && method_exists($user, $setMethod)) {
+            $value = $transform ? $transform($inputs[$key]) : $inputs[$key];
+            $user->$setMethod($value);
+            return true;
+        }
+        return false;
+    }
+
+    // tenta la modifica di un qualsiasi utente
+    private static function modifyUserFromImputs(array $inputs, EUser $user) {
         try {
-            $inputs = UValidate::validateInputArray($_POST, self::$rulesModifyClient, false);
+            $inputs = UValidate::validateInputArray($inputs, self::$rulesModifyUser, false);
         } catch (ValidationException $e) {
             // if validation fails, show the error message
             (new VError())->show($e->getMessage());
             exit;
         }
 
-        if (isset($inputs['name'])) $user->setName($inputs['name']);
-        if (isset($inputs['surname'])) $user->setSurname($inputs['surname']);
-        if (isset($inputs['email'])) $user->setEmail($inputs['email']);
-        if (isset($inputs['password'])) $user->setPassword($inputs['password']);
-        if (isset($inputs['birthday'])) $user->setBirthDate($inputs['birthday']);
-        if (isset($inputs["gender"])) $user->setSex(UserSex::from($inputs["gender"]));
+        self::attemptModifyFromInputArray($inputs, 'name', $user, 'setName');
+        self::attemptModifyFromInputArray($inputs, 'surname', $user, 'setSurname');
+        self::attemptModifyFromInputArray($inputs, 'password', $user, 'setPassword');
+        self::attemptModifyFromInputArray($inputs, 'birthday', $user, 'setBirthDate');
+        self::attemptModifyFromInputArray($inputs, 'cvv', $user, 'setCv');
+        // Special case: convert string to enum
+        self::attemptModifyFromInputArray($inputs, 'gender', $user, 'setSex', fn($val) => UserSex::from($val));
         
+        // caso per immagine di profilo
         if (UHTTPMethods::files("profilePicture", "name") != null) {
             $imgName = UImage::storeImageGetFilename(UHTTPMethods::files("profilePicture"));
             $user->setProfilePicture($imgName);
         }
+        
+        // check per unicità di email
+        if (isset($inputs['email'])) {
+            if (FPersistentManager::getInstance()->verifyUserEmail($inputs["email"])) {
+                if ($user->getEmail() !== $inputs['email']) {
+                    $view = new VError();
+                    $view->show("Email già presa da qualcun'altro.");
+                    exit;
+                }
+            }
+            $user->setEmail($inputs['email']);
+        }
 
-        if (isset($inputs["profilePicture"])) $user->setSex($inputs["profilePicture"]);
-        
-        $view = new VError();
-        
+        // check per unicità di username
         if (isset($inputs['username'])) {
             if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
                 if ($user->getUsername() !== $inputs['username']) {
+                    $view = new VError();
                     $view->show("Username già preso da qualcun'altro.");
                     exit;
                 }
             }
             $user->setUsername($inputs['username']);
         }
-        
+
+        $view = new VError();
 
         $ok = FPersistentManager::getInstance()->uploadObj($user);
         if (!$ok) {
@@ -266,6 +327,29 @@ class CUser {
         }
  
         $view->showSuccess("Dati modificati con successo.");
+        exit;
+    }
+
+    public static function finalizeModifyAnyUser($id) {
+        CUser::isLogged();
+        CUser::assertRole(EAdmin::class);
+        
+        $user = FPersistentManager::getInstance()->retriveUserById($id);
+        if ($user == null) {
+            (new VError())->show('Invalid user ID');
+            exit;
+        }
+
+        // modifies selected user
+        self::modifyUserFromImputs($_POST, $user);
+        exit;
+    }
+
+    public static function modifyUserRequest() {
+        CUser::isLogged();
+        $user = CUser::getLoggedUser();
+
+        self::modifyUserFromImputs($_POST, $user);
         exit;
     }
     

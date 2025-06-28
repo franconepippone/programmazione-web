@@ -1,7 +1,5 @@
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="manageReservations"}
-
-{extends file=$layout}
 {assign var="page_title" value="Dashboard - Settings"}
 
 {block name="dashboard_content"}

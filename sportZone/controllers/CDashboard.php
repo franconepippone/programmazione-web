@@ -172,15 +172,15 @@ class CDashboard{
     public static function manageReservations() {
         CUser::isLogged();
         $role = self::assertRole(EEmployee::class, EAdmin::class);
-        $view = new VDashboard();
         $user = CUser::getLoggedUser();
-
+        
         $name = $_GET['name'] ?? null;
         $date = $_GET['date'] ?? null;
         $sport = $_GET['sport'] ?? null;
-
+        
         $filtered = FPersistentManager::getInstance()->retriveFilteredReservations($name, $date, $sport);
-
+        
+        $view = new VDashboard();
         $view->showFilteredReservations($filtered, $name, $date,$sport, $role);
     }
 

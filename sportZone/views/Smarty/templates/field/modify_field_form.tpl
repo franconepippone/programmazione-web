@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-  <div class="container my-5">
+  <div class="container my-5" style="max-width: 900px;">
     <form
       action="/field/finalizeFieldModify/{$field.id}"
       method="post"
