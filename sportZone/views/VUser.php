@@ -25,4 +25,13 @@ class VUser{
         $this->smarty->display('user/home.tpl');
     }
 
+    public function showModifyForm($user) {
+        $userArray = EUser::usertoArray($user);
+        $this->smarty->assign('user', $userArray);
+        
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->assign('formTemplate', "user/modify_forms/client.tpl");
+        $this->smarty->display("user/modify_forms/generic.tpl");
+    }
+
 }

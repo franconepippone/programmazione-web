@@ -219,6 +219,21 @@ class CUser {
         $view->showHome($logged);
     }
 
+    public static function modifyUserForm($id) {
+        CUser::isLogged();
+        $role = CUser::assertRole(EAdmin::class);
+
+        $user = FPersistentManager::getInstance()->retriveUserById($id);
+        if ($user == null) {
+            (new VError())->show('Invalid user ID');
+            exit;
+        }
+
+        $view = new VUser();
+        $view->showModifyForm($user);
+
+    }
+
     public static function modifyUserRequest() {
         CUser::isLogged();
         $user = CUser::getLoggedUser();
