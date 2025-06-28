@@ -139,16 +139,25 @@ abstract class EUser
     public function addReservation(EReservation $reservation): self {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations[] = $reservation;
-            $reservation->setClient($this);
+            $reservation->setUser($this);
         }
         return $this;
     }
 
     public function removeReservation(EReservation $reservation): self {
         if ($this->reservations->removeElement($reservation)) {
-            $reservation->setClient(null);
+            $reservation->setUser(null);
         }
         return $this;
+    }
+
+    public function getType(): string {
+        return match (get_class($this)) {
+            EClient::class => 'client',
+            EInstructor::class => 'instructor',
+            EEmployee::class => 'employee',
+            default => 'unknown',
+        };
     }
 
     public static function usertoArray($user) {

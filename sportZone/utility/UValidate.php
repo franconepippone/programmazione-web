@@ -692,17 +692,17 @@ class UValidate {
     *
      * Deve essere un intero positivo corrispondente a una reservation esistente nel database.
      */
-     public static function validateReservationId($id) {
-    $id = intval($id);
-    if ($id <= 0) {
-        throw new ValidationException("ID prenotazione non valido.");
-    }
-    $pm = FPersistentManager::getInstance();
-    $reservation = $pm->retriveObj(EReservation::class, $id);
-    if (!$reservation) {
-        throw new ValidationException("Prenotazione non trovata.");
-    }
-    return $id;
+    public static function validateReservationId($id) {
+        $id = intval($id);
+        if ($id <= 0) {
+            throw new ValidationException("ID prenotazione non valido.");
+        }
+        $pm = FPersistentManager::getInstance();
+        $reservation = $pm->retriveReservationById($id);
+        if (!$reservation) {
+            throw new ValidationException("Prenotazione non trovata.");
+        }
+        return $id;
     }
 
     /**
@@ -736,6 +736,10 @@ class UValidate {
     public static function validateNoActiveReservation($clientId) {
         $today = new DateTime('today');
         $reservations = FReservation::getReservationsByUserId($clientId);
+        $user = FPersistentManager::getInstance()->retriveUserById($clientId);
+        if ($user->getType() != 'client') {
+            return true;
+        }
         if (!$reservations) {
             return true;
         }

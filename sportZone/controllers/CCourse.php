@@ -299,9 +299,6 @@ class CCourse {
 
 
 
-
-
-
     public static function getDatesForWeekdays(array $weekdaysItalian, DateTime $startDate, DateTime $endDate): array {
         $mapDays = [
             'Lunedì'    => 'Monday',
@@ -347,9 +344,6 @@ class CCourse {
 
 
 
-
-
-
     private static function getHourlySlots(DateTime $start_time, DateTime $end_time): array {
         $end_limit = clone $end_time;
 
@@ -368,66 +362,65 @@ class CCourse {
 
 
 
-
     public static function getCommonAvailableStartTimesForDuration(EField $field,array $dates,int $duration): array {
-    $pm = FPersistentManager::getInstance();
-    $dailySlots = [];
+        $pm = FPersistentManager::getInstance();
+        $dailySlots = [];
 
-    foreach ($dates as $dateStr) {
-        $date = new DateTime($dateStr);
-        $slots = $pm->retriveAvaiableHoursForFieldAndDate($field->getId(), $date->format('Y-m-d'));
-        sort($slots);
-        $dailySlots[] = $slots;
-    }
+        foreach ($dates as $dateStr) {
+            $date = new DateTime($dateStr);
+            $slots = $pm->retriveAvaiableHoursForFieldAndDate($field->getId(), $date->format('Y-m-d'));
+            sort($slots);
+            $dailySlots[] = $slots;
+        }
 
-    $possibleStartsByDay = [];
+        $possibleStartsByDay = [];
 
-    foreach ($dailySlots as $slots) {
-        $startTimes = [];
-        for ($i = 0; $i <= count($slots) - $duration; $i++) {
-            $ok = true;
-            $start = DateTime::createFromFormat('H:i:s', $slots[$i]);
+        foreach ($dailySlots as $slots) {
+            $startTimes = [];
+            for ($i = 0; $i <= count($slots) - $duration; $i++) {
+                $ok = true;
+                $start = DateTime::createFromFormat('H:i:s', $slots[$i]);
 
-            for ($j = 1; $j < $duration; $j++) {
-                $expected = (clone $start)->modify("+{$j} hours")->format('H:i:s');
-                if (!in_array($expected, $slots)) {
-                    $ok = false;
-                    break;
+                for ($j = 1; $j < $duration; $j++) {
+                    $expected = (clone $start)->modify("+{$j} hours")->format('H:i:s');
+                    if (!in_array($expected, $slots)) {
+                        $ok = false;
+                        break;
+                    }
+                }
+
+                if ($ok) {
+                    $startTimes[] = $slots[$i];
                 }
             }
+            $possibleStartsByDay[] = $startTimes;
+        }
 
-            if ($ok) {
-                $startTimes[] = $slots[$i];
+        $common = $possibleStartsByDay[0];
+        for ($i = 1; $i < count($possibleStartsByDay); $i++) {
+            $common = array_intersect($common, $possibleStartsByDay[$i]);
+        }
+
+        sort($common);
+        return array_values($common);
+    }  
+
+
+    
+    public static function generateAndSaveCourseReservations(array $dates, string $startTimeStr, int $duration, EField $field, EUser $instructor): void {
+        $pm = FPersistentManager::getInstance();
+
+        foreach ($dates as $dateStr) {
+            $date = new DateTime($dateStr);
+            $start = DateTime::createFromFormat('Y-m-d H:i:s', $dateStr . ' ' . $startTimeStr);
+
+            for ($i = 0; $i < $duration; $i++) {
+                $slotTime = (clone $start)->modify("+{$i} hours");
+                $reservation = new EReservation($date, $slotTime, $field, $instructor, new EOnSitePayment());
+                $pm::saveReservation($reservation);
             }
         }
-        $possibleStartsByDay[] = $startTimes;
     }
-
-    $common = $possibleStartsByDay[0];
-    for ($i = 1; $i < count($possibleStartsByDay); $i++) {
-        $common = array_intersect($common, $possibleStartsByDay[$i]);
-    }
-
-    sort($common);
-    return array_values($common);
-}  
-
-
-
-    public static function generateAndSaveCourseReservations(array $dates, string $startTimeStr, int $duration, EField $field, EUser $instructor): void {
-    $pm = FPersistentManager::getInstance();
-
-    foreach ($dates as $dateStr) {
-        $date = new DateTime($dateStr);
-        $start = DateTime::createFromFormat('Y-m-d H:i:s', $dateStr . ' ' . $startTimeStr);
-
-        for ($i = 0; $i < $duration; $i++) {
-            $slotTime = (clone $start)->modify("+{$i} hours");
-            $reservation = new EReservation($date, $slotTime, $field, $instructor, new EOnSitePayment());
-            $pm::saveReservation($reservation);
-        }
-    }
-}
 
 
 
