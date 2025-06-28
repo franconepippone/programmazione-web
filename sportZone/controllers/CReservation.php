@@ -73,10 +73,10 @@ class CReservation{
 
             $field = FPersistentManager::getInstance()->retriveFieldById($fieldId);
             if (!$field) {
-            $error = new VError();
-            $error->show("Campo non trovato.");
-            return;
-            }
+                $error = new VError();
+                $error->show("Campo non trovato.");
+                return;
+                }
             $view->showReservationForm($field,$date,$avaiableHours);
         
         } catch (ValidationException $e) {
@@ -137,7 +137,7 @@ class CReservation{
 
 
         $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
-        $client = FPersistentManager::getInstance()->retriveClientById($userId);
+        $client = FPersistentManager::getInstance()->retriveUserById($userId);
 
 
         $dateObj = new DateTime($pending['date']);
