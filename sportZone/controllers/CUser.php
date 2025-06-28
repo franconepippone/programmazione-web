@@ -32,7 +32,7 @@ class CUser {
         $role = CUser::getUserRole();
         if (!in_array($role, $allowedRoles, true)) {
             $verr = new VError();
-            $verr->show("You have no access to this page.");
+            $verr->show("Non hai accesso a questa pagina. Devi essere un cliente");
             exit;
         }
         return $role;

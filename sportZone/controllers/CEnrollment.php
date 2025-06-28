@@ -6,9 +6,11 @@ class CEnrollment
 {
     public static function enrollmentConfirmation($course_id) {
         CUser::isLogged();
+        $user= CUser::getLoggedUser();
+        CUser::assertRole(EClient::class);
         //prendo l id dell utente dalla sessione
-        $userID = USession::getSessionElement('user');
-        $user= FPersistentManager::retriveUserOnId($userID);
+        
+        
         $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
         
         self::isEnrolled($course,$user);
@@ -37,12 +39,12 @@ class CEnrollment
     {
         CUser::isLogged();
         
-        $userID = USession::getSessionElement('user');
-        $user = FPersistentManager::retriveUserOnId($userID);
+        $user = CUser::getLoggedUser();
+
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
 
         
-        self::isEnrolled($course,$user);
+        self::isEnrolled($course,$user);//se iscritto non lo fa procedere
 
         // Verifica se già iscritto
         
@@ -55,7 +57,11 @@ class CEnrollment
         $enrollment->setEnrollmentDate(new DateTime(date('Y-m-d')));
 
         FPersistentManager::getInstance()->saveEnrollment($enrollment);
-
+        $message='Iscrizione avvenuta con successo';
+        $butt_name ="le mie iscrizioni ";
+        $butt_action="window.location.href='/dashboard/myEnrollments'";
+            $view = new VError;
+            $view->showSuccess($message, $butt_name,$butt_action);
         $view = new VEnrollment();
         $view->showEnrollmentFinalization($enrollment);
     }

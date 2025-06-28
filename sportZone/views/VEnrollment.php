@@ -17,6 +17,8 @@ class VEnrollment
     {
         $courseData = ECourse::courseToArray($course);
         $userData = EUser::userToArray($user);
+
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('course', $courseData);
         $this->smarty->assign('user', $userData);
         $this->smarty->display('enrollment/enrollForm.tpl');
@@ -27,6 +29,8 @@ class VEnrollment
     {
         $userData = EUser::userToArray($user);
         $courseData = ECourse::courseToArray($course);
+
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userData);
         $this->smarty->assign('course', $courseData);
         $this->smarty->display('enrollment/enrollmentConfirmation.tpl');
@@ -34,6 +38,7 @@ class VEnrollment
     
     public function showEnrollmentFinalization($enrollment)
     {
+        USmarty::configureBaseLayout($this->smarty);
         $enrollmentData = EEnrollment::enrollmentToArray($enrollment);
         $this->smarty->assign('enrollment', $enrollmentData);
         $this->smarty->display('enrollment/enrollmentFinalization.tpl');
@@ -46,6 +51,7 @@ class VEnrollment
         foreach ($enrollments as $enrollment) {
             $enrollmentsData[] = EEnrollment::enrollmentToArray($enrollment);
         }
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('enrollments', $enrollmentsData);
         $this->smarty->display('enrollment/myEnrollments.tpl');
     }
@@ -63,6 +69,7 @@ class VEnrollment
         foreach ($enrollments as $enrollment) {
             $enrollmentsData[] = EEnrollment::enrollmentToArray($enrollment);
         }
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('enrollments', $enrollmentsData);
         $this->smarty->assign('course_id', $course_id);
         $this->smarty->display('enrollment/enrollmentsOfCourse.tpl');
