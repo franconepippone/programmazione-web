@@ -298,7 +298,6 @@ class FEntityManager{
      * @return array|null An array of matching objects, or null if no match is found or an error occurs.
      */
     
-    
     public static function retriveObjListFromFields($class, array $fields): ?array {
         try {
             $obj = self::$entityManager->getRepository($class)->findBy($fields);
@@ -306,6 +305,29 @@ class FEntityManager{
         } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage();
             return null;
+        }
+    }
+
+    /**
+     * Retrieves all entities of the specified class that match the given non-null field criteria.
+     *
+     * This method filters out any fields with null values from the criteria array,
+     * then queries the repository for entities matching the remaining criteria.
+     * If an exception occurs during the query, an error message is displayed and an empty array is returned.
+     *
+     * @param string $class The fully qualified class name of the entity to retrieve.
+     * @param array $fields An associative array of field names and their values to filter by. Fields with null values are ignored.
+     * @return array An array of matching entities, or an empty array if none are found or an error occurs.
+     */
+    public static function retriveAllMatching($class, array $fields): array {
+        // Remove null values so they don't filter
+        $criteria = array_filter($fields, function($v) { return $v !== null; });
+        
+        try {
+            return self::$entityManager->getRepository($class)->findBy($criteria);
+        } catch (Exception $e) {
+            echo "ERROR: " . $e->getMessage();
+            return [];
         }
     }
 

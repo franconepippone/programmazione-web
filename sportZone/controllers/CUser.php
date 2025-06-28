@@ -5,7 +5,7 @@ use Doctrine\DBAL\Exception as DBALException;
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
-class CUser{
+class CUser {
 
     // Array of rules for validating user registration inputs
     // The keys are the input names, and the values are the validation methods (inside the UValidate class)
@@ -27,6 +27,17 @@ class CUser{
         "birthday" => 'validateBirthDate',
         "gender" => 'validateGender'
     ];
+
+    public static function assertRole(...$allowedRoles): string {
+        $role = CUser::getUserRole();
+        if (!in_array($role, $allowedRoles, true)) {
+            $verr = new VError();
+            $verr->show("You have no access to this page.");
+            exit;
+        }
+        return $role;
+    }
+
 
     public static function isLoggedBool(): bool 
     {

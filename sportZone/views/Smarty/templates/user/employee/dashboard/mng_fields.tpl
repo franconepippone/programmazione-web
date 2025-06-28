@@ -4,85 +4,33 @@
 {/block}
 
 {block name="dashboard_content"}
-    <div class="form">
-        <h2 class="form__title">Dettagli Corso</h2>
-        {foreach from=$courses item=course}
-        <div class="form__content">
-            <div class="form__group">
-                <label class="form__label" for="id">ID:</label>
-                <div class="form__value" id="id">{$course.id|default:'N/D'}</div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="title">Titolo:</label>
-                <div class="form__value" id="title">{$course.title|default:'N/D'|escape}</div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="description">Descrizione:</label>
-                <div class="form__value" id="description">{$course.description|default:'N/D'|escape}</div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="startDate">Data inizio:</label>
-                <div class="form__value" id="startDate">
-                    {if $course.startDate}
-                        {$course.startDate|date_format:"%d/%m/%Y"}
-                    {else}
-                        N/D
-                    {/if}
-                </div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="endDate">Data fine:</label>
-                <div class="form__value" id="endDate">
-                    {if $course.endDate}
-                        {$course.endDate|date_format:"%d/%m/%Y"}
-                    {else}
-                        N/D
-                    {/if}
-                </div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="timeSlot">Fascia oraria:</label>
-                <div class="form__value" id="timeSlot">{$course.timeSlot|default:'N/D'}</div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="daysOfWeek">Giorni:</label>
-                <div class="form__value" id="daysOfWeek">
-                    {if $course.daysOfWeek|@count > 0}
-                        {foreach from=$course.daysOfWeek item=day name=giorni}
-                            {$day}{if !$smarty.foreach.giorni.last}, {/if}
-                        {/foreach}
-                    {else}
-                        N/D
-                    {/if}
-                </div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="cost">Costo:</label>
-                <div class="form__value" id="cost">
-                    {if $course.cost !== null && $course.cost !== ''}
-                        {$course.cost} €
-                    {else}
-                        N/D
-                    {/if}
-                </div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="MaxParticipantsCount">Max partecipanti:</label>
-                <div class="form__value" id="MaxParticipantsCount">{$course.MaxParticipantsCount|default:'N/D'}</div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="field">Campo:</label>
-                <div class="form__value" id="field">{$course.field|default:'N/D'}</div>
-            </div>
-            <div class="form__group">
-                <label class="form__label" for="instructor">Istruttore:</label>
-                <div class="form__value" id="instructor">{$course.instructor|default:'N/D'}</div>
-            </div>
-        </div>
+  <h1 class="results-header">Search fields</h1>
 
-        <div class="form__group" style="margin-top: 2rem; text-align: center;">
-            <button type="button" class="form__button" onclick="history.back()">⬅ Torna indietro</button>
-        </div>
-        {/foreach}
-    </div>
+<form class="search-form" method="GET" action="/dashboard/manageFields">
+    <label>
+        Name:
+        <input type="text" name="name" value="{$title}" placeholder="football-1">
+    </label>
+    <label>
+        Sport:
+        <select name="sport">
+            <option value="">-- All sports --</option>
+            <option value="football" {if $search.sport == 'football'}selected{/if}>Calcio</option>
+            <option value="tennis" {if $search.sport == 'tennis'}selected{/if}>Tennis</option>
+            <option value="basket" {if $search.sport == 'basket'}selected{/if}>Basket</option>
+            <option value="padel" {if $search.sport == 'padel'}selected{/if}>Padel</option>
+            <!-- Altri sport possono essere aggiunti qui -->
+        </select>
+    </label>
+    <button type="submit">Search</button>or
+    <a href="/field/createFieldForm" class="add-field-btn" style="text-decoration:none;">
+        <button type="button" style="margin-left:10px;">Create field</button>
+    </a>
+</form>
+  <div class="results-container">
+    {foreach $fields as $field}
+        {assign var="fieldUrl" value="/field/modifyField/{$field.id}"}
+        {include file="field/field_card.tpl" field=$field}
+    {/foreach}
+  </div>
 {/block}

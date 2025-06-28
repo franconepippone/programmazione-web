@@ -16,6 +16,14 @@ class UImage
         return rtrim($basePath, '/') . '/images/' . ltrim($filename, '/');
     }
 
+    public static function getImageFullPaths(array $filenames) {
+        $paths = [];
+        foreach ($filenames as $name) {
+            $paths[] = self::getImageFullPath($name);
+        }
+        return $paths;
+    }
+
     public static function storeImageGetFilename(array $file): ?string {
         // Validate the image first
         $check = self::validateImage($file);

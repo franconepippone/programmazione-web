@@ -1,18 +1,13 @@
 <?php
 
+use App\Enum\EnumSport;
+
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CDashboard{
-
     private static function assertRole(...$allowedRoles): string {
-        $role = CUser::getUserRole();
-        if (!in_array($role, $allowedRoles, true)) {
-            $verr = new VError();
-            $verr->show("You have no access to this page.");
-            exit;
-        }
-        return $role;
+        return CUser::assertRole(...$allowedRoles);
     }
 
     // ----------------- COMMON --------------------
@@ -41,8 +36,7 @@ class CDashboard{
 
     
 
-     public static function myReservations() {
-        
+    public static function myReservations() {
         CUser::isLogged();
         $role = self::assertRole(EClient::class);
 
@@ -141,15 +135,30 @@ class CDashboard{
         $user = CUser::getLoggedUser();
         $role = self::assertRole(EEmployee::class);
         
-        $rulesSearch = 
+        $rulesSearch = [
+            "sport" => "validateSport"
+        ];
 
-        //try {
-          //  $searchInputs = UValidate::validateInputArray($_GET, )
-        //}
+        try {
+            $getInputs = UValidate::validateInputArray($_GET, $rulesSearch, false);
+        } catch (ValidationException $e) {
+            echo "INPUT VALIDATION FAILED: " . $e->getMessage();
+            exit;
+        }
 
+        $searchParams = ['sport' => null];
+        if (isset($getInputs['sport'])) {
+            $searchParams['sport'] = $getInputs['sport'];
+        }
 
+        // filtraggio campi
+
+        $pm = FPersistentManager::getInstance();
+        $fields = $pm->retrieveFieldsBySport($searchParams['sport']);
+
+    
         $view = new VDashboard();
-        $view->showManageFields($user, $role);
+        $view->showManageFields($user, $role, $fields, $searchParams);
     }
 /*
     public static function manageReservations(){

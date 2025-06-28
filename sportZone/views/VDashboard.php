@@ -139,11 +139,18 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_courses.tpl');
     }
 
-    public function showManageFields(EUser $user, string $role) {
+    public function showManageFields(EUser $user, string $role, $fields, $searchParams) {
         $userArray = EUser::usertoArray($user);
+
+        $fieldsInfo = [];
+        foreach ($fields as $fld) {
+            $fieldsInfo[] = EField::fieldToArray($fld);
+        }
 
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('user', $userArray);
+        $this->smarty->assign('search', $searchParams);
+        $this->smarty->assign('fields', $fieldsInfo);
         $this->smarty->display($this->getBasePath($role) . 'mng_fields.tpl');
     }
 

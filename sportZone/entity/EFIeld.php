@@ -207,7 +207,11 @@ class EField
     }
 
     public static function fieldToArray(EField $field) {
-        
+        $images = [];
+        foreach ($field->getImages() as $imgName) {
+            $imagePath = UImage::getImageFullPath($imgName);
+            $images[] = $imagePath;
+        }
         return [
             'name' => $field ->getName(),
             'id' => $field->getId(),
@@ -218,6 +222,7 @@ class EField
             'longitude' => $field->getLongitude(),
             'terrainType' => $field ->getTerrainType(),
             'isIndoor' => $field ->getIsIndoor(),
+            'images' => $images,
         ];
     }
 }
