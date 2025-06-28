@@ -1,9 +1,5 @@
 {extends file=$layout}
-
-{block name="styles"}
-
-{/block}
-
+{assign var="page_title" value="Courses"}
 {block name="content"}
     <div class="results-list container py-4">
         <h2 class="mb-4">Risultati della Ricerca</h2>
@@ -26,6 +22,7 @@
                     </div>
                 {/foreach}
             </div>
+
         {else}
             <p>Nessun risultato trovato con i filtri selezionati.</p>
         {/if}

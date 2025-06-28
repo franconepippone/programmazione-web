@@ -61,7 +61,6 @@ class VReservation{
         $this->smarty->display('reservation/reservation_details.tpl');
     }
     
-  
 
     public function showModifyForm($reservation) {
         USmarty::configureBaseLayout($this->smarty);

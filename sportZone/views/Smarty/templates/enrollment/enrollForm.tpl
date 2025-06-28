@@ -1,18 +1,16 @@
-<!DOCTYPE html> 
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Modulo di iscrizione</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+{extends file=$layout}  
+{assign var="page_title" value="Register new"}
+
+
+
+{block name="content"}
     <div class="container py-4">
         <h2 class="mb-4 text-center">Modulo di iscrizione</h2>
         <p class="text-center mb-4">
             Corso: <strong>{$title|escape}</strong>
         </p>
         <form method="post" action="/course/submitEnrollment" class="mx-auto" style="max-width: 500px;">
-            <input type="hidden" name="id" value="{$id}">
+            <input type="hidden" name="id" value="{$course.id}">
 
             <div class="mb-3">
                 <label for="name" class="form-label">Nome:</label>
@@ -54,8 +52,9 @@
                 <input type="password" id="password" name="password" required class="form-control">
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Iscriviti</button>
+            <a href="/enrollment/enrollmentConfirmation/{$course.id}" class="btn btn-primary w-100 text-center">Iscriviti</a>
+
         </form>
     </div>
 </body>
-</html>
+{/block}

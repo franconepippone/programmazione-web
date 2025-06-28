@@ -13,7 +13,7 @@ class EInstructor extends EUser
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $cv = null;
 
-    #[ORM\OneToMany(mappedBy: "Instructor", targetEntity: ECourse::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "Instructor", targetEntity: ECourse::class, cascade: ["persist", "remove"], orphanRemoval: true)]
     private Collection $courses;
 
     public function __construct() {
@@ -70,4 +70,5 @@ class EInstructor extends EUser
         }
         return $coursesArray;
     }
+    
 }

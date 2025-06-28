@@ -40,9 +40,8 @@ class CDashboard{
         CUser::isLogged();
         $role = self::assertRole(EClient::class);
 
-        //$clientId = CUser::getCurrentUser()->getId();
         $clientId = $_SESSION['user'];
-        $reservation = FPersistentManager::getInstance()->retriveActiveReservationByUserId($clientId);
+        $reservation = UUtility::retriveActiveReservationByUserId($clientId);
         $active = $reservation !== null;
 
         $view = new VDashboard();
@@ -177,25 +176,16 @@ class CDashboard{
         $role = self::assertRole(EEmployee::class);
         $view = new VDashboard();
         $user = CUser::getLoggedUser();
-        
-        $reservations = FPersistentManager::getInstance()->retriveAllReservations();
-        
-        $view->showManageReservations($reservations, $role);
-    }
 
-    public static function filteredList() {
-
-        $role = self::assertRole(EEmployee::class);
-        $view = new VDashboard();
-        $user = CUser::getLoggedUser();
-        
         $name = $_GET['name'] ?? null;
         $date = $_GET['date'] ?? null;
         $sport = $_GET['sport'] ?? null;
 
-        $filtered = FReservation::filterReservations($name, $date, $sport);
+        $filtered = FPersistentManager::getInstance()->retriveFilteredReservations($name, $date, $sport);
 
-
-        $view->showFilteredReservations($filtered, $name, $date, $sport, $role);
+        $view->showFilteredReservations($filtered, $name, $date,$sport, $role);
     }
+
+    
+    
 }

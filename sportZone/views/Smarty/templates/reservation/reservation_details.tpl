@@ -1,5 +1,5 @@
 {extends file=$layout}
-
+{assign var="page_title" value="Dashboard - Settings"}
 {block name="content"}
     <div class="container py-4 d-flex justify-content-center">
         <div class="card shadow-sm" style="max-width: 400px; width: 100%;">

@@ -1,11 +1,9 @@
-<!DOCTYPE html> 
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Modulo di iscrizione - Riepilogo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+{extends file=$layout}  
+{assign var="page_title" value="Register new"}
+
+
+
+{block name="content"}
     <div class="container py-4">
         <h2 class="mb-4">Modulo di iscrizione</h2>
         <p>Corso: <strong>{$course.title|escape}</strong></p>
@@ -35,5 +33,4 @@
             <a href="/enrollment/finalizeEnrollment/{$course.id}" class="btn btn-primary">Conferma iscrizione</a>
         </div>
     </div>
-</body>
-</html>
+{/block}
