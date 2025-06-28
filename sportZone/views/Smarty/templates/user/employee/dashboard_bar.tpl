@@ -10,18 +10,18 @@
   <section>
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item">
-        <a href="/dashboard/profile" class="nav-link{if $active_tab == 'profile'} active{/if}">Profile</a>
+        <a href="/dashboard/profile" class="nav-link{if $active_tab == 'profile'} active{/if}">Profilo</a>
       </li>
       <li class="nav-item">
-        <a href="/dashboard/settings" class="nav-link{if $active_tab == 'settings'} active{/if}">Settings</a>
+        <a href="/dashboard/settings" class="nav-link{if $active_tab == 'settings'} active{/if}">Impostazioni</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Management</a>
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Gestione</a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item{if $active_tab == 'manageCourses'} active{/if}" href="/dashboard/manageCourses">Manage Courses</a></li>
-          <li><a class="dropdown-item{if $active_tab == 'manageFields'} active{/if}" href="/dashboard/manageFields">Manage Fields</a></li>
-          <li><a class="dropdown-item{if $active_tab == 'manageReservations'} active{/if}" href="/dashboard/manageReservations">Manage Reservations</a></li>
-          <li><a class="dropdown-item{if $active_tab == 'manageUsers'} active{/if}" href="/dashboard/manageUsers">Manage Users</a></li>
+          <li><a class="dropdown-item{if $active_tab == 'manageCourses'} active{/if}" href="/dashboard/manageCourses">Gestisci Corsi</a></li>
+          <li><a class="dropdown-item{if $active_tab == 'manageFields'} active{/if}" href="/dashboard/manageFields">Gestisci Campi</a></li>
+          <li><a class="dropdown-item{if $active_tab == 'manageReservations'} active{/if}" href="/dashboard/manageReservations">Gestisci Prenotazioni</a></li>
+          <li><a class="dropdown-item{if $active_tab == 'manageUsers'} active{/if}" href="/dashboard/manageUsers">Gestisci Clienti</a></li>
         </ul>
       </li>
     </ul>

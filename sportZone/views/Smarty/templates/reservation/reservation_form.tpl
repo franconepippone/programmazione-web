@@ -9,8 +9,9 @@
             <form method="POST" action="/reservation/reservationSummary">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Campo:</label>
-                    <div>{$fieldData.sport} - {$fieldData.terrainType}</div>
+                    <div>{$fieldData.name} - {$fieldData.sport}</div>
                 </div>
+                
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Data:</label>

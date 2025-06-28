@@ -238,8 +238,7 @@ class CUser {
         if (isset($inputs['password'])) $user->setPassword($inputs['password']);
         if (isset($inputs['birthday'])) $user->setBirthDate($inputs['birthday']);
         if (isset($inputs["gender"])) $user->setSex(UserSex::from($inputs["gender"]));
-        // TODO Non aggiorna il gender
-
+        
         if (UHTTPMethods::files("profilePicture", "name") != null) {
             $imgName = UImage::storeImageGetFilename(UHTTPMethods::files("profilePicture"));
             $user->setProfilePicture($imgName);
@@ -250,7 +249,6 @@ class CUser {
         $view = new VError();
         
         if (isset($inputs['username'])) {
-            echo "SISIS";
             if (FPersistentManager::getInstance()->verifyUserUsername($inputs["username"])) {
                 if ($user->getUsername() !== $inputs['username']) {
                     $view->show("Username già preso da qualcun'altro.");

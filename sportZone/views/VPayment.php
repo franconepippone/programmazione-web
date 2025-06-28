@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php';
 
-class VOnlinePayment{
+class VPayment{
 
     private $smarty;
 
@@ -9,14 +9,13 @@ class VOnlinePayment{
         $this->smarty = USmarty::getInstance();
     }
 
-    public function showAddCreditCardForm() {
-        $this->smarty->display("payment/add_credit_card.tpl");
-    }
+
 
     public function showPaymentMethodSelection() {
+        USmarty::configureBaseLayout($this->smarty);
         $this->smarty->display("payment/select_payment_method.tpl");
     }
-
+/*
     public function showUserPaymentMethods($paymentMethods, $amount) {
         $methodsInfo = [];
         foreach ($paymentMethods as $method) {
@@ -49,5 +48,5 @@ class VOnlinePayment{
         $this->smarty->assign('paymentMethods', $methodsInfo);
         $this->smarty->display("payment/choose_method.tpl");
     }
-    
+    */
 }

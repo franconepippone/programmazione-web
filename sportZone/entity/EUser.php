@@ -12,13 +12,8 @@ use App\Enum\UserSex;
 
 abstract class EUser
 {
-
-
-
     #[ORM\OneToMany(mappedBy: "user", targetEntity: EReservation::class, cascade: ["persist", "remove"])]
     private Collection $reservations;
-
-
 
     #[ORM\Id]
     #[ORM\GeneratedValue("AUTO")]
@@ -165,7 +160,7 @@ abstract class EUser
             'id' => $user->getId(),
             'name' => $user->getName(),
             'surname' => $user->getSurname(),
-            'sex'=> 'male',
+            'sex'=> $user->getSex()->value,
             'email' => $user->getEmail(),
             'username' => $user->getUsername(),
             'birthDate' => $user->getBirthDate()->format('Y-m-d'),

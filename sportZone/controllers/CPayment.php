@@ -6,23 +6,33 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 
 class CPayment {
 
-    #[PathUrl('pay')]
-    public static function paymentEntryPoint() {
-        $ongoingPaymentData = self::getOngoingPayment();
-        if ($ongoingPaymentData == null) exit;
-
-        header("Location: /payment/selectMethod");
-    }
+    const METHOD_ONSITE = 0;
+    const METHOD_ONLINE = 1;
+    const STATUS_SUCCESS = 2;
+    const STATUS_FAILED = 3;
+    const STATUS_PENDING = 4; // for onsite payments
 
     public static function selectMethod() {
-       
-        $view = new VOnlinePayment();
+        CUser::isLogged();
+        CUser::assertRole(EClient::class);
+        self::getOngoingPayment(); // automatically shows error and exits if not valid
+
+        $view = new VPayment();
         $view->showPaymentMethodSelection(); 
     }
-    
-    
 
-    private static $rulesAddCreditCard = [
+    public static function test() {
+        CPayment::startPayment("29", "/payment/endtest");
+    }
+
+    public static function endtest() {
+        CUser::isLogged();
+        
+        $outcome = self::getPaymentOutcome();
+        print_r($outcome);
+    }
+    
+/*    private static $rulesAddCreditCard = [
         "number" => 'validateCreditCardNumber',
         "expirationDate" => 'validateFutureDate',
         "cardNetwork" => 'validateCardNetwork',
@@ -78,15 +88,10 @@ class CPayment {
         FPersistentManager::getInstance()->uploadObj($paymentMethod);
         echo "uploaded";
     }
+*/
 
-    #[PathUrl(PathUrl::HIDDEN)]
     private static function getOngoingPayment(): array {
         CUser::isLogged();
-        if (!CUser::isClient()) {
-            $viewErr = new VError();
-            $viewErr->show("Solo i clienti possono pagare.");
-            exit;
-        }; // only clients can pay
 
         // verify that the user has started a payment
         if (!USession::isSetSessionElement('ongoingPayment')) {
@@ -111,17 +116,10 @@ class CPayment {
     #[PathUrl(PathUrl::HIDDEN)]
     public static function startPayment(
         string $amount, 
-        string $success_url, 
-        string $cancel_url, 
-        string $paymentSecret, 
-        bool $redirectNow = false
-    ): never {
+        string $redirect_url
+    ) {
         CUser::isLogged();
-        if (!CUser::isClient()) {
-            $viewErr = new VError();
-            $viewErr->show("Solo i clienti possono pagare.");
-            exit;
-        }; // only clients can pay
+        CUser::assertRole(EClient::class);
         
         try {
             $amountCents =  UValidate::validateCurrencyAmount($amount); // validate amount
@@ -133,113 +131,61 @@ class CPayment {
 
         // stores in session, so they are safe and not modifiable
         $ongoingPayment = [
-            'paymentSecretHash' => password_hash($paymentSecret, PASSWORD_DEFAULT),
             'amountCents' => $amountCents,
-            'successRedirectUrl' => $success_url,
-            'cancelRedirectUrl' => $cancel_url,
-            'outcome' => null // this will be set later when the payment is confirmed
+            'redirect_url' => $redirect_url
         ];
         USession::setSessionElement('ongoingPayment', $ongoingPayment); 
         
         // redirects to the payment method selection page
-        if ($redirectNow) header("Location: /payment/pay");
+        header("Location: /payment/selectMethod");
+    }
+
+    public static function payOnline() {
+        // TODO IMPLEMENT ONLINE PAYMENT
+
+        $ongoingPayment = self::getOngoingPayment(); // if this return then there is an ongoing payment
+        $redirect = $ongoingPayment["redirect_url"];
+        
+        self::endPaymentAndStoreOutcome(self::METHOD_ONLINE, self::STATUS_SUCCESS);
+
+        sleep(2);
+        echo 'redirecting to '. $redirect . '...';
+        header("Location: " . $redirect);
+        exit;
+    }
+
+    public static function payOnsite() {
+        // just mark the payment as pending
+        $ongoingPayment = self::getOngoingPayment(); // if this return then there is an ongoing payment
+        $redirect = $ongoingPayment["redirect_url"];
+        
+        self::endPaymentAndStoreOutcome(self::METHOD_ONSITE, self::STATUS_PENDING);
+
+        echo 'redirecting to '. $redirect . '...';
+        header("Location: " . $redirect);
         exit;
     }
     
-    public static function __selectMethod() {
-        $ongoingPaymentData = self::getOngoingPayment();
-
-        $amountCents = $ongoingPaymentData['amountCents'];
-
-        // mostra la lista dei metodi di pagamento dell'utente
-        /** @var EClient $user */
-        $user = CUser::getLoggedUser();
-        $paymentMethods = $user->getPaymentMethods();
-
-        $view = new VOnlinePayment();
-        $view->showPaymentMethods($paymentMethods, $amountCents);
-    }
-
-    public static function confirmPay() {
-        $ongoingPaymentData = self::getOngoingPayment();
-
-        $amountCents = $ongoingPaymentData['amountCents'];
-        $successRedirectUrl = $ongoingPaymentData['successRedirectUrl'];
-        $cancelRedirectUrl = $ongoingPaymentData['cancelRedirectUrl'];
-        $outcome = $ongoingPaymentData['outcome'];
-
-        echo "Amount: $amountCents, Redirect URL: $successRedirectUrl, Outcome: $outcome, Cancel URL: $cancelRedirectUrl";
-
-        // arrivano in POST:
-        //  - il metodo di pagamento scelto (id)
-
-        try {
-            $inputs = UValidate::validateInputArray($_POST, ['methodId' => 'validateId'], true);
-        } catch (ValidationException $e) {
-            $viewErr = new VError();
-            $viewErr->show($e->getMessage());
-            exit;
-        }
-
-        $methodId = $inputs['methodId'];
-        
-        // check if the methodId is valid and belongs to the user and recovers it
-        /** @var EClient $user */
-        $user = CUser::getLoggedUser();
-        $paymentMethods = $user->getPaymentMethods();
-        $paymentMethod = null;
-        foreach ($paymentMethods as $method) {
-            if ($method->getId() == $methodId) {
-                $paymentMethod = $method;
-                break;
-            }
-        }
-
-        // validate that the payment method exists and belongs to the user
-        if ($paymentMethod === null) {
-            $viewErr = new VError();
-            $viewErr->show("Il metodo di pagamento scelto non esiste o non ti appartiene.");
-            exit;
-        }
-
-        // check if the payment has already been made
-        if ($outcome == null) {
-            $outcome = $paymentMethod->pay($amountCents); // amount in cents
-        } else {
-            $viewErr = new VError();
-            $viewErr->show("Il pagamento è già stato effettuato.");
-            exit;
-        }
-
-        // store the outcome in the session
-        $ongoingPaymentData['outcome'] = $outcome; // store the outcome in the session
-        USession::setSessionElement('ongoingPayment', $ongoingPaymentData);
-
-        if (!$outcome) {
-            $viewErr = new VError();
-            $viewErr->show("Il pagamento non è andato a buon fine. Riprova più tardi.");
-            USession::unsetSessionElement('ongoingPayment'); // remove the ongoing payment from session
-            exit;
-        }
-
-        // payment successful, remove the ongoing payment from session
-        header("Location: $successRedirectUrl");
-    }
-
-    #[PathUrl(PathUrl::HIDDEN)]
-    public static function verifyAndEndPayment($paymentSecret): bool
+    private static function endPaymentAndStoreOutcome(int $type, int $status)
     {
-        $ongoingPaymentData = self::getOngoingPayment();
-
-        // verify the payment secret
-        if (!password_verify($paymentSecret, $ongoingPaymentData['paymentSecretHash'])) {
-            echo "Payment secret does not match.";
-            return false; // payment secret does not match
-        }
-
-        // remove the ongoing payment from session
         USession::unsetSessionElement('ongoingPayment');
-        return true; // payment verified and ended successfully
+        $outcome = [
+            'type' => $type,
+            'status' => $status
+        ];
+        USession::setSessionElement('paymentOutcome', $outcome);
+    }
+
+    /*
+    @returns null if there is no payment outcome 
+    */ 
+    #[PathUrl(PathUrl::HIDDEN)]
+    public static function getPaymentOutcome(): ?array {
+        if (USession::isSetSessionElement('paymentOutcome')) {
+            $outcome = USession::getSessionElement('paymentOutcome');
+            USession::unsetSessionElement('paymentOutcome');
+            return $outcome;
+        } else return null;
     }
 
 }   

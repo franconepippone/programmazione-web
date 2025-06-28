@@ -326,18 +326,18 @@ class UValidate {
      */
     public static function validatePassword(string $password): string {
         try {
-            return self::validateString($password, 8, 255, 
+            return self::validateString($password, 8, 32, 
             '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_\-+=]{8,}$/');
         } catch (ValidationException $e) {
             // simply rethrow the exception with a more specific message
             $errcode = $e->getCode();
             switch ($errcode) {
                 case -1:
-                    throw new ValidationException("Password must be at least 8 characters long.", code: $errcode);
+                    throw new ValidationException("La password deve essere lunga almeno 8 caratteri.", code: $errcode);
                 case -2:
-                    throw new ValidationException("Password must not exceed 255 characters.", code: $errcode);
+                    throw new ValidationException("La password non può superare 32 caratteri.", code: $errcode);
                 default:
-                    throw new ValidationException("Password must contain at least one uppercase letter, one lowercase letter, and one digit.", code: $errcode);
+                    throw new ValidationException("La password deve contenere almeno una lettera maiuscola, una lettera minuscola e una cifra.", code: $errcode);
             }
         }
     }
