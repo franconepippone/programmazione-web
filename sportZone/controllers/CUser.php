@@ -29,6 +29,7 @@ class CUser {
         "cvv" => 'skipValidation'
     ];
 
+    #[PathUrl(PathUrl::HIDDEN)]
     public static function assertRole(...$allowedRoles): string {
         $role = CUser::getUserRole();
         if (!in_array($role, $allowedRoles, true)) {
@@ -427,11 +428,6 @@ class CUser {
         return self::getUserRole() === EAdmin::class;
     }
 
-
-
-
-
-
     
     private static $rulesCreate = [
         'name'            => 'validateName',
@@ -443,7 +439,8 @@ class CUser {
     ];
 
     public static function userCreationForm() {
-        CUser::isAdmin(); 
+        CUser::isLogged();
+        CUser::assertRole(EAdmin::class);
 
         $view = new VUser();
         $view->showUserCreationForm();
@@ -451,7 +448,8 @@ class CUser {
 
 
     public static function finalizeUserCreation() {
-        CUser::isAdmin();
+        CUser::isLogged();
+        CUser::assertRole(EAdmin::class);
 
         $post = $_POST;
         $pm = FPersistentManager::getInstance();
@@ -516,7 +514,8 @@ class CUser {
 
     public static function deleteUser(){
         CUser::isLogged();
-        CUser::isAdmin();
+        CUser::assertRole(EAdmin::class);
+
         $idUser = $_POST['id'] ?? null;
         if ($idUser==null) {
             $view=new VError();
