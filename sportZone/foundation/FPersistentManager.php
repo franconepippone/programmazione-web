@@ -79,6 +79,10 @@ class FPersistentManager{
         return $result;
     }
 
+    public static function removeUser(EUser $user){
+        FUser::deleteUser($user);
+    }
+
      //-------------------------------------FIELD---------------------------------------
 
     /**

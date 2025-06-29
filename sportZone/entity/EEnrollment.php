@@ -18,10 +18,10 @@ class EEnrollment
 
     // ======= RELAZIONI =======
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "courses")]
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: "enrollments")]
     private ?EClient $client = null;
 
-    #[ORM\ManyToOne(targetEntity: ECourse::class, inversedBy: "enrollments")]
+    #[ORM\ManyToOne(targetEntity: ECourse::class, inversedBy: "courses")]
     #[ORM\JoinColumn(nullable: false)]
     private ?ECourse $course = null;
 

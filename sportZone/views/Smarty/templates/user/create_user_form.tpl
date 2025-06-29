@@ -7,7 +7,7 @@
             <div class="card-body">
                 <h2 class="card-title mb-4 text-center">Crea un nuovo utente</h2>
 
-                <form method="post" action="/admin/finalizeUserCreation" novalidate>
+                <form method="post" action="/user/finalizeUserCreation" novalidate>
                     <div class="mb-3">
                         <label for="name" class="form-label">Nome</label>
                         <input type="text" name="name" id="name" value="{$name|default:''}" class="form-control" required>

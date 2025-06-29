@@ -33,4 +33,8 @@ class FUser{
         return FEntityManager::getAllUsers();
     
     }
+
+    public static function deleteUser(EUser $user){
+        FEntityManager::getInstance()->deleteObj($user);
+    }
 }
