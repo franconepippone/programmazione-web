@@ -124,7 +124,8 @@ class CDashboard{
 
     // Function to show the list of courses
     // It retrieves the courses from the persistent manager and displays them using the view
-    public static function manageCourses() {  
+    public static function manageCourses() {
+        CUser::isLogged();  
         $user = CUser::getLoggedUser();
         $role = self::assertRole(EEmployee::class, EAdmin::class);
            
