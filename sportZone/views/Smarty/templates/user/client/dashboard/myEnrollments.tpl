@@ -18,12 +18,12 @@
                                     <strong>Iscritto il:</strong> {$enrollment.enrollmentDate|date_format:"%d/%m/%Y"}
                                 </p>
                                 <p class="card-text mb-3" name="description">
-                                    {$enrollment.course['description']|escape}
+                                    {$enrollment.course.description|escape}
                                 </p>
                                 <p class="card-text mt-auto" name="client">
                                     <strong>Utente:</strong> 
-                                    {if $enrollment.client && $enrollment.client[0]}
-                                        {$enrollment.client[0]['name']|escape} {$enrollment.client[0]['surname']|escape}
+                                    {if $enrollment.client && $enrollment.client}
+                                        {$enrollment.client.name|escape} {$enrollment.client.surname|escape}
                                     {/if}
                                 </p>
                                 <a href="/dashboard/courseDetailsClient/{$enrollment.course['id']}" class="btn btn-primary mt-3 align-self-start">

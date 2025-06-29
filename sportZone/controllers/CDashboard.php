@@ -139,7 +139,7 @@ class CDashboard{
         }        
 
         $view = new VDashboard();
-        $view->showCourses($courses, $role);
+        $view->showManageCourses($courses, $role);
         
     }
 

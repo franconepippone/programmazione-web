@@ -1,10 +1,16 @@
 {extends file="../dashboard_bar.tpl"}
+{assign var="active_tab" value="manageCourses"}
+{assign var="page_title" value="Dashboard - courses"}
 
-{block name="dashboard_tabs_styles"}
-{/block}
-{block name="content"}
+{block name="dashboard_content"}
     <div class="results-list container py-4">
-        <h2 class="mb-4">Risultati della Ricerca</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Risultati della Ricerca</h2>
+            <a href="/course/createCourseForm" class="btn btn-success">
+                ➕ Crea Nuovo Corso
+            </a>
+        </div>
+
         {if $courses|@count > 0}
             <div class="row row-cols-1 row-cols-md-2 g-4">
                 {foreach from=$courses item=course}
@@ -24,7 +30,6 @@
                     </div>
                 {/foreach}
             </div>
-
         {else}
             <p>Nessun risultato trovato con i filtri selezionati.</p>
         {/if}
