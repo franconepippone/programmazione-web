@@ -32,7 +32,7 @@ class VUser{
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('modifiedUserClass', $role);
         $this->smarty->assign('formTemplate', "user/modify_forms/client.tpl");
-        $this->smarty->display("user/modify_forms/generic.tpl");
+        $this->smarty->display("user/modify_forms/modify_user_generic.tpl");
     }
 
     

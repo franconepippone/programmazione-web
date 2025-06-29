@@ -217,10 +217,15 @@ class UValidate {
         // Validates a birth date string
         $date = self::validateDate($dateString);
         $today = new DateTime();
+
+        if ($date > $today) {
+            throw new ValidationException("La data non può essere nel futuro.");
+        }
+
         $age = $today->diff($date)->y;
 
         if ($age < MINIMUM_AGE) {
-            throw new ValidationException("You must be at least " . MINIMUM_AGE . " years old.");
+            throw new ValidationException("Devi avere almeno " . MINIMUM_AGE . " anni.");
         }
 
         return $date;

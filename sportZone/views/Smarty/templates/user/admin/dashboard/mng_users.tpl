@@ -8,7 +8,7 @@
 
         <div class="row g-3 mb-4">
             <div class="col-md-6">
-                <label for="userName" class="form-label">Nome:</label>
+                <label for="userName" class="form-label">Filtra per nome:</label>
                 <input type="text" class="form-control" id="userName" placeholder="Nome utente" oninput="filterUsers()">
             </div>
             <div class="col-md-6 d-flex align-items-end gap-2">
