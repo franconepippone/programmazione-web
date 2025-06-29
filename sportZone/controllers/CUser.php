@@ -412,4 +412,10 @@ class CUser {
         return self::getUserRole() === EClient::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
+    public static function isAdmin()
+    {
+        return self::getUserRole() === EAdmin::class;
+    }
+
 }

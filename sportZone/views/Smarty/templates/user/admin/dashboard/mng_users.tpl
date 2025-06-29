@@ -5,6 +5,9 @@
 {block name="dashboard_content"}
     <div class="container my-4">
         <h2 class="mb-4">Lista Utenti</h2>
+        <a href="/admin/userCreationForm" class="btn btn-success">
+                ➕ Crea Utente
+        </a>
 
         {if $users|@count > 0}
             <div class="row row-cols-1 row-cols-md-2 g-4">
