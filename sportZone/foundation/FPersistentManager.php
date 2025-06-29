@@ -8,7 +8,7 @@ require_once "FField.php";
 class FPersistentManager{
 
     /**
-     * Singleton Class (NON HA SENSO???? che senso ha avere un singleton con metodi statici?? forse è solo simmetria con eentitymanager?) -americo 
+     *   
      */
 
      private static $instance;

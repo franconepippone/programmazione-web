@@ -28,7 +28,7 @@ class CField {
         $searchParams = ['date' => null, 'sport' => null];
         if (isset($getInputs['date'])) {
             $dataText = $getInputs['date'];
-            $searchParams['date'] = $dataText; // Convert DateTime to string in 'Y-m-d' format
+            $searchParams['date'] = $dataText; 
         }
 
         if (isset($getInputs['sport'])) {
@@ -65,6 +65,7 @@ class CField {
         }
         
         $date = isset($inputs['date']) ? $inputs["date"] : null;
+        UValidate::validateReservationDate($date);
 
         $view = new VField();
         $view->showDetailsPage($fld, $date);

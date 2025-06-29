@@ -41,29 +41,9 @@ class CFrontController{
         //$this->createDummyFields();
         //$this->createDummyCourses();
         
-/**
-        $employee = (new EEmployee())
-            ->setName('Maria')
-            ->setSurname('Rossi')
-            ->setEmail('ciro')
-            ->setBirthDate(new DateTime('1990-01-01'))
-            ->setSex(UserSex::MALE)
-            ->setUsername('maria.rossi')
-            ->setPassword('password123'); // Assuming you have a setPassword method
-
-       FPersistentManager::getInstance()->uploadObj($admin);
-       $admin = (new EAdmin())
-            ->setName('cria')
-            ->setSurname('Rossi')
-            ->setEmail('ciro')
-            ->setBirthDate(new DateTime('1990-01-01'))
-            ->setSex(UserSex::MALE)
-            ->setUsername('moria.rossi')
-            ->setPassword('password123'); // Assuming you have a setPassword method
-
-       FPersistentManager::getInstance()->uploadObj($admin);*/
+        
         //$this->createDummyFields();
-        //$this->createDummyCourses($instructor );
+        //$this->createDummyUsers();
         //CHelper::createUsers();
         ob_start();
         // echo $requestUri;
@@ -151,7 +131,32 @@ class CFrontController{
         }
         return $map;
     }
+    
 
+
+
+    private static function createDummyUsers(){
+        $employee = (new EEmployee())
+            ->setName('Maria')
+            ->setSurname('Rossi')
+            ->setEmail('cirddo')
+            ->setBirthDate(new DateTime('1990-01-01'))
+            ->setSex(UserSex::MALE)
+            ->setUsername('maria.rossi')
+            ->setPassword('password123'); // Assuming you have a setPassword method
+
+       FPersistentManager::getInstance()->uploadObj($employee);
+       $admin = (new EAdmin())
+            ->setName('cria')
+            ->setSurname('Rossi')
+            ->setEmail('cieeero')
+            ->setBirthDate(new DateTime('1990-01-01'))
+            ->setSex(UserSex::MALE)
+            ->setUsername('moria.rossi')
+            ->setPassword('password123'); // Assuming you have a setPassword method
+
+       FPersistentManager::getInstance()->uploadObj($admin);
+        }
     
     //creo campi fittizi
     

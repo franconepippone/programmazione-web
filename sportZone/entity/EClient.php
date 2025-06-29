@@ -64,8 +64,6 @@ class EClient extends EUser
     
     
     public static function clientToArray(EClient $client): array {
-        return [
-            EUser::userToArray($client)
-        ];
+        return EUser::userToArray($client);
     }
 }

@@ -20,7 +20,7 @@
                             </div>
                             <div class="card-footer bg-transparent border-0">
                                 <a href="/dashboard/courseDetailsInstructor/{$course.id}" class="btn btn-primary">
-                                    Modifica
+                                    Dettagli
                                 </a>
                             </div>
                         </div>

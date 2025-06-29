@@ -27,10 +27,14 @@
         <tbody>
           {foreach from=$enrollments item=enrollment}
             <tr>
-              <td>{$enrollment.name|escape}</td>
-              <td>{$enrollment.surname|escape}</td>
-              <td>{$enrollment.email|escape}</td>
-              <td>{$enrollment.date|date_format:"%d/%m/%Y"}</td>
+              {if $enrollment.client}
+                 <td>{$enrollment.client.name|escape}</td>
+                 <td>{$enrollment.client.surname|escape}</td>
+                 <td>{$enrollment.client.email|escape}</td>
+                 <td>{$enrollment.enrollmentDate|date_format:"%d/%m/%Y"|escape}</td>
+              {else} 
+                 <td colspan="3">Nessun cliente associato</td>
+              {/if} 
             </tr>
           {/foreach}
         </tbody>
