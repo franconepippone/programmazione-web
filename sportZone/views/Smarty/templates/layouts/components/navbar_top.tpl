@@ -9,12 +9,12 @@
       <li class="nav-item"><a class="nav-link" href="/user/home">Home</a></li>
       <li class="nav-item"><a class="nav-link" href="/field/searchForm">Prenota un campo</a></li>
       <li class="nav-item"><a class="nav-link" href="/course/showCourses">Iscriviti a un corso</a></li>
-      {if $isLogged}<li class="nav-item"><a class="nav-link" href="/dashboard/profile">Dashboard personale</a></li>
+      {if $isLogged}
+        <li class="nav-item"><a class="nav-link" href="/dashboard/profile">Dashboard personale</a></li>
+      
+        <!-- Profile dropdown -->
+        {include file="layouts/components/profile_dropdown.tpl"}
       {/if}
-
-      <!-- Profile dropdown -->
-      {include file="layouts/components/profile_dropdown.tpl"}
-
     </ul>
   </div>
 </nav>
