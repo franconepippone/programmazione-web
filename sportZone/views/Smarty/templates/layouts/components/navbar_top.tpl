@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark px-4">
-  <a class="navbar-brand fw-bold" href="#">{include file="layouts/logo.html"}</a>
+  <a class="navbar-brand fw-bold" href="/user/home">{include file="layouts/logo.html"}</a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>

@@ -566,7 +566,7 @@ class UValidate {
 
         if ($require && !empty($fieldNames)) {
             throw new ValidationException(
-                "Missing required parameters.",
+                "Parametri richiesti mancanti",
                 details: ["params" => implode(', ', $fieldNames)]
             );
         }
