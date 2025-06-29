@@ -313,4 +313,9 @@ class FPersistentManager{
         return $result;
     }
 
+    public static function removeEnrollment(EEnrollment $e) {
+        $result = FEnrollment::deleteEnrollment($e);
+        return $result;
+    }
+
 }

@@ -34,26 +34,36 @@ class CFrontController{
 
     public function run($requestUri){
         // Parse the request URI
-        /*
-        $this->createDummyFields();
-        $this->createDummyCourses();
         
-        $this->createDummyFields();
-        $this->createDummyCourses();
-        */
-        /*
-        $instructor = (new EInstructor())
-            ->setName('Mario')
+        //$this->createDummyFields();
+        //$this->createDummyCourses();
+        
+        //$this->createDummyFields();
+        //$this->createDummyCourses();
+        
+/**
+        $employee = (new EEmployee())
+            ->setName('Maria')
             ->setSurname('Rossi')
             ->setEmail('ciro')
             ->setBirthDate(new DateTime('1990-01-01'))
             ->setSex(UserSex::MALE)
-            ->setUsername('mario.rossi')
+            ->setUsername('maria.rossi')
             ->setPassword('password123'); // Assuming you have a setPassword method
 
-        FPersistentManager::getInstance()->uploadObj($instructor);
-        $this->createDummyFields($instructor);
-        $this->createDummyCourses($instructor);*/
+       FPersistentManager::getInstance()->uploadObj($admin);
+       $admin = (new EAdmin())
+            ->setName('cria')
+            ->setSurname('Rossi')
+            ->setEmail('ciro')
+            ->setBirthDate(new DateTime('1990-01-01'))
+            ->setSex(UserSex::MALE)
+            ->setUsername('moria.rossi')
+            ->setPassword('password123'); // Assuming you have a setPassword method
+
+       FPersistentManager::getInstance()->uploadObj($admin);*/
+        //$this->createDummyFields();
+        //$this->createDummyCourses($instructor );
         //CHelper::createUsers();
         ob_start();
         // echo $requestUri;
@@ -236,8 +246,8 @@ class CFrontController{
         foreach ($courses as $course) {
             FPersistentManager::getInstance()->uploadObj($course);
         }
-        //$instructor->addCourse($course1);
-        //$instructor->addCourse($course2);
+        $instructor->addCourse($course1);
+        $instructor->addCourse($course2);
     }
     
 }

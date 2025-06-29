@@ -189,7 +189,7 @@ class VDashboard{
     public function showMyReservationDetails($reservation, $active, $role) {
 
         if ($reservation !== null) {
-            $reservation = EReservation::reservationToArray($reservation);
+            $reservationArray = EReservation::reservationToArray($reservation);
         } else {
             $reservationArray = [];
         }

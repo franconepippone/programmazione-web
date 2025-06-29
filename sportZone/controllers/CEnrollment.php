@@ -111,7 +111,7 @@ class CEnrollment
             return;
         }
 
-        FPersistentManager::getInstance()->deleteEnrollment($enrollment_id);
+        FPersistentManager::getInstance()->removeEnrollment($enrollment);
 
         $view = new VEnrollment();
         $view->showDeleteConfirmation();

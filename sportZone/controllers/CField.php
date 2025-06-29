@@ -9,7 +9,7 @@ class CField {
 
     private static $rulesSearch = [
         "sport" => 'validateSport',
-        "date" => 'validateDate'
+        "date" => 'validateReservationDate'
     ];
 
     public static function searchForm() {
@@ -27,7 +27,7 @@ class CField {
 
         $searchParams = ['date' => null, 'sport' => null];
         if (isset($getInputs['date'])) {
-            $dataText = $getInputs['date']->format('Y-m-d');
+            $dataText = $getInputs['date'];
             $searchParams['date'] = $dataText; // Convert DateTime to string in 'Y-m-d' format
         }
 
@@ -64,7 +64,7 @@ class CField {
             exit;
         }
         
-        $date = isset($inputs['date']) ? $inputs["date"]->format('Y-m-d') : null;
+        $date = isset($inputs['date']) ? $inputs["date"] : null;
 
         $view = new VField();
         $view->showDetailsPage($fld, $date);

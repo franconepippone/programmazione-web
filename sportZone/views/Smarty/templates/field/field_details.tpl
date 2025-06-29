@@ -6,6 +6,11 @@
 
 {block name="content"}
   <div class="container my-3">
+    <div class="mb-3">
+      <a href="/field/showResults?date={$selectedDate|default:$choosenDate|date_format:"%Y-%m-%d"}" class="btn btn-secondary">
+       &larr; Torna ai risultati
+    </a>
+  </div>
 
     <!-- Page Title with Sport Icon -->
     <h1 class="mb-4 text-center">

@@ -87,7 +87,7 @@
 
             <div class="d-flex justify-content-between">
                 <a href="javascript:history.back()" class="btn btn-secondary">⬅ Torna indietro</a>
-                <a href="/course/modifyForm/{$course.id|default:'N/D'}" class="btn btn-primary">Modifica corso</a>
+                <a href="/enrollment/showEnrollmentsOfCourse/{$course.id}" class="btn btn-outline-secondary">👥 Iscritti</a>
             </div>
         </div>
     </div>
