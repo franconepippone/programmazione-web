@@ -202,6 +202,11 @@ class CUser {
      */
     public static function logout(){
         USession::getInstance();
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 3600,
+        $params["path"],
+        $params["domain"]
+        );
         USession::unsetSession();
         USession::destroySession();
 
