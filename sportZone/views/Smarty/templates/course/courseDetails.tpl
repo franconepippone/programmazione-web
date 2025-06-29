@@ -1,6 +1,5 @@
 {extends file=$layout}  
-{assign var="page_title" value="Register new"}
-
+{assign var="page_title" value="Dettagli corso"}
 
 
 {block name="content"}

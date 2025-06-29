@@ -20,8 +20,8 @@ class CCourse {
     //********************************************************* */
     
     public static function createCourseForm($data = []) {
-    
-        CUser::isEmployee();
+        CUser::isLogged();
+        CUser::assertRole(EEmployee::class, EAdmin::class);
         $view = new VCourse();
   
         $pm = FPersistentManager::getInstance();
@@ -34,8 +34,8 @@ class CCourse {
 
 
     public static function courseSummary() {
-       
-        CUser::isEmployee();
+        CUser::isLogged();
+        CUser::assertRole(EEmployee::class, EAdmin::class);
 
         $view = new VCourse();
         $pm = FPersistentManager::getInstance();
@@ -72,7 +72,7 @@ class CCourse {
         } catch (ValidationException $e) {
             $msg = $e->getMessage();
             if (isset($e->details['params'])) {
-               $msg .= ''. $e->details[''] .'';
+               $msg .= ' ' . print_r($e->details['params'], true);
             }
             (new VError())->show($msg);
         }
@@ -80,7 +80,8 @@ class CCourse {
     }
 
     public static function finalizeCourse() {
-        //CUser::isEmployee();
+        CUser::isLogged();
+        CUser::assertRole(EEmployee::class, EAdmin::class);
 
         $view = new VCourse();
         $pm = FPersistentManager::getInstance();
@@ -153,7 +154,8 @@ class CCourse {
 
 
     public static function deleteCourse($course_id) {
-        CUser::isEmployee();
+        CUser::isLogged();
+        CUser::assertRole(EEmployee::class, EAdmin::class);
         try {
             // Controlla se il corso esiste
             $course = FPersistentManager::retriveCourseOnId($course_id);

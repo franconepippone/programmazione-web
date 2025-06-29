@@ -126,7 +126,7 @@ class CDashboard{
     // It retrieves the courses from the persistent manager and displays them using the view
     public static function manageCourses() {  
         $user = CUser::getLoggedUser();
-        $role = self::assertRole(EEmployee::class);
+        $role = self::assertRole(EEmployee::class, EAdmin::class);
            
         try {       
                 $courses = FPersistentManager::getInstance()->retriveCourses();               

@@ -1,7 +1,7 @@
 {extends file="../dashboard_bar.tpl"}
+{assign var="active_tab" value="courses"}
 
 {block name="dashboard_tabs_styles"}
-    <link rel="stylesheet" href="/programmazione-web/sportZone/views/Smarty/css/details.css">
 {/block}
 
 {block name="dashboard_content"}

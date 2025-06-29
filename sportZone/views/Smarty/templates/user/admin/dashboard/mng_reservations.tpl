@@ -1,3 +1,6 @@
+
+DEPRECATED
+{*}
 {extends file="../dashboard_bar.tpl"}
 {assign var="active_tab" value="manageReservations"}
 {assign var="page_title" value="Dashboard - reservations"}
@@ -11,7 +14,7 @@
         </button>
 
         <button type="button" class="btn btn-primary" onclick="window.location.href='/dashboard/filteredList';">
-            Filtra le prenotazioni
+            Cerca prenotazioni
         </button>
     </div>
 

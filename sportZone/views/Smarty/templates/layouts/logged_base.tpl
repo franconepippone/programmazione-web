@@ -1,4 +1,5 @@
-<!---->
+DEPRECATED, we only use guest_base
+{*}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +12,8 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    {*
+    
+    <!--
       <style>
         body {
         font-family: 'Inter', sans-serif;
@@ -45,7 +47,7 @@
         text-align: center;
         }
       </style>
-    *}
+    -->
 
     {block name="styles"}{/block}
 </head>

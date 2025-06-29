@@ -49,7 +49,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 fw-semibold">Crea Utente</button>
-                    <a href="/user/home" class="btn btn-secondary w-100 fw-semibold mt-2">Torna alla homepage</a>
+                    <a href="/dashboard/manageUsers" class="btn btn-secondary w-100 fw-semibold mt-2">Torna indietro</a>
                 </form>
             </div>
         </div>

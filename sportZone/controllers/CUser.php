@@ -82,13 +82,17 @@ class CUser {
  
     // Registers a new user by displaying the registration form.
     public static function register(){
+        if (CUser::isLoggedBool()) {
+            header("Location: /user/home");
+            exit;
+        }
         $view = new VUser();
         $view->showRegistrationForm();
     }
 
     // Displays the login form for the user.
     public static function login(){
-        if(UCookie::isSet('PHPSESSID')){
+        if(UCookie::isSet(SESSION_NAME)){
             if(session_status() == PHP_SESSION_NONE){
                 USession::getInstance();
             }
@@ -135,7 +139,6 @@ class CUser {
             exit;
         }
 
-        // fills session variables with user data
         USession::getInstance();
         session_regenerate_id(true);
         USession::setSessionElement( 'user', $user->getId());
@@ -209,6 +212,7 @@ class CUser {
         );
         USession::unsetSession();
         USession::destroySession();
+        setcookie(SESSION_NAME, '', time() - 3600);
 
         $redirectUrl = "/user/home";
         if (UHTTPMethods::getIsSet("redirect")) {
@@ -277,6 +281,9 @@ class CUser {
 
     // tenta la modifica di un qualsiasi utente
     private static function modifyUserFromImputs(array $inputs, EUser $user) {
+
+        print_r($inputs);
+
         try {
             $inputs = UValidate::validateInputArray($inputs, self::$rulesModifyUser, false);
         } catch (ValidationException $e) {
@@ -284,6 +291,8 @@ class CUser {
             (new VError())->show($e->getMessage());
             exit;
         }
+
+        print_r($inputs);
 
         self::attemptModifyFromInputArray($inputs, 'name', $user, 'setName');
         self::attemptModifyFromInputArray($inputs, 'surname', $user, 'setSurname');
@@ -511,21 +520,44 @@ class CUser {
 
 
     public static function deleteUser(){
+        CUser::isLogged();
         CUser::isAdmin();
         $idUser = $_POST['id'] ?? null;
         if ($idUser==null) {
             $view=new VError();
             $view->show('Id mancante.');
-            return;
+            exit;
         }
         $user=FPersistentManager::retriveUserById($idUser);
         if ($user==null) {
             $view=new VError();
             $view->show('Utente non trovato.');
-            return;
+            exit;
         }
+
+        // can't delete admin
+        if ($user::class === EAdmin::class) {
+            (new VError())->show('Non puoi eliminare un admin.');
+            exit;
+        }
+
+        if ($user::class === EInstructor::class) {
+            // if the user is an instructor, remove all his courses
+            $courses = $user->getCourses();
+            foreach ($courses as $course) {
+                FPersistentManager::removeCourse($course);
+            }
+        }
+        // same thing for reservations
+        if ($user::class === EClient::class) {
+            $reservations = $user->getReservations();
+            foreach ($reservations as $reservation) {
+                FPersistentManager::removeReservation($reservation);
+            }
+        }
+
         FPersistentManager::removeUser($user);
-        (new VError())->showSuccess('Utente eliminato con successo','Torna alla homepage',"window.location.href='/user/home'");
+        (new VError())->showSuccess('Utente eliminato con successo','Continua',"window.location.href='/dashboard/manageUsers'");
         
     }
 

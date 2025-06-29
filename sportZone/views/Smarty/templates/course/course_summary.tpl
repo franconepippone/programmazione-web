@@ -50,8 +50,8 @@
                     </div>
 
                     <div class="d-grid mb-2">
-                        <button type="submit" class="btn btn-primary fw-semibold">Conferma</button>
-                        <a href="/course/createCourseForm" class="btn btn-secondary w-100 fw-semibold">Torna indietro</a>
+                        <button type="submit" class="btn btn-primary fw-semibold mb-3">Conferma</button>
+                        <a href="javascript:history.back()" class="btn btn-secondary w-100 fw-semibold">Torna indietro</a>
                     </div>
                 </form>
 
