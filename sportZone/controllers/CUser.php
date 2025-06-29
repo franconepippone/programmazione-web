@@ -429,12 +429,14 @@ class CUser {
         'surname'      => 'validateName',
         'username'       => 'validateUsername',
         'password'         => 'validatePassword',
+        'email'             => 'validateemail',
+        'date'              => 'validateDate'
     ];
 
     public static function userCreationForm() {
         CUser::isAdmin(); 
 
-        $view = new VAdmin();
+        $view = new VUser();
         $view->showUserCreationForm();
     }
 
@@ -474,8 +476,8 @@ class CUser {
             $entity->setSurname($validated['surname']);
             $entity->setUsername($validated['username']);
             $entity->setPassword($validated['password']);
-            $entity->setEmail('default@default');
-            $entity->setBirthDate(new \DateTime('2000-01-01'));
+            $entity->setEmail($validated['email']);
+            $entity->setBirthDate($validated['date']);
             $entity->setSex(UserSex::MALE);
 
             $pm->uploadObj($entity);

@@ -35,4 +35,13 @@ class VUser{
         $this->smarty->display("user/modify_forms/generic.tpl");
     }
 
+    
+    public function showUserCreationForm(){
+         USmarty::configureBaseLayout($this->smarty);
+         $this->smarty->display("user/create_user_form.tpl");
+
+    }
+
+    
+
 }

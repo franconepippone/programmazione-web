@@ -21,7 +21,8 @@ class CField {
         try {
             $getInputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
-            echo "INPUT VALIDATION FAILED: " . $e->getMessage();
+            $view = new VError();
+            $view->show( $e->getMessage(),'Torna indietro');
             exit;
         }
 

@@ -24,6 +24,16 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" name="email" id="email" value="{$email|default:''}" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Data di Nascita</label>
+                        <input type="date" name="date" id="date" value="{$date|default:''}" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" name="password" id="password" class="form-control" required>
                     </div>

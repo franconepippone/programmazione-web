@@ -151,6 +151,7 @@ abstract class EUser
             EClient::class => 'client',
             EInstructor::class => 'instructor',
             EEmployee::class => 'employee',
+            EAdmin::class => 'admin',
             default => 'unknown',
         };
     }

@@ -81,10 +81,6 @@ class CDashboard{
         $course = FPersistentManager::retriveCourseOnId($course_id);
         
        
-        //echo $enrollments[0]->getDate();
-       
-    
-        
         $view = new VDashboard();
         $view->showDetailsClient( $course ,$user , $role);
     }
@@ -199,7 +195,9 @@ class CDashboard{
         
         
         $userList = FPersistentManager::getInstance()->retrieveAllUsers();
-        //print_r ($userList);
+
+
+       
         $view = new VDashboard();
         $view->showManageUsers($userList, $user, $role);
 
