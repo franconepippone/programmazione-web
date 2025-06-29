@@ -15,34 +15,44 @@
         </button>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover text-center mx-auto" style="max-width: 900px;">
-            <thead class="table-dark">
-                <tr>
-                    <th>Campo</th>
-                    <th>Data</th>
-                    <th>Orario</th>
-                    <th>Utente</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach $reservations as $res}
+    {if $reservations|@count > 0}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover text-center mx-auto" style="max-width: 900px;">
+                <thead class="table-dark">
                     <tr>
-                        <td>{$res.field}</td>
-                        <td>{$res.date}</td>
-                        <td>{$res.time}</td>
-                        <td>{$res.fullname}</td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-sm"
-                                onclick="window.location.href='/reservation/reservationDetails?id={$res.id}'">
-                                View details
-                            </button>
-                        </td>
+                        <th>Campo</th>
+                        <th>Data</th>
+                        <th>Orario</th>
+                        <th>Utente</th>
+                        <th>Azioni</th>
                     </tr>
-                {/foreach}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    {foreach $reservations as $res}
+                        <tr>
+                            <td>{$res.field}</td>
+                            <td>{$res.date}</td>
+                            <td>{$res.time}</td>
+                            <td>{$res.fullname}</td>
+                            <td>
+                                <button type="button" class="btn btn-info btn-sm"
+                                    onclick="window.location.href='/reservation/reservationDetails?id={$res.id}'">
+                                    View details
+                                </button>
+                            </td>
+                        </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    {else}
+        <div class="alert alert-warning text-center mx-auto" style="max-width: 600px;">
+            <h5>⚠️ Nessuna prenotazione trovata.</h5>
+            <p>Torna alla home per visualizzare o creare una nuova prenotazione.</p>
+            <button type="button" class="btn btn-secondary mt-2" onclick="window.location.href='/'">
+                Torna alla Home
+            </button>
+        </div>
+    {/if}
 </div>
 {/block}

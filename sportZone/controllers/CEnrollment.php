@@ -18,7 +18,7 @@ class CEnrollment
         $view->showEnrollmentConfirmation($user,$course);
     }
 
-    // Mostra il form di iscrizione a un corso
+  
     public static function enrollForm($course_id)
     {
         CUser::isLogged();
@@ -44,12 +44,9 @@ class CEnrollment
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
 
         
-        self::isEnrolled($course,$user);//se iscritto non lo fa procedere
+        self::isEnrolled($course,$user);
 
-        // Verifica se già iscritto
-        
-
-        // Crea iscrizione
+    
         $enrollment = new EEnrollment();
         $enrollment->setClient($user);
         $enrollment->setCourse($course);
@@ -79,27 +76,6 @@ class CEnrollment
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    // Permette di annullare l'iscrizione a un corso
     public static function deleteEnrollment($enrollment_id)
     {
         CUser::isLogged();
@@ -111,7 +87,7 @@ class CEnrollment
             return;
         }
 
-        FPersistentManager::getInstance()->deleteEnrollment($enrollment_id);
+        FPersistentManager::getInstance()->removeEnrollment($enrollment);
 
         $view = new VEnrollment();
         $view->showDeleteConfirmation();

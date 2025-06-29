@@ -34,27 +34,17 @@ class CFrontController{
 
     public function run($requestUri){
         // Parse the request URI
-        /*
-        $this->createDummyFields();
-        $this->createDummyCourses();
         
-        $this->createDummyFields();
-        $this->createDummyCourses();
-        */
-        /*
-        $instructor = (new EInstructor())
-            ->setName('Mario')
-            ->setSurname('Rossi')
-            ->setEmail('ciro')
-            ->setBirthDate(new DateTime('1990-01-01'))
-            ->setSex(UserSex::MALE)
-            ->setUsername('mario.rossi')
-            ->setPassword('password123'); // Assuming you have a setPassword method
-
-        FPersistentManager::getInstance()->uploadObj($instructor);
-        $this->createDummyFields($instructor);
-        $this->createDummyCourses($instructor);*/
+        //$this->createDummyFields();
+        //$this->createDummyCourses();
         
+        //$this->createDummyFields();
+        //$this->createDummyCourses();
+        
+        
+        //$this->createDummyFields();
+        //$this->createDummyUsers();
+        //CHelper::createUsers();
         ob_start();
         // echo $requestUri;
         echo $requestUri . "<br>";
@@ -141,7 +131,32 @@ class CFrontController{
         }
         return $map;
     }
+    
 
+
+
+    private static function createDummyUsers(){
+        $employee = (new EEmployee())
+            ->setName('Maria')
+            ->setSurname('Rossi')
+            ->setEmail('cirddo')
+            ->setBirthDate(new DateTime('1990-01-01'))
+            ->setSex(UserSex::MALE)
+            ->setUsername('maria.rossi')
+            ->setPassword('password123'); // Assuming you have a setPassword method
+
+       FPersistentManager::getInstance()->uploadObj($employee);
+       $admin = (new EAdmin())
+            ->setName('cria')
+            ->setSurname('Rossi')
+            ->setEmail('cieeero')
+            ->setBirthDate(new DateTime('1990-01-01'))
+            ->setSex(UserSex::MALE)
+            ->setUsername('moria.rossi')
+            ->setPassword('password123'); // Assuming you have a setPassword method
+
+       FPersistentManager::getInstance()->uploadObj($admin);
+        }
     
     //creo campi fittizi
     
@@ -236,8 +251,8 @@ class CFrontController{
         foreach ($courses as $course) {
             FPersistentManager::getInstance()->uploadObj($course);
         }
-        //$instructor->addCourse($course1);
-        //$instructor->addCourse($course2);
+        $instructor->addCourse($course1);
+        $instructor->addCourse($course2);
     }
     
 }

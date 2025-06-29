@@ -27,7 +27,7 @@ abstract class EUser
     protected string $surname;
 
     #[ORM\Column(type: "date", nullable: false)]
-    protected \DateTimeInterface $birthDate;
+    protected \DateTimeInterface $birthDate; 
 
     #[ORM\Column(type: "string", nullable: false)]
     protected string $sex;
@@ -151,6 +151,7 @@ abstract class EUser
             EClient::class => 'client',
             EInstructor::class => 'instructor',
             EEmployee::class => 'employee',
+            EAdmin::class => 'admin',
             default => 'unknown',
         };
     }

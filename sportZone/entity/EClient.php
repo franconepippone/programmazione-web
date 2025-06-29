@@ -12,7 +12,7 @@ require_once __DIR__ . "/../../vendor/autoload.php";
 #[ORM\Table(name: "clients")]
 class EClient extends EUser
 {
-    #[ORM\OneToMany(mappedBy: "clients", targetEntity: EEnrollment::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: "client", targetEntity: EEnrollment::class, cascade: ["persist", "remove"])]
     private Collection $enrollments;
 
     #[ORM\OneToMany(mappedBy: "client", targetEntity: EPaymentMethod::class, cascade: ["persist", "remove"])]
@@ -64,8 +64,6 @@ class EClient extends EUser
     
     
     public static function clientToArray(EClient $client): array {
-        return [
-            EUser::userToArray($client)
-        ];
+        return EUser::userToArray($client);
     }
 }

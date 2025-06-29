@@ -412,4 +412,116 @@ class CUser {
         return self::getUserRole() === EClient::class;
     }
 
+    #[PathUrl(PathUrl::HIDDEN)]
+    public static function isAdmin()
+    {
+        return self::getUserRole() === EAdmin::class;
+    }
+
+
+
+
+
+
+    
+    private static $rulesCreate = [
+        'name'            => 'validateName',
+        'surname'      => 'validateName',
+        'username'       => 'validateUsername',
+        'password'         => 'validatePassword',
+        'email'             => 'validateemail',
+        'date'              => 'validateDate'
+    ];
+
+    public static function userCreationForm() {
+        CUser::isAdmin(); 
+
+        $view = new VUser();
+        $view->showUserCreationForm();
+    }
+
+
+    public static function finalizeUserCreation() {
+        CUser::isAdmin();
+
+        $post = $_POST;
+        $pm = FPersistentManager::getInstance();
+
+        try {
+        
+            $validated = UValidate::validateInputArray($post, self::$rulesCreate, true);
+
+        
+            $validRoles = ['client', 'employee', 'instructor'];
+            if (empty($post['role']) || !in_array($post['role'], $validRoles)) {
+                throw new ValidationException("Ruolo selezionato non valido.");
+            }
+            $role = $post['role'];
+
+            switch ($role) {
+                case 'client':
+                    $entity = new EClient();
+                    break;
+
+                case 'employee':
+                    $entity = new EEmployee();
+                    break;
+
+                case 'instructor':
+                    $entity = new EInstructor();
+                    break;
+            }
+
+            $entity->setName($validated['name']);
+            $entity->setSurname($validated['surname']);
+            $entity->setUsername($validated['username']);
+            $entity->setPassword($validated['password']);
+            $entity->setEmail($validated['email']);
+            $entity->setBirthDate($validated['date']);
+            $entity->setSex(UserSex::MALE);
+
+            $pm->uploadObj($entity);
+
+               
+          
+                        
+
+
+            (new VError())->showSuccess(
+                "Utente creato con successo!",
+                "Torna alla homepage",
+                "window.location.href='/user/home'"
+            );
+
+        } catch (ValidationException $e) {
+            $msg = $e->getMessage();
+            if (!empty($e->details['params'])) {
+                $msg .= "<br>Mancano: " . implode(', ', $e->details['params']);
+            }
+            (new VError())->show($msg, "Torna indietro", "history.back()");
+        } 
+
+
+    }
+
+
+    public static function deleteUser(){
+        CUser::isAdmin();
+        $idUser = $_POST['id'] ?? null;
+        if ($idUser==null) {
+            $view=new VError();
+            $view->show('Id mancante.');
+            return;
+        }
+        $user=FPersistentManager::retriveUserById($idUser);
+        if ($user==null) {
+            $view=new VError();
+            $view->show('Utente non trovato.');
+            return;
+        }
+        FPersistentManager::removeUser($user);
+        (new VError())->showSuccess('Utente eliminato con successo','Torna alla homepage',"window.location.href='/user/home'");
+        
+    }
+
 }

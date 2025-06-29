@@ -47,8 +47,8 @@
 
             {elseif $modifiedUserClass == 'EAdmin'}
                 {*THIS SHOULD NEVER HAPPEN*}
-                {include file="user/modify_forms/profile/prfl_admin.tpl"}
-                {include file="user/modify_forms/settings/stgs_admin.tpl"}
+                
+                
 
             {elseif $modifiedUserClass == 'EInstructor'}
                 {include file="user/modify_forms/profile/prfl_instructor.tpl"}
@@ -58,9 +58,12 @@
             {/if}
 
             <div class="d-flex justify-content-end gap-2 mt-4">
-              <button type="submit" class="btn btn-primary">Modify</button>
-              <a href="/user/delete" class="btn btn-danger">Delete</a>
+                <button type="submit" class="btn btn-primary">Modify</button>
             </div>
+          </form>
+          <form action="/user/deleteUser" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="{$user.id}">  
+                <button type="submit" class="btn btn-danger">Delete</button>
           </form>
         </div>
       </div>

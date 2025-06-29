@@ -63,8 +63,8 @@ class VCourse
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('courses', $coursesData);
         $this->smarty->assign('userRole', $userRole);
-
         $this->smarty->display('course/showCourses.tpl');
+        
     }
 
     
@@ -84,9 +84,12 @@ class VCourse
         $this->smarty->assign('courses', $courseData);
         
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->display('course/courseDetails.tpl');
 
-        //$this->smarty->display('course/courseDetailsClient.tpl');
+        if (CUser::isClient()) {
+            $this->smarty->display('course/courseDetails.tpl');
+        }else{
+            $this->smarty->display('course/course_details_employee.tpl');
+        }
     
     }
 

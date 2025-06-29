@@ -132,11 +132,18 @@ class VDashboard{
 
     // -------------- EMPLOYEE ONLY -----------------
 
-    public function showManageCourses(EUser $user, string $role) {
-        $userArray = EUser::usertoArray($user);
+    public function showManageCourses(array $courses, string $role) {
+        $coursArray =[];
+        if ($courses !== null) {
+            foreach ($courses as $course) {
+                $coursArray[] = ECourse::courseToArray($course);
+            }
+        } else {
+            $coursArray = [];
+        }
 
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('user', $userArray);
+        $this->smarty->assign('courses', $coursArray);
         $this->smarty->display($this->getBasePath($role) . 'mng_courses.tpl');
     }
 
@@ -155,13 +162,7 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'mng_fields.tpl');
     }
 
-    public function showManageUsers(EUser $user, string $role) {
-        $userArray = EUser::usertoArray($user);
-
-        USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('user', $userArray);
-        $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
-    }
+   
 
 
 
@@ -189,7 +190,7 @@ class VDashboard{
     public function showMyReservationDetails($reservation, $active, $role) {
 
         if ($reservation !== null) {
-            $reservation = EReservation::reservationToArray($reservation);
+            $reservationArray = EReservation::reservationToArray($reservation);
         } else {
             $reservationArray = [];
         }
@@ -204,9 +205,12 @@ class VDashboard{
 
     // ------------------ ADMIN ONLY ---------------------
 
-    public function showManageEmployees(EUser $user, string $role) {
+    public function showManageUsers($userList,EUser $user, string $role) {
+ 
+        $this->smarty->assign('users', $userList);
+        //print_r($userList);
         USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->display($this->getBasePath($role) . 'mng_employees.tpl');
+        $this->smarty->display($this->getBasePath($role) . 'mng_users.tpl');
     }
 
 }

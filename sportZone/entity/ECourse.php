@@ -195,7 +195,7 @@ class ECourse
             'MaxParticipantsCount' => $course->getMaxParticipantsCount(),
             'field' => $course->getField() ? $course->getField()->getName() : null,// Assuming getField() returns an EField object
             'sport' => $course->getField() ? $course->getField()->getSport() : null, // Assuming getField() returns an EField object
-            'instructor' => $course->getInstructor() ? $course->getInstructor()->getName()   : null, // Assuming getInstructor() returns an EUser object
+            'instructor' => $course->getInstructor() ? $course->getInstructor()->getFullName()   : null, // Assuming getInstructor() returns an EUser object
             'instructor_id'=>$course->getInstructor() ? $course->getInstructor()->getId() : null
 
         ];

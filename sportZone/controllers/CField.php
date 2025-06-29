@@ -9,7 +9,7 @@ class CField {
 
     private static $rulesSearch = [
         "sport" => 'validateSport',
-        "date" => 'validateDate'
+        "date" => 'validateReservationDate'
     ];
 
     public static function searchForm() {
@@ -21,14 +21,15 @@ class CField {
         try {
             $getInputs = UValidate::validateInputArray($_GET, self::$rulesSearch, false);
         } catch (ValidationException $e) {
-            echo "INPUT VALIDATION FAILED: " . $e->getMessage();
+            $view = new VError();
+            $view->show( $e->getMessage(),'Torna indietro');
             exit;
         }
 
         $searchParams = ['date' => null, 'sport' => null];
         if (isset($getInputs['date'])) {
-            $dataText = $getInputs['date']->format('Y-m-d');
-            $searchParams['date'] = $dataText; // Convert DateTime to string in 'Y-m-d' format
+            $dataText = $getInputs['date'];
+            $searchParams['date'] = $dataText; 
         }
 
         if (isset($getInputs['sport'])) {
@@ -49,9 +50,9 @@ class CField {
 
     public static function details($fieldId) {
         $pm = FPersistentManager::getInstance();
-        $fld = $pm->retriveFieldById($fieldId);
+        $field = $pm->retriveFieldById($fieldId);
 
-        if ($fld == null) {
+        if ($field == null) {
             echo "Invalid field id";
             exit;
         }
@@ -64,10 +65,10 @@ class CField {
             exit;
         }
         
-        $date = isset($inputs['date']) ? $inputs["date"]->format('Y-m-d') : null;
+        $date = isset($inputs['date']) ? $inputs["date"] : null;
 
         $view = new VField();
-        $view->showDetailsPage($fld, $date);
+        $view->showDetailsPage($field, $date);
     }
 
 

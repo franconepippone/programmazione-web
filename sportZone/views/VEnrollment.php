@@ -68,6 +68,7 @@ class VEnrollment
         $enrollmentsData = [];
         foreach ($enrollments as $enrollment) {
             $enrollmentsData[] = EEnrollment::enrollmentToArray($enrollment);
+
         }
         USmarty::configureBaseLayout($this->smarty);
         $this->smarty->assign('enrollments', $enrollmentsData);

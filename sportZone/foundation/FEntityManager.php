@@ -93,6 +93,20 @@ class FEntityManager{
         }
     }
 
+    public static function getAllUserIds(): array
+    {
+        $dql = 'SELECT u.id FROM EUser u';
+        $query = self::$entityManager->createQuery($dql);
+        $result = $query->getResult();
+        return $result;
+    }
+
+    public static function getAllUsers(): array {
+        $dql = 'SELECT PARTIAL u.{id, name, surname, email, username, birthDate, sex} FROM EUser u';
+        $query = self::$entityManager->createQuery($dql);
+    return $query->getArrayResult(); // Qui hai già un array "piatto", niente ricorsione
+}
+
     /**
      * return an object finding it not on the a but on an attribute
      */

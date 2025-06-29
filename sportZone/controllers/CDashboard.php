@@ -81,10 +81,6 @@ class CDashboard{
         $course = FPersistentManager::retriveCourseOnId($course_id);
         
        
-        //echo $enrollments[0]->getDate();
-       
-    
-        
         $view = new VDashboard();
         $view->showDetailsClient( $course ,$user , $role);
     }
@@ -126,13 +122,21 @@ class CDashboard{
 
     // --------------- EMPLOYEE ONLY -----------------
 
-    public static function manageCourses(){
-        CUser::isLogged();
+    // Function to show the list of courses
+    // It retrieves the courses from the persistent manager and displays them using the view
+    public static function manageCourses() {  
         $user = CUser::getLoggedUser();
-        $role = self::assertRole(EEmployee::class, EAdmin::class);
-        
+        $role = self::assertRole(EEmployee::class);
+           
+        try {       
+                $courses = FPersistentManager::getInstance()->retriveCourses();               
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
+        }        
+
         $view = new VDashboard();
-        $view->showManageCourses($user, $role);
+        $view->showManageCourses($courses, $role);
+        
     }
 
     public static function manageFields(){
@@ -167,15 +171,7 @@ class CDashboard{
     }
 
 
-    public static function manageUsers(){
-        CUser::isLogged();
-        $role = self::assertRole(EEmployee::class, EAdmin::class);
-        
-        $view = new VDashboard();
-
-        $user = CUser::getLoggedUser();
-        $view->showManageUsers($user, $role);
-    }
+    
     
     public static function manageReservations() {
         CUser::isLogged();
@@ -192,15 +188,20 @@ class CDashboard{
         $view->showFilteredReservations($filtered, $name, $date,$sport, $role);
     }
 
-    public static function manageEmployees() {
+    public static function manageUsers() {
         CUser::isLogged();
         $role = self::assertRole(EAdmin::class);
         $user = CUser::getLoggedUser();
         
-        $view = new VDashboard();
-        $view->showManageEmployees($user, $role);
-    }
+        
+        $userList = FPersistentManager::getInstance()->retrieveAllUsers();
 
+
+       
+        $view = new VDashboard();
+        $view->showManageUsers($userList, $user, $role);
+
+    }
     
     
 }

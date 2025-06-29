@@ -8,7 +8,7 @@ require_once "FField.php";
 class FPersistentManager{
 
     /**
-     * Singleton Class (NON HA SENSO???? che senso ha avere un singleton con metodi statici?? forse è solo simmetria con eentitymanager?) -americo 
+     *   
      */
 
      private static $instance;
@@ -34,6 +34,10 @@ class FPersistentManager{
 
     //-------------------------------------USER---------------------------------------
     
+    public static function retrieveAllUsers(){
+        $result = FUser::getAllUsers();
+        return $result;
+    }
     /**
      * verify if a user with this email exists in the database
      */
@@ -73,6 +77,10 @@ class FPersistentManager{
     public static function retriveUserOnId(int $id) {
         $result = FUser::getUserById($id);
         return $result;
+    }
+
+    public static function removeUser(EUser $user){
+        FUser::deleteUser($user);
     }
 
      //-------------------------------------FIELD---------------------------------------
@@ -306,6 +314,11 @@ class FPersistentManager{
     }
     public static function retriveEnrollmentsOnAttributes(array $fields) {
         $result = FEnrollment::getEnrollmentsByAttributes($fields);
+        return $result;
+    }
+
+    public static function removeEnrollment(EEnrollment $e) {
+        $result = FEnrollment::deleteEnrollment($e);
         return $result;
     }
 

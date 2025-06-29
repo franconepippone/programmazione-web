@@ -72,7 +72,7 @@ class CCourse {
         } catch (ValidationException $e) {
             $msg = $e->getMessage();
             if (isset($e->details['params'])) {
-              //  $msg .= "<br>Mancano i seguenti parametri: " . implode(', ', $e->details['params']);
+               $msg .= ''. $e->details[''] .'';
             }
             (new VError())->show($msg);
         }
@@ -120,34 +120,8 @@ class CCourse {
     }
 
 
-    //************************************************************************** */
-    //here starts Kevin's code, please do not modify it
-    
 
 
-    private static $rulesCourseKevin = [
-        'title'                => 'validateTitle',
-        'description'          => 'validateDescription',
-        'startDate'            => 'validateStartDate',
-        'endDate'              => 'validateDate', // oppure 'validateEndDate' se vuoi controllare rispetto a startDate
-        'timeSlot'             => 'validateTimeSlot', // oppure crea un metodo specifico se vuoi validare il formato
-        'daysOfWeek'           => 'validateDays',   // assicurati che arrivi come array
-        'cost'                 => 'validatePrice',
-        'MaxParticipantsCount' => 'validateMaxParticipants',
-        'instructor'           => 'validateName',
-        'field'                => 'validateFieldName'
-    ];
-
-
-    //form per cercare i corsi, anche con filtri
-    /*public static function searchForm() {
-        
-        
-        //fine creazione corsi fittizi
-
-        $view = new VCourse();
-        $view->showSearchForm();
-    }*/
 
     
     public static function showCourses() {  
@@ -171,16 +145,12 @@ class CCourse {
         } catch (Exception $e) {
             (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
         } 
-        
-        
        
-        //echo $enrollments[0]->getDate();
-       
-    
-        
         $view = new VCourse();
         $view->showCourseDetails( $course );
     }
+
+
 
     public static function deleteCourse($course_id) {
         CUser::isEmployee();
@@ -200,7 +170,7 @@ class CCourse {
             foreach ($reservations as $reservation) {
                 FPersistentManager::getInstance()->removeReservation($reservation);
             }
-            (new VError())->showSuccess("Corso eliminato con successo.");
+            (new VError())->showSuccess("Corso eliminato con successo.",'Torna alla homepage',"window.location.href='/user/home'");
         
         } catch (Exception $e) {
             (new VError())->show('Impossibile eliminare correttamente il corso.');

@@ -55,6 +55,7 @@ class CReservation{
         try {
         
             UValidate::validateNoActiveReservation($userId);
+            UValidate::validateReservationDate($_GET['date'] ?? null);
     
             $view = new VReservation();
     

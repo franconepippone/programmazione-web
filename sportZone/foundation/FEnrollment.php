@@ -45,4 +45,12 @@ class FEnrollment {
         $result = FEntityManager::getInstance()->deleteObj($enrollment);
         return $result;
     }
+
+    public static function deleteEnrollmentOnCourse(ECourse $course) {
+        $enrollments = self::getEnrollmentsByCourseId($course->getId());
+        foreach ($enrollments as $enrollment) {
+            self::deleteEnrollment($enrollment);
+        }
+        return true; 
+    }
 }
