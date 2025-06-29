@@ -5,32 +5,27 @@
 {/block}
 
 {block name="dashboard_content"}
-    <div class="container py-4">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                {if $active}
-                    <h2 class="card-title mb-4">La tua prenotazione attiva</h2>
-                    <ul class="list-group mb-4">
-                        <li class="list-group-item"><strong>Campo:</strong> {$reservation.field}</li>
-                        <li class="list-group-item"><strong>Data:</strong> {$reservation.date}</li>
-                        <li class="list-group-item"><strong>Ora:</strong> {$reservation.time}</li>
-                    </ul>
-
-                    <form method="post" action="/reservation/cancelInfo" class="mb-3">
-                        <button type="submit" class="btn btn-danger w-100">Cancella prenotazione</button>
-                    </form>
-
-                    <form method="post" action="/user/home">
-                        <button type="submit" class="btn btn-secondary w-100">Torna alla homepage</button>
-                    </form>
-                {else}
-                    <h2 class="card-title mb-3">Nessuna prenotazione attiva</h2>
-                    <p class="mb-4">Non hai prenotazioni attive al momento.</p>
-                    <form method="post" action="/user/home">
-                        <button type="submit" class="btn btn-primary w-100">Torna alla homepage</button>
-                    </form>
-                {/if}
+    <div class="results-list container py-4">
+        <h2 class="mb-4">La tua prenotazione attiva</h2>
+        {if $active}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <ul class="list-group mb-4">
+                                <li class="list-group-item"><strong>Campo:</strong> {$reservation.field}</li>
+                                <li class="list-group-item"><strong>Data:</strong> {$reservation.date}</li>
+                                <li class="list-group-item"><strong>Ora:</strong> {$reservation.time}</li>
+                            </ul>
+                            <form method="post" action="/reservation/cancelInfo" class="mb-3 d-grid">
+                                <button type="submit" class="btn btn-danger mx-auto" style="min-width: 180px;">Cancella prenotazione</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        {else}
+            <p>Non hai prenotazioni attive al momento.</p>
+        {/if}
     </div>
 {/block}

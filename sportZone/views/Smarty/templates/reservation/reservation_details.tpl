@@ -20,7 +20,7 @@
                 </ul>
 
                 <div class="d-flex justify-content-center gap-3">
-                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">Torna indietro</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/dashboard/manageReservations'">Torna indietro</button>
 
                     <form action="/reservation/modifyReservation" method="get" class="m-0">
                         <input type="hidden" name="id" value="{$reservation.id}">

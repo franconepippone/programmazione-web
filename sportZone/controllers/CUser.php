@@ -506,21 +506,29 @@ class CUser {
 
 
     public static function deleteUser(){
+        CUser::isLogged();
         CUser::isAdmin();
         $idUser = $_POST['id'] ?? null;
         if ($idUser==null) {
             $view=new VError();
             $view->show('Id mancante.');
-            return;
+            exit;
         }
         $user=FPersistentManager::retriveUserById($idUser);
         if ($user==null) {
             $view=new VError();
             $view->show('Utente non trovato.');
-            return;
+            exit;
         }
+
+        // can't delete admin
+        if ($user::class === EAdmin::class) {
+            (new VError())->show('Non puoi eliminare un admin.');
+            exit;
+        }
+
         FPersistentManager::removeUser($user);
-        (new VError())->showSuccess('Utente eliminato con successo','Torna alla homepage',"window.location.href='/user/home'");
+        (new VError())->showSuccess('Utente eliminato con successo','Continua',"window.location.href='/dashboard/manageUsers'");
         
     }
 

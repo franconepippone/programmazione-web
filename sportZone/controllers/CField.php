@@ -157,7 +157,7 @@ class CField {
         FPersistentManager::getInstance()->uploadObj($field);
         
         $view = new VError();
-        $view->showSuccess("Field was succesfully modified.", buttAction: "window.location.href='/dashboard/manageFields'");
+        $view->showSuccess("Campo modificato con successo", buttAction: "window.location.href='/dashboard/manageFields'");
     }
 
     public static function finalizeFieldCreation() {
@@ -170,7 +170,7 @@ class CField {
         FPersistentManager::getInstance()->uploadObj($field);
         
         $view = new VError();
-        $view->showSuccess("Field was succesfully created", buttAction: "window.location.href='/dashboard/manageFields'");
+        $view->showSuccess("Il campo è stato creato con successo", buttAction: "window.location.href='/dashboard/manageFields'");
     }
 
     public static function delete($fieldId) {

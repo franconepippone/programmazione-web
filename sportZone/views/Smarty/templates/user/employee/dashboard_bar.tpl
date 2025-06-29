@@ -1,10 +1,10 @@
 {extends file=$layout}
 
-
 {block name="styles"}
   {block name="dashboard_tabs_styles"}{/block}
 {/block}
 
+{assign var="ManageTabActive" value=in_array($active_tab, ['manageCourses', 'manageFields', 'manageReservations'])}
 
 {block name="content"}
   <section>
@@ -16,7 +16,7 @@
         <a href="/dashboard/settings" class="nav-link{if $active_tab == 'settings'} active{/if}">Impostazioni</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Gestione</a>
+        <a class="nav-link dropdown-toggle {if $ManageTabActive} active{/if}" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Gestione</a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item{if $active_tab == 'manageCourses'} active{/if}" href="/dashboard/manageCourses">Gestisci Corsi</a></li>
           <li><a class="dropdown-item{if $active_tab == 'manageFields'} active{/if}" href="/dashboard/manageFields">Gestisci Campi</a></li>

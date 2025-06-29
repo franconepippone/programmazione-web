@@ -35,9 +35,11 @@
                     </ul>
                 {/if}
 
-                <form method="post" action="/user/home" class="d-grid">
-                    <button type="submit" class="btn btn-secondary">← Torna alla home</button>
-                </form>
+                <div class="text-center">
+                    <a href="/dashboard/myReservations" class="btn btn-primary">
+                        Vedi prenotazione
+                    </a>
+                </div>
             </div>
         </div>
     </div>

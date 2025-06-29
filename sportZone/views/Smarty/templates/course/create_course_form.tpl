@@ -85,8 +85,10 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 fw-semibold">Continua</button>
+                    <button type="submit" class="btn btn-primary w-100 fw-semibold mb-4">Continua</button>
+                    {*
                     <a href="/user/home" class="btn btn-secondary w-100 fw-semibold">Torna alla homepage</a>
+                    *}
                 </form>
             </div>
         </div>
