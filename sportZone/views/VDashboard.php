@@ -181,6 +181,19 @@ class VDashboard{
         $this->smarty->display($this->getBasePath($role) . 'showFiltered.tpl');
     }
 
+    public function showCourses($courses, $role)
+    {
+        $coursesData = [];
+        foreach ($courses as $course) {
+            $coursesData []= ECourse::courseToArray($course);
+        }
+        USmarty::configureBaseLayout($this->smarty);
+        $this->smarty->assign('courses', $coursesData);
+        $this->smarty->assign('userRole', $role);
+
+        $this->smarty->display($this->getBasePath($role) .'mng_courses.tpl');
+    }
+
 
     
 

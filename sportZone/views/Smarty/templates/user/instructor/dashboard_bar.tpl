@@ -1,8 +1,8 @@
 {extends file=$layout}
 
+
 {block name="styles"}
-    {block name="dashboard_tabs_styles"}{/block}
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/slate/bootstrap.min.css" rel="stylesheet">
+  {block name="dashboard_tabs_styles"}{/block}
 {/block}
 
 {block name="content"}

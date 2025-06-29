@@ -117,21 +117,7 @@ class CCourse {
     }
 
 
-    // Function to show the list of courses
-    // It retrieves the courses from the persistent manager and displays them using the view
-    public static function showCourses() {  
-        $role = CUser::getUserRole();
-           
-        try {       
-                $courses = FPersistentManager::getInstance()->retriveCourses();               
-        } catch (Exception $e) {
-            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
-        }        
-
-        $view = new VCourse();
-        $view->showCourses($courses, $role);
-        
-    }
+    
 
 
 

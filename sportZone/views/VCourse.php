@@ -53,19 +53,7 @@ class VCourse
 
     }
     //********************************************************* */
-    public function showCourses($courses, $userRole)
-    {
-        $coursesData = [];
-        foreach ($courses as $course) {
-            $coursesData []= ECourse::courseToArray($course);
-        }
-        //print_r($coursesData);
-        USmarty::configureBaseLayout($this->smarty);
-        $this->smarty->assign('courses', $coursesData);
-        $this->smarty->assign('userRole', $userRole);
-
-        $this->smarty->display('course/showCourses.tpl');
-    }
+    
 
     
     // Metodo per visualizzare il form di iscrizione a un corso
