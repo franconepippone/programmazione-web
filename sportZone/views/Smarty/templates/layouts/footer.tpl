@@ -2,7 +2,7 @@
   <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
     
     <div class="mb-3 mb-md-0">
-      &copy; 2025 MyWebsite. All rights reserved.
+      &copy; 2025 SportZone. All rights reserved.
     </div>
 
     <nav class="d-flex gap-3 mb-3 mb-md-0">
