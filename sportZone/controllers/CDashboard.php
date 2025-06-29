@@ -126,13 +126,21 @@ class CDashboard{
 
     // --------------- EMPLOYEE ONLY -----------------
 
-    public static function manageCourses(){
-        CUser::isLogged();
+    // Function to show the list of courses
+    // It retrieves the courses from the persistent manager and displays them using the view
+    public static function manageCourses() {  
         $user = CUser::getLoggedUser();
-        $role = self::assertRole(EEmployee::class, EAdmin::class);
-        
+        $role = self::assertRole(EEmployee::class);
+           
+        try {       
+                $courses = FPersistentManager::getInstance()->retriveCourses();               
+        } catch (Exception $e) {
+            (new VError())->show("Errore durante il recupero dei corsi: " . $e->getMessage());
+        }        
+
         $view = new VDashboard();
-        $view->showManageCourses($user, $role);
+        $view->showCourses($courses, $role);
+        
     }
 
     public static function manageFields(){

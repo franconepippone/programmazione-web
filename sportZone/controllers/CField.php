@@ -49,9 +49,9 @@ class CField {
 
     public static function details($fieldId) {
         $pm = FPersistentManager::getInstance();
-        $fld = $pm->retriveFieldById($fieldId);
+        $field = $pm->retriveFieldById($fieldId);
 
-        if ($fld == null) {
+        if ($field == null) {
             echo "Invalid field id";
             exit;
         }
@@ -65,10 +65,9 @@ class CField {
         }
         
         $date = isset($inputs['date']) ? $inputs["date"] : null;
-        UValidate::validateReservationDate($date);
 
         $view = new VField();
-        $view->showDetailsPage($fld, $date);
+        $view->showDetailsPage($field, $date);
     }
 
 
