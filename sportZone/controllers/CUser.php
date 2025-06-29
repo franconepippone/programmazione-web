@@ -88,7 +88,7 @@ class CUser {
 
     // Displays the login form for the user.
     public static function login(){
-        if(UCookie::isSet('PHPSESSID')){
+        if(UCookie::isSet(SESSION_NAME)){
             if(session_status() == PHP_SESSION_NONE){
                 USession::getInstance();
             }
@@ -135,7 +135,6 @@ class CUser {
             exit;
         }
 
-        // fills session variables with user data
         USession::getInstance();
         session_regenerate_id(true);
         USession::setSessionElement( 'user', $user->getId());
@@ -204,6 +203,7 @@ class CUser {
         USession::getInstance();
         USession::unsetSession();
         USession::destroySession();
+        setcookie(SESSION_NAME, '', time() - 3600);
 
         $redirectUrl = "/user/home";
         if (UHTTPMethods::getIsSet("redirect")) {
