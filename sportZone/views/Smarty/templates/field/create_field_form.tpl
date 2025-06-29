@@ -17,8 +17,8 @@
               </div>
 
               <div class="mb-3">
-                <label for="sport" class="form-label">Sport</label>
-                <input type="text" class="form-control" id="sport" name="sport" required>
+                {assign var="Mandatory" value=true}
+                {include file="field/sport_selection.tpl"}
               </div>
 
               <div class="mb-3">
