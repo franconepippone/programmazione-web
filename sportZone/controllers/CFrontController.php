@@ -40,34 +40,26 @@ class CFrontController{
         && (!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'https')
         ) {
             // Oppure, per mostrare un errore:
-            die('Accesso consentito solo tramite HTTPS');
+            (new VError())->show("L'accesso a questo server è consentito solo tramite HTTPS");
+            exit;
         }
 
-        //$this->createDummyFields();
-        //$this->createDummyCourses();
-        
-        //$this->createDummyFields();
-        //$this->createDummyCourses();
-        
-        
-        //$this->createDummyFields();
-        //$this->createDummyUsers();
-        //CHelper::createUsers();
         ob_start();
         // echo $requestUri;
-        echo $requestUri . "<br>";
+        //echo $requestUri . "<br>";
         $path = parse_url($requestUri, PHP_URL_PATH);
         $uriParts = explode('/', $path);
+        
         array_shift($uriParts);
-        var_dump($uriParts);
-        echo "<br><br>";
+        //var_dump($uriParts);
+        //echo "<br><br>";
        
         // Extract controller and method names
         $controllerName = !empty($uriParts[0]) ? ucfirst($uriParts[0]) : 'User';
-        var_dump($controllerName);
+        //var_dump($controllerName);
         $controllerMethodKey = (!empty($uriParts[1]) ? $uriParts[1] : 'login');
-        echo "Requested controller: " . $controllerName . "<br>";
-        echo "Requested method key: " . $controllerMethodKey . "<br>";
+        //echo "Requested controller: " . $controllerName . "<br>";
+        //echo "Requested method key: " . $controllerMethodKey . "<br>";
 
         // Load the controller class
         $controllerClass = 'C' . $controllerName;
@@ -76,7 +68,8 @@ class CFrontController{
         // var_dump($controllerFile);
 
         if (!file_exists($controllerFile)) {
-            echo "<br> Controller ". $controllerClass ." not found <br>";
+            (new VError())->show("Controller " . $controllerClass . " not found");
+            //echo "<br> Controller ". $controllerClass ." not found <br>";
             // Controller not found, handle appropriately (e.g., show 404 page)
             //header('Location: /Agora/User/home')
             exit;
@@ -84,7 +77,8 @@ class CFrontController{
         
         require_once $controllerFile;
         if (!class_exists($controllerClass)) {
-            echo "<br> Controller class ". $controllerClass ." not found <br>";
+            (new VError())->show("Controller class " . $controllerClass . " not found");
+            //echo "<br> Controller class ". $controllerClass ." not found <br>";
             // Controller not found, handle appropriately (e.g., show 404 page)
             //header('Location: /Agora/User/home')
             exit;            
@@ -94,7 +88,8 @@ class CFrontController{
         //print_r($map);
 
         if (!array_key_exists($controllerMethodKey, $map)) {
-            echo "<br> No method mapped to ". $controllerMethodKey ." key in controller ". $controllerClass ."<br>";
+            (new VError())->show("No method mapped to " . $controllerMethodKey . " key in controller " . $controllerClass);
+            //echo "<br> No method mapped to ". $controllerMethodKey ." key in controller ". $controllerClass ."<br>";
             // Method not found, handle appropriately (e.g., show 404 page)
             //header('Location: /Agora/User/home')
             exit;
