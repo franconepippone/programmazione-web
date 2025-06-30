@@ -1,6 +1,6 @@
 {extends file=$layout}
-{assign var="page_title" value="Dashboard - Settings"}
-{block name="dashboard_content"}
+{assign var="page_title" value="Cancel Confirmation"}
+{block name="content"}
     <div class="container py-5">
         <div class="card shadow-sm mx-auto text-center" style="max-width: 600px;">
             <div class="card-body">
