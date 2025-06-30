@@ -277,9 +277,7 @@ class CUser {
 
     // tenta la modifica di un qualsiasi utente
     private static function modifyUserFromImputs(array $inputs, EUser $user) {
-
-        print_r($inputs);
-
+        
         try {
             $inputs = UValidate::validateInputArray($inputs, self::$rulesModifyUser, false);
         } catch (ValidationException $e) {
@@ -287,8 +285,6 @@ class CUser {
             (new VError())->show($e->getMessage());
             exit;
         }
-
-        print_r($inputs);
 
         self::attemptModifyFromInputArray($inputs, 'name', $user, 'setName');
         self::attemptModifyFromInputArray($inputs, 'surname', $user, 'setSurname');

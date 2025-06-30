@@ -35,6 +35,14 @@ class CFrontController{
     public function run($requestUri){
         // Parse the request URI
         
+        if (
+        (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on')
+        && (!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'https')
+        ) {
+            // Oppure, per mostrare un errore:
+            die('Accesso consentito solo tramite HTTPS');
+        }
+
         //$this->createDummyFields();
         //$this->createDummyCourses();
         
