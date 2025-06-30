@@ -6,8 +6,8 @@ class CEnrollment
 {
     public static function enrollmentConfirmation($course_id) {
         CUser::isLogged();
-        $user= CUser::getLoggedUser();
         CUser::assertRole(EClient::class);
+        $user= CUser::getLoggedUser();
         //prendo l id dell utente dalla sessione
         
         
@@ -32,13 +32,40 @@ class CEnrollment
 
 
 
+    public static function finalizeEnrollment_pay($course_id)
+    {
+        CUser::isLogged();
+        CUser::assertRole(EClient::class);
+        $user = CUser::getLoggedUser();
 
+        $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
+
+        self::isEnrolled($course,$user);
+
+        CPayment::startPayment($course->getEnrollmentCost(), '/enrollment/finalizeEnrollment/' . $course_id);
+        exit; // should never reach here, payment should redirect
+    }
 
     // Finalizza l'iscrizione a un corso
     public static function finalizeEnrollment($course_id)
     {
         CUser::isLogged();
-        
+        CUser::assertRole(EClient::class);
+
+        $outcome = CPayment::getPaymentOutcome();
+        if (!isset($outcome) || !isset($outcome['type'])) {
+            (new VError())->show("Errore con il pagamento.");
+            exit;
+        }
+
+        if ($outcome['type'] === CPayment::METHOD_ONSITE) {
+            (new VError())->show(
+                "Non è possibile iscriversi con questo metodo di pagamento. È consentito solo il pagamento online oppure presentarsi in struttura. Ci scusiamo per il disagio.",
+            "Torna indietro", 
+        'window.location.href="/course/courseDetails/' . $course_id . '"');
+            exit;
+        }
+
         $user = CUser::getLoggedUser();
 
         $course = FPersistentManager::getInstance()->retriveCourseOnId($course_id);
