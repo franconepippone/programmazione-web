@@ -150,7 +150,8 @@ class CReservation{
 
         $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
         $client = FPersistentManager::getInstance()->retriveUserById($userId);
-
+        $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($pending['fieldId'], $pending['date']);
+        //if ($pending['time'] )
 
         $dateObj = new DateTime($pending['date']);
         $timeObj = new DateTime($pending['time']);
