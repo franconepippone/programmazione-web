@@ -184,7 +184,11 @@ class CDashboard{
         $sport = $_GET['sport'] ?? null;
         
         $filtered = FPersistentManager::getInstance()->retriveFilteredReservations($name, $date, $sport);
-        
+        $filtered = array_filter($filtered, function($reservation) {
+            $user = $reservation->getUser();
+            return !($user instanceof EInstructor);
+        });
+
         $view = new VDashboard();
         $view->showFilteredReservations($filtered, $name, $date,$sport, $role);
     }

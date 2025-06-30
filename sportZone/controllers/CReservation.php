@@ -89,11 +89,6 @@ class CReservation{
         }
     }
 
-  
-
-
-
-
 
     public static function reservationSummary() {
         
@@ -150,8 +145,16 @@ class CReservation{
 
         $field = FPersistentManager::getInstance()->retriveFieldById($pending['field_id']);
         $client = FPersistentManager::getInstance()->retriveUserById($userId);
-        $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($pending['fieldId'], $pending['date']);
-        //if ($pending['time'] )
+        $avaiableHours = UUtility::retriveAvaiableHoursForFieldAndDate($pending['field_id'], $pending['date']);
+        
+        // ultima verifica prima di aggiornare il database
+        if (!in_array($pending['time'], $avaiableHours)) {
+            (new VError())->show("Ci dispiace ma l'orario selezionato non è più disponibile. Riceverai un rimborso.",
+                                 "Torna indietro",
+                                 "location.href='/user/home'"
+                                );
+            return;
+        }
 
         $dateObj = new DateTime($pending['date']);
         $timeObj = new DateTime($pending['time']);
@@ -181,17 +184,6 @@ class CReservation{
         $view = new VReservation();
         $view->showConfirmation();
     }
-
-
-
-
-
-
-
-   
-
-
-
 
       public static function cancelInfo() {
         $view = new VReservation();
