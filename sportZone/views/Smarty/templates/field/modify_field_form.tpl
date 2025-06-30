@@ -1,5 +1,5 @@
 {extends file=$layout}  
-{assign var="page_title" value="Register new"}
+{assign var="page_title" value="Modifica campo"}
 
 {block name="styles"}
 {/block}
@@ -12,25 +12,25 @@
       enctype="multipart/form-data"
       class="p-4 bg-light rounded shadow"
     >
-      <h1 class="mb-4">Modify field</h1>
+      <h1 class="mb-4">Modifica campo</h1>
 
       <div class="mb-3">
-        <label for="name" class="form-label">Name:</label>
+        <label for="name" class="form-label">Nome:</label>
         <input type="text" id="name" name="name" value="{$field.name}" class="form-control" />
       </div>
 
       <div class="mb-3">
-        <label for="sport" class="form-label">Sport:</label>
-        <input type="text" id="sport" name="sport" value="{$field.sport}" class="form-control" />
+        {assign var="Mandatory" value=true}
+        {include file="field/sport_selection.tpl"}
       </div>
 
       <div class="mb-3">
-        <label for="terrainType" class="form-label">Terrain type:</label>
+        <label for="terrainType" class="form-label">Tipo di terreno:</label>
         <input type="text" id="terrainType" name="terrainType" value="{$field.terrainType}" class="form-control" />
       </div>
 
       <div class="mb-3">
-        <label for="isIndoor" class="form-label">Is indoor?</label>
+        <label for="isIndoor" class="form-label">Al chiuso?</label>
         <select id="isIndoor" name="isIndoor" class="form-select" required>
           <option value="1">Sì</option>
           <option value="0">No</option>
@@ -38,7 +38,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="hourlyCost" class="form-label">Hourly cost (€):</label>
+        <label for="hourlyCost" class="form-label">Costo orario (€):</label>
         <input
           type="number"
           step="0.01"
@@ -52,28 +52,28 @@
       </div>
 
       <div class="mb-3">
-        <label for="description" class="form-label">Description:</label>
+        <label for="description" class="form-label">Descrizione:</label>
         <textarea
           id="description"
           name="description"
           rows="4"
           class="form-control"
-          placeholder="Insert a field description"
+          placeholder="Inserisci una descrizione del campo"
         >{$field.description}</textarea>
       </div>
 
       <div class="mb-3">
-        <label for="images" class="form-label">Upload field pictures:</label>
+        <label for="images" class="form-label">Carica immagini del campo:</label>
         <input type="file" id="images" name="images[]" accept="image/*" multiple class="form-control" />
       </div>
 
       {if isset($images) && $images|@count > 0}
         <div class="mb-3">
-          <label class="form-label">Current field pictures:</label>
+          <label class="form-label">Immagini attuali del campo:</label>
           <div class="d-flex flex-wrap gap-2">
             {foreach from=$images item=imageUrl}
               <div class="overflow-hidden" style="max-width: 120px;">
-                <img src="{$imageUrl}" alt="Field image" class="img-thumbnail w-100" />
+                <img src="{$imageUrl}" alt="Immagine campo" class="img-thumbnail w-100" />
               </div>
             {/foreach}
           </div>
@@ -86,8 +86,8 @@
       <hr class="my-4" />
 
       <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-        <button type="submit" class="btn btn-primary">Apply changes</button>
-        <button type="button" class="btn btn-danger" onclick="window.location.href='/field/delete/{$field.id}'">Delete</button>
+        <button type="submit" class="btn btn-primary">Applica modifiche</button>
+        <button type="button" class="btn btn-danger" onclick="window.location.href='/field/delete/{$field.id}'">Elimina</button>
       </div>
     </form>
   </div>
