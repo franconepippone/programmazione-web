@@ -85,10 +85,10 @@ class VCourse
         
         USmarty::configureBaseLayout($this->smarty);
 
-        if (CUser::isClient()) {
-            $this->smarty->display('course/courseDetails.tpl');
-        }else{
+        if (CUser::isEmployee() || CUser::isAdmin()) {
             $this->smarty->display('course/course_details_employee.tpl');
+        }else{
+            $this->smarty->display('course/courseDetails.tpl');
         }
     
     }

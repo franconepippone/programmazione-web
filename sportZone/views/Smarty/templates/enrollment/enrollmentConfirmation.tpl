@@ -29,7 +29,7 @@
         </dl>
 
         <div class="d-flex gap-3">
-            <a href="/enrollment/enrollForm/{$course.id}" class="btn btn-secondary">Modifica dati</a>
+            {*<a href="/enrollment/enrollForm/{$course.id}" class="btn btn-secondary">Modifica dati</a>*}
             <a href="/enrollment/finalizeEnrollment_pay/{$course.id}" class="btn btn-primary">Conferma iscrizione</a>
         </div>
     </div>
