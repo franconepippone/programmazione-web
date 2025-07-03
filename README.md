@@ -18,7 +18,7 @@ Applicativo web per la gestione di un palazzetto dello sport.
 - Backend sviluppato in PHP
 
 ### Disponibile su
-https://streaming-community.bio/
+https://sportzoneaq.free.nf
 
 # ENG
 ## Project abstract
@@ -36,5 +36,5 @@ Web application for managing a sports center.
 - Backend developed in PHP
 
 ## Available at
-https://streaming-community.bio/
+https://sportzoneaq.free.nf
 
