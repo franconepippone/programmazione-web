@@ -10,10 +10,16 @@ class CEnrollment
         $user= CUser::getLoggedUser();
         //prendo l id dell utente dalla sessione
         
-        
         $course=FPersistentManager::getInstance()->retriveCourseOnId($course_id);
-        
         self::isEnrolled($course,$user);
+
+        $maxParticipants = $course->getMaxParticipantsCount();
+        $iscrizioni = FPersistentManager::getInstance()->retriveEnrollmentsOnCourseId($course_id);
+        if(sizeof($iscrizioni)+1 > $maxParticipants) {
+            (new VError())->show("Il corso è al completo. Non puoi iscriverti.");
+            exit;
+        }
+
         $view = new VEnrollment();
         $view->showEnrollmentConfirmation($user,$course);
     }
